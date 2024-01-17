@@ -1,4 +1,12 @@
-# rlquantopt
+# RLQuantOpt
+
+17/01/2024
+Added code developed during QVAQT:
+`rl_envs/` Contains OpenAI Gym environment called  which uses  pulse package and the  processor from
+`rl_agents/` Contains implementations of simple RL agents: SARSA & a greedy agent with a linear approximation of the Q-function
+`rl_analysis/` Some scripts to evaluate the trained agents
+
+Note that this code did not produce any meaningful results, and should only be considered as a starting point for RLQuantOpt.
 
 
 
