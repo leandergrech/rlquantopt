@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from rl_envs.qu_pulse_env import QuPulseEnv
+from rlquantopt.rl_envs import QuPulseEnv
 
 env = QuPulseEnv()
 o = env.reset()

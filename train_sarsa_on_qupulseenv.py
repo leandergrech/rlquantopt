@@ -4,9 +4,9 @@ from datetime import datetime as dt
 import yaml
 
 from qutip_qip.circuit import QubitCircuit
-from pulses_workspace.utils import LinearDecay, boltzmann, eps_greedy
-from pulses_workspace.rl_envs.qu_pulse_env import QuPulseEnv
-from pulses_workspace.rl_agents.sarsa import train_instance_early_termination
+from rlquantopt.utils import LinearDecay, boltzmann, eps_greedy
+from rlquantopt.rl_envs import QuPulseEnv
+from rlquantopt.rl_agents import sarsa_train_instance_early_termination
 
 experiment_dir = f"qupulseenv_sarsa_{dt.now().strftime('%m%d%y_%H%M%S')}"
 
@@ -60,7 +60,7 @@ train_params['policy'] = policy
 train_params['env'] = env
 train_params['eval_env'] = eval_env
 
-finish_timestep = train_instance_early_termination(**train_params)
+finish_timestep = sarsa_train_instance_early_termination(**train_params)
 
 with open(os.path.join(experiment_dir, 'train_info.md'), 'w') as f:
     f.write(f'{finish_timestep}')

@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pickle as pkl
-from ..utils import argmax, QFuncBaseClass
+from rlquantopt.utils import argmax, QFuncBaseClass
 
 
 class FeatureExtractor:

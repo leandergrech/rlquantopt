@@ -12,9 +12,9 @@ from tqdm import tqdm
 import yaml
 from qutip_qip.circuit import QubitCircuit
 
-from pulses_workspace.utils import grid_on, get_q_func_filenames, get_q_func_xrange, get_val, get_q_func_step, get_latest_experiment, eval_agent
-from pulses_workspace.rl_agents.linear_q_function import QValueFunctionLinear
-from pulses_workspace.rl_envs.qu_pulse_env import QuPulseEnv
+from rlquantopt.utils import grid_on, get_q_func_filenames, get_q_func_xrange, get_val, get_q_func_step, get_latest_experiment, eval_agent
+from rlquantopt.rl_agents.linear_q_function import QValueFunctionLinear
+from rlquantopt.rl_envs import QuPulseEnv
 
 
 def get_training_params(yaml_path):

@@ -1,10 +1,11 @@
-from pulses_workspace.rl_envs.qu_pulse_env import QuPulseEnv
-from qutip_qip.circuit import QubitCircuit
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from pulses_workspace.utils import grid_on
+from qutip_qip.circuit import QubitCircuit
 from tqdm import trange, tqdm
 import numpy as np
+
+from rlquantopt.rl_envs import QuPulseEnv
+from rlquantopt.utils import grid_on
 
 mpl.rcParams['font.size'] = 25
 
