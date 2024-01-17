@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pickle as pkl
-from pulses_workspace.utils import argmax, QFuncBaseClass
+from ..utils import argmax, QFuncBaseClass
 
 
 class FeatureExtractor:

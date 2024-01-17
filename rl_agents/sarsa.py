@@ -5,9 +5,9 @@ import pickle as pkl
 from collections import deque
 warnings.filterwarnings(action="ignore", category=DeprecationWarning)
 
-from pulses_workspace.rl_agents.linear_q_function import QValueFunctionLinear, FeatureExtractor
-from pulses_workspace.utils import eval_agent
-from pulses_workspace.rl_envs.qu_pulse_env import QuPulseEnv, get_discrete_actions, get_reduced_discrete_actions
+from linear_q_function import QValueFunctionLinear, FeatureExtractor
+from ..utils import eval_agent
+from ..rl_envs.qu_pulse_env import QuPulseEnv, get_discrete_actions, get_reduced_discrete_actions
 
 from tqdm import trange
 
