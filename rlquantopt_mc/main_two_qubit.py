@@ -1,7 +1,7 @@
 import krotov
 import numpy as np
 
-from Python.two_qubit import TwoQubit
+from rlquantopt_mc.two_qubit import TwoQubit
 
 if __name__ == '__main__':
 	# This implicit factor is because frequencies convert to energies as E = h * nu, but our
