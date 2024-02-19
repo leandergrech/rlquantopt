@@ -62,13 +62,13 @@ class OneQubit:
 		return result
 
 	def gate_fidelity(self, x):
-		self.H = [self.H0, [self.H1, np.repeat(x, int(len(self.tlist) / len(x)))]]
+		self.H = [self.H0, [self.H1, self.get_params(x, self.tlist)]]
 
 		args_list = [(self.H, state, self.tlist) for state in self.full_liouville_basis]
 
 		results = [self.wrapped_mesolve(args) for args in args_list]
 
-		return F_avg(results, self.basis_states, self.unitary)
+		return F_avg(results, self.basis_states, self.unitary, prec=1e-4)
 
 	@staticmethod
 	def wrapped_mesolve(args):
@@ -76,12 +76,21 @@ class OneQubit:
 		sol = mesolve(H, psi, tlist)
 		return sol.states[-1]
 
+	@staticmethod
+	def get_params(x, tlist):
+		bin_len = int(len(tlist) / (len(x) + 2))
+		_x = np.zeros(bin_len)
+		_x = np.append(_x, np.repeat(x, bin_len))
+		_x = np.append(_x, np.zeros(bin_len))
+
+		return _x
+
 	# noinspection PyUnusedLocal,PyTypeChecker
 	def cost_fun(self, x, *args):
 		self.nfev += 1
 		self.x = x
 
-		self.H = [self.H0, [self.H1, np.repeat(self.x, int(len(self.tlist) / len(self.x)))]]
+		self.H = [self.H0, [self.H1, self.get_params(self.x, self.tlist)]]
 
 		args_list = [(self.H, state, self.tlist) for state in self.basis_states]
 
@@ -98,7 +107,7 @@ class OneQubit:
 
 	# noinspection PyTypeChecker
 	def plot_population_dynamics(self, x, tlist):
-		H = [self.H0, [self.H1, np.repeat(x, int(len(tlist) / len(x)))]]
+		H = [self.H0, [self.H1, self.get_params(x, tlist)]]
 
 		e_ops = [self.basis_states[0].proj(), self.basis_states[1].proj()]
 
@@ -117,8 +126,7 @@ class OneQubit:
 			ax.set_title(title)
 		plt.show()
 
-	@staticmethod
-	def plot_pulse(x, tlist):
+	def plot_pulse(self, x, tlist):
 		fig, ax = plt.subplots(figsize=(16, 8))
-		ax.plot(tlist, np.repeat(x, int(len(tlist) / len(x))))
+		ax.plot(tlist, self.get_params(x, tlist))
 		plt.show()
