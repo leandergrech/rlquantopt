@@ -4,12 +4,12 @@ import numpy as np
 from rlquantopt_mc.one_qubit import OneQubit
 
 if __name__ == '__main__':
-	nstates = 8
-	tlist = np.linspace(0, 10, 1000)
+	nstates = 2
+	tlist = np.linspace(0, 10, 2000)
 	T = tlist[-1]
 	time_slots = 100
 
-	x0 = np.array([krotov.shapes.flattop(t, 0, T, t_rise=1, func='sinsq') for t in np.linspace(0, T, time_slots)])
+	x0 = np.array([krotov.shapes.flattop(t, 0, T, t_rise=0.5, func='sinsq') for t in np.linspace(0, T, time_slots - 2)])
 	method = 'Nelder-Mead'
 
 	gate = np.array([[0, 1], [1, 0]])

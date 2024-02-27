@@ -145,7 +145,6 @@ class TwoQubit:
 
 		return F_avg(results, self.basis_states, self.unitary)
 
-
 	@staticmethod
 	def wrapped_mesolve(args):
 		H, psi, tlist, c_ops = args
