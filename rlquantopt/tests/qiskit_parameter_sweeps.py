@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import json
 import qiskit.pulse as pulse
 import qiskit_dynamics.pulse as qdp
 from qiskit_dynamics import Solver
@@ -11,19 +12,19 @@ now = datetime.now
 import matplotlib.pyplot as plt
 
 
-
 def pulsate_gaussian(r=0.1, w=5., dt=0.222, amp=1., beta=2.):
     # # Strength of Rabi=rate in GHz
     # r = 0.1
-    #
+
     # # Freq of the qubit transition in GHz
     # w = 5.
-    #
+
     # # Sample rate of the backend in ns
     # dt = 0.222
-    #
+
     # # Define gaussian envelope to have a pi rotation
     # amp = 1.
+
     area = 1
     sig = area*0.399128/r/amp
     T = 4*sig
@@ -32,18 +33,15 @@ def pulsate_gaussian(r=0.1, w=5., dt=0.222, amp=1., beta=2.):
     # 1.75 factor is used to approximately get sx gate.
     # Further "calibration" could be done to refine the pulse amplitude
     with pulse.build(name="sx-sy schedule") as xp:
-        pulse.play(pulse.Drag(duration, amp/1.75, sig/dt, beta),
-                  pulse.DriveChannel(0))
+        pulse.play(pulse.Drag(duration, amp/1.75, sig/dt, beta), pulse.DriveChannel(0))
         pulse.shift_phase(np.pi/2, pulse.DriveChannel(0))
-        pulse.play(pulse.Drag(duration, amp/1.75, sig/dt, beta),
-                  pulse.DriveChannel(0))
+        pulse.play(pulse.Drag(duration, amp/1.75, sig/dt, beta), pulse.DriveChannel(0))
 
     # xp.draw()
 
     plt.rcParams["font.size"] = 16
 
     # converter =qdp.InstructionToSignals(dt, carriers={"d0": w})
-
     # signals = converter.get_signals(xp)
     # fig, axs = plt.subplots(1, 2, figsize=(14, 4.5))
     # for ax, title in zip(axs, ["envelope", "signal"]):
@@ -86,7 +84,6 @@ def pulsate_gaussian(r=0.1, w=5., dt=0.222, amp=1., beta=2.):
 
     return dict(sol=sol, T=T)
 
-
 def plot_populations(results, ax=None):
     sol = results['sol']
     T = results['T']
@@ -108,27 +105,30 @@ def plot_populations(results, ax=None):
     return ax
 
 
-
-
 plt.rcParams['font.size'] = 18
 
 beta = 1.0
-save_dir = f'gridsearch_beta[{beta:.1f}]_r[0.05,0.25, 0.05]_w[1,6,1]'
-if not os.path.exists:
+r_values = np.arange(0.05, 0.26, 0.05)
+w_values = np.arange(1, 7, dtype=int)
+# params = dict(beta=beta, r_values=list(r_values), w_values=list(w_values))
+save_dir = '/home/leander/code/rlquantopt/rlquantopt/tests/qiskit_parameter_sweeps'
+if not os.path.exists(save_dir):
     os.makedirs(save_dir)
+# with open(os.path.join(save_dir, 'params.json'), 'w') as f:
+#     json.dump(params, f)
 
-for r in np.arange(0.05, 0.26, 0.05):
+for r in r_values:
     fig, axs = plt.subplots(3, 2, figsize=(20, 15))
-    for w, ax in zip(np.arange(1, 7), np.ravel(axs)):
+    for w, ax in zip(w_values, np.ravel(axs)):
         print(f'r={r}, w={w}')
         # results = pulsate_gaussian(r=0.1, w=5., amp=1.0)
         start = now()
-        results = pulsate_gaussian(r=r, w=w, amp=1.0, beta=beta)
+        results = pulsate_gaussian(r=r, w=w, beta=beta)
         end = now()
         print(f'Done in {end - start}')
         ax = plot_populations(results, ax)
         ax.set_title(f'r={r}, w={w}')
 
     fig.tight_layout()
-    fig.savefig(os.path.join(save_dir, f'r[{r}]_w[1,6].png'))
+    fig.savefig(os.path.join(save_dir, f'r_{r:.2f}.png'))
     # plt.show()

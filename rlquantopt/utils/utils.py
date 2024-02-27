@@ -214,3 +214,58 @@ def get_latest_experiment(lab_dir, pattern='sarsa', offset=0):
     experiment_name = experiments[-1-offset]
 
     return os.path.join(lab_dir, experiment_name)
+
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from matplotlib import cm
+from matplotlib.colors import LogNorm
+
+
+def norm_mat(mat, EPS):
+    # lmat = np.log10(mat)
+    # return (lmat + 6)/ 6
+    mat = np.clip(mat, a_min=EPS, a_max=1)
+    return mat
+
+
+def animate_matrices(matrices, n_levels, EPS=1e-5):
+    # Initialize the plot
+    mpl.rcParams['font.size'] = 10
+    fig, ax = plt.subplots()
+    matrix = matrices[0]
+    # im = ax.imshow(matrix, animated=True, vmin=1e-3, vmax=1, cmap=cm.plasma, norm=LogNorm())
+    norm = LogNorm(vmin=EPS, vmax=1)
+    # im = ax.imshow(log_norm_mat(matrix), animated=True, vmin=0, vmax=1, cmap=cm.plasma)#, norm=norm)
+    im = ax.imshow(norm_mat(matrix, EPS), animated=True, cmap=cm.plasma, norm=norm)
+
+    n_states = n_levels ** 2    # Only for 2 qubits
+    tick_labels = []
+    for i in range(n_levels):
+        for j in range(n_levels):
+            tick_labels.append(f'$|{i}{j}\\rangle$')
+
+    ax.set_xticks(np.arange(n_states), tick_labels)
+    ax.set_yticks(np.arange(n_states), tick_labels)
+
+    # ax.grid(which='minor', color='w', linestyle='-', linewidth=2)
+    for i in np.arange(n_states+1):
+        ax.axhline(i-0.5, color='w', linestyle='-', linewidth=1)
+        ax.axvline(i-0.5, color='w', linestyle='-', linewidth=1)
+
+    # Add a colorbar
+    fig.colorbar(im, ax=ax)#, boundaries=np.linspace(0, 1, 11))
+
+    n = len(matrices)
+    # Update function for the animation
+    def update(frame):
+        ax.set_title(f'{(frame+1) * 100./n:.2f}%')
+        im.set_array(norm_mat(matrices[frame], EPS))
+        return [im]
+
+    # Create the animation
+    n = len(matrices)
+    frames = list(range(n)) + [n - 1] * 100
+    ani = FuncAnimation(fig, update, frames=frames, blit=False, interval=20)
+    return ani

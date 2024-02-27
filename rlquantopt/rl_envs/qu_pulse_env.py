@@ -5,6 +5,7 @@ import gym
 from qutip import basis
 from qutip_qip.device import SCQubits
 import scipy.interpolate as interp
+import matplotlib.pyplot as plt
 from qutip_qip.circuit import QubitCircuit
 
 ObsType = TypeVar("QuantumPulse", gym.spaces.Box, list, np.ndarray)
@@ -59,8 +60,7 @@ class QuPulseEnv(gym.Env):
 
         self.basis0 = basis(3)
 
-    def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None,
-    ) -> ObsType:
+    def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None) -> ObsType:
         init_state = np.ones(self.observation_space.shape[0])
         if options is not None:
             init_state = options.get('init_state', init_state)
@@ -112,7 +112,7 @@ class QuPulseEnv(gym.Env):
         self.processor.pulses[chidx].coeff = coeff_interp(np.linspace(0, sz - 1, nsz))
         self.processor.pulses[chidx].tlist = np.arange(nsz).astype(float)
 
-    def render(self):
+    def render(self, mode='human'):
         if 'plt' not in globals(): import matplotlib.pyplot as plt
         fig, axs = plt.subplots(self.n_channels)
         for ax, pulse in zip(axs, self.processor.pulses):

@@ -1,7 +1,7 @@
 import krotov
 import numpy as np
 
-from Python.one_qubit import OneQubit
+from rlquantopt_mc.one_qubit import OneQubit
 
 if __name__ == '__main__':
 	nstates = 8

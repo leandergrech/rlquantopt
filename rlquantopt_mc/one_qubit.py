@@ -122,3 +122,6 @@ class OneQubit:
 		fig, ax = plt.subplots(figsize=(16, 8))
 		ax.plot(tlist, np.repeat(x, int(len(tlist) / len(x))))
 		plt.show()
+
+if __name__ == '__main__':
+    qubit = OneQubit()
