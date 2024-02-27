@@ -8,8 +8,9 @@ if __name__ == '__main__':
 	T = tlist[-1]
 	time_slots = 21
 
-	x0 = np.random.uniform(-0.1, 0.1, time_slots - 2)
-	method = 'COBYLA'
+	x0 = np.random.uniform(-1, 1, time_slots - 2)
+	method = 'BFGS'
+	min_kwargs = dict()
 
 	gate = np.array([[0, 1], [1, 0]])
 
@@ -17,6 +18,6 @@ if __name__ == '__main__':
 
 	print(one_qubit.gate_fidelity(x0))
 
-	one_qubit.run(x0=x0, method=method)
+	one_qubit.run(x0=x0, method=method, min_kwargs=min_kwargs)
 
 	print(one_qubit.gate_fidelity(one_qubit.x))

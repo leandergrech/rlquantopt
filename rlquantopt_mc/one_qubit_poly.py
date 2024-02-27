@@ -1,12 +1,14 @@
 from itertools import product
 
 import numpy as np
-from matplotlib import pyplot as plt
+from krotov.functionals import F_avg
 from qutip import mesolve, Qobj
+
 from scipy.linalg import eigh
 from scipy.optimize import minimize
-from krotov.functionals import F_avg
-from scipy.interpolate import CubicSpline
+
+from rlquantopt_mc.plotter import plot_pulse, plot_population_dynamics
+from utils import save_result, cubic_spline_with_zeroes
 
 
 class OneQubit:
@@ -23,6 +25,7 @@ class OneQubit:
 		else:
 			self.unitary = gate
 
+		self.min_kwargs = None
 		self.nfev = 0
 		self.iter = 0
 		self.H = None
@@ -36,7 +39,7 @@ class OneQubit:
 		n = np.arange(-self.nstates, self.nstates + 1)
 		up = np.diag(np.ones(2 * self.nstates), k=-1)
 		do = up.T
-		H0 = Qobj(np.diag(4 * Ec * (n - ng) ** 2) - Ej * (up + do) / 2.0)
+		H0 = Qobj(np.diag(4 * Ec * (n - ng) ** 2) - Ej * (up + do) / 2.)
 		H1 = Qobj(-2 * np.diag(n))
 
 		return H0, H1
@@ -47,24 +50,31 @@ class OneQubit:
 		ndx = np.argsort(eigenvals.real)
 		return eigenvecs[:, ndx]
 
-	def run(self, x0, method=None):
+	def run(self, x0, method=None, min_kwargs=None, save_result=True):
+		if min_kwargs is None:
+			self.min_kwargs = dict()
+		else:
+			self.min_kwargs = min_kwargs
 		self.time_slots = np.linspace(0, self.tlist[-1], (len(x0) + 2))
 		self.x0 = x0
-		self.plot_pulse(self.x0, self.time_slots)
-		self.plot_population_dynamics(self.x0, self.time_slots)
+		plot_pulse(self.tlist, self.x0, self.time_slots)
+		plot_population_dynamics(self.H0, self.H1, self.basis_states, self.tlist, self.x0, self.time_slots)
 		self.nfev = 0
 		self.iter = 0
 		# Minimize
-		result = minimize(fun=self.cost_fun, x0=self.x0, method=method, callback=self.callback)
+		result = minimize(fun=self.cost_fun, x0=self.x0, method=method, options=min_kwargs, callback=self.callback)
 
-		self.plot_pulse(result.x, self.time_slots)
-		self.plot_population_dynamics(result.x, self.time_slots)
+		if save_result:
+			self._save_result(result)
+
+		plot_pulse(self.tlist, result.x, self.time_slots)
+		plot_population_dynamics(self.H0, self.H1, self.basis_states, self.tlist, self.x, self.time_slots)
 
 		return result
 
 	def gate_fidelity(self, x):
 		self.time_slots = np.linspace(0, self.tlist[-1], (len(x) + 2))
-		self.H = [self.H0, [self.H1, self.get_pulse(x, self.time_slots)(self.tlist)]]
+		self.H = [self.H0, [self.H1, cubic_spline_with_zeroes(x, self.time_slots)(self.tlist)]]
 
 		args_list = [(self.H, state, self.tlist) for state in self.full_liouville_basis]
 
@@ -78,27 +88,19 @@ class OneQubit:
 		sol = mesolve(H, psi, tlist)
 		return sol.states[-1]
 
-	@staticmethod
-	def get_pulse(x, time_slots):
-		_x = np.copy(x)
-		_x = np.insert(_x, 0, 0)
-		_x = np.append(_x, 0)
-		c = CubicSpline(time_slots, _x)
-
-		return c
-
 	# noinspection PyUnusedLocal,PyTypeChecker
 	def cost_fun(self, x, *args):
 		self.nfev += 1
 		self.x = x
 
-		self.H = [self.H0, [self.H1, self.get_pulse(self.x, self.time_slots)(self.tlist)]]
+		self.H = [self.H0, [self.H1, cubic_spline_with_zeroes(self.x, self.time_slots)(self.tlist)]]
 
 		args_list = [(self.H, state, self.tlist) for state in self.basis_states]
 
 		results = [self.wrapped_mesolve(args) for args in args_list]
 
-		self.F = 0.5 * (np.abs(results[0].overlap(self.basis_states[1])) ** 2 + np.abs(results[1].overlap(self.basis_states[0])) ** 2)
+		self.F = 0.5 * (np.abs(results[0].overlap(self.basis_states[1])) ** 2 + np.abs(
+			results[1].overlap(self.basis_states[0])) ** 2)
 
 		return 1 - self.F
 
@@ -107,28 +109,24 @@ class OneQubit:
 		self.iter += 1
 		print(self.iter, self.nfev, self.F)
 
-	# noinspection PyTypeChecker
-	def plot_population_dynamics(self, x, time_slots):
-		H = [self.H0, [self.H1, self.get_pulse(x, time_slots)(self.tlist)]]
+	def _save_result(self, result):
+		folder = f'data'
+		data = dict(
+			data=dict(
+				H0=self.H0.get_data().todense(),
+				H1=self.H1.get_data().todense(),
+				basis_states=[s.get_data().todense() for s in self.basis_states],
+				nstates=self.nstates,
+				tlist=self.tlist,
+				time_slots=self.time_slots,
+				unitary=self.unitary.get_data().todense(),
+			),
+			result=dict(
+				params=result.x,
+				fun=result.fun,
+				nfev=result.nfev,
+				nit=result.nit
+			)
+		)
 
-		e_ops = [self.basis_states[0].proj(), self.basis_states[1].proj()]
-
-		sol0 = mesolve(H, self.basis_states[0], self.tlist, e_ops=e_ops)
-		sol1 = mesolve(H, self.basis_states[1], self.tlist, e_ops=e_ops)
-
-		fig, axs = plt.subplots(ncols=2, figsize=(16, 8))
-		axs = np.ndarray.flatten(axs)
-		labels = ['0', '1']
-		expectations = [sol0.expect, sol1.expect]
-
-		for ax, exp, title in zip(axs, expectations, labels):
-			for i, label in enumerate(labels):
-				ax.plot(self.tlist, exp[i], label=label)
-			ax.legend()
-			ax.set_title(title)
-		plt.show()
-
-	def plot_pulse(self, x, time_slots):
-		fig, ax = plt.subplots(figsize=(16, 8))
-		ax.plot(self.tlist, self.get_pulse(x, time_slots)(self.tlist))
-		plt.show()
+		save_result(data, folder)
