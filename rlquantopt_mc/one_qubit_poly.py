@@ -55,7 +55,7 @@ class OneQubit:
 			self.min_kwargs = dict()
 		else:
 			self.min_kwargs = min_kwargs
-		self.time_slots = np.linspace(0, self.tlist[-1], (len(x0) + 2))
+		self.time_slots = np.linspace(0, self.tlist[-1], len(x0) + 2)
 		self.x0 = x0
 		plot_pulse(self.tlist, self.x0, self.time_slots)
 		plot_population_dynamics(self.H0, self.H1, self.basis_states, self.tlist, self.x0, self.time_slots)

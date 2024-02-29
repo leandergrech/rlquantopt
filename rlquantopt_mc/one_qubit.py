@@ -2,7 +2,7 @@ from itertools import product
 
 import numpy as np
 from matplotlib import pyplot as plt
-from qutip import mesolve, Qobj
+from qutip import mesolve, Qobj, basis
 from scipy.linalg import eigh
 from scipy.optimize import minimize
 from krotov.functionals import F_avg
@@ -13,6 +13,9 @@ class OneQubit:
 		self.tlist = tlist
 		self.nstates = nstates
 		self.H0, self.H1 = self.transmon_hamiltonian()
+		# self.psi0 = basis(2 * self.nstates + 1, 0)
+		# self.psi1 = basis(2 * self.nstates + 1, 1)
+		# self.basis_states = [self.psi0, self.psi1]
 		self.eigenvectors = self.logical_basis(self.H0)
 		self.basis_states = [Qobj(self.eigenvectors[:, 0]), Qobj(self.eigenvectors[:, 1])]
 		self.full_liouville_basis = [psi * phi.dag() for psi, phi in product(self.basis_states, self.basis_states)]
@@ -22,6 +25,17 @@ class OneQubit:
 		else:
 			self.unitary = gate
 
+		self.mapped_basis_states = [sum(complex(self.unitary[i, j]) * self.basis_states[i]
+		                                for i in range(self.unitary.shape[0])) for j in range(self.unitary.shape[1])]
+		# Lots of gates just rearrange the basis states, and we can avoid some complexity by identifying
+		# this and setting the mapped_basis_states to the identical objects as the original basis_states
+		for i, state in enumerate(self.mapped_basis_states):
+			for j, basis_state in enumerate(self.basis_states):
+				if state == basis_state:
+					self.mapped_basis_states[i] = basis_state
+
+		self.target_states = self.mapped_basis_states
+
 		self.nfev = 0
 		self.iter = 0
 		self.H = None
@@ -29,6 +43,7 @@ class OneQubit:
 		self.x0 = None
 		self.x = None
 		self.F = None
+		self.min_kwargs = None
 
 	def transmon_hamiltonian(self, Ec=0.386, EjEc=45, ng=0.):
 		Ej = EjEc * Ec
@@ -46,7 +61,7 @@ class OneQubit:
 		ndx = np.argsort(eigenvals.real)
 		return eigenvecs[:, ndx]
 
-	def run(self, time_slots, x0, method=None):
+	def run(self, time_slots, x0, method=None, **min_kwargs):
 		self.time_slots = time_slots
 		self.x0 = x0
 		self.plot_pulse(self.x0, self.tlist)
@@ -54,7 +69,7 @@ class OneQubit:
 		self.nfev = 0
 		self.iter = 0
 		# Minimize
-		result = minimize(fun=self.cost_fun, x0=self.x0, method=method, callback=self.callback)
+		result = minimize(fun=self.cost_fun, x0=self.x0, method=method, options=min_kwargs, callback=self.callback)
 
 		self.plot_pulse(result.x, self.tlist)
 		self.plot_population_dynamics(result.x, self.tlist)
@@ -68,7 +83,7 @@ class OneQubit:
 
 		results = [self.wrapped_mesolve(args) for args in args_list]
 
-		return F_avg(results, self.basis_states, self.unitary, prec=1e-4)
+		return F_avg(results, self.basis_states, self.unitary, self.mapped_basis_states, prec=1e-3)
 
 	@staticmethod
 	def wrapped_mesolve(args):
@@ -96,7 +111,8 @@ class OneQubit:
 
 		results = [self.wrapped_mesolve(args) for args in args_list]
 
-		self.F = 0.5 * (np.abs(results[0].overlap(self.basis_states[1])) ** 2 + np.abs(results[1].overlap(self.basis_states[0])) ** 2)
+		self.F = 0.5 * (np.abs(results[0].overlap(self.target_states[0])) ** 2 +
+		                np.abs(results[1].overlap(self.target_states[1])) ** 2)
 
 		return 1 - self.F
 
@@ -130,6 +146,3 @@ class OneQubit:
 		fig, ax = plt.subplots(figsize=(16, 8))
 		ax.plot(tlist, self.get_params(x, tlist))
 		plt.show()
-
-if __name__ == '__main__':
-    qubit = OneQubit()
