@@ -3,7 +3,7 @@ import numpy as np
 from rlquantopt_mc.one_qubit_poly import OneQubit
 
 if __name__ == '__main__':
-	nstates = 3
+	nstates = 1
 	tlist = np.linspace(0, 10, 2001)
 	T = tlist[-1]
 	time_slots = 21
@@ -18,6 +18,6 @@ if __name__ == '__main__':
 
 	print(one_qubit.gate_fidelity(x0))
 
-	one_qubit.run(x0=x0, method=method, min_kwargs=min_kwargs)
+	result = one_qubit.run(x0=x0, method=method, min_kwargs=min_kwargs)
 
-	print(one_qubit.gate_fidelity(one_qubit.x))
+	print(one_qubit.gate_fidelity(result.x))
