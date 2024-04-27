@@ -1,6 +1,8 @@
 import os.path
 from itertools import product
 from datetime import datetime as dt
+from typing import SupportsFloat, Any
+
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
@@ -9,7 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import LogNorm
 from matplotlib import cm
-from gymnasium.core import RenderFrame
+from gymnasium.core import RenderFrame, ActType, ObsType
 from tqdm import trange, tqdm
 
 from qutip_qip.circuit import QubitCircuit
@@ -21,10 +23,10 @@ from krotov.functionals import F_avg
 class QuPulseEpisodicEnv(gym.Env):
     # Action scaling symmetric around 0
     action_channel_scaling = {
-        'zx': 0.01,
-        'sx': 0.01,
-        'sy': 0.01,
-        'sz': 0.001
+        'zx': 25e-5,
+        'sx': 15e-4,
+        'sy': 15e-4,
+        'sz': 5e-5
     }
     # action_channel_scaling = {
     #     'zx': 0.05,
@@ -56,7 +58,8 @@ class QuPulseEpisodicEnv(gym.Env):
         # Initialise simulator
         self.n_levels = n_levels = 2
         self.qc = qc = QubitCircuit(N=2)
-        qc.add_gate("CNOT", controls=0, targets=1)
+        # qc.add_gate("CNOT", controls=0, targets=1)
+        qc.add_gate("SWAP", targets=[0, 1])
 
         self.simulator = SCQubits(num_qubits=2, dims=[n_levels, n_levels], wq=[5.15, 5.09], wr=[5.96, 5.96], g=[0.1, 0.1], alpha=[-0.3, -0.3], omega_single=[0.01, 0.01], omega_cr=[0.01, 0.01], t1=50.e3, t2=20.e3)
         # print(processor.get_control('sx0'))
@@ -89,7 +92,7 @@ class QuPulseEpisodicEnv(gym.Env):
         self.nb_basis_states = self.n_levels ** 2
         # self.states_in_episode = None
         self.current_state = None
-        self.final_states = None
+        self.final_states_all = None
 
         # Prepare evaluation initial states
         self.psi00 = basis([self.n_levels, self.n_levels], [0, 0])
@@ -150,23 +153,70 @@ class QuPulseEpisodicEnv(gym.Env):
                     action[a_idx] /= scale
         return np.array(action)
 
-    # def get_cur_normed_pulse_amplitudes(self, return_dict=False):
-    #     ret = {k: v[:self.cur_idx + 1] for k, v in self.pulse_amplitudes.items()}
-    #     if return_dict:
-    #         return ret
-    #     else:
-    #         return list(ret.values())
-
     def reset(self, *params):
         self.cur_idx = 0
-        self.final_states = []
+        self.final_states_all = []
         self.pulse_amplitudes = self.init_pulse_amplitudes()
+        self.amps_cum = np.zeros(self.n_act)
+        self.step_states = self.full_liouville_basis.copy()
         # TODO: initialise state probas. appropriately - i.e. sum up to one
         self.current_state = np.zeros(self.n_obs)
         self.rewards = []
         return self.current_state
 
     def step(self, action):
+        return self.step_direct(action)
+        # return self.step_naive(action)
+
+    def step_direct(self, action):
+        action_denorm = self.denorm_action(action)
+
+        self.step_states = self.directed_forward_dynamics(from_states=self.step_states, amp_deltas=action_denorm)
+
+        done, success = False, False
+
+        # Check if episode is done
+        if self.cur_idx >= self.pulse_length - 1:
+            done = True
+
+        # Calculate reward for current action
+        reward = self.reward_function(self.step_states)
+        # if done:
+        #     reward = self.reward_function()
+        # else:
+        #     reward = 0
+
+        self.rewards.append(reward)
+
+        if reward > self.REW_THRESH:
+            success = True
+            done = True
+
+        # Construct observation for agent using state probabilities and normed actions
+        state_probas = np.real(np.concatenate([np.diag(item) for item in self.step_states]))
+        normed_latest_amplitudes = self.norm_action(
+            [self.pulse_amplitudes[lbl][self.cur_idx] for lbl in self.channel_labels])
+        self.current_state = np.concatenate([state_probas, normed_latest_amplitudes])
+
+        self.cur_idx += 1
+        return self.current_state, reward, done, success
+
+    def directed_forward_dynamics(self, from_states, amp_deltas):
+        for i, _ in enumerate(self.simulator.pulses):
+            prev_amp = self.amps_cum[i]
+            self.amps_cum[i] = prev_amp + amp_deltas[i]
+            self.simulator.pulses[i].coeff = np.array([prev_amp, self.amps_cum[i]])
+            self.simulator.pulses[i].tlist = np.array([0, 1e-3, self.dt])
+
+        final_states = []
+        for state in from_states:
+            result = self.simulator.run_state(init_state=state)
+            final_state = result.states[-1]
+            final_states.append(final_state)
+
+        return final_states
+
+    def step_naive(self, action):
         # print(action)
         prev_action_denorm = np.zeros(self.n_channels)
         if self.cur_idx > 0:
@@ -183,16 +233,18 @@ class QuPulseEpisodicEnv(gym.Env):
 
         # Simulate pulses and get final states
         final_states = self.forward_dynamics()
-        self.final_states.append(final_states)
+        self.final_states_all.append(final_states)
 
         # Check if episode is done
         if self.cur_idx >= self.pulse_length - 1:
             done = True
 
         # Calculate reward for current action
-        reward = 0
+        # reward = self.reward_function()
         if done:
             reward = self.reward_function()
+        else:
+            reward = 0
 
         self.rewards.append(reward)
 
@@ -232,42 +284,27 @@ class QuPulseEpisodicEnv(gym.Env):
         # for init_state in self.initial_states:
         for init_state in self.basis_states:
             result = self.simulator.run_state(init_state=init_state)
-            final_states.append(result.states[-1])
+            final_state = result.states[-1]
+            final_states.append(final_state)
         # return result.states[-1]
         return final_states
 
-    def reward_function(self):
+    def reward_function(self, step_states=None) -> float:
         # TODO: expand fidelity computation to cover all basis vectors
-        full_louis_results = []
-        for full_louis in self.full_liouville_basis:
-            full_louis_results.append(self.simulator.run_state(full_louis).states[-1])
+        next_states = []
+        if step_states is None:
+            step_states = self.full_liouville_basis
+        # for full_louis in self.full_liouville_basis:
+        for step_state in step_states:
+            next_states.append(self.simulator.run_state(step_state).states[-1])
 
-        f = F_avg(full_louis_results, self.basis_states, self.unitary, self.mapped_basis_states)
+        f = F_avg(next_states, self.basis_states, self.unitary, self.mapped_basis_states, prec=1e-4)
         return f
-
-    # def get_bloch_sphere_coordinates(self, qobj):
-    #     # Ensure qobj is a density matrix
-    #     if not qobj.isoper:# or qobj.dims[0][0] != 2:
-    #         raise ValueError("Qobj must be a density matrix of a qubit.")
-    #
-    #     # Extract diagonal elements
-    #     p0 = qobj[0, 0].real  # Probability of being in |00>
-    #     p1 = qobj[4, 4].real  # Probability of being in |11>
-    #
-    #     # Calculate z from probabilities
-    #     z = p0 - p1
-    #
-    #     # Extract off-diagonal elements for x and y if possible
-    #     coherence = qobj[1, 1]  # Coherence between |00> and |11> seen as |01>
-    #     x = 2 * coherence.real
-    #     y = 2 * coherence.imag
-    #
-    #     return x, y, z
 
     def render(self, **kwargs) -> RenderFrame | list[RenderFrame] | None:
         mpl.rcParams['font.size'] = 10
 
-        states = self.final_states
+        states = self.final_states_all
 
         # Setup figure and axes
         fig = plt.figure(tight_layout=True, figsize=(20, 12))
@@ -377,88 +414,3 @@ class QuPulseEpisodicEnv(gym.Env):
             ani.save(save_path, dpi=80, writer='imagemagick')
 
         plt.show()
-
-
-from cycler import cycler
-mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
-
-
-def testing_actions():
-    env = QuPulseEpisodicEnv()
-    print(env)
-    ch_lbls = env.channel_labels
-
-    ideal_pulses = env.ideal_pulses
-    T = ideal_pulses['max_time']
-    N = ideal_pulses['max_len']
-    global_tlist = np.linspace(0, T, N)
-    ideal_actions = ideal_pulses['coeff']
-    tlists = ideal_pulses['tlist']
-
-    init_state = env.reset()
-
-    action = prev_action = np.zeros(env.n_act)
-
-    fig, axs = plt.subplots(2)
-    ax = axs[0]
-    cmap = mpl.cm.get_cmap('tab10')
-
-    for i, (lbl, ideal_act, tl) in enumerate(zip(ch_lbls, ideal_actions, tlists)):
-        ax.plot(tl, ideal_act, c=cmap(i / (env.n_act - 1)), label=lbl, marker='.')
-
-    # For pulse duration
-    all_actions = np.empty(shape=(N, env.n_act))
-    for i, t in enumerate(tqdm(global_tlist)):
-        cur_action = np.zeros(env.n_act)
-        for j, (ideal_act, tli) in enumerate(zip(ideal_actions, tlists)):
-            idx = np.argmin(np.square(tli - t))
-            if idx > 0:
-                cur_action[j] = ideal_act[idx] - ideal_act[idx-1]
-
-        all_actions[i] = env.norm_action(cur_action)
-
-    ax = axs[1]
-    for j, (acts, ch_lbl) in enumerate(zip(all_actions.T, ch_lbls)):
-        ax.scatter(global_tlist, acts, c=cmap(j / (env.n_act - 1)), marker='^', label=ch_lbl)
-
-    for ax in axs:
-        ax.legend(loc='best')
-
-    fig.tight_layout()
-    plt.show()
-
-
-def main():
-    env = QuPulseEpisodicEnv()
-    print(env)
-
-    ideal_pulses = env.ideal_pulses
-    T = ideal_pulses['max_time']
-    N = ideal_pulses['max_len']
-    global_tlist = np.linspace(0, T, N)
-    ideal_actions = ideal_pulses['coeff']
-    tlists = ideal_pulses['tlist']
-
-    init_state = env.reset()
-
-    for i, t in enumerate(tqdm(global_tlist)):
-        if i > 2:
-            break
-        cur_action = np.zeros(env.n_act)
-        for j, (ideal_act, tli) in enumerate(zip(ideal_actions, tlists)):
-            idx = np.argmin(np.square(tli - t))
-            if idx > 0:
-                cur_action[j] = ideal_act[idx] - ideal_act[idx - 1]
-
-        # cur_action = env.norm_action(cur_action)
-        cur_action = env.norm_action(cur_action)
-        # cur_action = np.random.uniform(-1, 1, env.n_act)
-        env.step(cur_action)
-
-    # env.render(save_path=f'QuPulseEpisodicEnv_ideal_pulse_{dt.now().strftime("%m%d%yT%H%M%S")}.gif')
-    env.render()
-
-
-if __name__ == '__main__':
-    # testing_actions()
-    main()
