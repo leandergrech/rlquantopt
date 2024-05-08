@@ -1,4 +1,5 @@
 import os
+import argparse
 from datetime import datetime as dt
 import gymnasium as gym
 import numpy as np
@@ -15,28 +16,34 @@ from rlquantopt.rl_envs.vec_qu_pulse_episodic_env import VecQuPulseEpisodicEnv a
 from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 
 
-def testing_vqpee():
-    n_envs = 1
-    # vec_env = VQPEE(num_envs=n_envs, pulse_length=300)
-    # envs = [QPEE(pulse_length=300, sparse_reward=True) for _ in range(n_envs)]
-    vec_env = VQPEE(n_envs, pulse_length=300)
-    init_state = vec_env.reset()
-    print(f'Initial state shape: {init_state.shape}')
-    for i in trange(10):
-        actions = [vec_env.action_space.sample() for _ in range(n_envs)]
-        observations, rewards, dones, infos = vec_env.step(actions)
+def parse_args():
+    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on QuPulseEpisodic vectorised environment')
+    parser.add_argument('--n_envs', default=10, help='Number of parallel environments')
+    parser.add_argument('--n_train', default=int(5e5), help='Number of training steps')
+    # parser.add_argument('--lr', default=1e-5, type=float, help="Learning rate")
+    # parser.add_argument('--max_steps', default=100, type=int)
+    # parser.add_argument('--per_device_train_batch_size', default=2, type=int)
+    # parser.add_argument('--per_device_eval_batch_size', default=2, type=int)
+    # parser.add_argument('--eval_steps', default=25, type=int)
+    # parser.add_argument('--save_steps', default=50, type=int)
+    # parser.add_argument('--no_cuda', action='store_true')
+    # parser.add_argument("--seed", type=int, default=42, help="For reproducibility")
 
-    vec_env.render()
+    return parser.parse_args()
 
 
 def main():
-    n_envs = 10
+    args = parse_args()
+
+    # n_envs = 10
+    n_envs = args.n_envs
     pulse_length = 300
     env = VQPEE(num_envs=n_envs, pulse_length=pulse_length)
 
     n_steps = 2048
     batch_size = 256 #(n_envs * n_steps) // 100
-    n_train = int(5e5)
+    # n_train = int(5e5)
+    n_train = args.n_train
     log_interval = 1
     save_freq = 100
 

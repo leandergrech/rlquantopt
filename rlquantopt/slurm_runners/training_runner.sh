@@ -34,8 +34,8 @@ else
 fi
 
 USER_DIR=/opt/users/lgrec12
+PROJ_DIR=$USER_DIR/rlquantopt_workspace/rlquantopt
+SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/qpee_sb3_training.py
 
-SCRIPT_PATH=$USER_DIR/rlquantopt_workspace/adace3/token_classification_training.py
-
-python $SCRIPT_PATH $DATASET_DIR $OUTPUT_DIR --lr 1e-5 --max_steps 1500 --per_device_train_batch_size 16 --per_device_eval_batch_size 16 --eval_steps 50 --save_steps 100 --seed $SEED
+python $SCRIPT_PATH --n-envs 10 --n-train 1000
 
