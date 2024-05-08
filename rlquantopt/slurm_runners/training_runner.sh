@@ -35,7 +35,8 @@ fi
 
 USER_DIR=/opt/users/lgrec12
 PROJ_DIR=$USER_DIR/rlquantopt_workspace/rlquantopt
+pip install $PROJ_DIR
 SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/qpee_sb3_training.py
 
-python $SCRIPT_PATH --n-envs 10 --n-train 1000
+python $SCRIPT_PATH --n-envs 10 --n-train 1000 --log-interval 1 --save-freq 1000
 

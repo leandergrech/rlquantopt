@@ -18,8 +18,10 @@ from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on QuPulseEpisodic vectorised environment')
-    parser.add_argument('--n_envs', default=10, help='Number of parallel environments')
-    parser.add_argument('--n_train', default=int(5e5), help='Number of training steps')
+    parser.add_argument('--n-envs', default=10, help='Number of parallel environments')
+    parser.add_argument('--n-train', default=int(5e5), help='Number of training steps')
+    parser.add_argument('--save-freq', default=1000, help='Save model every N calls to env.step')
+    parser.add_argument('--log-interval', default=1, help='Save model every N calls to env.step')
     # parser.add_argument('--lr', default=1e-5, type=float, help="Learning rate")
     # parser.add_argument('--max_steps', default=100, type=int)
     # parser.add_argument('--per_device_train_batch_size', default=2, type=int)
@@ -44,14 +46,13 @@ def main():
     batch_size = 256 #(n_envs * n_steps) // 100
     # n_train = int(5e5)
     n_train = args.n_train
-    log_interval = 1
-    save_freq = 100
+    log_interval = args.log_interval
+    save_freq = args.save_freq // n_envs
 
     # n_steps = 10
     # batch_size = 5#(n_envs * n_steps) // 100
     # n_train = 100
     # save_freq = max(1000 // n_envs, 1)
-
 
     algo = 'PPO'
     work_dir = os.path.join(f'VQPEE-{algo}')
