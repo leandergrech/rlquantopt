@@ -18,10 +18,10 @@ from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on QuPulseEpisodic vectorised environment')
-    parser.add_argument('--n-envs', default=10, help='Number of parallel environments')
-    parser.add_argument('--n-train', default=int(5e5), help='Number of training steps')
-    parser.add_argument('--save-freq', default=1000, help='Save model every N calls to env.step')
-    parser.add_argument('--log-interval', default=1, help='Save model every N calls to env.step')
+    parser.add_argument('--n-envs', default=10, type=int, help='Number of parallel environments')
+    parser.add_argument('--n-train', default=int(5e5), type=int, help='Number of training steps')
+    parser.add_argument('--save-freq', default=1000, type=int, help='Save model every N calls to env.step')
+    parser.add_argument('--log-interval', default=1, type=int, help='Save model every N calls to env.step')
     parser.add_argument('--no_cuda', action='store_true')
     # parser.add_argument('--lr', default=1e-5, type=float, help="Learning rate")
     # parser.add_argument('--max_steps', default=100, type=int)
