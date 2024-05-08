@@ -1,11 +1,11 @@
 #!/bin/bash
 # ALWAYS specify CPU and RAM resources needed as well as walltime
-#SBATCH --partition=research_gpu
-#SBATCH --gres=gpu:ampere:1
+#SBATCH --partition=research_cpu
+# SBATCH --gres=gpu:ampere:1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem-per-cpu=4G
-#SBATCH --time=250
+#SBATCH --cpus-per-task=32
+#SBATCH --mem-per-cpu=1G
+#SBATCH --time=600
 # job parameters
 #SBATCH --job-name=rlquantopt-training
 #SBATCH --account=rlquantopt
