@@ -6,7 +6,7 @@ from qutip_qip.device import SCQubits
 
 from rlquantopt.utils.utils import animate_matrices
 
-nb_levels = 3
+nb_levels = 2
 
 gate = 'CNOT'
 qc = QubitCircuit(N=2)
@@ -17,14 +17,14 @@ processor = SCQubits(num_qubits=2, dims=[nb_levels, nb_levels], wq=[5.15, 5.09],
                      alpha=[-0.3, -0.3], omega_single=[0.01, 0.01], omega_cr=[0.01, 0.01], t1=50.e3, t2=20.e3)
 print(processor.get_control_labels())
 # print(processor.get_control('sx0'))
-processor.pulse_mode = 'discrete'
+# processor.pulse_mode = 'discrete'
 processor.load_circuit(qc)
 processor.plot_pulses(show_axis=True)
 # plt.show()
 
 # Get pulse info
 for p in processor.pulses:
-	print(f'Pulse {p.label}: min {min(p.coeff)}, max {max(p.coeff)}')
+    print(f'Pulse {p.label}: min {min(p.coeff)}, max {max(p.coeff)}')
 
 # Plot pulses
 plt.rcParams['font.size'] = 20

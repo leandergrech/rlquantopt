@@ -1,10 +1,16 @@
 import os
 from abc import ABC
+import random
+import string
 import numpy as np
 from copy import deepcopy
 import yaml
 
 from matplotlib.ticker import MultipleLocator
+
+
+def generate_random_alphanumeric(n):
+    return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(n))
 
 
 def argmax(arr):

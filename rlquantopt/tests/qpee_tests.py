@@ -9,34 +9,6 @@ from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv
 mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 
 
-def get_reconstructed_pulses_with_uniform_time(env):
-    ideal_pulses = env.ideal_pulses
-    ideal_amps = ideal_pulses['coeff']
-    tlists = ideal_pulses['tlist']
-    T = ideal_pulses['max_time']
-    N = ideal_pulses['max_len']//4
-
-    # Obtain ideal amplitudes reconstructions
-    global_tlist = np.linspace(0, T, N + 1)
-    recons_amps = np.zeros(shape=(len(ideal_amps), N))
-    for i, t in enumerate(global_tlist[:-1]):
-        for j, tli in enumerate(tlists):
-            idx = np.argmin(np.square(tli - t))
-            # idx = np.searchsorted(tli, t)
-            idx1, idx2 = None, None
-            if tli[idx] < t:
-                idx1 = idx - 1
-                idx2 = idx
-            else:
-                idx1 = idx
-                idx2 = idx + 1
-
-            recons_amp = ideal_amps[j][idx1] + ((t - tli[idx1])/(tli[idx2] - tli[idx1]))*(ideal_amps[j][idx2] - ideal_amps[j][idx1])
-            recons_amps[j][i] = recons_amp
-
-    return recons_amps, global_tlist
-
-
 def check_reconstructed_ideal_pulse():
     env = QuPulseEpisodicEnv()
     print(env.channel_labels)
@@ -45,7 +17,7 @@ def check_reconstructed_ideal_pulse():
     # Obtain ideal amplitudes reconstructions
     ideal_pulses = env.ideal_pulses
 
-    recons_amps, global_tlist = get_reconstructed_pulses_with_uniform_time(env)
+    recons_amps, global_tlist = env.get_reconstructed_pulses_with_uniform_time()
 
     # Compute original fidelity with ideal pulses from qutip
     for j, (i_tli, i_amp) in enumerate(zip(ideal_pulses['tlist'], ideal_pulses['coeff'])):
@@ -74,23 +46,11 @@ def check_reconstructed_ideal_pulse():
     print(f'Fidelity from reconstructed pulse: {fidelity*100:.2f}%')
     plt.show()
 
-def check_action_norms():
-    env = QuPulseEpisodicEnv()
-
-    ideal_pulses = env.ideal_pulses
-
-    recons_amps, global_tlist = get_reconstructed_pulses_with_uniform_time(env)
-
-
-
-
-def check_different_gate():
-    env = QuPulseEpisodicEnv()
 
 def reconstructed_ideal_pulse_with_environment():
-    env = QuPulseEpisodicEnv()
+    env = QuPulseEpisodicEnv(pulse_length=300, sparse_reward=False)
 
-    recons_amps, global_tlist = get_reconstructed_pulses_with_uniform_time(env)
+    recons_amps, global_tlist = env.get_reconstructed_pulses_with_uniform_time()
 
     env.reset()
     rews = []
@@ -112,7 +72,7 @@ def reconstructed_ideal_pulse_with_environment():
         # cur_action += np.random.normal(0, 0.01, env.n_act)
         all_actions_norm = np.vstack((all_actions_norm, cur_action))
 
-        _, rew, _, _ = env.step(cur_action)
+        _, rew, *_ = env.step(cur_action)
         rews.append(rew)
         duration = dt.now() - start
         durations.append(duration.total_seconds()*1000.)
@@ -157,6 +117,13 @@ def reconstructed_ideal_pulse_with_environment():
     plt.show()
 
 
+def check_env():
+    from stable_baselines3.common.env_checker import check_env
+    env = QuPulseEpisodicEnv(pulse_length=300)
+    check_env(env)
+
+
 if __name__ == '__main__':
     # check_reconstructed_ideal_pulse()
     reconstructed_ideal_pulse_with_environment()
+    # check_env()
