@@ -1,7 +1,7 @@
 from itertools import product
 from typing import *
 import numpy as np
-import gym
+import gymnasium as gym
 from qutip import basis
 from qutip_qip.device import SCQubits
 import scipy.interpolate as interp
