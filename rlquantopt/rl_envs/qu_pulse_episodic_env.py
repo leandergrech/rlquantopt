@@ -278,7 +278,7 @@ class QuPulseEpisodicEnv(gym.Env):
         # Setup figure and axes
         fig = plt.figure(figsize=(20, 12))
         fig.suptitle('CNOT')
-        gs = mpl.gridspec.GridSpec(3, self.nb_basis_states)
+        gs = mpl.gridspec.GridSpec(4, self.nb_basis_states)
 
         ax_state_titles = []
         for i in range(self.n_levels):
@@ -291,7 +291,8 @@ class QuPulseEpisodicEnv(gym.Env):
             ax_state[i].set_title(ax_state_titles[i])
 
         ax_action = fig.add_subplot(gs[1, :])
-        ax_reward = fig.add_subplot(gs[2, :])
+        ax_action_deltas = fig.add_subplot(gs[2, :])
+        ax_reward = fig.add_subplot(gs[3, :])
 
         # Initialize the plot
         EPS = 1e-4
@@ -313,7 +314,7 @@ class QuPulseEpisodicEnv(gym.Env):
             ax.set_xticks(np.arange(self.nb_basis_states), tick_labels)
             ax.set_yticks(np.arange(self.nb_basis_states), reversed(tick_labels))
 
-        ax_action.set_xlim(0, self.cur_idx - 1)  # Assuming 100 timesteps, adjust as necessary
+        ax_action.set_xlim(0, self.cur_idx - 1)
         if self.cur_idx == 0:
             A = 1.
         else:
@@ -321,6 +322,11 @@ class QuPulseEpisodicEnv(gym.Env):
         ax_action.set_ylim(-A, A)  # Adjust based on action range
         ax_action.set_ylabel('Pulse amplitude')  # Adjust based on action range
         ax_action.set_xlabel('Steps')  # Adjust based on action range
+
+        ax_action_deltas.set_xlim(0, self.cur_idx - 1)
+        ax_action_deltas.set_ylim(-1, 1)  # Adjust based on action range
+        ax_action_deltas.set_ylabel('Pulse deltas')  # Adjust based on action range
+        ax_action_deltas.set_xlabel('Steps')  # Adjust based on action range
 
         # print(self.rewards)
         ax_reward.set_ylim(min(self.rewards), max(self.rewards))  # Adjust based on expected reward range
@@ -346,6 +352,7 @@ class QuPulseEpisodicEnv(gym.Env):
         ax_reward.set_xlim(0, self.cur_idx - 1)
 
         action_lines = [ax_action.plot([], [], lw=1.2, label=ch, marker='.')[0] for _, ch in enumerate(self.channel_labels)]
+        action_delta_lines = [ax_action_deltas.plot([], [], lw=1.2, label=ch, marker='.')[0] for _, ch in enumerate(self.channel_labels)]
         ax_action.legend(loc='upper right', ncol=2)
         reward_line, = ax_reward.plot([], [], 'g-', lw=2, marker='.')
 
@@ -357,9 +364,11 @@ class QuPulseEpisodicEnv(gym.Env):
 
             for line in action_lines:
                 line.set_data([], [])
+            for line in action_delta_lines:
+                line.set_data([], [])
             reward_line.set_data([], [])
 
-            return *ims, *action_lines, reward_line
+            return *ims, *action_lines, *action_delta_lines, reward_line
 
         def update(frame):
             for i, ax in enumerate(ax_state):
@@ -374,11 +383,14 @@ class QuPulseEpisodicEnv(gym.Env):
             for line, action in zip(action_lines, actions):
                 line.set_data(range(frame), action[:frame])
 
+            for line, action in zip(action_delta_lines, actions):
+                line.set_data(range(frame-1), np.diff(action[:frame]))
+
             rewards = self.rewards
             reward_line.set_data(range(frame), rewards[:frame])
             ax_reward.set_title(f'Time: {global_tlist[frame]}ns  Reward: {rewards[frame]}')
 
-            return *ims, *action_lines, reward_line
+            return *ims, *action_lines, *action_delta_lines, reward_line
 
         frames = list(range(self.cur_idx)) + [self.cur_idx - 1] * 10
         ani = FuncAnimation(fig, update, frames=frames, interval=5, init_func=init, blit=False)
@@ -386,7 +398,7 @@ class QuPulseEpisodicEnv(gym.Env):
         if save_path is None:
             save_path = generate_random_alphanumeric(8) + '.mp4'
         print(f'Saving to: {save_path}')
-        ffwriter = mpl.animation.FFMpegWriter(fps=25)
+        ffwriter = mpl.animation.FFMpegWriter(fps=10)
         ani.save(save_path, dpi=60, writer=ffwriter)
 
 

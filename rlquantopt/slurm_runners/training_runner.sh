@@ -3,15 +3,15 @@
 #SBATCH --partition=research_cpu
 # SBATCH --gres=gpu:ampere:1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=8
 #SBATCH --mem-per-cpu=1G
 #SBATCH --time=600
 # job parameters
 #SBATCH --job-name=rlquantopt-training
 #SBATCH --account=rlquantopt
 # email user with progress
-#SBATCH --mail-user=leander.grech@um.edu.mt
-#SBATCH --mail-type=all
+# SBATCH --mail-user=leander.grech@um.edu.mt
+# SBATCH --mail-type=all
 #
 echo Running on $(hostname)
 scontrol --details show jobs $SLURM_JOBID |grep RES
@@ -30,13 +30,12 @@ if [ -d $VENV ]; then
 else
 	echo Virtual environment $ENV_NAME NOT found
 	REQ_PATH=$PROJ_DIR/requirements.txt
-#	echo Creating from $REQ_PATH
+	echo Creating from $REQ_PATH
 	conda create --name $ENV_NAME python=3.10
 	conda activate $ENV_NAME
 	conda install pip
-	pip install -r $REQ_PATH
 fi
-
+pip install -r $REQ_PATH
 pip install -e $PROJ_DIR
 
 SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/qpee_sb3_training.py

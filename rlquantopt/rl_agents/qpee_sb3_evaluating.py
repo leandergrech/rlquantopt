@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from stable_baselines3 import PPO
@@ -7,9 +8,14 @@ from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 
 # model_path = '03-05-24_171958_VQPEE_14-envs_PPO_1000-n_steps_140-batch_size.zip'
 # model_path = '08-05-24_010313_VQPEE_16-envs_PPO_2048-n_steps_64-batch_size.zip'
-model_path = 'VQPEE-PPO/08-05-24_185422_16-envs/rl_model_272800_steps.zip'
+model_dir = 'VQPEE-PPO/09-05-24_095621_16-envs'
+model_name = 'rl_model_163680_steps.zip'
+model_path = os.path.join(model_dir, model_name)
+
 model = PPO.load(model_path)
-env = QPEE(pulse_length=300, sparse_reward=False)
+pulse_length = 50
+sparse_reward = False
+env = QPEE(pulse_length=pulse_length, sparse_reward=sparse_reward)
 
 # mean_rew, std_rew = evaluate_policy(model, env=env, n_eval_episodes=1)
 # print(f'Mean reward = {mean_rew:.2f}')
@@ -20,7 +26,7 @@ term = False
 trunc = False
 idx = 0
 rews = []
-pbar= tqdm(total=300)
+pbar= tqdm(total=pulse_length)
 while not term and not trunc:
     idx += 1
     a = model.predict(obs, deterministic=True)[0]
@@ -36,4 +42,7 @@ while not term and not trunc:
 # ax.set_ylabel('Reward (F)')
 #
 # plt.show()
-env.render()
+save_dir = os.path.join(model_dir, 'evals')
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+env.render(save_path=os.path.join(save_dir, os.path.splitext(model_name)[0]+'.mp4'))
