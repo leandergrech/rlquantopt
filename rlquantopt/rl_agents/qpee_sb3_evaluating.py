@@ -6,7 +6,8 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 
 # model_path = '03-05-24_171958_VQPEE_14-envs_PPO_1000-n_steps_140-batch_size.zip'
-model_path = '08-05-24_010313_VQPEE_16-envs_PPO_2048-n_steps_64-batch_size.zip'
+# model_path = '08-05-24_010313_VQPEE_16-envs_PPO_2048-n_steps_64-batch_size.zip'
+model_path = 'VQPEE-PPO/08-05-24_185422_16-envs/rl_model_272800_steps.zip'
 model = PPO.load(model_path)
 env = QPEE(pulse_length=300, sparse_reward=False)
 

@@ -9,8 +9,8 @@ from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 
 
 class VecQuPulseEpisodicEnv(SubprocVecEnv):
-    def __init__(self, num_envs, pulse_length):
-        self.envs = [QPEE(pulse_length=pulse_length, sparse_reward=True) for _ in range(num_envs)]
+    def __init__(self, num_envs, pulse_length, sparse_reward=True):
+        self.envs = [QPEE(pulse_length=pulse_length, sparse_reward=sparse_reward) for _ in range(num_envs)]
         super().__init__(self.envs, start_method='fork')
 
     def render(self, mode: Optional[str] = None, save_prefix=None):
