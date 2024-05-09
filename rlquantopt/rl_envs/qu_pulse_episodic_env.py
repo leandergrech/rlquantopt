@@ -147,10 +147,6 @@ class QuPulseEpisodicEnv(gym.Env):
         ideal_amps = ideal_pulses['coeff']
         tlists = ideal_pulses['tlist']
         T = ideal_pulses['max_time']
-        # if pulse_length:
-        #     N = pulse_length
-        # else:
-        #     N = ideal_pulses['max_len']
         N = self.pulse_length
 
         # Obtain ideal amplitudes reconstructions
@@ -201,8 +197,6 @@ class QuPulseEpisodicEnv(gym.Env):
             np.random.seed(seed)
 
         self.cur_idx = 0
-        # chi = int(len(self.full_liouville_basis)/len(self.basis_states))
-        # basis_liouville = [self.full_liouville_basis[k*chi+k] for k in range(chi)]
         self.final_states_all = [self.full_liouville_basis.copy()]
         self.pulse_amplitudes = self.init_pulse_amplitudes()
         self.amps_cum = np.zeros(self.n_act)
@@ -257,8 +251,6 @@ class QuPulseEpisodicEnv(gym.Env):
         for i, _ in enumerate(self.simulator.pulses):
             prev_amp = self.amps_cum[i]
             self.amps_cum[i] = prev_amp + amp_deltas[i]
-            # self.simulator.pulses[i].coeff = np.array([prev_amp, self.amps_cum[i]])
-            # self.simulator.pulses[i].tlist = np.array([0, 1e-3, self.dt])
             self.simulator.pulses[i].coeff = np.array([self.amps_cum[i]])
             self.simulator.pulses[i].tlist = np.array([0, self.dt])
 

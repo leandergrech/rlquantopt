@@ -23,13 +23,6 @@ def parse_args():
     parser.add_argument('--save-freq', default=1000, type=int, help='Save model every N calls to env.step')
     parser.add_argument('--log-interval', default=1, type=int, help='Save model every N calls to env.step')
     parser.add_argument('--no_cuda', action='store_true')
-    # parser.add_argument('--lr', default=1e-5, type=float, help="Learning rate")
-    # parser.add_argument('--max_steps', default=100, type=int)
-    # parser.add_argument('--per_device_train_batch_size', default=2, type=int)
-    # parser.add_argument('--per_device_eval_batch_size', default=2, type=int)
-    # parser.add_argument('--eval_steps', default=25, type=int)
-    # parser.add_argument('--save_steps', default=50, type=int)
-    # parser.add_argument("--seed", type=int, default=42, help="For reproducibility")
 
     return parser.parse_args()
 
@@ -37,12 +30,12 @@ def parse_args():
 def main():
     args = parse_args()
 
-    # n_envs = 10
     n_envs = int(args.n_envs)
-    pulse_length = 300
-    env = VQPEE(num_envs=n_envs, pulse_length=pulse_length, sparse_reward=False)
+    pulse_length = 50
+    sparse_reward = False
+    env = VQPEE(num_envs=n_envs, pulse_length=pulse_length, sparse_reward=sparse_reward)
 
-    n_steps = 2048
+    n_steps = 100
     batch_size = 256 #(n_envs * n_steps) // 100
     # n_train = int(5e5)
     n_train = int(args.n_train)
@@ -53,11 +46,6 @@ def main():
     if args.no_cuda:
         device = 'cpu'
 
-    # n_steps = 10
-    # batch_size = 5#(n_envs * n_steps) // 100
-    # n_train = 100
-    # save_freq = max(1000 // n_envs, 1)
-
     algo = 'PPO'
     work_dir = os.path.join(f'VQPEE-{algo}')
     model_name = f"{dt.now().strftime('%d-%m-%y_%H%M%S')}_{n_envs}-envs"
@@ -67,12 +55,16 @@ def main():
     new_logger = configure(os.path.join(model_path, 'logs'), ['stdout', 'csv', 'tensorboard'])
     env = VecMonitor(env, filename=os.path.join(model_path, 'vec_monitor'))
 
-    model = PPO('MlpPolicy', env, tensorboard_log=os.path.join(model_path, 'tb_logs'), n_steps=n_steps, batch_size=batch_size, device=device)
-    # model = SAC('MlpPolicy', env, tensorboard_log=os.path.join('VQPEE-SAC', model_name))
+    if algo == 'PPO':
+        model = PPO('MlpPolicy', env, tensorboard_log=os.path.join(model_path, 'tb_logs'), n_steps=n_steps, batch_size=batch_size, device=device)
+    else:
+        raise NotImplementedError
+
     model.set_logger(new_logger)
 
     print(f'Training {model_name}...')
-    model.learn(total_timesteps=n_train, progress_bar=True, log_interval=log_interval, tb_log_name=model_name, callback=callback)
+    model.learn(total_timesteps=n_train, progress_bar=True, log_interval=log_interval, tb_log_name=model_name,
+                callback=callback)
     # model.save(model_name)
 
 
