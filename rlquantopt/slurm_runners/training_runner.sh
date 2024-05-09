@@ -29,12 +29,12 @@ if [ -d $VENV ]; then
 	echo Conda environment $ENV_NAME activated
 else
 	echo Virtual environment $ENV_NAME NOT found
-	REQ_PATH=$PROJ_DIR/requirements.txt
-	echo Creating from $REQ_PATH
 	conda create --name $ENV_NAME python=3.10
 	conda activate $ENV_NAME
 	conda install pip
 fi
+REQ_PATH=$PROJ_DIR/requirements.txt
+echo Updating requirements from $REQ_PATH
 pip install -r $REQ_PATH
 pip install -e $PROJ_DIR
 

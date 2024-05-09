@@ -324,7 +324,7 @@ class QuPulseEpisodicEnv(gym.Env):
         ax_action.set_xlabel('Steps')  # Adjust based on action range
 
         ax_action_deltas.set_xlim(0, self.cur_idx - 1)
-        ax_action_deltas.set_ylim(-1, 1)  # Adjust based on action range
+        ax_action_deltas.set_ylim(-1.1, 1.1)  # Adjust based on action range
         ax_action_deltas.set_ylabel('Pulse deltas')  # Adjust based on action range
         ax_action_deltas.set_xlabel('Steps')  # Adjust based on action range
 
@@ -354,6 +354,7 @@ class QuPulseEpisodicEnv(gym.Env):
         action_lines = [ax_action.plot([], [], lw=1.2, label=ch, marker='.')[0] for _, ch in enumerate(self.channel_labels)]
         action_delta_lines = [ax_action_deltas.plot([], [], lw=1.2, label=ch, marker='.')[0] for _, ch in enumerate(self.channel_labels)]
         ax_action.legend(loc='upper right', ncol=2)
+        ax_action_deltas.legend(loc='upper right')
         reward_line, = ax_reward.plot([], [], 'g-', lw=2, marker='.')
 
         def init():

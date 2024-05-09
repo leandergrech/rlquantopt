@@ -9,7 +9,7 @@ from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 # model_path = '03-05-24_171958_VQPEE_14-envs_PPO_1000-n_steps_140-batch_size.zip'
 # model_path = '08-05-24_010313_VQPEE_16-envs_PPO_2048-n_steps_64-batch_size.zip'
 model_dir = 'VQPEE-PPO/09-05-24_095621_16-envs'
-model_name = 'rl_model_163680_steps.zip'
+model_name = 'rl_model_178560_steps.zip'
 model_path = os.path.join(model_dir, model_name)
 
 model = PPO.load(model_path)
