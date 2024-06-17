@@ -184,33 +184,34 @@ class EvalCallback(EventCallback):
                     self.evaluations_successes.append(self._is_success_buffer)
                     kwargs = dict(successes=self.evaluations_successes)
 
-                np.savez(
-                    self.log_path,
-                    timesteps=self.evaluations_timesteps,
-                    results=self.evaluations_rewards,
-                    ep_lengths=self.evaluations_length,
-                    **kwargs,
-                )
+                # np.savez(
+                #     self.log_path,
+                #     timesteps=self.evaluations_timesteps,
+                #     results=self.evaluations_rewards,
+                #     ep_lengths=self.evaluations_length,
+                #     **kwargs,
+                # )
 
             mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
             mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(episode_lengths)
-            init_rewards = np.mean([ep_rews[0] for ep_rews in episode_rewards])
-            best_rewards = np.mean([max(ep_rews) for ep_rews in episode_rewards])
+            mean_init_rewards = np.mean([ep_rews[0] for ep_rews in episode_rewards])
+            mean_best_rewards = np.mean([max(ep_rews) for ep_rews in episode_rewards])
 
             # mean_ep_reward_improvement = np.mean(np.subtract(best_rewards, init_rewards))
-            mean_ep_reward_improvement = best_rewards - init_rewards
+            mean_ep_reward_improvement = mean_best_rewards - mean_init_rewards
             mean_ep_len_best = np.mean([np.argmax(ep_rews) for ep_rews in episode_rewards])
 
             if self.verbose >= 1:
-                print(f"Eval num_timesteps={self.num_timesteps}, " f"episode_reward={mean_reward:.2f} +/- {std_reward:.2f}")
+                print(
+                    f"Eval num_timesteps={self.num_timesteps}, " f"episode_reward={mean_reward:.2f} +/- {std_reward:.2f}")
                 print(f"Episode length: {mean_ep_length:.2f} +/- {std_ep_length:.2f}")
             # Add to current Logger
             self.logger.record("eval/mean_reward", float(mean_reward))
             self.logger.record("eval/std_reward", float(std_reward))
             self.logger.record("eval/mean_ep_length", float(mean_ep_length))
             self.logger.record("eval/std_ep_length", float(std_ep_length))
-            self.logger.record("eval/mean_init_reward", float(init_rewards))
-            self.logger.record('eval/mean_best_rewards', float(best_rewards))
+            self.logger.record("eval/mean_init_reward", float(mean_init_rewards))
+            self.logger.record('eval/mean_best_rewards', float(mean_best_rewards))
             self.logger.record('eval/mean_ep_reward_improvement', float(mean_ep_reward_improvement))
             self.logger.record('eval/mean_ep_len_best', float(mean_ep_len_best))
 
@@ -252,10 +253,10 @@ class EvalCallback(EventCallback):
 
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on QuPulseEpisodic vectorised environment')
-    parser.add_argument('--n-envs', default=16, type=int, help='Number of parallel environments')
-    parser.add_argument('--n-train', default=int(1e6), type=int, help='Number of training steps')
-    parser.add_argument('--save-freq', default=10000, type=int, help='Save model every save_freq calls to env.step')
-    parser.add_argument('--eval-freq', default=5000, type=int, help='Evaluate model every eval_freq calls to env.step')
+    # parser.add_argument('--n-envs', default=16, type=int, help='Number of parallel environments')
+    parser.add_argument('--n-train', default=int(2e5), type=int, help='Number of training steps')
+    parser.add_argument('--save-freq', default=5000, type=int, help='Save model every save_freq calls to env.step')
+    parser.add_argument('--eval-freq', default=500, type=int, help='Evaluate model every eval_freq calls to env.step')
     parser.add_argument('--n-eval-eps', default=5, type=int, help='Number of evaluation episodes done every eval_freq calls to env.step')
     parser.add_argument('--log-interval', default=1, type=int, help='Log every N calls to env.step')
     parser.add_argument('--no-cuda', action='store_true')
@@ -266,75 +267,45 @@ def parse_args():
 
 def ppo_learning_rate(x):
     lr1 = 3e-4
-    # return lr1
-    lr2 = 1e-3
-    start_decay_at = 0.5
-    if x > start_decay_at:
-        return lr1
-    else:
-        x_ = x/start_decay_at
-        return lr2 + (lr1 - lr2) * x_
+    return lr1*x
 
 
 def main():
     args = parse_args()
 
-    # n_envs = int(args.n_envs)
-    # n_envs = 1
-    # pulse_length = 120
-    # sparse_reward = False
-    # use_full_liouville = True
-    # inc_off_diag = True
-    # env = VQPEE(num_envs=n_envs, pulse_length=pulse_length, sparse_reward=sparse_reward, use_full_liouville=use_full_liouville, inc_off_diag=inc_off_diag)
-    n_eval_eps = int(args.n_eval_eps)
-    # eval_env = VQPEE(num_envs=n_eval_eps, pulse_length=pulse_length, sparse_reward=sparse_reward, use_full_liouville=use_full_liouville, inc_off_diag=inc_off_diag)
     pulse_length = 120
     env = ZCQPEE(pulse_length=pulse_length)
     eval_env = ZCQPEE(pulse_length=pulse_length)
-    # print(f'ZCQPEE pulse_length={pulse_length}\tn_obs={env.envs[0].n_obs}\tn_act={env.envs[0].n_act}')
+
+    info_fn = 'info.txt'
+    TRAINING_MESSAGE = (f"ZCQPEE:   pulse_length={pulse_length}\n"
+                        f"          action scaling = {env.action_channel_scaling} \t A_norm_max = {env.A_norm_max}\n"
+                        f"          T = {env.T} ns \t ΔT = {env.dt:.3f} ns\n"
+                        f"          ISWAP gate optimisation.\n"
+                        f"          Action is delta amplitude in this version of the environment.\n"
+                        "")
+
+    n_eval_eps = int(args.n_eval_eps)
     print(f'ZCQPEE pulse_length={pulse_length}\tn_obs={env.n_obs}\tn_act={env.n_act}')
 
     # PPO parameter setup
-    n_steps = pulse_length
+    n_steps = pulse_length*2
     n_epochs = 8
-    batch_size = 120
-    # batch_size = (n_envs * n_steps) // n_epochs # 256 #(n_envs * n_steps) // 100
-    # batch_size = n_steps) // n_epochs # 256 #(n_envs * n_steps) // 100
+    batch_size = 32
 
     n_train = int(args.n_train)
     log_interval = int(args.log_interval)
-    # save_freq = int(args.save_freq // n_envs)
     save_freq = int(args.save_freq)
-    # eval_freq = int(args.eval_freq // n_envs)
     eval_freq = int(args.eval_freq)
 
-    # n_act = env.envs[0].n_act
-    # action_noise = NormalActionNoise(mean=np.zeros(n_act), sigma=np.ones(n_act) * 0.01)
-    # action_noise = VectorizedActionNoise(base_noise=action_noise_base, n_envs=n_envs)
-    # eval_freq = 1
-
     # Setting device on the CPU only for now since I am working on my laptop
-    # device = 'cuda'
-    # if args.no_cuda:
-    #     device = 'cpu'
     device = 'cpu'
 
     algo_str = 'PPO'
     algo = PPO
-    SEED = 123
+    SEED = 234
     policy_kwargs = dict(activation_fn=tc.nn.ReLU,
-                         net_arch=dict(pi=[256, 64], vf=[256, 64]))
-                         # net_arch=dict(pi=[100, 100], vf=[100, 100], qf=[100, 100]))
-    # algo_kw = dict(learning_rate=1e-3,
-    #                buffer_size=int(1e6),
-    #                learning_starts=int(1e2),
-    #                batch_size=256,
-    #                gradient_steps=1,
-    #                action_noise=action_noise,
-    #                device=device,
-    #                seed=SEED
-    #                )    # DDPG
-    '''algo_kw = dict(gradient_steps=10, use_sde=True, sde_sample_freq=100, verbose=1)   # SAC'''
+                         net_arch=dict(pi=[256, 128], vf=[256, 128]))
     algo_kw = dict(batch_size=batch_size,
                    n_steps=n_steps,
                    learning_rate=ppo_learning_rate,
@@ -352,11 +323,10 @@ def main():
                    seed=SEED,
                    verbose=1)   # PPO
 
-    work_dir = os.path.join(f'ZCQPEE-{algo_str}')
+    work_dir = os.path.join(f'ZCQPEE{pulse_length}pl-{algo_str}')
     dt_fmt_str = '%d-%m-%y_%H%M%S'
 
     retrain_latest = args.retrain_latest
-    # retrain_latest = True
     model_checkpoint = None
     if retrain_latest:
         # Assumes that the model names start with the date time information in the format defined by `dt_fmt_str`
@@ -367,8 +337,13 @@ def main():
         model_checkpoint = sorted([item for item in os.listdir(model_path) if 'steps' in item], key=lambda x: int(x.split('_')[2]))[-1]
     else:
         # model_name = f"{dt.now().strftime(dt_fmt_str)}_{n_envs}-envs"
-        model_name = f"{dt.now().strftime(dt_fmt_str)}_ZCQPEE"
+        model_name = f"{dt.now().strftime(dt_fmt_str)}_ZCQPEE{pulse_length}pl"
         model_path = os.path.join(work_dir, model_name)
+
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
+    with open(os.path.join(model_path, info_fn), 'w') as f:
+        f.write(TRAINING_MESSAGE)
 
     # env = VecMonitor(env, filename=os.path.join(model_path, 'vec_monitor'))
     if model_checkpoint is not None:
@@ -377,18 +352,20 @@ def main():
         reset_num_timesteps = False
     else:
         # model = algo('MlpPolicy', env, tensorboard_log=os.path.join(model_path, 'tb_logs'), policy_kwargs=policy_kwargs, **algo_kw)
-        model = algo('MlpPolicy', env, tensorboard_log=os.path.join(model_path, 'tb_logs'), policy_kwargs=policy_kwargs, **algo_kw)
+        tb_log = os.path.join(model_path, 'tb_logs')
+        os.makedirs(tb_log)
+        model = algo('MlpPolicy', env, tensorboard_log=tb_log, policy_kwargs=policy_kwargs, **algo_kw)
         reset_num_timesteps = True
 
     # eval_env = VecMonitor(eval_env, filename=os.path.join(model_path, 'eval_vec_monitor'))
     checkpoint_callback = CheckpointCallback(save_freq=save_freq, save_path=model_path)
     eval_callback = EvalCallback(eval_env=eval_env, n_eval_episodes=n_eval_eps, eval_freq=eval_freq, verbose=1, best_model_save_path=os.path.join(model_path, 'best_model'), log_path=os.path.join(model_path, 'evals'))
-    new_logger = configure(os.path.join(model_path, 'logs'), ['stdout', 'csv', 'tensorboard'])
+    new_logger = configure(os.path.join(model_path, 'logs'), ['stdout', 'tensorboard'])
 
     model.set_logger(new_logger)
 
-    print(f'Training {model_name}...')
-    model.learn(total_timesteps=n_train, progress_bar=True, log_interval=log_interval, tb_log_name=model_name,
+    print(f'Training {model_name} in {model_path}...')
+    model.learn(total_timesteps=n_train, progress_bar=False, log_interval=log_interval, tb_log_name=model_name,
                 callback=[checkpoint_callback, eval_callback], reset_num_timesteps=reset_num_timesteps)
     # model.save(model_name)
 
