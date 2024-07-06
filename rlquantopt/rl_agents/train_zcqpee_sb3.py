@@ -267,6 +267,7 @@ def parse_args():
                              'NOTE: n_steps * n_envs must be greater than 1 (because of the advantage normalization)'
                              'See https://github.com/pytorch/pytorch/issues/29372')
     parser.add_argument('--n-epochs', type=int, default=10, help='Number of epoch when optimizing the surrogate loss')
+    parser.add_argument('--batch-size', type=int, default=64, help='Mini-batch size')
     parser.add_argument('--seed', default=123, type=int, help='Set random seed')
     parser.add_argument('--retrain-latest', action='store_true')
 
