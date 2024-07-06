@@ -36,6 +36,7 @@ fi
 REQ_PATH=$PROJ_DIR/requirements.txt
 echo Updating requirements from $REQ_PATH
 pip install -r $REQ_PATH
+pip uninstall rlquantopt
 pip install -e $PROJ_DIR
 
 SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3.py
