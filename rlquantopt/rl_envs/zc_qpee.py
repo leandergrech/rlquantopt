@@ -11,16 +11,14 @@ from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 from gymnasium import Env
 
-# from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity
-# from rlquantopt.utils import generate_random_alphanumeric
 
 
 class ZCQPEE(Env):
     action_channel_scaling = {'z': 1e-1}
     # action_channel_scaling = {'z': 1}
     # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
-    optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv'
+    optimised_pulse_path = '../rl_envs/configs/data_lilmc.csv'
 
     PREC = 5e-4
     A_norm_max = 10
