@@ -14,6 +14,7 @@ setup(
         'stable-baselines3',
         'gymnasium',
         'scipy',
-        'pyyaml'
+        'pyyaml',
+        'tensorboard'
     ],
 )
