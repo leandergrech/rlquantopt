@@ -9,6 +9,20 @@ import yaml
 from matplotlib.ticker import MultipleLocator
 
 
+def decimal_to_base3(n):
+    if n == 0:
+        return '000'
+
+    digits = []
+    while n:
+        digits.append(int(n % 3))
+        n //= 3
+
+    base3_str = ''.join(str(x) for x in digits[::-1])
+    # Zero padding to ensure the result is always 3 characters long
+    return base3_str.zfill(3)
+
+
 def generate_random_alphanumeric(n):
     return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(n))
 

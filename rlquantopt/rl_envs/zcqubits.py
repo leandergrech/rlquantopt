@@ -234,210 +234,210 @@ class ZCQubits:
         plt.show()
 
 
-def test():
-    num_qubits = 2  # KEEP 2
-    qubit_dims = [3, 3]
-    coupler_dims = 3
-
-    full_dims = qubit_dims.copy()
-    full_dims.append(coupler_dims)
-
-    psi00 = ket((0, 0, 0), dim=full_dims)
-    psi01 = ket((0, 1, 0), dim=full_dims)
-    psi10 = ket((1, 0, 0), dim=full_dims)
-    psi11 = ket((1, 1, 0), dim=full_dims)
-
-    basis_states = [psi00, psi01, psi10, psi11]
-
-    unitary = Qobj(np.array([
-        [1, 0, 0, 0],
-        [0, 0, 1j, 0],
-        [0, 1j, 0, 0],
-        [0, 0, 0, 1]
-    ]), dims=[[2, 2], [2, 2]])
-
-    target_states = [sum(unitary[i, j] * basis_states[i]
-                         for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
-    '''
-    # Lots of gates just rearrange the basis states, and we can avoid some complexity by identifying
-    # this and setting the mapped_basis_states to the identical objects as the original basis_states
-    for i, target_state in enumerate(target_states):
-        for j, basis_state in enumerate(basis_states):
-            if target_state == basis_state:
-                target_states[i] = basis_state
-    '''
-    params = {
-        "omega_s": [5.8899, 5.0311],
-        "alpha_s": [-324e-3, -235e-3],
-        "g": [100e-3, 71.4e-3]
-    }
-
-    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **params)
-
-    pulse_length = 120
-    # rl_dir = f'../rl_agents/ZCQPEE{pulse_length}pl-PPO/09-06-24_172549_ZCQPEE{pulse_length}pl'
-    # rl_dir = f'../rl_agents/ZCQPEE{pulse_length}pl-PPO/10-06-24_143544_ZCQPEE{pulse_length}pl'
-    # rl_dir = f'../rl_agents/ZCQPEE{pulse_length}pl-PPO/13-06-24_115241_ZCQPEE{pulse_length}pl/best_model'
-    # rl_fn = f'rl_model_65000_steps.zip'
-    # rl_path = os.path.join(rl_dir, rl_fn)
-    # rl_name = os.path.splitext(rl_fn)[0]
-    # from rlquantopt.rl_envs.zc_qpee import ZCQPEE
-
-    # env = ZCQPEE(pulse_length)
-    # dt = env.dt
-
-    # rl_agent = PPO.load(rl_path)
-
-    # optimised_pulse_file = 'optimised_pulse_60params_200ns_201samples.csv'
-    # optimised_pulse_file = 'configs/mc_optimised_pulse.csv'
-    # optimised_pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/09-06-24_172549_ZCQPEE120pl/pulses/rl_model_55000_steps.csv'
-    # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/10-06-24_143544_ZCQPEE120pl/pulses/'
-    par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
-    # optimised_pulse_file = os.path.join(par_dir, 'rl_model_35000_steps.csv')
-    optimised_pulse_file = os.path.join(par_dir, 'best_model.csv')
-    model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
-    model_dir = os.path.dirname(optimised_pulse_file)
-
-    data = pd.read_csv(optimised_pulse_file)
-    pulse = data['amplist'].to_numpy()
-    # pulse_length = len(pulse)
-    tlist = data['tlist'].to_numpy()
-    dt = tlist[1] - tlist[0]
-
-    fig, ax = plt.subplots()
-    ax.plot(tlist, pulse)
-    ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_pulse.pdf'))
-
-    """
-    RUNNING FULL PULSE AT ONCE, starting from each basis_state, respectively
-    """
-    H = QobjEvo([model.drift, [model.control, pulse]], args={}, tlist=tlist, order=0)
-    solver = SESolver(H, options=dict(store_final_state=True))
-
-    # noinspection PyUnresolvedReferences
-    e_ops = [state.proj() for state in target_states]
-    results = [solver.run(basis_state, tlist, e_ops=e_ops) for basis_state in basis_states]
-
-    states = [res.final_state for res in results]
-
-    f = [fidelity(s, t) for s, t in zip(states, target_states)]
-    expectations = [res.expect for res in results]
-
-    print('Full pulse')
-    print(f)
-
-
-    fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
-    axs = np.ndarray.flatten(axs)
-    labels = ['00', '01', '10', '11']
-    for ax, exp, title in zip(axs, expectations, labels):
-        for i, label in enumerate(labels):
-            ax.plot(tlist, exp[i], label=label)
-        ax.legend()
-        ax.set_title(title)
-    fig.suptitle('Full pulse')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_full-pulse_populations.pdf'))
-
-    """
-    RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
-    """
-    H = QobjEvo([model.drift, [model.control, lambda t, A: A]], args={'A': 0.})
-    solver = [SESolver(H) for _ in range(4)]
-
-    f = []
-    all_f = []
-    expectations = []
-    # s = None
-    s = basis_states.copy()
-    cur_amp = 0.
-    states = [[s[i].full()] for i in range(len(basis_states))]
-    for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
-        l = [[expect(e, basis_state)] for e in e_ops]
-        all_f.append([])
-        fid = 0.
-        for i, t in enumerate(tlist[1:]):
-            solver[k].start(s[k], 0)
-
-            # obs = np.concatenate([env.extract_current_state([states[k][-1] for k in range(len(basis_states))], state_only=True), [cur_amp]])
-            # action = rl_agent.predict(obs)[0]
-            # action = env.denorm_action(action)
-            # if i == 0:
-            #     act_delta = 0.
-            # else:
-            #     act_delta = pulse[i] - pulse[i - 1]
-            #
-            # cur_amp += act_delta
-            cur_amp = pulse[i]
-            s[k] = solver[k].step(dt, args={'A': cur_amp})
-            states[k].append(s[k].full().copy())
-            for j, e in enumerate(e_ops):
-                l[j].append(expect(e, s[k]))
-            fid = fidelity(s[k], target_state)
-            all_f[-1].append(fid)
-        f.append(fid)
-        expectations.append(l)
-
-    print('Step pulse')
-    print(f)
-
-    fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
-    axs = np.ndarray.flatten(axs)
-    labels = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
-
-    for ax, exp, title in zip(axs, expectations, labels):
-        for i, label in enumerate(labels):
-            ax.plot(tlist, exp[i], label=label)
-        ax.legend()
-        ax.set_title(title)
-    fig.suptitle('Step pulse')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_step-pulse_population.pdf'))
-
-    from matplotlib.animation import FuncAnimation
-    from matplotlib import cm
-    from matplotlib.colors import LogNorm
-    import matplotlib as mpl
-
-    fig, axs = plt.subplots(4, figsize=(15, 10))
-    # gs = mpl.gridspec.GridSpec(ncols=6, nrows=4)
-    # axs = [fig.add_subplot(gs[i, :]) for i in range(4)]
-
-    EPS = 1e-3
-    cmap = cm.CMRmap
-    norm = LogNorm(vmin=EPS, vmax=1)
-    ims = []
-    for k, ax in enumerate(axs):
-        ax.set_title(f'{labels[k]}')
-        s = np.clip(np.abs(states[k][0]).T, EPS, 1)
-        im = ax.imshow(s, animated=True, cmap=cmap, norm=norm, origin='upper')
-        ims.append(im)
-
-    fig.subplots_adjust(right=0.8)
-    ax_colorbar = fig.add_axes([0.85, 0.15, 0.05, 0.7])
-    fig.colorbar(ims[0], ax=ax_colorbar)
-
-    def init():
-        for k, ax in enumerate(axs):
-            s = np.clip(np.abs(states[k][0]).T, EPS, 1)
-            im = ax.imshow(s, animated=True, cmap=cmap, norm=norm, origin='upper')
-            ims[k] = im
-        return ims,
-
-    def animate(i):
-        fig.suptitle(f'Step pulse @ step {i}')
-        for k, ax in enumerate(axs):
-            s = np.clip(np.abs(states[k][i]).T, EPS, 1)
-            im = ax.imshow(s, animated=True, cmap=cmap, norm=norm, origin='upper')
-            ims[k] = im
-        return ims,
-
-    # plt.show()
-    frames = np.arange(len(states[0]))
-    ani = FuncAnimation(fig, animate, frames=frames, init_func=init, blit=False)
-    ffwriter = mpl.animation.FFMpegWriter(fps=15)
-    save_path = os.path.join(model_dir, f'zcqubits_{model_name}_render.mp4')
-    print(save_path)
-    ani.save(save_path, dpi=100, writer=ffwriter)
+# def test():
+#     num_qubits = 2  # KEEP 2
+#     qubit_dims = [3, 3]
+#     coupler_dims = 3
+#
+#     full_dims = qubit_dims.copy()
+#     full_dims.append(coupler_dims)
+#
+#     psi00 = ket((0, 0, 0), dim=full_dims)
+#     psi01 = ket((0, 1, 0), dim=full_dims)
+#     psi10 = ket((1, 0, 0), dim=full_dims)
+#     psi11 = ket((1, 1, 0), dim=full_dims)
+#
+#     basis_states = [psi00, psi01, psi10, psi11]
+#
+#     unitary = Qobj(np.array([
+#         [1, 0, 0, 0],
+#         [0, 0, 1j, 0],
+#         [0, 1j, 0, 0],
+#         [0, 0, 0, 1]
+#     ]), dims=[[2, 2], [2, 2]])
+#
+#     target_states = [sum(unitary[i, j] * basis_states[i]
+#                          for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
+#     '''
+#     # Lots of gates just rearrange the basis states, and we can avoid some complexity by identifying
+#     # this and setting the mapped_basis_states to the identical objects as the original basis_states
+#     for i, target_state in enumerate(target_states):
+#         for j, basis_state in enumerate(basis_states):
+#             if target_state == basis_state:
+#                 target_states[i] = basis_state
+#     '''
+#     params = {
+#         "omega_s": [5.8899, 5.0311],
+#         "alpha_s": [-324e-3, -235e-3],
+#         "g": [100e-3, 71.4e-3]
+#     }
+#
+#     model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **params)
+#
+#     pulse_length = 120
+#     # rl_dir = f'../rl_agents/ZCQPEE{pulse_length}pl-PPO/09-06-24_172549_ZCQPEE{pulse_length}pl'
+#     # rl_dir = f'../rl_agents/ZCQPEE{pulse_length}pl-PPO/10-06-24_143544_ZCQPEE{pulse_length}pl'
+#     # rl_dir = f'../rl_agents/ZCQPEE{pulse_length}pl-PPO/13-06-24_115241_ZCQPEE{pulse_length}pl/best_model'
+#     # rl_fn = f'rl_model_65000_steps.zip'
+#     # rl_path = os.path.join(rl_dir, rl_fn)
+#     # rl_name = os.path.splitext(rl_fn)[0]
+#     # from rlquantopt.rl_envs.zc_qpee import ZCQPEE
+#
+#     # env = ZCQPEE(pulse_length)
+#     # dt = env.dt
+#
+#     # rl_agent = PPO.load(rl_path)
+#
+#     # optimised_pulse_file = 'optimised_pulse_60params_200ns_201samples.csv'
+#     # optimised_pulse_file = 'configs/mc_optimised_pulse.csv'
+#     # optimised_pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/09-06-24_172549_ZCQPEE120pl/pulses/rl_model_55000_steps.csv'
+#     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/10-06-24_143544_ZCQPEE120pl/pulses/'
+#     par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
+#     # optimised_pulse_file = os.path.join(par_dir, 'rl_model_35000_steps.csv')
+#     optimised_pulse_file = os.path.join(par_dir, 'best_model.csv')
+#     model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
+#     model_dir = os.path.dirname(optimised_pulse_file)
+#
+#     data = pd.read_csv(optimised_pulse_file)
+#     pulse = data['amplist'].to_numpy()
+#     # pulse_length = len(pulse)
+#     tlist = data['tlist'].to_numpy()
+#     dt = tlist[1] - tlist[0]
+#
+#     fig, ax = plt.subplots()
+#     ax.plot(tlist, pulse)
+#     ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
+#     fig.savefig(os.path.join(model_dir, f'{model_name}_pulse.pdf'))
+#
+#     """
+#     RUNNING FULL PULSE AT ONCE, starting from each basis_state, respectively
+#     """
+#     H = QobjEvo([model.drift, [model.control, pulse]], args={}, tlist=tlist, order=0)
+#     solver = SESolver(H, options=dict(store_final_state=True))
+#
+#     # noinspection PyUnresolvedReferences
+#     e_ops = [state.proj() for state in target_states]
+#     results = [solver.run(basis_state, tlist, e_ops=e_ops) for basis_state in basis_states]
+#
+#     states = [res.final_state for res in results]
+#
+#     f = [fidelity(s, t) for s, t in zip(states, target_states)]
+#     expectations = [res.expect for res in results]
+#
+#     print('Full pulse')
+#     print(f)
+#
+#
+#     fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+#     axs = np.ndarray.flatten(axs)
+#     labels = ['00', '01', '10', '11']
+#     for ax, exp, title in zip(axs, expectations, labels):
+#         for i, label in enumerate(labels):
+#             ax.plot(tlist, exp[i], label=label)
+#         ax.legend()
+#         ax.set_title(title)
+#     fig.suptitle('Full pulse')
+#     fig.savefig(os.path.join(model_dir, f'{model_name}_full-pulse_populations.pdf'))
+#
+#     """
+#     RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
+#     """
+#     H = QobjEvo([model.drift, [model.control, lambda t, A: A]], args={'A': 0.})
+#     solver = [SESolver(H) for _ in range(4)]
+#
+#     f = []
+#     all_f = []
+#     expectations = []
+#     # s = None
+#     s = basis_states.copy()
+#     cur_amp = 0.
+#     states = [[s[i].full()] for i in range(len(basis_states))]
+#     for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
+#         l = [[expect(e, basis_state)] for e in e_ops]
+#         all_f.append([])
+#         fid = 0.
+#         for i, t in enumerate(tlist[1:]):
+#             solver[k].start(s[k], 0)
+#
+#             # obs = np.concatenate([env.extract_current_state([states[k][-1] for k in range(len(basis_states))], state_only=True), [cur_amp]])
+#             # action = rl_agent.predict(obs)[0]
+#             # action = env.denorm_action(action)
+#             # if i == 0:
+#             #     act_delta = 0.
+#             # else:
+#             #     act_delta = pulse[i] - pulse[i - 1]
+#             #
+#             # cur_amp += act_delta
+#             cur_amp = pulse[i]
+#             s[k] = solver[k].step(dt, args={'A': cur_amp})
+#             states[k].append(s[k].full().copy())
+#             for j, e in enumerate(e_ops):
+#                 l[j].append(expect(e, s[k]))
+#             fid = fidelity(s[k], target_state)
+#             all_f[-1].append(fid)
+#         f.append(fid)
+#         expectations.append(l)
+#
+#     print('Step pulse')
+#     print(f)
+#
+#     fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+#     axs = np.ndarray.flatten(axs)
+#     labels = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
+#
+#     for ax, exp, title in zip(axs, expectations, labels):
+#         for i, label in enumerate(labels):
+#             ax.plot(tlist, exp[i], label=label)
+#         ax.legend()
+#         ax.set_title(title)
+#     fig.suptitle('Step pulse')
+#     fig.savefig(os.path.join(model_dir, f'{model_name}_step-pulse_population.pdf'))
+#
+#     from matplotlib.animation import FuncAnimation
+#     from matplotlib import cm
+#     from matplotlib.colors import LogNorm
+#     import matplotlib as mpl
+#
+#     fig, axs = plt.subplots(4, figsize=(15, 10))
+#     # gs = mpl.gridspec.GridSpec(ncols=6, nrows=4)
+#     # axs = [fig.add_subplot(gs[i, :]) for i in range(4)]
+#
+#     EPS = 1e-3
+#     cmap = cm.CMRmap
+#     norm = LogNorm(vmin=EPS, vmax=1)
+#     ims = []
+#     for k, ax in enumerate(axs):
+#         ax.set_title(f'{labels[k]}')
+#         s = np.clip(np.abs(states[k][0]).T, EPS, 1)
+#         im = ax.imshow(s, animated=True, cmap=cmap, norm=norm, origin='upper')
+#         ims.append(im)
+#
+#     fig.subplots_adjust(right=0.8)
+#     ax_colorbar = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+#     fig.colorbar(ims[0], ax=ax_colorbar)
+#
+#     def init():
+#         for k, ax in enumerate(axs):
+#             s = np.clip(np.abs(states[k][0]).T, EPS, 1)
+#             im = ax.imshow(s, animated=True, cmap=cmap, norm=norm, origin='upper')
+#             ims[k] = im
+#         return ims,
+#
+#     def animate(i):
+#         fig.suptitle(f'Step pulse @ step {i}')
+#         for k, ax in enumerate(axs):
+#             s = np.clip(np.abs(states[k][i]).T, EPS, 1)
+#             im = ax.imshow(s, animated=True, cmap=cmap, norm=norm, origin='upper')
+#             ims[k] = im
+#         return ims,
+#
+#     # plt.show()
+#     frames = np.arange(len(states[0]))
+#     ani = FuncAnimation(fig, animate, frames=frames, init_func=init, blit=False)
+#     ffwriter = mpl.animation.FFMpegWriter(fps=15)
+#     save_path = os.path.join(model_dir, f'zcqubits_{model_name}_render.mp4')
+#     print(save_path)
+#     ani.save(save_path, dpi=100, writer=ffwriter)
 
 # def main():
 #     num_qubits = 2  # KEEP 2
@@ -491,7 +491,111 @@ def test():
 #
 #     print(result)
 
-def test_step(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs', csv_file='data_lilmc.csv'):
+
+# def test_step(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs', csv_file='data_lilmc.csv'):
+#     num_qubits = 2  # KEEP 2
+#     qubit_dims = [3, 3]
+#     coupler_dims = 3
+#
+#     full_dims = qubit_dims.copy()
+#     full_dims.append(coupler_dims)
+#
+#     psi00 = ket((0, 0, 0), dim=full_dims)
+#     psi01 = ket((0, 1, 0), dim=full_dims)
+#     psi10 = ket((1, 0, 0), dim=full_dims)
+#     psi11 = ket((1, 1, 0), dim=full_dims)
+#
+#     basis_states = [psi00, psi01, psi10, psi11]
+#
+#     unitary = Qobj(np.array([
+#         [1, 0, 0, 0],
+#         [0, 0, 1j, 0],
+#         [0, 1j, 0, 0],
+#         [0, 0, 0, 1]
+#     ]), dims=[[2, 2], [2, 2]])
+#
+#     target_states = [sum(unitary[i, j] * basis_states[i]
+#                          for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
+#     params = {
+#         "omega_s": [5.8899, 5.0311],
+#         "alpha_s": [-324e-3, -235e-3],
+#         "g": [100e-3, 71.4e-3]
+#     }
+#
+#     model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **params)
+#
+#     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
+#     optimised_pulse_file = os.path.join(par_dir, csv_file)
+#     model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
+#     model_dir = os.path.dirname(optimised_pulse_file)
+#
+#
+#     data = pd.read_csv(optimised_pulse_file)
+#     pulse = data['amplist'].to_numpy()
+#     # pulse_length = len(pulse)
+#     tlist = data['tlist'].to_numpy()
+#     dt = tlist[1] - tlist[0]
+#
+#     fig, ax = plt.subplots()
+#     ax.plot(tlist, pulse)
+#     ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
+#     fig.savefig(os.path.join(model_dir, f'{model_name}_pulse_step.pdf'))
+#
+#     """
+#         RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
+#         """
+#     H = QobjEvo([model.drift, [model.control, lambda t, A: A]], args={'A': 0.})
+#     solver = [SESolver(H) for _ in range(4)]
+#     e_ops = [state.proj() for state in basis_states]
+#
+#     f = []
+#     all_f = []
+#     expectations = []
+#     # s = None
+#     s = basis_states.copy()
+#     # cur_amp = 0.
+#     states = [[s[i].full()] for i in range(len(basis_states))]
+#     for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
+#         l = [[expect(e, basis_state)] for e in e_ops]
+#         all_f.append([])
+#         fid = 0.
+#         solver[k].start(s[k], 0)
+#         for i, t in enumerate(tlist[1:]):
+#             cur_amp = pulse[i]
+#             t = tlist[i]
+#             s_ = solver[k].step(t, args={'A': cur_amp})
+#             s[k] = s_
+#             states[k].append(s[k].full().copy())
+#             for j, e in enumerate(e_ops):
+#                 l[j].append(expect(e, s[k]))
+#             fid = fidelity(s[k], target_state)
+#             all_f[-1].append(fid)
+#         f.append(fid)
+#         expectations.append(l)
+#
+#     print('Step pulse')
+#     print(f, np.mean(f))
+#
+#     fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+#     axs = np.ndarray.flatten(axs)
+#     labels = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
+#
+#     for ax, exp, title in zip(axs, expectations, labels):
+#         for i, label in enumerate(labels):
+#             ax.plot(tlist, exp[i], label=label)
+#         ax.legend()
+#         ax.set_title(title)
+#     fig.suptitle('Step pulse')
+#     fig.savefig(os.path.join(model_dir, f'{model_name}_step-pulse_population.pdf'))
+
+
+def test_step(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
+    # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
+    model_name = os.path.splitext(os.path.basename(pulse_file))[0]
+    model_dir = os.path.dirname(pulse_file)
+    if save_dir is None:
+        save_dir = model_dir
+
     num_qubits = 2  # KEEP 2
     qubit_dims = [3, 3]
     coupler_dims = 3
@@ -515,30 +619,29 @@ def test_step(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs'
 
     target_states = [sum(unitary[i, j] * basis_states[i]
                          for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
-    params = {
-        "omega_s": [5.8899, 5.0311],
-        "alpha_s": [-324e-3, -235e-3],
-        "g": [100e-3, 71.4e-3]
-    }
+    # params = {
+    #     "omega_s": [5.8899, 5.0311],
+    #     "alpha_s": [-324e-3, -235e-3],
+    #     "g": [100e-3, 71.4e-3]
+    # }
+    # fuck-up params
+    # params = {
+    #     "omega_s": [6., 6.],
+    #     "alpha_s": [-300e-3, -300e-3],
+    #     "g": [70e-3, 70e-3]
+    # }
 
-    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **params)
+    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims)#, **params)
 
-    # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
-    optimised_pulse_file = os.path.join(par_dir, csv_file)
-    model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
-    model_dir = os.path.dirname(optimised_pulse_file)
-
-
-    data = pd.read_csv(optimised_pulse_file)
+    data = pd.read_csv(pulse_file)
     pulse = data['amplist'].to_numpy()
-    # pulse_length = len(pulse)
     tlist = data['tlist'].to_numpy()
-    dt = tlist[1] - tlist[0]
 
-    fig, ax = plt.subplots()
-    ax.plot(tlist, pulse)
-    ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_pulse_step.pdf'))
+    if plot:
+        fig, ax = plt.subplots()
+        ax.plot(tlist, pulse)
+        ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
+        fig.savefig(os.path.join(save_dir, f'{model_name}_pulse_step.pdf'))
 
     """
         RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
@@ -550,22 +653,23 @@ def test_step(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs'
     f = []
     all_f = []
     expectations = []
-    # s = None
     s = basis_states.copy()
-    cur_amp = 0.
-    states = [[s[i].full()] for i in range(len(basis_states))]
+    states = [[s[i]] for i in range(len(basis_states))]
     for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
         l = [[expect(e, basis_state)] for e in e_ops]
         all_f.append([])
         fid = 0.
+        solver[k].start(s[k], 0)
+        # for i, t in enumerate(tlist[1:]):
         for i, t in enumerate(tlist[1:]):
-            solver[k].start(s[k], 0)
             cur_amp = pulse[i]
-            s[k] = solver[k].step(dt, args={'A': cur_amp})
-            states[k].append(s[k].full().copy())
+            t = tlist[i]
+            s_ = solver[k].step(t, args={'A': cur_amp})
+            s[k] = s_
+            states[k].append(s_)
             for j, e in enumerate(e_ops):
-                l[j].append(expect(e, s[k]))
-            fid = fidelity(s[k], target_state)
+                l[j].append(expect(e, s_))
+            fid = fidelity(s_, target_state)
             all_f[-1].append(fid)
         f.append(fid)
         expectations.append(l)
@@ -573,19 +677,33 @@ def test_step(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs'
     print('Step pulse')
     print(f, np.mean(f))
 
-    fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
-    axs = np.ndarray.flatten(axs)
-    labels = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
+    if plot:
+        fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+        axs = np.ndarray.flatten(axs)
+        labels = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
 
-    for ax, exp, title in zip(axs, expectations, labels):
-        for i, label in enumerate(labels):
-            ax.plot(tlist, exp[i], label=label)
-        ax.legend()
-        ax.set_title(title)
-    fig.suptitle('Step pulse')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_step-pulse_population.pdf'))
+        for ax, exp, title in zip(axs, expectations, labels):
+            for i, label in enumerate(labels):
+                ax.plot(tlist, exp[i], label=label)
+            ax.legend()
+            ax.set_title(title)
+        fig.suptitle('Step pulse')
+        fig.savefig(os.path.join(save_dir, f'{model_name}_step-pulse_population.pdf'))
 
-def test_full(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs', csv_file='data_lilmc.csv'):
+    # states = np.squeeze(states)
+    # n_basis, n_states, len_ket = states.shape
+    # states = states.reshape((n_states, n_basis, len_ket))
+    states = np.squeeze(np.array(states))
+    return states, pulse, np.mean(all_f, axis=0)
+
+
+def test_full(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
+    par_dir = os.path.dirname(pulse_file)
+    model_name = os.path.splitext(os.path.basename(pulse_file))[0]
+    model_dir = os.path.dirname(pulse_file)
+    if save_dir is None:
+        save_dir = model_dir
+
     num_qubits = 2  # KEEP 2
     qubit_dims = [3, 3]
     coupler_dims = 3
@@ -609,30 +727,37 @@ def test_full(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs'
 
     target_states = [sum(unitary[i, j] * basis_states[i]
                          for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
-    params = {
-        "omega_s": [5.8899, 5.0311],
-        "alpha_s": [-324e-3, -235e-3],
-        "g": [100e-3, 71.4e-3]
-    }
+    # params = {
+    #     "omega_s": [5.8899, 5.0311],
+    #     "alpha_s": [-324e-3, -235e-3],
+    #     "g": [100e-3, 71.4e-3]
+    # }
+    # fuck-up params
+    # params = {
+    #     "omega_s": [6., 6.],
+    #     "alpha_s": [-300e-3, -300e-3],
+    #     "g": [70e-3, 70e-3]
+    # }
 
-    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **params)
+    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims)#, **params)
 
     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
-    optimised_pulse_file = os.path.join(par_dir, csv_file)
-    model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
-    model_dir = os.path.dirname(optimised_pulse_file)
+    # optimised_pulse_file = os.path.join(par_dir, csv_file)
+    # model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
+    # model_dir = os.path.dirname(optimised_pulse_file)
 
 
-    data = pd.read_csv(optimised_pulse_file)
-    pulse = data['amplist'].to_numpy()
+    data = pd.read_csv(pulse_file)
+    pulse = data['amplist'].to_numpy()/10
     # pulse_length = len(pulse)
     tlist = data['tlist'].to_numpy()
-    dt = tlist[1] - tlist[0]
+    print(f'T={tlist[-1]}')
 
-    fig, ax = plt.subplots()
-    ax.plot(tlist, pulse)
-    ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_pulse_full.pdf'))
+    if plot:
+        fig, ax = plt.subplots()
+        ax.plot(tlist, pulse)
+        ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
+        fig.savefig(os.path.join(save_dir, f'{model_name}_pulse_full.pdf'))
 
     """
     RUNNING FULL PULSE AT ONCE, starting from each basis_state, respectively
@@ -652,20 +777,25 @@ def test_full(par_dir='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs'
     print('Full pulse')
     print(f, np.mean(f))
 
-
-    fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
-    axs = np.ndarray.flatten(axs)
-    labels = ['00', '01', '10', '11']
-    for ax, exp, title in zip(axs, expectations, labels):
-        for i, label in enumerate(labels):
-            ax.plot(tlist, exp[i], label=label)
-        ax.legend()
-        ax.set_title(title)
-    fig.suptitle('Full pulse')
-    fig.savefig(os.path.join(model_dir, f'{model_name}_full-pulse_populations.pdf'))
+    if plot:
+        fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+        axs = np.ndarray.flatten(axs)
+        labels = ['00', '01', '10', '11']
+        for ax, exp, title in zip(axs, expectations, labels):
+            for i, label in enumerate(labels):
+                ax.plot(tlist, exp[i], label=label)
+            ax.legend()
+            ax.set_title(title)
+        fig.suptitle('Full pulse')
+        fig.savefig(os.path.join(save_dir, f'{model_name}_full-pulse_populations.pdf'))
 
 
 if __name__ == "__main__":
-    test_step()
-    test_full()
+    # pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/20-06-24_120311_ZCQPEE120pl/best_model/pulses/best_model_T200ns_delta_mode_default_model_to_term.csv'
+    pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv'
+    save_dir = os.path.splitext(pulse_file)[0]
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    test_full(pulse_file=pulse_file, save_dir=save_dir)
+    test_step(pulse_file=pulse_file, save_dir=save_dir)
     # main()

@@ -18,26 +18,32 @@ from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity
 
 class ZCQPEE(Env):
     action_channel_scaling = {'z': 1e-1}
+    # action_channel_scaling = {'z': 1}
     # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
     optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv'
 
-    FID_THRESH = 0.995
     PREC = 5e-4
     A_norm_max = 10
     PLOT_LOG_EPS = 1e-3
     cmap = cm.CMRmap
-    REW_THRESH = None
 
-    def __init__(self, pulse_length):
-        ZCQPEE.REW_THRESH = self.fid2rew(ZCQPEE.FID_THRESH)
+    def __init__(self, pulse_length=120, delta_mode=True, default_model_params=False, T=50, fid_thresh=0.995):
+        self.FID_THRESH = fid_thresh
+        self.REW_THRESH = self.fid2rew(self.FID_THRESH)
+        self.delta_mode = delta_mode
+        if not delta_mode:
+            self.A_norm_max = 1
 
         # Set up model
         self.n_levels = n_levels = 3
-        params = {
-            "omega_s": [5.8899, 5.0311],
-            "alpha_s": [-324e-3, -235e-3],
-            "g": [100e-3, 71.4e-3]
-        }
+        if default_model_params:
+            params = {}
+        else:
+            params = {
+                "omega_s": [5.8899, 5.0311],
+                "alpha_s": [-324e-3, -235e-3],
+                "g": [100e-3, 71.4e-3]
+            }
         qubit_dims = [n_levels, n_levels]
         coupler_dims = 3
         full_dims = qubit_dims.copy()
@@ -49,18 +55,20 @@ class ZCQPEE(Env):
         self.psi11 = ket((1, 1, 0), dim=full_dims)
         self.basis_states_ket = [self.psi00, self.psi01, self.psi10, self.psi11]
 
-        self.simulators = [ZCQubits(2, qubit_dims=qubit_dims, coupler_dims=coupler_dims, params=params) for _ in range(len(self.basis_states_ket))]
+        # self.simulators = [ZCQubits(2, qubit_dims=qubit_dims, coupler_dims=coupler_dims, params=params) for _ in range(len(self.basis_states_ket))]
+        self.simulator = ZCQubits(2, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **params)
 
-        self.channel_labels = ['z']
+        self.channel_label = 'z'
 
-        self.T = T = 200 # ns
+        self.T = T  # ns
         self.pulse_length = pulse_length
         self.tlist = np.linspace(0, T, pulse_length)
         self.dt = T/(self.pulse_length - 1) # dt obtained after np.linspace(0, T, pulse_length)
+        assert self.tlist[1] == self.dt
         self.pulse_amplitudes_norm = self.init_pulse_amplitudes()
 
         coeff, tlist = self.get_optimal_pulse()
-        self.ideal_pulses = {'labels': self.channel_labels,
+        self.ideal_pulses = {'labels': [self.channel_label],
                              'coeff': [coeff],
                              'tlist': [tlist],
                              'max_len': len(coeff),
@@ -79,7 +87,7 @@ class ZCQPEE(Env):
         self.basis_states_str = ('$|000\\rangle$', '$|010\\rangle$','$|100\\rangle$','$|110\\rangle$',)
         self.initial_states = self.basis_states.copy()
         # self.solvers = [SESolver(self.simulator.H) for _ in self.basis_states]
-        self.solvers = [SESolver(self.simulators[i].H) for i in range(len(self.basis_states))]
+        self.solvers = [SESolver(self.simulator.H) for i in range(len(self.basis_states))]
 
         mapped_basis_states = [sum(unitary[i, j] * basis_states[i]
                                    for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
@@ -120,11 +128,11 @@ class ZCQPEE(Env):
 
     def init_pulse_amplitudes(self):
         # return np.zeros((self.n_channels, self.pulse_length))  # First row for u01, second row for d1
-        buffer = {}
-        for channel_label in self.channel_labels:
-            buffer[channel_label] = np.zeros(self.pulse_length + 1)  # +1 since first amp must be zero
-
-        return buffer
+        # buffer = {}
+        # for channel_label in self.channel_labels:
+        #     buffer[channel_label] = np.zeros(self.pulse_length)  # +1 since first amp must be zero
+        # return buffer
+        return np.zeros(self.pulse_length)
 
     def reset(self, seed=None):
         if seed is not None:
@@ -132,7 +140,7 @@ class ZCQPEE(Env):
         self.cur_idx = 0
         self.final_states_all = [self.initial_states.copy()]
         self.pulse_amplitudes_norm = self.init_pulse_amplitudes()
-        self.amps_cur = np.zeros(self.n_act)
+        self.amps_cur = 0.
         self.step_states = self.initial_states.copy()
         self.current_state = self.extract_current_state(self.step_states, idx=0).astype(np.float32)
         self.actions_all = []
@@ -154,7 +162,7 @@ class ZCQPEE(Env):
             obs.append(np.concatenate([state.real.copy(), state.imag.copy()]))
         if not state_only:
             if action is None:
-                obs.append([self.amps_cur / self.A_norm_max])
+                obs.append(np.array([self.amps_cur / self.A_norm_max]).reshape(-1, 1))
             else:
                 obs.append(np.array(action).reshape(-1, 1))
             # Add also the time of current step
@@ -168,7 +176,7 @@ class ZCQPEE(Env):
 
     def denorm_action(self, action):
         SCALE = self.action_channel_scaling['z']
-        return action * SCALE
+        return np.array(action) * SCALE
 
     def step(self, action):
         """
@@ -178,24 +186,18 @@ class ZCQPEE(Env):
         """
         # Absolute amplitude conversion required for rendering
         self.actions_all.append(action[0])
-        prev_abs_action = np.zeros(self.n_channels)
-        oob_pulse = False   # Out of bounds absolute pulse
-        if self.cur_idx > 0:
-            prev_abs_action = [self.pulse_amplitudes_norm[lbl][self.cur_idx - 1] for lbl in self.channel_labels]
-        for i, channel_label in enumerate(self.channel_labels):
-            # Delta formalism
-            abs_action = prev_abs_action[i] + action[i]
-            if abs(abs_action) > self.A_norm_max:
-                oob_pulse = True
-                abs_action = np.sign(abs_action) * self.A_norm_max
-            # Absolute formalism
-            # abs_action = action[i]
-            self.pulse_amplitudes_norm[channel_label][self.cur_idx] = abs_action
 
         # Environment dynamics
-        action_denorm = self.denorm_action(action.copy())
+        amp_delta_denorm = self.denorm_action(action.copy())[0]
         from_states = self.step_states.copy()
-        self.step_states = self.forward_dynamics(from_states=from_states, amp_deltas=action_denorm)
+        crash = False
+        oob_pulse = False
+        try:
+            self.step_states, oob_pulse = self.forward_dynamics(from_states=from_states, amp_delta=amp_delta_denorm)
+        except Exception as e:
+            print(e)
+            crash = True
+
         self.final_states_all.append(self.step_states.copy())
 
         # terminated is only True when reward threshold is exceeded
@@ -203,17 +205,18 @@ class ZCQPEE(Env):
         terminated, truncated = False, False
 
         # Check if episode is done
-        if self.cur_idx >= self.pulse_length - 1:
+        if self.cur_idx >= self.pulse_length - 1 or crash:
             truncated = True
 
         # Calculate reward for current action
-        if oob_pulse:
+        if oob_pulse or crash:
             reward = 0.
         else:
             reward = self.reward_function(self.step_states)
+        self.rewards.append(reward)
+
         if reward > self.REW_THRESH:
             terminated = True
-        self.rewards.append(reward)
 
         # Construct observation for agent using state probabilities and normed actions
         self.current_state = self.extract_current_state(self.step_states, self.cur_idx)
@@ -221,29 +224,44 @@ class ZCQPEE(Env):
         self.cur_idx += 1
         return self.current_state, reward, terminated, truncated, {}
 
-    def forward_dynamics(self, from_states, amp_deltas):
-        # prev_amp = self.amps_cur.copy()
-        # self.amps_cur = np.add(prev_amp, amp_deltas)
-        # self.amps_cur += amp_deltas
-        self.amps_cur = np.array(amp_deltas).reshape(-1)
+    def forward_dynamics(self, from_states, amp_delta):
+        oob_pulse = False  # Out of bounds absolute pulse
+
+        if self.cur_idx == 0:
+            abs_action = 0.
+        else:
+            abs_action = self.pulse_amplitudes_norm[self.cur_idx - 1]
+
+        # for i, channel_label in enumerate(self.channel_labels):
+            # Delta formalism
+        if self.delta_mode:
+            abs_action += amp_delta
+        else:
+            abs_action = amp_delta
+        if abs(abs_action) > self.A_norm_max:
+            oob_pulse = True
+            abs_action = np.sign(abs_action) * self.A_norm_max
+        # Absolute formalism
+        # abs_action = action[i]
+        self.pulse_amplitudes_norm[self.cur_idx] = abs_action
+
+        if self.delta_mode:
+            self.amps_cur += amp_delta
+        else:
+            self.amps_cur = amp_delta
+
         final_states = []
         for k, solver in enumerate(self.solvers):
             # self.solvers[k].start(from_states[k], 0.)
-            # s = self.solvers[k].step((self.cur_idx + 1) * self.dt, args={'A': self.amps_cur[0]})
-
-            s = self.solvers[k].step(self.tlist[self.cur_idx], args={'A': self.amps_cur[0]})
+            t = self.tlist[self.cur_idx]
+            s = self.solvers[k].step(t, args={'A': self.amps_cur})
             final_states.append(s.copy())
 
-        return final_states
+        return final_states, oob_pulse
 
     def reward_function(self, step_states):
-        # f = sum([np.abs(step_states[i].overlap(self.target_states[i])) ** 2 for i in range(4)])
-        # f = np.mean([np.abs(s.overlap(t)) ** 2 for s, t in zip(step_states, self.target_states)])
-        # SCALE = 10.
         f = np.mean([fidelity(s, t) for s, t in zip(step_states, self.target_states)])
         rew = self.fid2rew(f)
-#         if rew > self.REW_THRESH:
-#             rew *= SCALE
         return rew
 
     @staticmethod
@@ -252,9 +270,7 @@ class ZCQPEE(Env):
 
     @staticmethod
     def rew2fid(rew):
-#         SCALE = 10.
-#         if rew > ZCQPEE.REW_THRESH * SCALE:
-#             rew /= SCALE
+        rew = float(rew)
         return 1 - np.power(10, -rew)
 
     def get_reconstructed_pulses_with_uniform_time(self):
@@ -290,16 +306,18 @@ class ZCQPEE(Env):
         mpl.rcParams['font.size'] = 10
 
         states = self.final_states_all
-        actions = [self.pulse_amplitudes_norm[lbl] for lbl in self.channel_labels]
-        infidelities = (1 - np.clip([self.rew2fid(r) for r in self.rewards], a_min=1e-4, a_max=1)) * 100.
+        fidelities = (np.clip([self.rew2fid(r) for r in self.rewards], a_min=1e-4, a_max=1)) * 100.
+        infidelities = [100 - item for item in fidelities]
         recons_amps, global_tlist = self.get_reconstructed_pulses_with_uniform_time()
-        # recons_amps = recons_amps[0]
-        recons_amps_norm = self.norm_action(recons_amps.copy())
 
         # Setup figure and axes
         fig = plt.figure(figsize=(15, 10))
-        fig.suptitle(f'ISWAP')
-        gs = mpl.gridspec.GridSpec(4, 2)
+        fig.suptitle(f'iSWAP\naction scale={self.action_channel_scaling[self.channel_label]:.2e}')
+        if self.delta_mode:
+            n_rows = 4
+        else:
+            n_rows = 3
+        gs = mpl.gridspec.GridSpec(n_rows, 2)
 
         ax_state_titles = []
         for i in range(self.n_levels):
@@ -308,8 +326,9 @@ class ZCQPEE(Env):
 
         ax_state = fig.add_subplot(gs[0, :])
         ax_action = fig.add_subplot(gs[1, :])
-        ax_action_deltas = fig.add_subplot(gs[2, :])
-        ax_reward = fig.add_subplot(gs[3, :])
+        if self.delta_mode:
+            ax_action_deltas = fig.add_subplot(gs[2, :])
+        ax_reward = fig.add_subplot(gs[n_rows - 1, :])
 
         # Initialize the plot
         EPS = self.PLOT_LOG_EPS
@@ -333,26 +352,35 @@ class ZCQPEE(Env):
 
         ax = ax_action
         ax.axhline(y=0, linestyle='dashed', color='gray')
-        ax.set_xlim(0, self.cur_idx - 1)
-        A = self.A_norm_max
-        ax.set_ylim(-A, A)  # Adjust based on action range
+        ax.set_xlim(0, self.T)
+        K_delta = self.action_channel_scaling['z']
+        K =  K_delta * self.A_norm_max
+        ax.set_ylim(-K, K)  # Adjust based on action range
         ax.set_ylabel('Pulse amplitude')  # Adjust based on action range
-        ax.set_xlabel('Steps')  # Adjust based on action range
+        ax.set_xlabel('Time [ns]')  # Adjust based on action range
 
-        ax = ax_action_deltas
-        ax.axhline(y=0, linestyle='dashed', color='gray')
-        ax.set_xlim(0, self.cur_idx - 1)
-        ax.set_ylim(-1.1, 1.1)  # Adjust based on action range
-        ax.set_ylabel('Pulse deltas')  # Adjust based on action range
-        ax.set_xlabel('Steps')  # Adjust based on action range
+        if self.delta_mode:
+            ax = ax_action_deltas
+            ax.axhline(y=0, linestyle='dashed', color='gray')
+            ax.set_xlim(0, self.T)
 
+            ax.set_ylim(-K_delta*1.1, K_delta*1.1)  # Adjust based on action range
+            ax.set_ylabel('Pulse deltas')  # Adjust based on action range
+            ax.set_xlabel('Time [ns]')  # Adjust based on action range
+
+        nb_orders = lambda x: 10 ** int(np.log10(x))
         ax = ax_reward
-        ax.set_ylim(10**int(np.log10(min(infidelities))), 10**(int(np.log10(max(infidelities))) + 1))  # Adjust based on expected reward range
+        infid_thresh = (1. - self.FID_THRESH) * 100.
+        rew_lim_min = min(nb_orders(min(infidelities)), nb_orders(infid_thresh)) / 10.
+        rew_lim_max = nb_orders(max(infidelities)) * 10.
+        ax.axhline(infid_thresh, ls='dashed', c='g', label=f'Threshold: {infid_thresh:.2f}%')
+        ax.set_ylim(rew_lim_min, rew_lim_max)  # Adjust based on expected reward range
+        ax.legend(loc='upper right')
+
         ax.set_yscale('log')
         ax.set_ylabel('Infidelity (%)')
-        ax.set_xlabel('Steps')
+        ax.set_xlabel('Time [ns]')
 
-        # s = np.repeat(self.PREC, self.n_obs - self.n_act - 1).reshape(4, -1)
         s = np.abs(np.concatenate([s.full() for s in states[0]])).reshape(4, -1)
         im = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
         texts = []
@@ -364,20 +392,25 @@ class ZCQPEE(Env):
         fig.colorbar(im, ax=ax_state)
 
         # Plot ideal pulses - dash-cross
-        for lbl, pulse in zip(self.channel_labels, recons_amps_norm):
-            ax_action.plot(pulse, ls='dashed', alpha=0.7, marker='x', label=f'Ideal {lbl}')
+        ax_action_ideal = ax_action.twinx()
+        ax_action_ideal.set_ylabel('Pulse amplitide')
+        ax_action_ideal.plot(self.tlist, recons_amps[0], ls='dashed', alpha=0.7, marker='x', label=f'Ideal {self.channel_label}')
+        ax_action_ideal.legend(loc='best')
 
-        ax_reward.set_xlim(0, self.cur_idx - 1)
+        ax_reward.set_xlim(0, self.T)
 
-        # action_lines = [ax_action.plot([], [], lw=1.2, label=ch, marker='.')[0] for _, ch in enumerate(self.channel_labels)]
-        ch = self.channel_labels[0]
-        action_line, = ax_action.plot([], [], lw=1.2, label=ch, marker='.')
-        # action_delta_lines = [ax_action_deltas.plot([], [], lw=1.2, label=f'Δ{ch}', marker='.')[0] for _, ch in enumerate(self.channel_labels)]
-        action_delta_line, = ax_action_deltas.plot([], [], lw=1.2, label=f'Δ{ch}', marker='.')
+        action_line, = ax_action.plot([], [], lw=1.2, c='tab:orange', label=self.channel_label, marker='.')
         ax_action.legend(loc='upper right', ncol=2)
-        ax_action_deltas.legend(loc='upper right')
-        reward_line, = ax_reward.plot([], [], 'g-', lw=2, marker='.')
+
         ax_reward.set_title('Time:  Fidelity:')
+        ax_reward.grid(which='major', linestyle='--', color='grey', linewidth=1)
+        ax_reward.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
+        reward_line, = ax_reward.plot([], [], 'g-', lw=2, marker='.')
+
+        action_delta_line = None
+        if self.delta_mode:
+            action_delta_line, = ax_action_deltas.plot([], [], lw=1.2, label=f'Δ{self.channel_label}', marker='.')
+            ax_action_deltas.legend(loc='upper right')
         fig.tight_layout()
 
         def init():
@@ -385,17 +418,15 @@ class ZCQPEE(Env):
             s = np.flipud(s)
             im = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
 
-            # for line in action_lines:
             action_line.set_data([], [])
-            # for line in action_delta_lines:
-            action_delta_line.set_data([], [])
             reward_line.set_data([], [])
+            if self.delta_mode:
+                action_delta_line.set_data([], [])
 
             for i, srow in enumerate(s):
                 for j, selem in enumerate(srow):
                     texts[i*len(srow) + j].set_text(f'{selem:.2f}')
 
-            # return *ims, *action_lines, *action_delta_lines, reward_line
             return im, action_line, action_delta_line, reward_line, texts
 
         def update(frame):
@@ -403,20 +434,16 @@ class ZCQPEE(Env):
             s = np.flipud(s)
             im = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
 
-            # for line, action in zip(action_lines, [self.pulse_amplitudes_norm[self.channel_labels[0]]]):
-            action_line.set_data(range(frame), self.pulse_amplitudes_norm[self.channel_labels[0]][:frame])
-
-            # for line, action in zip(action_delta_lines, [self.actions_all]):
-            action_delta_line.set_data(range(frame), self.actions_all[:frame])
-
-            reward_line.set_data(range(frame), infidelities[:frame])
-            ax_reward.set_title(f'Time: {global_tlist[frame]:.2f}ns  Fidelity: {100 - infidelities[frame]:.2f}:%')
+            action_line.set_data(self.tlist[:frame], self.denorm_action(self.pulse_amplitudes_norm[:frame]))
+            reward_line.set_data(self.tlist[:frame], infidelities[:frame])
+            ax_reward.set_title(f'Time: {global_tlist[frame]:.2f}ns  Fidelity: {100 - infidelities[frame]:.2f}%  (Best fidelity: {max(fidelities):.2f}%)')
+            if self.delta_mode:
+                action_delta_line.set_data(self.tlist[:frame], self.denorm_action(self.actions_all[:frame]))
 
             for i, srow in enumerate(s):
                 for j, selem in enumerate(srow):
                     texts[i*len(srow) + j].set_text(f'{selem:.3f}')
 
-            # return *ims, *action_lines, *action_delta_lines, reward_line
             return im, action_line, action_delta_line, reward_line, texts
 
         frames = list(np.arange(0, self.cur_idx, 2)) + [self.cur_idx - 1] * 5
@@ -430,7 +457,7 @@ class ZCQPEE(Env):
         print(f'Saving to: {save_path}')
         ffwriter = mpl.animation.FFMpegWriter(fps=10)
 
-        pbar = tqdm(total=self.pulse_length)
+        pbar = tqdm(total=len(frames))
 
         def progress_callback(current_frame: int, total_frames: int):
             nonlocal pbar
@@ -438,9 +465,17 @@ class ZCQPEE(Env):
         print(f'Saving to: {save_path}')
         ani.save(save_path, dpi=100, writer=ffwriter, progress_callback=progress_callback)
 
+        fig, ax = plt.subplots()
+        ax.plot(fidelities, color='g')
+        ax.plot(fidelities, color='g')
+        ax.set_title('Fidelity evolution')
+        ax.set_ylabel('Fidelity (%)')
+        ax.set_ylabel('Step')
+        fig.savefig(os.path.splitext(save_path)[0] + '_fidelity.pdf')
+
 
     @staticmethod
-    def evaluate_pulse(pulse_file, save_path):
+    def evaluate_pulse(pulse_file, save_path, render=True, **env_kwargs):
         assert pulse_file.endswith('.csv')
         assert save_path.endswith('.mp4')
 
@@ -448,12 +483,18 @@ class ZCQPEE(Env):
         pulse = data['amplist'].to_numpy()
         tlist = data['tlist'].to_numpy()
         pulse_length = len(tlist)
-        env = ZCQPEE(pulse_length=pulse_length)
-        print(env.dt)
+        env = ZCQPEE(**env_kwargs)
+        # print(env.dt)
         # exit(23)
-        assert tlist[1] == env.dt
+        assert int(tlist[1] * 1e6) == int(env.dt * 1e6)
 
+        acts = []
+        rews = []
+        fids = []
+
+        # obses.append(env.reset()[0])
         env.reset()
+
         truncated = False
         terminated = False
         idx = 0
@@ -463,12 +504,19 @@ class ZCQPEE(Env):
             else:
                 action = np.array([pulse[idx] - pulse[idx - 1]])
 
+            acts.append(pulse[idx])
             action = env.norm_action(action)
 
-            _, _, terminated, truncated, _ = env.step(action)
+            _, rew, terminated, truncated, _ = env.step(action)
+
+            rews.append(rew)
+            fids.append(env.rew2fid(rew))
             idx += 1
 
-        env.render(save_path=save_path)
+        if render:
+            env.render(save_path=save_path)
+        states = np.array(env.final_states_all).T
+        return states, np.array(acts), np.array(rews), np.array(fids)
 
 
 if __name__ == '__main__':

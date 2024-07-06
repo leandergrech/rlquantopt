@@ -1,19 +1,16 @@
 import os
 import argparse
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Union
+import json
+from typing import Any, Dict, List, Optional, Union
 import gymnasium as gym
 import numpy as np
 import torch as tc
 from datetime import datetime as dt
-# from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env import VecMonitor, VecEnv, sync_envs_normalization, DummyVecEnv
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.callbacks import CheckpointCallback, EventCallback, BaseCallback
 from stable_baselines3 import PPO, SAC, DDPG, TD3
-from stable_baselines3.common.noise import NormalActionNoise, VectorizedActionNoise
-# from rlquantopt.rl_envs.vec_qu_pulse_episodic_env import VecQuPulseEpisodicEnv as VQPEE
-# from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.utils.rl_utils import evaluate_policy
 
@@ -252,14 +249,20 @@ class EvalCallback(EventCallback):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on QuPulseEpisodic vectorised environment')
+    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
     # parser.add_argument('--n-envs', default=16, type=int, help='Number of parallel environments')
-    parser.add_argument('--n-train', default=int(2e5), type=int, help='Number of training steps')
-    parser.add_argument('--save-freq', default=5000, type=int, help='Save model every save_freq calls to env.step')
+    parser.add_argument('--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
+    parser.add_argument('--a-norm-max', default=10, type=int, help='Set the maximum normalised amplitude when using delta-mode')
+    parser.add_argument('--a-scale', default=1e-1, type=float, help='Set action scaling during normalisation')
+    parser.add_argument('--seed', default=123, type=int, help='Set random seed')
+    parser.add_argument('--pulse-length', default=120, type=int, help='Maximum number of samples in a pulse')
+    parser.add_argument('--max-time-ns', default=200, type=int, help='Pulse duration in ns')
+    parser.add_argument('--n-train', default=250000, type=int, help='Number of training steps')
+    parser.add_argument('--save-freq', default=10000, type=int, help='Save model every save_freq calls to env.step')
     parser.add_argument('--eval-freq', default=500, type=int, help='Evaluate model every eval_freq calls to env.step')
     parser.add_argument('--n-eval-eps', default=5, type=int, help='Number of evaluation episodes done every eval_freq calls to env.step')
-    parser.add_argument('--log-interval', default=1, type=int, help='Log every N calls to env.step')
-    parser.add_argument('--no-cuda', action='store_true')
+    parser.add_argument('--log-interval', default=500, type=int, help='Log every N calls to env.step')
+    # parser.add_argument('--no-cuda', action='store_true')
     parser.add_argument('--retrain-latest', action='store_true')
 
     return parser.parse_args()
@@ -273,16 +276,19 @@ def ppo_learning_rate(x):
 def main():
     args = parse_args()
 
-    pulse_length = 120
-    env = ZCQPEE(pulse_length=pulse_length)
-    eval_env = ZCQPEE(pulse_length=pulse_length)
+    pulse_length = args.pulse_length
+    delta_mode = args.delta_mode
+    T = args.max_time_ns
+
+    env = ZCQPEE(pulse_length=pulse_length, delta_mode=delta_mode, T=T)
+    eval_env = ZCQPEE(pulse_length=pulse_length, delta_mode=delta_mode, T=T)
 
     info_fn = 'info.txt'
     TRAINING_MESSAGE = (f"ZCQPEE:   pulse_length={pulse_length}\n"
                         f"          action scaling = {env.action_channel_scaling} \t A_norm_max = {env.A_norm_max}\n"
                         f"          T = {env.T} ns \t ΔT = {env.dt:.3f} ns\n"
                         f"          ISWAP gate optimisation.\n"
-                        f"          Action is delta amplitude in this version of the environment.\n"
+                        f"          Action delta_mode={delta_mode}\n"
                         "")
 
     n_eval_eps = int(args.n_eval_eps)
@@ -303,25 +309,15 @@ def main():
 
     algo_str = 'PPO'
     algo = PPO
-    SEED = 234
+    # SEED = 234
+    SEED = None
     policy_kwargs = dict(activation_fn=tc.nn.ReLU,
                          net_arch=dict(pi=[256, 128], vf=[256, 128]))
-    algo_kw = dict(batch_size=batch_size,
-                   n_steps=n_steps,
-                   learning_rate=ppo_learning_rate,
-                   device=device,
-                   n_epochs=n_epochs,
-                   gamma=0.95,
-                   max_grad_norm=0.2,
-                   gae_lambda=0.99,
-                   ent_coef=0.05,
-                   vf_coef=0.2,
-                   use_sde=False,
-                   stats_window_size=10,
+    algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device,
+                   n_epochs=n_epochs, gamma=0.95, max_grad_norm=0.2, gae_lambda=0.99, ent_coef=0.05, vf_coef=0.2,
+                   use_sde=False, stats_window_size=10,
                    # sde_sample_freq=eval_freq,
-                   sde_sample_freq=-1,
-                   seed=SEED,
-                   verbose=1)   # PPO
+                   sde_sample_freq=-1, seed=SEED, verbose=1)   # PPO
 
     work_dir = os.path.join(f'ZCQPEE{pulse_length}pl-{algo_str}')
     dt_fmt_str = '%d-%m-%y_%H%M%S'
@@ -336,7 +332,6 @@ def main():
         model_path = os.path.join(work_dir, model_name)
         model_checkpoint = sorted([item for item in os.listdir(model_path) if 'steps' in item], key=lambda x: int(x.split('_')[2]))[-1]
     else:
-        # model_name = f"{dt.now().strftime(dt_fmt_str)}_{n_envs}-envs"
         model_name = f"{dt.now().strftime(dt_fmt_str)}_ZCQPEE{pulse_length}pl"
         model_path = os.path.join(work_dir, model_name)
 
@@ -344,8 +339,16 @@ def main():
         os.makedirs(model_path)
     with open(os.path.join(model_path, info_fn), 'w') as f:
         f.write(TRAINING_MESSAGE)
+        f.write(f'\nRL algo:  {algo_str}\n')
+        f.write('\npolicy_kwargs:\n')
+        pk = policy_kwargs.copy()
+        pk.pop('activation_fn')
+        json.dump(pk, f, indent=10)
+        f.write('\nalgo_kwargs:\n')
+        ak = algo_kw.copy()
+        ak.pop('learning_rate')
+        json.dump(ak, f, indent=10)
 
-    # env = VecMonitor(env, filename=os.path.join(model_path, 'vec_monitor'))
     if model_checkpoint is not None:
         model = algo.load(os.path.join(model_path, model_checkpoint))
         model.set_env(env)
@@ -357,7 +360,6 @@ def main():
         model = algo('MlpPolicy', env, tensorboard_log=tb_log, policy_kwargs=policy_kwargs, **algo_kw)
         reset_num_timesteps = True
 
-    # eval_env = VecMonitor(eval_env, filename=os.path.join(model_path, 'eval_vec_monitor'))
     checkpoint_callback = CheckpointCallback(save_freq=save_freq, save_path=model_path)
     eval_callback = EvalCallback(eval_env=eval_env, n_eval_episodes=n_eval_eps, eval_freq=eval_freq, verbose=1, best_model_save_path=os.path.join(model_path, 'best_model'), log_path=os.path.join(model_path, 'evals'))
     new_logger = configure(os.path.join(model_path, 'logs'), ['stdout', 'tensorboard'])
@@ -367,12 +369,7 @@ def main():
     print(f'Training {model_name} in {model_path}...')
     model.learn(total_timesteps=n_train, progress_bar=False, log_interval=log_interval, tb_log_name=model_name,
                 callback=[checkpoint_callback, eval_callback], reset_num_timesteps=reset_num_timesteps)
-    # model.save(model_name)
 
 
 if __name__ == '__main__':
     main()
-    # import matplotlib.pyplot as plt
-    # xrange = np.linspace(1, 0, 100)
-    # plt.plot(xrange, [ppo_learning_rate(item) for item in xrange])
-    # plt.show()

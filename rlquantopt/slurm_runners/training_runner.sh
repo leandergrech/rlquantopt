@@ -1,7 +1,7 @@
 #!/bin/bash
 # ALWAYS specify CPU and RAM resources needed as well as walltime
 #SBATCH --partition=research_cpu
-# SBATCH --gres=gpu:ampere:1
+#SBATCH --gres=gpu:ampere:1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem-per-cpu=1G
@@ -38,5 +38,20 @@ echo Updating requirements from $REQ_PATH
 pip install -r $REQ_PATH
 pip install -e $PROJ_DIR
 
-SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/qpee_sb3_training.py
-python $SCRIPT_PATH --n-envs 10 --n-train 1000 --log-interval 1 --save-freq 1000 --no-cuda
+SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3
+
+PULSE_LENGTHS=(500 1000 3000 60000)
+A_NORM_MAXS=(2 5 10)
+ACTION_SCALES=(1e-1 1)
+SEEDS=(123 234 345 456 567)
+
+for pl in "${PULSE_LENGTHS[@]}"; do
+  for amax in "${A_NORM_MAXS[@]}"; do
+    for ascale in "${ACTION_SCALES[@]}"; do
+      for seed in "${SEEDS[@]}"; do
+        python $SCRIPT_PATH --n-envs 16 --n-train 1500000 --log-interval 10 --save-freq 1000 --eval-freq 500 --max-time-ns 300 --pulse-length $pl  --a-norm-max $amax --a-scale $ascale --seed $seed
+      done
+    done
+  done
+done
+
