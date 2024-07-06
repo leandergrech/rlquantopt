@@ -38,7 +38,7 @@ echo Updating requirements from $REQ_PATH
 pip install -r $REQ_PATH
 pip install -e $PROJ_DIR
 
-SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3
+SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3.py
 
 PULSE_LENGTHS=(500 1000 3000 60000)
 A_NORM_MAXS=(2 5 10)
