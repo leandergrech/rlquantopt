@@ -90,4 +90,4 @@ def gate_fidelity(params, tlist, time_slots, H0, H1):
 
 	results = [self.wrapped_mesolve(args) for args in args_list]
 
-	return F_avg(results, self.basis_states, self.unitary, prec=1e-4)
+	return F_avg(results, self.basis_states, self.unitary_iswap, prec=1e-4)

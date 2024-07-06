@@ -1,6 +1,6 @@
 #!/bin/bash
 # ALWAYS specify CPU and RAM resources needed as well as walltime
-#SBATCH --partition=research_cpu
+#SBATCH --partition=research_gpu
 #SBATCH --gres=gpu:ampere:1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
@@ -44,12 +44,13 @@ PULSE_LENGTHS=(500 1000 3000 60000)
 A_NORM_MAXS=(2 5 10)
 ACTION_SCALES=(1e-1 1)
 SEEDS=(123 234 345 456 567)
+T=300
 
 for pl in "${PULSE_LENGTHS[@]}"; do
   for amax in "${A_NORM_MAXS[@]}"; do
     for ascale in "${ACTION_SCALES[@]}"; do
       for seed in "${SEEDS[@]}"; do
-        python $SCRIPT_PATH --n-envs 16 --n-train 1500000 --log-interval 10 --save-freq 1000 --eval-freq 500 --max-time-ns 300 --pulse-length $pl  --a-norm-max $amax --a-scale $ascale --seed $seed
+        python $SCRIPT_PATH --n-train 500000 --log-interval 100 --save-freq 1000 --eval-freq 500 -T $T --pulse-length $pl  --a-norm-max $amax --a-scale $ascale --seed $seed
       done
     done
   done

@@ -27,12 +27,18 @@ class ZCQPEE(Env):
     PLOT_LOG_EPS = 1e-3
     cmap = cm.CMRmap
 
-    def __init__(self, pulse_length=120, delta_mode=True, default_model_params=False, T=50, fid_thresh=0.995):
+    def __init__(self, pulse_length=120, delta_mode=True, default_model_params=False, T=50, fid_thresh=0.995, action_scaling=None, a_norm_max=None):
         self.FID_THRESH = fid_thresh
         self.REW_THRESH = self.fid2rew(self.FID_THRESH)
         self.delta_mode = delta_mode
         if not delta_mode:
             self.A_norm_max = 1
+
+        if action_scaling is not None:
+            self.action_scaling = action_scaling
+
+        if a_norm_max is not None:
+            self.A_norm_max = a_norm_max
 
         # Set up model
         self.n_levels = n_levels = 3
@@ -74,7 +80,7 @@ class ZCQPEE(Env):
                              'max_len': len(coeff),
                              'max_time': tlist[-1]}
 
-        self.unitary = unitary = Qobj(np.array([
+        self.unitary_iswap = U = Qobj(np.array([
             [1, 0, 0, 0],
             [0, 0, 1j, 0],
             [0, 1j, 0, 0],
@@ -89,8 +95,8 @@ class ZCQPEE(Env):
         # self.solvers = [SESolver(self.simulator.H) for _ in self.basis_states]
         self.solvers = [SESolver(self.simulator.H) for i in range(len(self.basis_states))]
 
-        mapped_basis_states = [sum(unitary[i, j] * basis_states[i]
-                                   for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
+        mapped_basis_states = [sum(U[i, j] * basis_states[i]
+                                   for i in range(U.shape[0])) for j in range(U.shape[1])]
         # Lots of gates just rearrange the basis states, and we can avoid some complexity by identifying
         # this and setting the mapped_basis_states to the identical objects as the original basis_states
         for i, state in enumerate(mapped_basis_states):
@@ -100,10 +106,10 @@ class ZCQPEE(Env):
         self.target_states = mapped_basis_states.copy()
 
         # Set up action space
-        self.action_space = spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
-        self.n_channels = 1
-        self.amps_cur = np.array([0.])
-        self.n_act = 1
+        self.n_channels = len(self.action_scaling)
+        self.action_space = spaces.Box(low=-1, high=1, shape=(self.n_channels,), dtype=np.float32)
+        self.amps_cur = np.zeros(self.n_channels)
+        self.n_act = self.n_channels
 
         # Set up observation space
         self.n_obs = len(self.basis_states) * 2 * reduce(lambda x, y: x*y, full_dims) + self.n_act + 1  # +1 is the time dimension
@@ -233,7 +239,7 @@ class ZCQPEE(Env):
             abs_action = self.pulse_amplitudes_norm[self.cur_idx - 1]
 
         # for i, channel_label in enumerate(self.channel_labels):
-            # Delta formalism
+        # Delta formalism
         if self.delta_mode:
             abs_action += amp_delta
         else:
@@ -517,6 +523,18 @@ class ZCQPEE(Env):
             env.render(save_path=save_path)
         states = np.array(env.final_states_all).T
         return states, np.array(acts), np.array(rews), np.array(fids)
+
+    def __repr__(self):
+        return (f"ZCQPEE:   pulse_length = {self.pulse_length}\n"
+                f"          T = {self.T} ns \n"
+                f"          ΔT = {self.dt:.3f} ns\n"
+                f"          action scaling = {self.action_channel_scaling}\n"
+                f"          A_norm_max = {self.A_norm_max}\n"
+                f"          ISWAP gate optimisation.\n"
+                f"          Action delta_mode={self.delta_mode}\n")
+
+    def __str__(self):
+        return f"ZCQPEE_pl-{self.pulse_length}_T-{self.T:d}ns{'_delta_mode' if self.delta_mode else ''}"
 
 
 if __name__ == '__main__':
