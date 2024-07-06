@@ -532,7 +532,7 @@ class ZCQPEE(Env):
                 f"          Action delta_mode={self.delta_mode}\n")
 
     def __str__(self):
-        return f"ZCQPEE_pl-{self.pulse_length}_T-{self.T:d}ns{'_delta_mode' if self.delta_mode else ''}"
+        return f"ZCQPEE_pl-{self.pulse_length}_T-{self.T:.1f}ns{'_delta_mode' if self.delta_mode else ''}"
 
 
 if __name__ == '__main__':
