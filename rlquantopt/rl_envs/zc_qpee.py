@@ -265,7 +265,7 @@ class ZCQPEE(Env):
 
     def reward_function(self, step_states):
         f = np.mean([fidelity(s, t) for s, t in zip(step_states, self.target_states)])
-        rew = self.fid2rew(f)
+        rew = self.fid2rew(f) - self.REW_THRESH
         return rew
 
     @staticmethod
