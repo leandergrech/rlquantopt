@@ -306,7 +306,7 @@ def main():
     eval_env = ZCQPEE(**env_kw)
 
     info_fn = 'info.txt'
-    TRAINING_MESSAGE = f"{repr(env)}\n" + f"Nb. envs: {n_envs}\n"
+    TRAINING_MESSAGE = f"{repr(eval_env)}\n" + f"Nb. envs: {n_envs}\n"
     n_eval_eps = int(args.n_eval_eps)
     print(f'n_obs={eval_env.n_obs}\tn_act={eval_env.n_act}')
 
