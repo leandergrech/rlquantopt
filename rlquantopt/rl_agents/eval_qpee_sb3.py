@@ -23,7 +23,7 @@ render = True
 model_dir = f'ZCQPEE{pulse_length}pl-{algo_str}/{model_datetime}_ZCQPEE{pulse_length}pl'
 model_dir = os.path.join(model_dir, 'best_model')
 env = ZCQPEE(pulse_length=pulse_length, delta_mode=delta_mode, default_model_params=default_model_params, T=T)
-env.action_channel_scaling['z'] = 1e-1
+env.action_scaling['z'] = 1e-1
 
 mp4_save_dir = os.path.join(model_dir, 'evals')
 pulse_save_dir = os.path.join(model_dir, 'pulses')

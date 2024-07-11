@@ -15,7 +15,7 @@ from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity
 
 
 class ZCQPEE(Env):
-    action_channel_scaling = {'z': 1e-1}
+    action_scaling = {'z': 1e-1}
     # action_channel_scaling = {'z': 1}
     # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
     optimised_pulse_path = '../rl_envs/configs/data_lilmc.csv'
@@ -175,11 +175,11 @@ class ZCQPEE(Env):
         return obs.astype(np.float32)
 
     def norm_action(self, action):
-        SCALE = self.action_channel_scaling['z']
+        SCALE = self.action_scaling['z']
         return action / SCALE
 
     def denorm_action(self, action):
-        SCALE = self.action_channel_scaling['z']
+        SCALE = self.action_scaling['z']
         return np.array(action) * SCALE
 
     def step(self, action):
@@ -316,7 +316,7 @@ class ZCQPEE(Env):
 
         # Setup figure and axes
         fig = plt.figure(figsize=(15, 10))
-        fig.suptitle(f'iSWAP\naction scale={self.action_channel_scaling[self.channel_label]:.2e}')
+        fig.suptitle(f'iSWAP\naction scale={self.action_scaling[self.channel_label]:.2e}')
         if self.delta_mode:
             n_rows = 4
         else:
@@ -357,7 +357,7 @@ class ZCQPEE(Env):
         ax = ax_action
         ax.axhline(y=0, linestyle='dashed', color='gray')
         ax.set_xlim(0, self.T)
-        K_delta = self.action_channel_scaling['z']
+        K_delta = self.action_scaling['z']
         K =  K_delta * self.A_norm_max
         ax.set_ylim(-K, K)  # Adjust based on action range
         ax.set_ylabel('Pulse amplitude')  # Adjust based on action range
@@ -526,7 +526,7 @@ class ZCQPEE(Env):
         return (f"ZCQPEE:   pulse_length = {self.pulse_length}\n"
                 f"          T = {self.T} ns \n"
                 f"          ΔT = {self.dt:.3f} ns\n"
-                f"          action scaling = {self.action_channel_scaling}\n"
+                f"          action scaling = {self.action_scaling}\n"
                 f"          A_norm_max = {self.A_norm_max}\n"
                 f"          ISWAP gate optimisation.\n"
                 f"          Action delta_mode={self.delta_mode}\n")
