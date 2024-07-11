@@ -104,8 +104,9 @@ fi
 SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3.py
 
 # Grid-search parameters
+N_ENVS=16
 PULSE_LENGTHS=(1000 3000 6000)
-A_NORM_MAXS=10
+A_NORM_MAX=10
 ACTION_SCALES=(1e-2 1e-1 1)
 T=300
 FID_THRESH=0.995
@@ -120,21 +121,20 @@ LOG_INTERVAL=100
 # Grid-search
 idx=$start_idx
 limit=$((start_idx + cnt))
-for seed in "${SEEDS[@]}"; do
-    for pl in "${PULSE_LENGTHS[@]}"; do
-        N_STEPS=$((pl * 2))
-        for a_max in "${A_NORM_MAXS[@]}"; do
-            for a_scale in "${ACTION_SCALES[@]}"; do
-                idx=$((idx + 1))
-                $PYTHON $SCRIPT_PATH --pulse-length $pl --delta-mode -T $T --a-scale $a_scale --a-norm-max $a_max\
-                --fid-thresh $FID_THRESH --n-steps $N_STEPS --n-train $N_TRAIN --save-freq $SAVE_FREQ \
-                --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL --seed $seed --n-envs 4
+for SEED in "${SEEDS[@]}"; do
+    for PL in "${PULSE_LENGTHS[@]}"; do
+        N_STEPS=$((PL * 2))
+        for A_SCALE in "${ACTION_SCALES[@]}"; do
+            idx=$((idx + 1))
+            echo "seed=$SEED, pl=$PL, a_scale=$A_SCALE"
+            $PYTHON $SCRIPT_PATH --pulse-length $PL --delta-mode -T $T --a-scale $A_SCALE --a-norm-max $A_NORM_MAX\
+            --fid-thresh $FID_THRESH --n-steps $N_STEPS --n-train $N_TRAIN --save-freq $SAVE_FREQ \
+            --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL --seed $SEED --n-envs $N_ENVS
 
-                if [ "$idx" -gt "$limit" ]; then
-                    echo "Reached session nb. of runs limit"
-                    exit 0
-                fi
-            done
+            if [ "$idx" -gt "$limit" ]; then
+                echo "Reached session nb. of runs limit"
+                exit 0
+            fi
         done
     done
 done
