@@ -78,9 +78,9 @@ fi
 SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3.py
 
 # Grid-search parameters
-PULSE_LENGTHS=(500 1000 3000 6000)
-A_NORM_MAXS=(2 5 10)
-ACTION_SCALES=(1e-1 1)
+PULSE_LENGTHS=(1000 3000 6000)
+A_NORM_MAXS=10
+ACTION_SCALES=(1e-2 1e-1 1)
 T=300
 FID_THRESH=0.995
 SEEDS=(123 234 345 456 567)
@@ -93,11 +93,12 @@ LOG_INTERVAL=100
 
 # Grid-search
 for pl in "${PULSE_LENGTHS[@]}"; do
+    N_STEPS=$(pl * 2)
     for a_max in "${A_NORM_MAXS[@]}"; do
         for a_scale in "${ACTION_SCALES[@]}"; do
             for seed in "${SEEDS[@]}"; do
                 $PYTHON $SCRIPT_PATH --n-train $N_TRAIN --save-freq $SAVE_FREQ --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL \
-                --pulse-length $pl --a-norm-max $a_max --a-scale $a_scale -T $T --fid-thresh $FID_THRESH --seed $seed
+                --pulse-length $pl --a-norm-max $a_max --a-scale $a_scale -T $T --fid-thresh $FID_THRESH --seed $seed --n-steps N_STEPS
             done
         done
     done

@@ -9,6 +9,7 @@ import torch as tc
 from datetime import datetime as dt
 from stable_baselines3.common.vec_env import VecMonitor, VecEnv, sync_envs_normalization, DummyVecEnv
 from stable_baselines3.common.logger import configure
+from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.callbacks import CheckpointCallback, EventCallback, BaseCallback
 from stable_baselines3 import PPO, SAC, DDPG, TD3
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
@@ -272,6 +273,7 @@ def parse_args():
     parser.add_argument('--retrain-latest', action='store_true')
 
     # Training parameters
+    parser.add_argument('--n-envs', default=8, type=int, help='Number of vectorised training environments')
     parser.add_argument('--n-train', default=250000, type=int, help='Number of training steps')
     parser.add_argument('--save-freq', default=10000, type=int, help='Save model every save_freq calls to env.step')
     parser.add_argument('--eval-freq', default=500, type=int, help='Evaluate model every eval_freq calls to env.step')
@@ -299,13 +301,14 @@ def main():
                   action_scaling={'z':float(args.a_scale)},
                   a_norm_max=float(args.a_norm_max))
 
-    env = ZCQPEE(**env_kw)
+    n_envs = args.n_envs
+    env = make_vec_env(lambda: ZCQPEE(**env_kw), n_envs=n_envs)
     eval_env = ZCQPEE(**env_kw)
 
     info_fn = 'info.txt'
-    TRAINING_MESSAGE = f"{repr(env)}"
+    TRAINING_MESSAGE = f"{repr(env)}\n" + f"Nb. envs: {n_envs}\n"
     n_eval_eps = int(args.n_eval_eps)
-    print(f'n_obs={env.n_obs}\tn_act={env.n_act}')
+    print(f'n_obs={eval_env.n_obs}\tn_act={eval_env.n_act}')
 
     # PPO parameter setup
     n_train = int(args.n_train)
@@ -331,8 +334,9 @@ def main():
     SEED = args.seed
     policy_kwargs = dict(activation_fn=tc.nn.ReLU,
                          net_arch=dict(pi=[256, 128], vf=[256, 128]))
+    gamma = 0.999
     algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device,
-                   n_epochs=n_epochs, gamma=0.95, max_grad_norm=0.2, gae_lambda=0.99, ent_coef=0.05, vf_coef=0.2,
+                   n_epochs=n_epochs, gamma=gamma, max_grad_norm=0.2, gae_lambda=0.99, ent_coef=0.05, vf_coef=0.2,
                    use_sde=False, stats_window_size=10,
                    # sde_sample_freq=eval_freq,
                    sde_sample_freq=-1, seed=SEED, verbose=1)   # PPO
