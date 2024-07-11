@@ -120,11 +120,11 @@ LOG_INTERVAL=100
 # Grid-search
 idx=$start_idx
 limit=$((start_idx + cnt))
-for pl in "${PULSE_LENGTHS[@]}"; do
-    N_STEPS=$((pl * 2))
-    for a_max in "${A_NORM_MAXS[@]}"; do
-        for a_scale in "${ACTION_SCALES[@]}"; do
-            for seed in "${SEEDS[@]}"; do
+for seed in "${SEEDS[@]}"; do
+    for pl in "${PULSE_LENGTHS[@]}"; do
+        N_STEPS=$((pl * 2))
+        for a_max in "${A_NORM_MAXS[@]}"; do
+            for a_scale in "${ACTION_SCALES[@]}"; do
                 idx=$((idx + 1))
                 $PYTHON $SCRIPT_PATH --pulse-length $pl --delta-mode -T $T --a-scale $a_scale --a-norm-max $a_max\
                 --fid-thresh $FID_THRESH --n-steps $N_STEPS --n-train $N_TRAIN --save-freq $SAVE_FREQ \
