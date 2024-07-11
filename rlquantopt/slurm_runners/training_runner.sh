@@ -119,13 +119,16 @@ EVAL_FREQ=500
 LOG_INTERVAL=100
 
 # Grid-search
-idx=$start_idx
+idx=0
 limit=$((start_idx + cnt))
 for SEED in "${SEEDS[@]}"; do
     for PL in "${PULSE_LENGTHS[@]}"; do
         N_STEPS=$((PL * 2))
         for A_SCALE in "${ACTION_SCALES[@]}"; do
             idx=$((idx + 1))
+            if [ "$idx" -lt "$start_idx" ]; then
+                continue
+            fi
             echo "seed=$SEED, pl=$PL, a_scale=$A_SCALE"
             $PYTHON $SCRIPT_PATH --pulse-length $PL --delta-mode -T $T --a-scale $A_SCALE --a-norm-max $A_NORM_MAX\
             --fid-thresh $FID_THRESH --n-steps $N_STEPS --n-train $N_TRAIN --save-freq $SAVE_FREQ \
