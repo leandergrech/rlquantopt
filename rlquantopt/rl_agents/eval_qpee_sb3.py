@@ -1,5 +1,5 @@
 import os
-import matplotlib.pyplot as plt
+import argparse
 import pandas as pd
 import numpy as np
 from pygments.lexer import default
@@ -9,6 +9,17 @@ from stable_baselines3 import PPO, SAC
 from rlquantopt.utils.rl_utils import evaluate_policy
 # from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
+
+
+def parse_args():
+    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
+    # ZCQPEE parameters
+    parser.add_argument('--pulse-length', default=120, type=int, help='Maximum number of samples in a pulse')
+    parser.add_argument('--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
+    parser.add_argument('')
+
+
+    return parser.parse_args()
 
 algo_str = 'PPO'
 algo = PPO

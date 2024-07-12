@@ -96,12 +96,15 @@ if [ "$slurm_set" = true ]; then
     # Install RLQuantOpt package in editable mode
     pip uninstall rlquantopt
     pip install -e $PROJ_DIR
+
 else
-    echo "Slurm is not set, doing nothing."
+  echo "Slurm is not set, doing nothing."
 fi
 
 # Training script
-SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3.py
+SCRIPT_DIR=$PROJ_DIR/rlquantopt/rl_agents
+SCRIPT_PATH=$SCRIPT_DIR/train_zcqpee_sb3.py
+#tensorboard --logdir .  &
 
 # Grid-search parameters
 N_ENVS=16
@@ -116,7 +119,7 @@ SEEDS=(123 234 345 456 567)
 N_TRAIN=1500000
 SAVE_FREQ=1000
 EVAL_FREQ=500
-LOG_INTERVAL=100
+LOG_INTERVAL=500
 
 # Grid-search
 idx=0
@@ -141,4 +144,5 @@ for SEED in "${SEEDS[@]}"; do
         done
     done
 done
+
 

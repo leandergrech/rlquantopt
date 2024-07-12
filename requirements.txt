@@ -189,8 +189,8 @@ stevedore==5.1.0
 style==1.1.0
 symengine==0.11.0
 sympy==1.12
-tensorboard==2.16.2
-tensorboard-data-server==0.7.2
+tensorboard
+tensorboard-data-server
 tensordict==0.2.1
 tensorrt==8.6.1.post1
 tensorrt-bindings==8.6.1

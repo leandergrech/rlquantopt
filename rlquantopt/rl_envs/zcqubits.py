@@ -1,7 +1,7 @@
 import os.path
 from copy import deepcopy
-from functools import partial
-from multiprocessing import Pool
+# from functools import partial
+# from multiprocessing import Pool
 from typing import Callable
 import numpy as np
 from matplotlib import pyplot as plt
@@ -183,16 +183,16 @@ class ZCQubits:
     def run_solver(self, state, e_ops):
         return self.solver.run(state, self.tlist, e_ops=e_ops)
 
-    def solve(self, e_ops=None):
-        self._control_func = self.control_func()
-        # results = []
-        # for s in self.initial_states:
-        #     res = self.run_solver(s, e_ops)
-        #     results.append(res)
-        _run_solver = partial(self.run_solver, e_ops=e_ops)
-        with Pool(self.threads) as pool:
-            results = pool.map(_run_solver, self.initial_states)
-        return results
+    # def solve(self, e_ops=None):
+    #     self._control_func = self.control_func()
+    #     # results = []
+    #     # for s in self.initial_states:
+    #     #     res = self.run_solver(s, e_ops)
+    #     #     results.append(res)
+    #     _run_solver = partial(self.run_solver, e_ops=e_ops)
+    #     with Pool(self.threads) as pool:
+    #         results = pool.map(_run_solver, self.initial_states)
+    #     return results
 
     # noinspection PyUnusedLocal
     def callback(self, x):

@@ -8,6 +8,8 @@ import numpy as np
 import torch as tc
 from datetime import datetime as dt
 from stable_baselines3.common.vec_env import VecMonitor, VecEnv, sync_envs_normalization, DummyVecEnv
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.callbacks import CheckpointCallback, EventCallback, BaseCallback
@@ -182,14 +184,6 @@ class EvalCallback(EventCallback):
                     self.evaluations_successes.append(self._is_success_buffer)
                     kwargs = dict(successes=self.evaluations_successes)
 
-                # np.savez(
-                #     self.log_path,
-                #     timesteps=self.evaluations_timesteps,
-                #     results=self.evaluations_rewards,
-                #     ep_lengths=self.evaluations_length,
-                #     **kwargs,
-                # )
-
             mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
             mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(episode_lengths)
             mean_init_rewards = np.mean([ep_rews[0] for ep_rews in episode_rewards])
@@ -260,7 +254,7 @@ def parse_args():
     parser.add_argument('--fid-thresh', default=0.995, type=float, help='Set goal fidelity threshold')
 
     # RL agent paramters
-    # parser.add_argument('--n-envs', type=int, default=16, help='Number of training vectorised environments')
+    parser.add_argument('--n-envs', type=int, default=8, help='Number of training vectorised environments')
     parser.add_argument('--algo', type=str, default='PPO', help='Type of RL agent')
     parser.add_argument('--n-steps', type=int, default=300,
                         help='The number of steps to run for each environment per update'
@@ -304,6 +298,7 @@ def main():
     n_envs = args.n_envs
     env = make_vec_env(lambda: ZCQPEE(**env_kw), n_envs=n_envs)
     eval_env = ZCQPEE(**env_kw)
+    env_yaml_fn = str(eval_env) + '.yml'
 
     info_fn = 'info.txt'
     TRAINING_MESSAGE = f"{repr(eval_env)}\n" + f"Nb. envs: {n_envs}\n"
@@ -325,23 +320,20 @@ def main():
     else:
         device = 'cuda'
 
+    gamma = 0.999
+    SEED = args.seed
+    policy_kwargs = dict(activation_fn=tc.nn.ReLU,
+                         net_arch=dict(pi=[256, 256], vf=[256, 256]))
     algo_str = args.algo
     if algo_str == 'PPO':
         algo = PPO
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device,
+                       n_epochs=n_epochs, gamma=gamma, max_grad_norm=0.2, gae_lambda=0.99, ent_coef=0.05, vf_coef=0.2,
+                       use_sde=False, stats_window_size=10, seed=SEED, verbose=1)  # PPO
     else:
         raise NotImplementedError
 
-    SEED = args.seed
-    policy_kwargs = dict(activation_fn=tc.nn.ReLU,
-                         net_arch=dict(pi=[256, 128], vf=[256, 128]))
-    gamma = 0.999
-    algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device,
-                   n_epochs=n_epochs, gamma=gamma, max_grad_norm=0.2, gae_lambda=0.99, ent_coef=0.05, vf_coef=0.2,
-                   use_sde=False, stats_window_size=10,
-                   # sde_sample_freq=eval_freq,
-                   sde_sample_freq=-1, seed=SEED, verbose=1)   # PPO
-
-    work_dir = os.path.join(f'ZCQPEE{args.pulse_length}pl-{algo_str}')
+    work_dir = os.path.join(f'{str(eval_env)}-{algo_str}')
     dt_fmt_str = '%d-%m-%y_%H%M%S'
 
     '''
@@ -357,8 +349,11 @@ def main():
         model_path = os.path.join(work_dir, model_name)
         model_checkpoint = sorted([item for item in os.listdir(model_path) if 'steps' in item], key=lambda x: int(x.split('_')[2]))[-1]
     else:
-        model_name = f"{dt.now().strftime(dt_fmt_str)}_ZCQPEE{args.pulse_length}pl"
+        model_name = f"{dt.now().strftime(dt_fmt_str)}"
         model_path = os.path.join(work_dir, model_name)
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
+        eval_env.to_yaml(os.path.join(model_path, env_yaml_fn))
 
     '''
     SAVE INFORMATION ABOUT THIS TRAINING SESSION

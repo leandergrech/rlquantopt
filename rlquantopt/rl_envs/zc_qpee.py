@@ -1,4 +1,5 @@
 from gymnasium import spaces
+import yaml
 import numpy as np
 from functools import reduce
 from tqdm import tqdm
@@ -16,7 +17,6 @@ from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity
 
 class ZCQPEE(Env):
     action_scaling = {'z': 1e-1}
-    # action_channel_scaling = {'z': 1}
     # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
     optimised_pulse_path = '../rl_envs/configs/data_lilmc.csv'
 
@@ -24,6 +24,27 @@ class ZCQPEE(Env):
     A_norm_max = 10
     PLOT_LOG_EPS = 1e-3
     cmap = cm.CMRmap
+
+    def to_yaml(self, save_path=None):
+        data = dict(pulse_length=self.pulse_length,
+                    delta_mode=self.delta_mode,
+                    T=self.T,
+                    fid_thresh=self.FID_THRESH,
+                    action_scaling=self.action_scaling,
+                    a_norm_max=self.A_norm_max)
+
+        if save_path is not None:
+            with open(save_path, 'w') as f:
+                yaml.dump(data, f)
+
+        return data
+
+    @classmethod
+    def from_yaml(cls, load_path):
+        with open(load_path, 'r') as f:
+            kw = yaml.load(f, yaml.SafeLoader)
+        self = cls(**kw)
+        return self
 
     def __init__(self, pulse_length=120, delta_mode=True, default_model_params=False, T=50, fid_thresh=0.995, action_scaling=None, a_norm_max=None):
         self.FID_THRESH = fid_thresh
@@ -78,12 +99,7 @@ class ZCQPEE(Env):
                              'max_len': len(coeff),
                              'max_time': tlist[-1]}
 
-        self.unitary_iswap = U = Qobj(np.array([
-            [1, 0, 0, 0],
-            [0, 0, 1j, 0],
-            [0, 1j, 0, 0],
-            [0, 0, 0, 1]
-        ]), dims=[[2, 2], [2, 2]])  # iSWAP
+        self.unitary_iswap = U = self.get_iswap_u()
 
         # Set up state vectors
 
@@ -123,6 +139,15 @@ class ZCQPEE(Env):
         self.rewards =None
         self.actions_all = None
 
+    @staticmethod
+    def get_iswap_u():
+        return Qobj(np.array([
+            [1, 0, 0, 0],
+            [0, 0, 1j, 0],
+            [0, 1j, 0, 0],
+            [0, 0, 0, 1]
+        ]), dims=[[2, 2], [2, 2]])  # iSWAP
+
     def get_optimal_pulse(self):
         data = pd.read_csv(self.optimised_pulse_path)
         tlist = data['tlist'].to_numpy()
@@ -138,7 +163,8 @@ class ZCQPEE(Env):
         # return buffer
         return np.zeros(self.pulse_length)
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
+        super().reset(seed=seed, options=options)
         if seed is not None:
             np.random.seed(seed)
         self.cur_idx = 0
@@ -150,8 +176,8 @@ class ZCQPEE(Env):
         self.actions_all = []
         self.rewards = []
 
-        for solver, basis_state in zip(self.solvers, self.basis_states):
-            solver.start(basis_state, 0.)
+        for solver, initial_state in zip(self.solvers, self.initial_states):
+            solver.start(initial_state, 0.)
 
         # for k, solver in enumerate(self.solvers):
         #     self.solvers[k].start(from_states[k], 0.)
@@ -209,17 +235,19 @@ class ZCQPEE(Env):
         terminated, truncated = False, False
 
         # Check if episode is done
-        if self.cur_idx >= self.pulse_length - 1 or crash:
-            truncated = True
+        if self.cur_idx >= self.pulse_length - 1:
+            terminated = True
 
         # Calculate reward for current action
+        reward = self.reward_function(self.step_states)
         if oob_pulse or crash:
-            reward = 0.
-        else:
-            reward = self.reward_function(self.step_states)
+            reward -= 10
+            truncated = True
+
         self.rewards.append(reward)
 
         if reward > self.REW_THRESH:
+            reward *= 10
             terminated = True
 
         # Construct observation for agent using state probabilities and normed actions
@@ -533,6 +561,8 @@ class ZCQPEE(Env):
 
     def __str__(self):
         return f"ZCQPEE_pl-{self.pulse_length}_T-{self.T:.1f}ns{'_delta_mode' if self.delta_mode else ''}"
+
+
 
 
 if __name__ == '__main__':
