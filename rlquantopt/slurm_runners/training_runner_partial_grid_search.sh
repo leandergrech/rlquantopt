@@ -107,18 +107,20 @@ SCRIPT_PATH=$SCRIPT_DIR/train_zcqpee_sb3.py
 #tensorboard --logdir .  &
 
 # Grid-search parameters
-N_ENVS=16
-PULSE_LENGTHS=(1000 3000 6000)
-A_NORM_MAX=10
-ACTION_SCALES=(1e-2 1e-1 1)
+N_ENVS=8
+PULSE_LENGTHS=(1000 2000 3000)
+A_NORM_MAX=5
+A_SCALE=1
 T=300
-FID_THRESH=0.995
+FID_THRESHES=(0.99 0.995 0.999)
+N_STEPS=(4096 8192)
+BATCH_SIZES=(128 256)
 SEEDS=(123 234 345 456 567)
 
 # Training parameters
-N_TRAIN=1500000
+N_TRAIN=1000000
 SAVE_FREQ=1000
-EVAL_FREQ=500
+EVAL_FREQ=1000
 LOG_INTERVAL=500
 
 # Grid-search
@@ -126,21 +128,24 @@ idx=0
 limit=$((start_idx + cnt))
 for SEED in "${SEEDS[@]}"; do
     for PL in "${PULSE_LENGTHS[@]}"; do
-        N_STEPS=$((PL * 2))
-        for A_SCALE in "${ACTION_SCALES[@]}"; do
-            idx=$((idx + 1))
-            if [ "$idx" -lt "$start_idx" ]; then
-                continue
-            fi
-            echo "seed=$SEED, pl=$PL, a_scale=$A_SCALE"
-            $PYTHON $SCRIPT_PATH --pulse-length $PL --delta-mode -T $T --a-scale $A_SCALE --a-norm-max $A_NORM_MAX\
-            --fid-thresh $FID_THRESH --n-steps $N_STEPS --n-train $N_TRAIN --save-freq $SAVE_FREQ \
-            --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL --seed $SEED --n-envs $N_ENVS
+        for FID_THRESH in "${FID_THRESHES[@]}"; do
+            for N_STEP in "${N_STEPS[@]}"; do
+                for BATCH_SIZE in "${BATCH_SIZES[@]}"; do
+                    idx=$((idx + 1))
+                    if [ "$idx" -lt "$start_idx" ]; then
+                        continue
+                    fi
+                    echo "seed=$SEED, pl=$PL, FID_THRESH=$FID_THRESH, n_step=$N_STEP, batch_size=$BATCH_SIZE"
+                    $PYTHON $SCRIPT_PATH --pulse-length $PL --delta-mode -T $T --a-scale $A_SCALE --a-norm-max $A_NORM_MAX\
+                    --fid-thresh $FID_THRESH --algo RecurrentPPO --n-steps $N_STEP --batch-size $BATCH_SIZE --n-train $N_TRAIN \
+                    --save-freq $SAVE_FREQ --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL --seed $SEED --n-envs $N_ENVS
 
-            if [ "$idx" -gt "$limit" ]; then
-                echo "Reached session nb. of runs limit"
-                exit 0
-            fi
+                    if [ "$idx" -gt "$limit" ]; then
+                        echo "Reached session nb. of runs limit"
+                        exit 0
+                    fi
+                done
+            done
         done
     done
 done

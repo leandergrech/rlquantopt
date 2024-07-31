@@ -15,11 +15,11 @@ from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - evaluating RL agent on ZCQPEE environment')
     # ZCQPEE parameters
-    parser.add_argument('--pulse-path', type=str, help='Path to model zip file')
+    parser.add_argument('pulse_path', type=str, help='Path to model zip file')
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
     parser.add_argument('--n_eps', type=int, help='Nb. of evaluation episodes', default=1)
     parser.add_argument('-r', action='store_true', help='Render the episode/s')
-    parser.add_argument('--verbosity', type=int, default=2,
+    parser.add_argument('-v', '--verbose', type=int, default=2,
                         help='Levels of analysis detail to perform on the pulse.\n'
                              'Level 0 - no analysis\n'
                              'Level 1 - plot rewards\n'
@@ -31,13 +31,20 @@ def parse_args():
 
 def gen_env_yaml(pulse_path, save_dir, ret_pulse=True, a_scale=1):
     data = pd.read_csv(pulse_path)
-    tkey, vkey = data.keys()[1:]
+    n_keys = len(data.keys())
+    if n_keys == 2:
+        tkey, vkey = data.keys()
+    elif n_keys == 3:
+        tkey, vkey = data.keys()[1:]
+    else:
+        raise Exception("There's something fucked with the CSV pulse file.")
     tlist = data[tkey]
     pulse = data[vkey]
 
-    env_kw = dict(delta_mode=False,
+    env_kw = dict(delta_mode=True,
                   T=max(tlist),
-                  pulse_length=len(pulse) - 1,
+                  a_norm_max=5,
+                  pulse_length=len(pulse),
                   optimised_pulse_path=os.path.abspath(pulse_path),
                   action_scaling={'z': a_scale})
     env = ZCQPEE(**env_kw)
@@ -54,10 +61,10 @@ def main():
     args = parse_args()
     n_eps = args.n_eps
     render = args.r
-    verbosity = args.verbosity
-    # pulse_path = args.pulse_path
+    verbose = args.verbose
+    pulse_path = args.pulse_path
     # pulse_path = '../rl_envs/configs/data_mkrauss/pulse_bad_guess.csv'
-    pulse_path = '../rl_envs/configs/data_lilmc/data_lilmc.csv'
+    # pulse_path = '../rl_envs/configs/data_lilmc/data_lilmc.csv'
     pulse_dir = os.path.abspath(os.path.dirname(pulse_path))
     pulse_name = os.path.splitext(os.path.basename(pulse_path))[0]
 
@@ -69,7 +76,7 @@ def main():
         if not os.path.exists(d):
             os.makedirs(d)
 
-    env_yml_path, pulse = gen_env_yaml(pulse_path, pulse_dir, ret_pulse=True)
+    env_yml_path, pulse = gen_env_yaml(pulse_path, res_save_dir, ret_pulse=True)
     tkey, vkey = pulse.keys()
     env = ZCQPEE.from_yaml(env_yml_path)
     for i in range(n_eps):
@@ -81,9 +88,12 @@ def main():
         idx = 0
         rews = []
         pbar= tqdm(total=env.pulse_length)
+        prev_a = 0
         while not (term or trunc):
             a = env.norm_action(np.array([pulse[vkey][idx]]))
-            obs, r, term, trunc, info = env.step(a)
+            a_delta = a - prev_a
+            obs, r, term, trunc, info = env.step(a_delta)
+            prev_a = a
 
             rews.append(r)
             pbar.update(1)
@@ -95,7 +105,7 @@ def main():
         infidelities = 1 - np.array(env.fidelities)
         infidelities *= 100.
 
-        if verbosity > 1:
+        if verbose > 1:
             fig, ax = plt.subplots()
             ax.plot(env.tlist, infidelities, c='k')
             ax.set_xlabel('Time [ns]')
@@ -112,17 +122,22 @@ def main():
             fig.suptitle(f'Max fidelity = {max_fid:.2f}%')
             axx.axhline(max_fid, c='g', linestyle='--', linewidth=0.5)
             axx.axvline(np.argmax(env.fidelities), c='g', linestyle='--', linewidth=0.5)
-            save_path = os.path.join(res_save_dir, 'fid_vs_infid_plot.pdf')
+            
+            save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.1f}_fid_vs_infid_plot.pdf')
+            if verbose > 2:
+                print(f'Saving result to: {save_path}')
             fig.savefig(save_path)
             
-        if verbosity > 0:
+        if verbose > 0:
             fig, ax = plt.subplots()
             ax.plot(env.tlist, rews, c='tab:orange')
             ax.set_xlabel('Time [ns]')
             ax.set_ylabel('Reward')
             ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
             ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
-            save_path = os.path.join(res_save_dir, 'rew_plot.pdf')
+            save_path = os.path.join(res_save_dir, f'{save_name}_rew_plot.pdf')
+            if verbose > 2:
+                print(f'Saving result to: {save_path}')
             fig.savefig(save_path)
 
             fig, ax = plt.subplots()
@@ -131,7 +146,10 @@ def main():
             ax.set_ylabel('Pulse amplitude')
             ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
             ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
-            save_path = os.path.join(res_save_dir, 'pulse.pdf')
+
+            save_path = os.path.join(res_save_dir, f'{save_name}_pulse.pdf')
+            if verbose > 2:
+                print(f'Saving result to: {save_path}')
             fig.savefig(save_path)
 
         if render:

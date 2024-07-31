@@ -88,6 +88,7 @@ class ZCQubits:
         destroy_op_tb = destroy(self.coupler_dims)
         # Coupler drift self interaction
         l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
+        print(self.params)
         l.append(-2 * np.pi * self.params['omega_r'] * destroy_op_tb.dag() * destroy_op_tb +
                  np.pi * self.params["alpha_c"] * destroy_op_tb.dag() ** 2 * destroy_op_tb ** 2)
         drift.append(tensor(*l))

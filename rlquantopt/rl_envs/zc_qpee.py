@@ -79,13 +79,24 @@ class ZCQPEE(Env):
             self.model_params["omega_s"] = model_params["omega_s"]
             self.model_params["alpha_s"] = model_params["alpha_s"]
             self.model_params["g"] = model_params["g"]
+            self.model_params["alpha_c"] = model_params["alpha_c"]
+            self.model_params["omega_r"] = model_params["omega_r"]
+            self.model_params["omega_c_0"] = model_params["omega_c_0"]
             self.n_levels = n_levels = model_params["n_levels"]
             coupler_dims = model_params["coupler_dims"]
             num_qubits = model_params["num_qubits"]
         else:
-            self.model_params["omega_s"] = [5.8899, 5.0311]
-            self.model_params["alpha_s"] = [-324e-3, -235e-3]
-            self.model_params["g"] = [100e-3, 71.4e-3]
+            # self.model_params["omega_s"] = [5.8899, 5.0311]
+            # self.model_params["alpha_s"] = [-324e-3, -235e-3]
+            # self.model_params["g"] = [100e-3, 71.4e-3]
+            # self.model_params["omega_s"] = [5.9, 6.0]
+            # self.model_params["alpha_s"] = [-310e-3, -290e-3]
+            self.model_params["omega_s"] = [6.0, 5.9]
+            self.model_params["alpha_s"] = [-290e-3, -310e-3]
+            self.model_params["g"] = [70e-3, 70e-3]
+            self.model_params["alpha_c"] = -200e-3
+            self.model_params["omega_r"] = 6.2
+            self.model_params["omega_c_0"] = 6.7
             self.n_levels = n_levels = 3
             coupler_dims = 3
             num_qubits = 2
@@ -167,7 +178,13 @@ class ZCQPEE(Env):
 
     def get_optimal_pulse(self):
         data = pd.read_csv(self.optimised_pulse_path)
-        tkey, vkey = data.columns[1:]
+        n_keys = len(data.keys())
+        if n_keys == 2:
+            tkey, vkey = data.keys()
+        elif n_keys == 3:
+            tkey, vkey = data.keys()[1:]
+        else:
+            raise Exception("There's something fucked with the CSV pulse file.")
 
         tlist = data[tkey].to_numpy()
         coeff = data[vkey].to_numpy()
@@ -260,14 +277,14 @@ class ZCQPEE(Env):
         SCALE = self.action_scaling['z']
         return np.array(action) * SCALE
 
-    def step(self, action):
+    def step(self, action, can_term=False):
         """
         Add a pulse amplitude delta vector (action) on the previous value of the pulse amplitude.
         :param action: Must be list-like with `self.n_abs` dimensions
         :return: observation_tp1, reward, terminated, truncated, info
         """
         # Action linear scaling wrt. episode time
-        action = np.array(action) * (self.pulse_length-self.cur_idx)/self.pulse_length
+        action = np.array(action)
 
         # Absolute amplitude conversion required for rendering
         self.actions_all.append(action[0])
@@ -304,8 +321,8 @@ class ZCQPEE(Env):
 
         self.rewards.append(reward)
 
-        # if reward > 0:
-        #     reward *= 10
+        if reward > 0 and can_term:
+            terminated = True
 
         # Construct observation for agent using state probabilities and normed actions
         # self.current_state = self.extract_current_state(self.step_states, self.cur_idx)

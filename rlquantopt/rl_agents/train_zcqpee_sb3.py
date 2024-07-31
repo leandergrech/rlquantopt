@@ -16,6 +16,9 @@ from stable_baselines3 import PPO
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.utils.rl_utils import evaluate_policy
 
+import warnings
+warnings.filterwarnings("ignore")
+
 
 class EvalCallback(EventCallback):
     """
@@ -304,11 +307,16 @@ def main():
 
     env_kw = dict(pulse_length=int(args.pulse_length),
                   delta_mode=args.delta_mode,
-                  default_model_params=False,
                   T=float(args.max_time_ns),
                   fid_thresh=float(args.fid_thresh),
                   action_scaling={'z':float(args.a_scale)},
                   a_norm_max=float(args.a_norm_max))
+                  # model_params={'omega_s': [5.8899, 5.0311],
+                  #               'alpha_s': [-324e-3, -235e-3],
+                  #               'g': [100e-3, 71.4e-3],
+                  #               'n_levels': 3,
+                  #               'coupler_dims': 3,
+                  #               'num_qubits': 2})
 
     n_envs = args.n_envs
     env = make_vec_env(lambda: ZCQPEE(**env_kw), n_envs=n_envs)

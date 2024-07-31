@@ -38,5 +38,8 @@ echo Updating requirements from $REQ_PATH
 pip install -r $REQ_PATH
 pip install -e $PROJ_DIR
 
-SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/qpee_sb3_training.py
-python $SCRIPT_PATH --n-envs 10 --n-train 1000 --log-interval 1 --save-freq 1000 --no-cuda
+SCRIPT_PATH=$PROJ_DIR/rlquantopt/rl_agents/train_zcqpee_sb3.py
+python $SCRIPT_PATH -p 1000 -T 300 -d --a-scale 1 --a-norm-max 5 --fid-thresh 0.99 \
+--algo RecurrentPPO --n-steps 4096 --batch-size 128 --n-envs 8 --n-train 10000000 \
+--log-interval 100 --save-freq 1000 --eval-freq 500 -L 128 -H 2 \
+--msg "This one has a larger n-steps and larger batch size"

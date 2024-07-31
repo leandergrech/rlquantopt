@@ -111,7 +111,7 @@ def main():
                 else:
                     a = model.predict(obs, deterministic=True)[0]
                 # a += np.random.normal(0, 1e-3, env.n_act)
-                obs, r, term, trunc, info = env.step(a)
+                obs, r, term, trunc, info = env.step(a, can_term=True)
 
                 a_denorm = env.denorm_action(a)[0]
                 if env.delta_mode:
