@@ -690,9 +690,6 @@ def test_step(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
         fig.suptitle('Step pulse')
         fig.savefig(os.path.join(save_dir, f'{model_name}_step-pulse_population.pdf'))
 
-    # states = np.squeeze(states)
-    # n_basis, n_states, len_ket = states.shape
-    # states = states.reshape((n_states, n_basis, len_ket))
     states = np.squeeze(np.array(states))
     return states, pulse, np.mean(all_f, axis=0)
 
@@ -792,7 +789,7 @@ def test_full(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
 
 if __name__ == "__main__":
     # pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/20-06-24_120311_ZCQPEE120pl/best_model/pulses/best_model_T200ns_delta_mode_default_model_to_term.csv'
-    pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv'
+    pulse_file = '/rlquantopt/rl_envs/configs/data_lilmc/data_lilmc.csv'
     save_dir = os.path.splitext(pulse_file)[0]
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)

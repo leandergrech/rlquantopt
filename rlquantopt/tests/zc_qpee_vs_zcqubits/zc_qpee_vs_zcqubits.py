@@ -7,7 +7,7 @@ from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.rl_envs.zcqubits import test_step
 from rlquantopt.utils.utils import decimal_to_base3
 
-pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv'
+pulse_file = '/rlquantopt/rl_envs/configs/data_lilmc/data_lilmc.csv'
 save_dir = '/home/leander/code/rlquantopt/rlquantopt/tests/zc_qpee_vs_zcqubits'
 T = 200
 env_kwargs = {'pulse_length': 200,

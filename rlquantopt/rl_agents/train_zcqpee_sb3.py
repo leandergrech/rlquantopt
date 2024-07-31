@@ -7,13 +7,12 @@ import gymnasium as gym
 import numpy as np
 import torch as tc
 from datetime import datetime as dt
-from stable_baselines3.common.vec_env import VecMonitor, VecEnv, sync_envs_normalization, DummyVecEnv
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.env_util import make_vec_env
+from sb3_contrib import RecurrentPPO, TRPO
+from stable_baselines3.common.vec_env import VecEnv, sync_envs_normalization
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.callbacks import CheckpointCallback, EventCallback, BaseCallback
-from stable_baselines3 import PPO, SAC, DDPG, TD3
+from stable_baselines3.common.callbacks import CheckpointCallback, EventCallback, BaseCallback, StopTrainingOnNoModelImprovement
+from stable_baselines3 import PPO
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.utils.rl_utils import evaluate_policy
 
@@ -59,9 +58,10 @@ class EvalCallback(EventCallback):
         render: bool = False,
         verbose: int = 1,
         warn: bool = True,
+        algo = 'PPO'
     ):
         super().__init__(callback_after_eval, verbose=verbose)
-
+        self.algo = algo
         self.callback_on_new_best = callback_on_new_best
         if self.callback_on_new_best is not None:
             # Give access to the parent
@@ -129,11 +129,14 @@ class EvalCallback(EventCallback):
             rews.append([])
             obs, _ = self.eval_env.reset()
             done = False
+            lstm_states = None
+            episode_start = np.ones((1,), dtype=bool)
             while not done:
-                actions = self.model.predict(
-                    obs,
-                    deterministic=True
-                )[0]
+                if self.algo == 'PPO' or self.algo == 'TRPO':
+                    actions = self.model.predict(obs, deterministic=True)[0]
+                elif self.algo == 'RecurrentPPO':
+                    actions, lstm_states = self.model.predict(obs, state=lstm_states, episode_start=episode_start, deterministic=True)
+
                 obs, r, te, tr, info = self.eval_env.step(actions)
                 rews[-1].append(r)
                 done = te or tr
@@ -157,16 +160,16 @@ class EvalCallback(EventCallback):
             # Reset success rate buffer
             self._is_success_buffer = []
 
-            episode_rewards, episode_lengths, all_rewards = evaluate_policy(
-                self.model,
-                self.eval_env,
-                n_eval_episodes=self.n_eval_episodes,
-                render=self.render,
-                deterministic=self.deterministic,
-                return_episode_rewards=True,
-                warn=self.warn,
-                callback=self._log_success_callback,
-            )
+            # episode_rewards, episode_lengths, all_rewards = evaluate_policy(
+            #     self.model,
+            #     self.eval_env,
+            #     n_eval_episodes=self.n_eval_episodes,
+            #     render=self.render,
+            #     deterministic=self.deterministic,
+            #     return_episode_rewards=True,
+            #     warn=self.warn,
+            #     callback=self._log_success_callback,
+            # )
 
             episode_rewards = self.eval_policy()
             episode_lengths = [len(item) for item in episode_rewards]
@@ -246,25 +249,28 @@ class EvalCallback(EventCallback):
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
     # ZCQPEE parameters
-    parser.add_argument('--pulse-length', default=120, type=int, help='Maximum number of samples in a pulse')
-    parser.add_argument('--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
+    parser.add_argument('-p', '--pulse-length', default=120, type=int, help='Maximum number of samples in a pulse')
+    parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
     parser.add_argument('-T', '--max-time-ns', default=200.0, type=float, help='Pulse duration in ns')
     parser.add_argument('--a-scale', default=0.1, type=float, help='Set action scaling during normalisation')
     parser.add_argument('--a-norm-max', default=10.0, type=float, help='Set the maximum normalised amplitude when using delta-mode')
     parser.add_argument('--fid-thresh', default=0.995, type=float, help='Set goal fidelity threshold')
 
     # RL agent paramters
-    parser.add_argument('--n-envs', type=int, default=8, help='Number of training vectorised environments')
     parser.add_argument('--algo', type=str, default='PPO', help='Type of RL agent')
-    parser.add_argument('--n-steps', type=int, default=300,
+    parser.add_argument('--n-steps', type=int, default=10--00,
                         help='The number of steps to run for each environment per update'
                              '(i.e. rollout buffer size is n_steps * n_envs where n_envs is number of environment copies running in parallel)'
                              'NOTE: n_steps * n_envs must be greater than 1 (because of the advantage normalization)'
                              'See https://github.com/pytorch/pytorch/issues/29372')
     parser.add_argument('--n-epochs', type=int, default=10, help='Number of epoch when optimizing the surrogate loss')
     parser.add_argument('--batch-size', type=int, default=64, help='Mini-batch size')
+    parser.add_argument('--gamma', type=float, default=0.99, help='Mini-batch size')
     parser.add_argument('--seed', default=123, type=int, help='Set random seed')
-    parser.add_argument('--retrain-latest', action='store_true')
+
+    # Fine tuning an existing model
+    parser.add_argument('-r', '--retrain-model-zip', type=str, default=None, help='By passing the path the model zipfile, you are instructing to continue training with these new parameters')
+
 
     # Training parameters
     parser.add_argument('--n-envs', default=8, type=int, help='Number of vectorised training environments')
@@ -275,13 +281,22 @@ def parse_args():
                         help='Number of evaluation episodes done every eval_freq calls to env.step')
     parser.add_argument('--log-interval', default=500, type=int, help='Log every N calls to env.step')
     parser.add_argument('--no-cuda', action='store_true')
+    parser.add_argument('--msg', default='', type=str, help='User message to add to info.txt')
+    parser.add_argument('-L', '--hidden-layer-size', default=64, type=int, help='Network hidden layer size. All layers are equal size')
+    parser.add_argument('-H', '--n-hidden-layers', default=2, type=int, help='Nb. of networks will hidden layers')
 
     return parser.parse_args()
 
 
 def ppo_learning_rate(x):
     lr1 = 3e-4
-    return lr1*x
+    return lr1 * x
+
+
+def ppo_clip_range(x):
+    clip_range1 = 0.4
+    # return clip_range1
+    return clip_range1 * x
 
 
 def main():
@@ -301,7 +316,7 @@ def main():
     env_yaml_fn = str(eval_env) + '.yml'
 
     info_fn = 'info.txt'
-    TRAINING_MESSAGE = f"{repr(eval_env)}\n" + f"Nb. envs: {n_envs}\n"
+    TRAINING_MESSAGE = f"{repr(eval_env)}\n" + f"Nb. envs: {n_envs}\n\n{args.msg}\n. "
     n_eval_eps = int(args.n_eval_eps)
     print(f'n_obs={eval_env.n_obs}\tn_act={eval_env.n_act}')
 
@@ -320,40 +335,52 @@ def main():
     else:
         device = 'cuda'
 
-    gamma = 0.999
+    gamma = args.gamma
     SEED = args.seed
+
+    L = args.hidden_layer_size
+    H = args.n_hidden_layers
     policy_kwargs = dict(activation_fn=tc.nn.ReLU,
-                         net_arch=dict(pi=[256, 256], vf=[256, 256]))
+                         net_arch=dict(pi=[L]*H, vf=[L]*H))
+
     algo_str = args.algo
+    policy_type = 'MlpPolicy'
     if algo_str == 'PPO':
         algo = PPO
-        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device,
-                       n_epochs=n_epochs, gamma=gamma, max_grad_norm=0.2, gae_lambda=0.99, ent_coef=0.05, vf_coef=0.2,
-                       use_sde=False, stats_window_size=10, seed=SEED, verbose=1)  # PPO
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=0.05, vf_coef=0.2, use_sde=False, stats_window_size=10,
+                       seed=SEED, verbose=1)  # PPO
+    elif algo_str == 'TRPO':
+        algo = TRPO
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, gamma=gamma, gae_lambda=0.95, seed=SEED, verbose=1)  # TRPO
+    elif algo_str == 'RecurrentPPO':
+        algo = RecurrentPPO
+        policy_type = 'MlpLstmPolicy'
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=0.05, vf_coef=0.2, use_sde=False, stats_window_size=10,
+                       seed=SEED, verbose=1)  # PPO
     else:
         raise NotImplementedError
 
-    work_dir = os.path.join(f'{str(eval_env)}-{algo_str}')
     dt_fmt_str = '%d-%m-%y_%H%M%S'
 
     '''
-    NAME NEW MODEL OR FIND LATEST CHECKPOINT
+    NAME NEW MODEL OR RETRAIN FROM MODEL CHECKPOINT
     '''
-    retrain_latest = args.retrain_latest
     model_checkpoint = None
-    if retrain_latest:
-        # Assumes that the model names start with the date time information in the format defined by `dt_fmt_str`
-        models_available = [item for item in os.listdir(work_dir)]
-        model_latest_date = sorted([dt.strptime('_'.join(item.split('_')[:2]), dt_fmt_str) for item in models_available])[-1].strftime(dt_fmt_str)
-        model_name = [item for item in models_available if model_latest_date in item][0]
-        model_path = os.path.join(work_dir, model_name)
-        model_checkpoint = sorted([item for item in os.listdir(model_path) if 'steps' in item], key=lambda x: int(x.split('_')[2]))[-1]
-    else:
+    model_zip = args.retrain_model_zip
+    if model_zip is None:
+        work_dir = os.path.join(f'{str(eval_env)}-{algo_str}')
         model_name = f"{dt.now().strftime(dt_fmt_str)}"
         model_path = os.path.join(work_dir, model_name)
         if not os.path.exists(model_path):
             os.makedirs(model_path)
         eval_env.to_yaml(os.path.join(model_path, env_yaml_fn))
+    # else:
+    #     model_dir, model_zip_fn = os.path.split(model_zip)
+    #     work_dir, model_name = os.path.split(model_dir)
+    #     model_name = os.path.splitext(model_zip))[-1]
+
+
+
 
     '''
     SAVE INFORMATION ABOUT THIS TRAINING SESSION
@@ -364,13 +391,20 @@ def main():
     with open(os.path.join(model_path, info_fn), 'w') as f:
         f.write(TRAINING_MESSAGE)
         f.write(f'\nRL algo:  {algo_str}\n')
+
         f.write('\npolicy_kwargs:\n')
         pk = policy_kwargs.copy()
         pk.pop('activation_fn')
         json.dump(pk, f, indent=10)
+
         f.write('\nalgo_kwargs:\n')
         ak = algo_kw.copy()
-        ak.pop('learning_rate')
+
+        if not isinstance(ak['learning_rate'], float):
+            ak['learning_rate'] = f'Linear decay from {ppo_learning_rate(1)}'
+        if 'PPO' in algo_str:
+            if not isinstance(ak['clip_range'], float):
+                ak['clip_range'] = f'Linear decay from {ppo_clip_range(1)}'
         json.dump(ak, f, indent=10)
 
     '''
@@ -384,14 +418,23 @@ def main():
         # model = algo('MlpPolicy', env, tensorboard_log=os.path.join(model_path, 'tb_logs'), policy_kwargs=policy_kwargs, **algo_kw)
         tb_log = os.path.join(model_path, 'tb_logs')
         os.makedirs(tb_log)
-        model = algo('MlpPolicy', env, tensorboard_log=tb_log, policy_kwargs=policy_kwargs, **algo_kw)
+        model = algo(policy_type, env, tensorboard_log=tb_log, policy_kwargs=policy_kwargs, **algo_kw)
         reset_num_timesteps = True
 
     '''
     SETUP TRAINING CALLBACKS AND NEW LOGGER
     '''
+    # Stop training if there is no improvement after more than 3 evaluations
+    stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=100, min_evals=1000, verbose=1)
     checkpoint_callback = CheckpointCallback(save_freq=save_freq, save_path=model_path)
-    eval_callback = EvalCallback(eval_env=eval_env, n_eval_episodes=n_eval_eps, eval_freq=eval_freq, verbose=1, best_model_save_path=os.path.join(model_path, 'best_model'), log_path=os.path.join(model_path, 'evals'))
+    eval_callback = EvalCallback(eval_env=eval_env,
+                                 n_eval_episodes=n_eval_eps,
+                                 eval_freq=eval_freq,
+                                 best_model_save_path=os.path.join(model_path, 'best_model'),
+                                 log_path=os.path.join(model_path, 'evals'),
+                                 callback_after_eval=stop_train_callback,
+                                 verbose=1,
+                                 algo=algo_str)
 
     new_logger = configure(os.path.join(model_path, 'logs'), ['stdout', 'tensorboard'])
     model.set_logger(new_logger)
