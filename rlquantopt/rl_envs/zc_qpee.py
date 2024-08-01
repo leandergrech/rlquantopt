@@ -11,41 +11,22 @@ from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 from gymnasium import Env
 
-from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity
+from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity, setup_ZCQubits4MKrauss_params
 
 
 class ZCQPEE(Env):
-    action_scaling = {'z': 1e-1}
-    # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
     # optimised_pulse_path = 'configs/data_lilmc/data_lilmc.csv'
+    # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
+    # Action scaling parameters
+    action_scaling = {'z': 1}    # Only applicable in delta_mode==True
+    A_norm_max = 5
 
+    # Rendering parameters
     PREC = 5e-4
-    A_norm_max = 10
     PLOT_LOG_EPS = 1e-3
-    cmap = cm.CMRmap
-
-    def to_yaml(self, save_path=None):
-        data = dict(pulse_length=self.pulse_length,
-                    delta_mode=self.delta_mode,
-                    T=self.T,
-                    fid_thresh=self.FID_THRESH,
-                    action_scaling=self.action_scaling,
-                    a_norm_max=self.A_norm_max,
-                    optimised_pulse_path=self.optimised_pulse_path,
-                    model_params=self.all_model_params)
-
-        if save_path is not None:
-            with open(save_path, 'w') as f:
-                yaml.dump(data, f)
-
-        return data
-
-    @classmethod
-    def from_yaml(cls, load_path):
-        with open(load_path, 'r') as f:
-            kw = yaml.load(f, yaml.SafeLoader)
-        self = cls(**kw)
-        return self
+    cmap = mpl.colormaps["CMRmap"]
+    FPS = 10
+    DPS = 100
 
     def __init__(self, pulse_length=120, delta_mode=True, T=50, fid_thresh=0.995, action_scaling=None, a_norm_max=None, optimised_pulse_path=None, model_params=None):
         self.FID_THRESH = fid_thresh
@@ -74,34 +55,17 @@ class ZCQPEE(Env):
                                  'max_time': tlist[-1]}
 
         # Set up model
-        self.model_params = {}
-        if model_params is not None:
-            self.model_params["omega_s"] = model_params["omega_s"]
-            self.model_params["alpha_s"] = model_params["alpha_s"]
-            self.model_params["g"] = model_params["g"]
-            self.model_params["alpha_c"] = model_params["alpha_c"]
-            self.model_params["omega_r"] = model_params["omega_r"]
-            self.model_params["omega_c_0"] = model_params["omega_c_0"]
-            self.n_levels = n_levels = model_params["n_levels"]
-            coupler_dims = model_params["coupler_dims"]
-            num_qubits = model_params["num_qubits"]
-        else:
-            # self.model_params["omega_s"] = [5.8899, 5.0311]
-            # self.model_params["alpha_s"] = [-324e-3, -235e-3]
-            # self.model_params["g"] = [100e-3, 71.4e-3]
-            # self.model_params["omega_s"] = [5.9, 6.0]
-            # self.model_params["alpha_s"] = [-310e-3, -290e-3]
-            self.model_params["omega_s"] = [6.0, 5.9]
-            self.model_params["alpha_s"] = [-290e-3, -310e-3]
-            self.model_params["g"] = [70e-3, 70e-3]
-            self.model_params["alpha_c"] = -200e-3
-            self.model_params["omega_r"] = 6.2
-            self.model_params["omega_c_0"] = 6.7
-            self.n_levels = n_levels = 3
-            coupler_dims = 3
-            num_qubits = 2
-
-        qubit_dims = [n_levels, n_levels]
+        self.model_params = setup_ZCQubits4MKrauss_params(model_params)
+        self.all_model_params = self.model_params.copy()
+        #     # self.model_params["omega_s"] = [5.8899, 5.0311]
+        #     # self.model_params["alpha_s"] = [-324e-3, -235e-3]
+        #     # self.model_params["g"] = [100e-3, 71.4e-3]
+        #     self.n_levels = n_levels = 3
+        #     coupler_dims = 3
+        #     num_qubits = 2
+        self.n_levels = self.model_params.get("n_levels")
+        coupler_dims = self.model_params.get("coupler_dims")
+        qubit_dims = self.model_params.get("qubit_dims")
         full_dims = qubit_dims.copy()
         full_dims.append(coupler_dims)
 
@@ -112,11 +76,7 @@ class ZCQPEE(Env):
         self.basis_states_ket = [self.psi00, self.psi01, self.psi10, self.psi11]
 
         # self.simulators = [ZCQubits(2, qubit_dims=qubit_dims, coupler_dims=coupler_dims, params=self.model_params) for _ in range(len(self.basis_states_ket))]
-        self.simulator = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims, **self.model_params)
-        self.all_model_params = self.model_params.copy()
-        self.all_model_params.update({'n_levels': n_levels,
-                                      'coupler_dims': coupler_dims,
-                                      'num_qubits': num_qubits})
+        self.simulator = ZCQubits(**self.model_params)
 
         self.T = T  # ns
         self.pulse_length = pulse_length
@@ -176,6 +136,29 @@ class ZCQPEE(Env):
             [0, 0, 0, 1]
         ]), dims=[[2, 2], [2, 2]])  # iSWAP
 
+    def to_yaml(self, save_path=None):
+        data = dict(pulse_length=self.pulse_length,
+                    delta_mode=self.delta_mode,
+                    T=self.T,
+                    fid_thresh=self.FID_THRESH,
+                    action_scaling=self.action_scaling,
+                    a_norm_max=self.A_norm_max,
+                    optimised_pulse_path=self.optimised_pulse_path,
+                    model_params=self.all_model_params)
+
+        if save_path is not None:
+            with open(save_path, 'w') as f:
+                yaml.dump(data, f)
+
+        return data
+
+    @classmethod
+    def from_yaml(cls, load_path):
+        with open(load_path, 'r') as f:
+            kw = yaml.load(f, yaml.SafeLoader)
+        self = cls(**kw)
+        return self
+
     def get_optimal_pulse(self):
         data = pd.read_csv(self.optimised_pulse_path)
         n_keys = len(data.keys())
@@ -217,12 +200,9 @@ class ZCQPEE(Env):
         for solver, initial_state in zip(self.solvers, self.initial_states):
             solver.start(initial_state, 0.)
 
-        # for k, solver in enumerate(self.solvers):
-        #     self.solvers[k].start(from_states[k], 0.)
-        # self.fidelities = []
         return self.current_state, {}
 
-    def get_current_amp_time_norm_tupe(self, action=None):
+    def get_current_amp_time_norm_tuple(self, action=None):
         obs_ampt = []
         # Add the action
         if action is None:
@@ -241,7 +221,7 @@ class ZCQPEE(Env):
                 state = state.full()
             obs.append(np.concatenate([state.real.copy(), state.imag.copy()]))
         if not state_only:
-            obs.extend(self.get_current_amp_time_norm_tupe(action))
+            obs.extend(self.get_current_amp_time_norm_tuple(action))
         obs = np.concatenate(obs).squeeze()
         return obs.astype(np.float32)
 
@@ -264,7 +244,7 @@ class ZCQPEE(Env):
                     obs.append(np.concatenate([s_.real.copy(), s_.imag.copy()]))
 
         if not state_only:
-            obs.extend(self.get_current_amp_time_norm_tupe(action))
+            obs.extend(self.get_current_amp_time_norm_tuple(action))
 
         obs = np.concatenate(obs).squeeze()
         return obs.astype(np.float32)
@@ -281,9 +261,9 @@ class ZCQPEE(Env):
         """
         Add a pulse amplitude delta vector (action) on the previous value of the pulse amplitude.
         :param action: Must be list-like with `self.n_abs` dimensions
+        :param can_term: If True, episode will terminate iff reward threshold is exceeded. Used during evaluation to get a shorter pulse ...
         :return: observation_tp1, reward, terminated, truncated, info
         """
-        # Action linear scaling wrt. episode time
         action = np.array(action)
 
         # Absolute amplitude conversion required for rendering
@@ -291,7 +271,7 @@ class ZCQPEE(Env):
 
         # Environment dynamics
         # amp_delta_denorm = self.denorm_action(action.copy())[0]
-        from_states = self.step_states.copy()
+        # from_states = self.step_states.copy()
         crash = False
         oob_pulse = False
         try:
@@ -302,8 +282,6 @@ class ZCQPEE(Env):
 
         self.final_states_all.append(self.step_states.copy())
 
-        # terminated is only True when reward threshold is exceeded
-        # truncated is only True when maximum pulse length is reached
         terminated, truncated = False, False
 
         # Check if episode is done
@@ -316,7 +294,8 @@ class ZCQPEE(Env):
             reward = -10
             truncated = True
 
-        if oob_pulse:
+        # Assign penalty if pulse in delta-mode is OOB
+        if oob_pulse and self.delta_mode:
             reward = -10
 
         self.rewards.append(reward)
@@ -445,8 +424,8 @@ class ZCQPEE(Env):
 
         ax_state = fig.add_subplot(gs[0, :])
         ax_action = fig.add_subplot(gs[1, :])
-        if self.delta_mode:
-            ax_action_deltas = fig.add_subplot(gs[2, :])
+        # if self.delta_mode:
+        #     ax_action_deltas =
         ax_reward = fig.add_subplot(gs[n_rows - 1, :])
 
         # Initialize the plot
@@ -478,7 +457,9 @@ class ZCQPEE(Env):
         ax.set_ylabel('Pulse amplitude')  # Adjust based on action range
         ax.set_xlabel('Time [ns]')  # Adjust based on action range
 
+        ax_action_deltas = None
         if self.delta_mode:
+            ax_action_deltas = fig.add_subplot(gs[2, :])
             ax = ax_action_deltas
             ax.axhline(y=0, linestyle='dashed', color='gray')
             ax.set_xlim(0, self.T)
@@ -509,12 +490,6 @@ class ZCQPEE(Env):
                 text = ax.text(j, i, f'{selem:.2f}', horizontalalignment='center', verticalalignment='center', fontsize=6, c='k')
                 texts.append(text)
         fig.colorbar(im, ax=ax_state)
-
-        # Plot ideal pulses - dash-cross
-        # ax_action_ideal = ax_action.twinx()
-        # ax_action_ideal.set_ylabel('Pulse amplitide')
-        # ax_action_ideal.plot(self.tlist, recons_amps[0], ls='dashed', alpha=0.7, marker='x', label=f'Ideal {self.channel_label}')
-        # ax_action_ideal.legend(loc='best')
 
         ax_reward.set_xlim(0, self.T)
 
@@ -567,24 +542,23 @@ class ZCQPEE(Env):
 
         frames = list(np.arange(0, self.cur_idx, 2)) + [self.cur_idx - 1] * 5
         ani = FuncAnimation(fig, update, frames=frames, interval=5, init_func=init, blit=False)
-        # plt.show()
-        # return ani
+
         if save_path is None:
             print(f'Returning animation')
             return ani
-        #     save_path = generate_random_alphanumeric(8) + '.mp4'
+
         print(f'Saving to: {save_path}')
-        ffwriter = mpl.animation.FFMpegWriter(fps=10)
 
         pbar = tqdm(total=len(frames))
 
         def progress_callback(current_frame: int, total_frames: int):
             nonlocal pbar
             pbar.update(1)
+        pbar.close()
         print(f'Saving to: {save_path}')
-        ani.save(save_path, dpi=100, writer=ffwriter, progress_callback=progress_callback)
 
-
+        ffwriter = mpl.animation.FFMpegWriter(fps=self.FPS)
+        ani.save(save_path, dpi=self.DPI, writer=ffwriter, progress_callback=progress_callback)
 
     @staticmethod
     def evaluate_pulse(pulse_file, save_path, render=True, **env_kwargs):
@@ -596,8 +570,7 @@ class ZCQPEE(Env):
         tlist = data['tlist'].to_numpy()
         pulse_length = len(tlist)
         env = ZCQPEE(**env_kwargs)
-        # print(env.dt)
-        # exit(23)
+
         assert int(tlist[1] * 1e6) == int(env.dt * 1e6)
 
         acts = []

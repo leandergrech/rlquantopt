@@ -1,11 +1,50 @@
+import os
 import warnings
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import gymnasium as gym
 import numpy as np
+import pandas as pd
 
 from stable_baselines3.common import type_aliases
 from stable_baselines3.common.vec_env import DummyVecEnv, VecEnv, VecMonitor, is_vecenv_wrapped
+
+
+def gen_env_yaml(env_type, pulse_path, save_dir, ret_pulse=True, override_env_kw=None):
+    tlist, pulse = get_pulse_data(pulse_path)
+
+    env_kw = dict(delta_mode=True,
+                  T=max(tlist),
+                  pulse_length=len(pulse),
+                  optimised_pulse_path=os.path.abspath(pulse_path))
+    if override_env_kw is not None:
+        env_kw.update(override_env_kw)
+
+    env = env_type(**env_kw)
+    save_path = os.path.join(save_dir, f'{str(env)}.yml')
+    env.to_yaml(save_path)
+
+    if ret_pulse:
+        return save_path, dict(tlist=tlist, pulse=pulse)
+    else:
+        return save_path
+
+
+def get_pulse_data(pulse_path):
+    data = pd.read_csv(pulse_path, index_col=0)
+    col_keys = list(data.keys())
+    tkey, vkey = None, None
+    for key in col_keys:
+        if 'amplist' in key or 'pulse' in key or 'amp' in key or 'value' in key:
+            vkey = key
+            continue
+        elif 'tlist' in key or 'time' in key or 't' in key:
+            tkey = key
+            continue
+    if tkey is None or vkey is None:
+        raise Exception("There's something f***ed with the CSV pulse file.")
+
+    return data[tkey].to_numpy(), data[vkey].to_numpy()
 
 
 def evaluate_policy(

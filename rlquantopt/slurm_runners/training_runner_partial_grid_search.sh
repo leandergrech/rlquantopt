@@ -107,6 +107,7 @@ SCRIPT_PATH=$SCRIPT_DIR/train_zcqpee_sb3.py
 #tensorboard --logdir .  &
 
 # Grid-search parameters
+ALGO=RecurrentPPO
 N_ENVS=8
 PULSE_LENGTHS=(1000 2000 3000)
 A_NORM_MAX=5
@@ -137,7 +138,7 @@ for SEED in "${SEEDS[@]}"; do
                     fi
                     echo "seed=$SEED, pl=$PL, FID_THRESH=$FID_THRESH, n_step=$N_STEP, batch_size=$BATCH_SIZE"
                     $PYTHON $SCRIPT_PATH --pulse-length $PL --delta-mode -T $T --a-scale $A_SCALE --a-norm-max $A_NORM_MAX\
-                    --fid-thresh $FID_THRESH --algo RecurrentPPO --n-steps $N_STEP --batch-size $BATCH_SIZE --n-train $N_TRAIN \
+                    --fid-thresh $FID_THRESH --algo $ALGO --n-steps $N_STEP --batch-size $BATCH_SIZE --n-train $N_TRAIN \
                     --save-freq $SAVE_FREQ --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL --seed $SEED --n-envs $N_ENVS
 
                     if [ "$idx" -gt "$limit" ]; then

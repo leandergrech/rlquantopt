@@ -17,7 +17,7 @@ def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - evaluating RL agent on ZCQPEE environment')
     # ZCQPEE parameters
     parser.add_argument('model_zip', type=str, nargs='+', help='Path to model zip file')
-    parser.add_argument('-a', '--algo', type=str, default='PPO', help='Type of RL algorithm')
+    parser.add_argument('-a', '--algo', type=str, default='RecurrentPPO', help='Type of RL algorithm')
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
     parser.add_argument('-e', '--env-yml-dir', type=str, default='', help='Directory containing only one yaml file with env arguments. Default, model directory.')
     parser.add_argument('--n-eps', type=int, help='Nb. of evaluation episodes', default=1)
@@ -41,8 +41,7 @@ def main():
                 raise argparse.ArgumentTypeError(f'{item} sub-argument is not a string')
     elif isinstance(model_zips, str):
         model_zips = [model_zips]
-    # print(model_zip[0])
-    # exit(23)
+
     for model_zip in sorted(model_zips):
         model_dir = os.path.dirname(model_zip)
         if (save_dir:= args.save_dir) == '':
@@ -52,15 +51,18 @@ def main():
         verbose = args.verbose
 
         algo_str = args.algo
-        if algo_str == 'PPO':
+        if algo_str == 'RecurrentPPO':
+            algo = RecurrentPPO
+        elif algo_str == 'PPO':
             algo = PPO
         elif algo_str == 'TRPO':
             algo = TRPO
-        elif algo_str == 'RecurrentPPO':
-            algo = RecurrentPPO
 
         if (env_yml_dir := args.env_yml_dir) == '':
             env_yml_dir = model_dir
+        elif env_yml_dir.startswith('../'):
+            env_yml_dir = os.path.abspath(os.path.join(model_dir, env_yml_dir))
+
         env_yml_path = None
         for item in os.listdir(env_yml_dir):
             if item.endswith('.yml') or item.endswith('.yaml'):
@@ -68,12 +70,6 @@ def main():
                 break
         if env_yml_path is None:
             raise Exception('No ZCQPEE environment configuration was found')
-        #
-        # pulse_length = 120
-        # T = 50
-        # delta_mode = False
-        # default_model_params = False
-        # env = ZCQPEE(pulse_length=pulse_length, delta_mode=delta_mode, default_model_params=default_model_params, T=T, action_scaling={'z':1e-1}, a_norm_max=10)
         env = ZCQPEE.from_yaml(env_yml_path)
 
         mp4_save_dir = os.path.join(save_dir, 'evals')

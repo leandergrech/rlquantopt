@@ -13,6 +13,8 @@ import pandas as pd
 from scipy.linalg import sqrtm
 from stable_baselines3 import PPO
 
+from rlquantopt.utils.rl_utils import get_pulse_data
+
 
 # noinspection PyUnresolvedReferences
 def fidelity(A, B) -> float:
@@ -48,20 +50,44 @@ def fidelity(A, B) -> float:
     return f[0, 0]
 
 
+def setup_ZCQubits4MKrauss_params(model_params):
+    if model_params is None:
+        model_params = {}
+    ret_model_params = {}
+    ret_model_params["omega_s"] = model_params.get("omega_s", [6.0, 5.9])
+    ret_model_params["alpha_s"] = model_params.get("alpha_s", [-290e-3, -310e-3])
+    ret_model_params["g"] = model_params.get("g", [70e-3, 70e-3])
+    ret_model_params["alpha_c"] = model_params.get("alpha_c", -200e-3)
+    ret_model_params["omega_r"] = model_params.get("omega_r", 6.2)
+    ret_model_params["omega_c_0"] = model_params.get("omega_c_0", 6.7)
+    ret_model_params["n_levels"] = model_params.get("n_levels", 3)
+    ret_model_params["num_qubits"] = model_params.get("num_qubits", 2)
+    ret_model_params["coupler_dims"] = model_params.get("coupler_dims", 3)
+    ret_model_params["qubit_dims"] = [ret_model_params["n_levels"]] * ret_model_params["num_qubits"]
+
+    return ret_model_params
+
+
 class ZCQubits:
-    def __init__(self, num_qubits, qubit_dims=None, coupler_dims=None, **params):
-        self.num_qubits = num_qubits
-        self.qubit_dims = qubit_dims if qubit_dims is not None else [3] * num_qubits
-        self.coupler_dims = coupler_dims if coupler_dims is not None else 3
+    def __init__(self, **params):
         self.params = {
-            "omega_s": [6] * self.num_qubits,
-            "alpha_s": [-300e-3] * self.num_qubits,
-            "g": [70e-3] * self.num_qubits,
+            "omega_s": [5.8899, 5.0311],    # [6] * self.num_qubits,
+            "alpha_s": [-324e-3, -235e-3],  # [-300e-3] * self.num_qubits,
+            "g": [100e-3, 71.4e-3],         # [70e-3] * self.num_qubits,
             "alpha_c": -230e-3,
             "omega_r": 0.0,
-            "omega_c_0": 7.445
+            "omega_c_0": 7.445,
+            "n_levels": 3,
+            "coupler_dims": 3,
+            "num_qubits": 2
         }
         self.params.update(deepcopy(params))
+
+        self.n_levels = self.params["n_levels"]
+        self.num_qubits = self.params["num_qubits"]
+        self.qubit_dims = [self.n_levels] * self.num_qubits
+        self.coupler_dims = self.params["coupler_dims"]
+
         self.drift = self._set_up_drift()
         self.control = self._set_up_control()
 
@@ -589,13 +615,15 @@ class ZCQubits:
 #     fig.suptitle('Step pulse')
 #     fig.savefig(os.path.join(model_dir, f'{model_name}_step-pulse_population.pdf'))
 
-
-def test_step(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
+LABELS = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
+def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
-    model_name = os.path.splitext(os.path.basename(pulse_file))[0]
-    model_dir = os.path.dirname(pulse_file)
+    pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
+    pulse_dir = os.path.dirname(pulse_file)
     if save_dir is None:
-        save_dir = model_dir
+        save_dir = pulse_dir
+    tlist, pulse = get_pulse_data(pulse_file)
+    print(f'T={tlist[-1]}')
 
     num_qubits = 2  # KEEP 2
     qubit_dims = [3, 3]
@@ -620,29 +648,8 @@ def test_step(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
 
     target_states = [sum(unitary[i, j] * basis_states[i]
                          for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
-    # params = {
-    #     "omega_s": [5.8899, 5.0311],
-    #     "alpha_s": [-324e-3, -235e-3],
-    #     "g": [100e-3, 71.4e-3]
-    # }
-    # fuck-up params
-    # params = {
-    #     "omega_s": [6., 6.],
-    #     "alpha_s": [-300e-3, -300e-3],
-    #     "g": [70e-3, 70e-3]
-    # }
 
-    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims)#, **params)
-
-    data = pd.read_csv(pulse_file)
-    pulse = data['amplist'].to_numpy()
-    tlist = data['tlist'].to_numpy()
-
-    if plot:
-        fig, ax = plt.subplots()
-        ax.plot(tlist, pulse)
-        ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
-        fig.savefig(os.path.join(save_dir, f'{model_name}_pulse_step.pdf'))
+    model = ZCQubits(**model_params)
 
     """
         RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
@@ -661,7 +668,6 @@ def test_step(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
         all_f.append([])
         fid = 0.
         solver[k].start(s[k], 0)
-        # for i, t in enumerate(tlist[1:]):
         for i, t in enumerate(tlist[1:]):
             cur_amp = pulse[i]
             t = tlist[i]
@@ -676,38 +682,43 @@ def test_step(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
         expectations.append(l)
 
     print('Step pulse')
-    print(f, np.mean(f))
+    res_str = f"Final fidelities={f}, Mean={np.mean(f)*100.:.2f}%"
+    print(res_str)
 
     if plot:
-        fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
-        axs = np.ndarray.flatten(axs)
-        labels = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
+        title = f'RL step pulse ({pulse_name})\npulse length = {len(pulse)} ; T={tlist[-1]}ns\n{res_str}'
+        fig, ax = plt.subplots()
+        ax.plot(tlist, pulse)
+        ax.set_title(title)
+        fig.savefig(os.path.join(save_dir, f'{pulse_name}_pulse-step.pdf'))
 
-        for ax, exp, title in zip(axs, expectations, labels):
-            for i, label in enumerate(labels):
+        fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+        fig.suptitle(res_str)
+        axs = np.ndarray.flatten(axs)
+
+        for ax, exp, ttl in zip(axs, expectations, LABELS):
+            for i, label in enumerate(LABELS):
                 ax.plot(tlist, exp[i], label=label)
             ax.legend()
-            ax.set_title(title)
-        fig.suptitle('Step pulse')
-        fig.savefig(os.path.join(save_dir, f'{model_name}_step-pulse_population.pdf'))
+            ax.set_title(ttl)
+        fig.suptitle(title)
+        fig.savefig(os.path.join(save_dir, f'{pulse_name}_population-step.pdf'))
 
     states = np.squeeze(np.array(states))
-    return states, pulse, np.mean(all_f, axis=0)
+    return states, pulse, all_f
 
 
-def test_full(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
-    par_dir = os.path.dirname(pulse_file)
-    model_name = os.path.splitext(os.path.basename(pulse_file))[0]
-    model_dir = os.path.dirname(pulse_file)
+def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
+    pulse_dir = os.path.dirname(pulse_file)
+    pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
     if save_dir is None:
-        save_dir = model_dir
+        save_dir = pulse_dir
 
-    num_qubits = 2  # KEEP 2
-    qubit_dims = [3, 3]
-    coupler_dims = 3
+    tlist, pulse = get_pulse_data(pulse_file)
+    print(f'T={tlist[-1]}')
 
-    full_dims = qubit_dims.copy()
-    full_dims.append(coupler_dims)
+    full_dims = model_params["qubit_dims"].copy()
+    full_dims.append(model_params["coupler_dims"])
 
     psi00 = ket((0, 0, 0), dim=full_dims)
     psi01 = ket((0, 1, 0), dim=full_dims)
@@ -725,37 +736,8 @@ def test_full(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
 
     target_states = [sum(unitary[i, j] * basis_states[i]
                          for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
-    # params = {
-    #     "omega_s": [5.8899, 5.0311],
-    #     "alpha_s": [-324e-3, -235e-3],
-    #     "g": [100e-3, 71.4e-3]
-    # }
-    # fuck-up params
-    # params = {
-    #     "omega_s": [6., 6.],
-    #     "alpha_s": [-300e-3, -300e-3],
-    #     "g": [70e-3, 70e-3]
-    # }
 
-    model = ZCQubits(num_qubits, qubit_dims=qubit_dims, coupler_dims=coupler_dims)#, **params)
-
-    # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
-    # optimised_pulse_file = os.path.join(par_dir, csv_file)
-    # model_name = os.path.splitext(os.path.basename(optimised_pulse_file))[0]
-    # model_dir = os.path.dirname(optimised_pulse_file)
-
-
-    data = pd.read_csv(pulse_file)
-    pulse = data['amplist'].to_numpy()/10
-    # pulse_length = len(pulse)
-    tlist = data['tlist'].to_numpy()
-    print(f'T={tlist[-1]}')
-
-    if plot:
-        fig, ax = plt.subplots()
-        ax.plot(tlist, pulse)
-        ax.set_title(f'RL pulse ({model_name}); {len(pulse)} pulse length; T=200ns')
-        fig.savefig(os.path.join(save_dir, f'{model_name}_pulse_full.pdf'))
+    model = ZCQubits(**model_params)
 
     """
     RUNNING FULL PULSE AT ONCE, starting from each basis_state, respectively
@@ -773,19 +755,27 @@ def test_full(pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/confi
     expectations = [res.expect for res in results]
 
     print('Full pulse')
-    print(f, np.mean(f))
+    res_str = f"Final fidelities={f}, Mean={np.mean(f)*100.:.2f}%"
+    print(res_str)
 
     if plot:
+        title = f'RL full pulse ({pulse_name})\npulse length = {len(pulse)} ; T={tlist[-1]}ns\n{res_str}'
+        fig, ax = plt.subplots()
+        ax.set_title(title)
+        ax.plot(tlist, pulse)
+        ax.set_title(f'RL pulse ({pulse_name}); {len(pulse)} pulse length; T=200ns')
+        fig.savefig(os.path.join(save_dir, f'{pulse_name}_pulse-full.pdf'))
+
         fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
+        fig.suptitle(res_str)
         axs = np.ndarray.flatten(axs)
-        labels = ['00', '01', '10', '11']
-        for ax, exp, title in zip(axs, expectations, labels):
-            for i, label in enumerate(labels):
+        for ax, exp, ttl in zip(axs, expectations, LABELS):
+            for i, label in enumerate(LABELS):
                 ax.plot(tlist, exp[i], label=label)
             ax.legend()
-            ax.set_title(title)
-        fig.suptitle('Full pulse')
-        fig.savefig(os.path.join(save_dir, f'{model_name}_full-pulse_populations.pdf'))
+            ax.set_title(ttl)
+        fig.suptitle(title)
+        fig.savefig(os.path.join(save_dir, f'{pulse_name}_population-full.pdf'))
 
 
 if __name__ == "__main__":

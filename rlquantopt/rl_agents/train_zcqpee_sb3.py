@@ -163,19 +163,9 @@ class EvalCallback(EventCallback):
             # Reset success rate buffer
             self._is_success_buffer = []
 
-            # episode_rewards, episode_lengths, all_rewards = evaluate_policy(
-            #     self.model,
-            #     self.eval_env,
-            #     n_eval_episodes=self.n_eval_episodes,
-            #     render=self.render,
-            #     deterministic=self.deterministic,
-            #     return_episode_rewards=True,
-            #     warn=self.warn,
-            #     callback=self._log_success_callback,
-            # )
-
             episode_rewards = self.eval_policy()
             episode_lengths = [len(item) for item in episode_rewards]
+            self._is_success_buffer = [ep_len < self.eval_env.pulse_length for ep_len in episode_lengths]
 
             if self.log_path is not None:
                 assert isinstance(episode_rewards, list)
@@ -186,18 +176,20 @@ class EvalCallback(EventCallback):
 
                 kwargs = {}
                 # Save success log if present
-                if len(self._is_success_buffer) > 0:
+                if sum(self._is_success_buffer) > 0:
                     self.evaluations_successes.append(self._is_success_buffer)
-                    kwargs = dict(successes=self.evaluations_successes)
 
             mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
-            mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(episode_lengths)
+            mean_ep_length, std_ep_length = np.mean(episode_lengths)
             mean_init_rewards = np.mean([ep_rews[0] for ep_rews in episode_rewards])
-            mean_best_rewards = np.mean([max(ep_rews) for ep_rews in episode_rewards])
+            best_rewards = [max(ep_rews) for ep_rews in episode_rewards]
+            best_fidelities = [self.eval_env.rew2fid(r + self.eval_env.REW_THRESH) for r in best_rewards]
 
-            # mean_ep_reward_improvement = np.mean(np.subtract(best_rewards, init_rewards))
+            mean_best_rewards = np.mean(best_rewards)
+            mean_best_fidelities = np.mean(best_fidelities)
             mean_ep_reward_improvement = mean_best_rewards - mean_init_rewards
             mean_ep_len_best = np.mean([np.argmax(ep_rews) for ep_rews in episode_rewards])
+            mean_success = np.mean(np.array(self._is_success_buffer).astype(int))
 
             if self.verbose >= 1:
                 print(
@@ -205,15 +197,15 @@ class EvalCallback(EventCallback):
                 print(f"Episode length: {mean_ep_length:.2f} +/- {std_ep_length:.2f}")
             # Add to current Logger
             self.logger.record("eval/mean_reward", float(mean_reward))
-            self.logger.record("eval/std_reward", float(std_reward))
             self.logger.record("eval/mean_ep_length", float(mean_ep_length))
             self.logger.record("eval/std_ep_length", float(std_ep_length))
-            self.logger.record("eval/mean_init_reward", float(mean_init_rewards))
-            self.logger.record('eval/mean_best_rewards', float(mean_best_rewards))
             self.logger.record('eval/mean_ep_reward_improvement', float(mean_ep_reward_improvement))
+            self.logger.record('eval/mean_best_rewards', float(mean_best_rewards))
+            self.logger.record('eval/mean_best_fidelities', float(mean_best_fidelities))
             self.logger.record('eval/mean_ep_len_best', float(mean_ep_len_best))
+            self.logger.record('eval/success', float(mean_success))
 
-            if len(self._is_success_buffer) > 0:
+            if sum(self._is_success_buffer) > 0:
                 success_rate = np.mean(self._is_success_buffer)
                 if self.verbose >= 1:
                     print(f"Success rate: {100 * success_rate:.2f}%")
@@ -285,7 +277,7 @@ def parse_args():
     parser.add_argument('--log-interval', default=500, type=int, help='Log every N calls to env.step')
     parser.add_argument('--no-cuda', action='store_true')
     parser.add_argument('--msg', default='', type=str, help='User message to add to info.txt')
-    parser.add_argument('-L', '--hidden-layer-size', default=64, type=int, help='Network hidden layer size. All layers are equal size')
+    parser.add_argument('-L', '--hidden-layer-size', default=128, type=int, help='Network hidden layer size. All layers are equal size')
     parser.add_argument('-H', '--n-hidden-layers', default=2, type=int, help='Nb. of networks will hidden layers')
 
     return parser.parse_args()
@@ -297,7 +289,7 @@ def ppo_learning_rate(x):
 
 
 def ppo_clip_range(x):
-    clip_range1 = 0.4
+    clip_range1 = 0.3
     # return clip_range1
     return clip_range1 * x
 
