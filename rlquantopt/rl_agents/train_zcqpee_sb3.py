@@ -1,6 +1,7 @@
 import os
 import argparse
 import warnings
+from datetime import datetime as dt
 import json
 from typing import Any, Dict, List, Optional, Union
 import gymnasium as gym
@@ -63,6 +64,7 @@ class EvalCallback(EventCallback):
         warn: bool = True,
         algo = 'PPO'
     ):
+        self.start_time = dt.now()
         super().__init__(callback_after_eval, verbose=verbose)
         self.algo = algo
         self.callback_on_new_best = callback_on_new_best
@@ -148,7 +150,10 @@ class EvalCallback(EventCallback):
     def _on_step(self) -> bool:
         continue_training = True
 
-        if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
+        if self.eval_freq > 0 and self.num_timesteps % self.eval_freq == 0:
+            time_elapsed = dt.now() - self.start_time
+            fps = self.num_timesteps / time_elapsed.total_seconds()
+
             # Sync training and eval env if there is VecNormalize
             if self.model.get_vec_normalize_env() is not None:
                 try:
@@ -180,7 +185,7 @@ class EvalCallback(EventCallback):
                     self.evaluations_successes.append(self._is_success_buffer)
 
             mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
-            mean_ep_length, std_ep_length = np.mean(episode_lengths)
+            mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(episode_lengths)
             mean_init_rewards = np.mean([ep_rews[0] for ep_rews in episode_rewards])
             best_rewards = [max(ep_rews) for ep_rews in episode_rewards]
             best_fidelities = [self.eval_env.rew2fid(r + self.eval_env.REW_THRESH) for r in best_rewards]
@@ -202,6 +207,7 @@ class EvalCallback(EventCallback):
             self.logger.record('eval/mean_ep_reward_improvement', float(mean_ep_reward_improvement))
             self.logger.record('eval/mean_best_rewards', float(mean_best_rewards))
             self.logger.record('eval/mean_best_fidelities', float(mean_best_fidelities))
+            self.logger.record('eval/mean_best_infidelities', float(1-mean_best_fidelities))
             self.logger.record('eval/mean_ep_len_best', float(mean_ep_len_best))
             self.logger.record('eval/success', float(mean_success))
 
@@ -212,7 +218,8 @@ class EvalCallback(EventCallback):
                 self.logger.record("eval/success_rate", success_rate)
 
             # Dump log so the evaluation results are printed with the correct timestep
-            self.logger.record("time/total_timesteps", self.num_timesteps, exclude="tensorboard")
+            self.logger.record("time/total_timesteps", self.num_timesteps)
+            self.logger.record("time/fps", fps)
             self.logger.dump(self.num_timesteps)
 
             if mean_reward > self.best_mean_reward:
@@ -289,9 +296,9 @@ def ppo_learning_rate(x):
 
 
 def ppo_clip_range(x):
-    clip_range1 = 0.3
-    # return clip_range1
-    return clip_range1 * x
+    clip_range1 = 0.4
+    return clip_range1
+    # return clip_range1 * x
 
 
 def main():
@@ -325,9 +332,9 @@ def main():
     n_steps = int(args.n_steps)
     batch_size = int(args.batch_size)
     n_epochs = int(args.n_epochs)
-    save_freq = int(args.save_freq)
-    eval_freq = int(args.eval_freq)
-    log_interval = int(args.log_interval)
+    save_freq = max(n_envs * n_steps, int(args.save_freq))
+    eval_freq = max(n_envs * n_steps, int(args.eval_freq))
+    log_interval = eval_freq
 
     # Setting device on the CPU only for now since I am working on my laptop
     if args.no_cuda:

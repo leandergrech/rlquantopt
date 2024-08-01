@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument('-a', '--algo', type=str, default='RecurrentPPO', help='Type of RL algorithm')
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
     parser.add_argument('-e', '--env-yml-dir', type=str, default='', help='Directory containing only one yaml file with env arguments. Default, model directory.')
+    parser.add_argument('--no-term', action='store_true', help='Keep running episode until the end of the pulse not until termination.')
     parser.add_argument('--n-eps', type=int, help='Nb. of evaluation episodes', default=1)
     parser.add_argument('-r', action='store_true', help='Render the episode/s')
     parser.add_argument('-v', '--verbose', type=int, default=2,
@@ -34,6 +35,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    no_term = args.no_term
     model_zips = args.model_zip
     if isinstance(model_zips, (list, tuple)):
         for item in model_zips:
@@ -77,7 +79,8 @@ def main():
             os.makedirs(mp4_save_dir)
 
         res_save_dir = os.path.join(save_dir, 'results')
-
+        if no_term:
+            res_save_dir = os.path.join(res_save_dir, 'no_term')
         for d in (mp4_save_dir, res_save_dir):
             if not os.path.exists(d):
                 os.makedirs(d)
@@ -85,8 +88,8 @@ def main():
         for i in range(n_eps):
             model_name = os.path.splitext(os.path.basename(model_zip))[0]
             save_name = f"{model_name}_{str(env)}_ep{i}"
-            mp4_save_path = os.path.join(mp4_save_dir, f'{save_name}.mp4')
-            print(f'Saving animations in: {mp4_save_path}')
+            if no_term:
+                save_name += '_no_term'
 
             model = algo.load(model_zip)
 
@@ -95,7 +98,8 @@ def main():
             trunc = False
             idx = 0
             rews = []
-            pbar= tqdm(total=env.pulse_length)
+            if verbose > 3:
+                pbar= tqdm(total=env.pulse_length)
             prev_amp = 0.
             pulse = [prev_amp]
             lstm_states = None
@@ -107,7 +111,7 @@ def main():
                 else:
                     a = model.predict(obs, deterministic=True)[0]
                 # a += np.random.normal(0, 1e-3, env.n_act)
-                obs, r, term, trunc, info = env.step(a, can_term=True)
+                obs, r, term, trunc, info = env.step(a, can_term=(not no_term))
 
                 a_denorm = env.denorm_action(a)[0]
                 if env.delta_mode:
@@ -117,16 +121,26 @@ def main():
                 pulse.append(prev_amp)
 
                 rews.append(r)
-                pbar.update(1)
+                if verbose > 3:
+                    pbar.update(1)
 
             max_fid = max(env.fidelities) * 100
 
             infidelities = 1 - np.array(env.fidelities)
             infidelities *= 100.
 
+            idx_best = np.argmin(infidelities)
+            t_best = env.tlist[idx_best]
+
             ep_len = len(infidelities)
+            title = f'Best infidelity {min(infidelities)/100.:.3e}\nFidelity={max_fid:.3f}% @ T={t_best:.1f}ns PL={idx_best + 1} Δt={t_best/(idx_best + 1):.3f}ns'
+            if verbose > 0:
+                print(f'Model: {model_zip}; Ep: {i}')
+                print(title + '\n')
+
             if verbose > 1:
                 fig, ax = plt.subplots()
+                fig.suptitle(title)
                 ax.plot(env.tlist[:ep_len], infidelities, c='k')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Infidelity (%)')
@@ -140,7 +154,6 @@ def main():
                 axx.spines['right'].set_color('g')
                 axx.tick_params(axis='y', colors='g', color='g')
 
-                fig.suptitle(f'Max fidelity = {max_fid:.2f}%')
                 axx.axhline(max_fid, c='g', linestyle='--', linewidth=0.5)
                 axx.axvline(env.tlist[np.argmax(env.fidelities)], c='g', linestyle='--', linewidth=0.5)
 
@@ -150,26 +163,41 @@ def main():
                 fig.savefig(save_path)
 
             if verbose > 0:
-                print(f'{os.sep}'.join(model_zip.split(os.sep)[-3:]) + ': ', end='')
-                print(f'Max. Fidelity = {max_fid:.2f}%')
+                # print(f'{os.sep}'.join(model_zip.split(os.sep)[-3:]) + ': ', end='')
+                # print(f'Max. Fidelity = {max_fid:.2f}%')
                 fig, ax = plt.subplots()
-                fig.suptitle(f'Max reward = {max(rews):.2f}%')
+                fig.suptitle(title)
                 ax.plot(env.tlist[:ep_len], rews, c='tab:orange')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Reward')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
                 ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
+                ax.axvline(t_best, color='g', ls='--', linewidth=0.5)
                 save_path = os.path.join(res_save_dir, f'{save_name}_rew_plot.pdf')
                 if verbose > 2:
                     print(f'Saving result to: {save_path}')
                 fig.savefig(save_path)
 
-                fig, ax = plt.subplots()
-                ax.plot(env.tlist[:ep_len], pulse[:-1], c='k', lw=0.5)
+                fig, axs = plt.subplots(2, figsize=(15,10))
+                fig.suptitle(title)
+                ax = axs[0]
+                ax.plot(env.tlist[:ep_len], pulse[:-1], c='k', lw=0.2)
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Pulse amplitude')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
                 ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
+                ax.axvline(t_best, color='g', ls='--', linewidth=0.5)
+
+                ax = axs[1]
+                famps = np.fft.fft(pulse)
+                flist = np.linspace(0, 1/(2*env.dt), len(famps)) / 1e9
+                ax.plot(flist[1:], np.abs(famps)[1:], c='b', lw=0.5)
+                ax.set_xlabel('Frequency [GHz]')
+                ax.set_ylabel('Amplitude')
+                axx = ax.twinx()
+                axx.plot(flist, np.angle(famps), c='grey', ls=':', lw=0.5)
+                axx.set_ylabel('Phase')
+
                 save_path = os.path.join(res_save_dir, f'{save_name}_pulse.pdf')
                 if verbose > 2:
                     print(f'Saving result to: {save_path}')
@@ -188,6 +216,8 @@ def main():
             dat.to_csv(os.path.join(res_save_dir, f'{save_name}.csv'))
 
             if render:
+                mp4_save_path = os.path.join(mp4_save_dir, f'{save_name}.mp4')
+                print(f'Saving animations in: {mp4_save_path}')
                 env.render(save_path=mp4_save_path)
 
 

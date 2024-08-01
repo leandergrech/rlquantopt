@@ -1,3 +1,4 @@
+import os
 from gymnasium import spaces
 import yaml
 import numpy as np
@@ -7,7 +8,6 @@ from qutip import Qobj, ket, QobjEvo, SESolver, expect
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
-from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 from gymnasium import Env
 
@@ -15,8 +15,6 @@ from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity, setup_ZCQubits4MKrau
 
 
 class ZCQPEE(Env):
-    # optimised_pulse_path = 'configs/data_lilmc/data_lilmc.csv'
-    # optimised_pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/mc_optimised_pulse.csv'
     # Action scaling parameters
     action_scaling = {'z': 1}    # Only applicable in delta_mode==True
     A_norm_max = 5
@@ -25,8 +23,8 @@ class ZCQPEE(Env):
     PREC = 5e-4
     PLOT_LOG_EPS = 1e-3
     cmap = mpl.colormaps["CMRmap"]
-    FPS = 10
-    DPS = 100
+    FPS = 25
+    DPI = 70
 
     def __init__(self, pulse_length=120, delta_mode=True, T=50, fid_thresh=0.995, action_scaling=None, a_norm_max=None, optimised_pulse_path=None, model_params=None):
         self.FID_THRESH = fid_thresh
@@ -394,19 +392,6 @@ class ZCQPEE(Env):
         # fidelities = (np.clip([self.rew2fid(r) for r in self.rewards], a_min=1e-4, a_max=1)) * 100.
         fidelities = np.multiply(self.fidelities, 100.)
         infidelities = [100 - item for item in fidelities]
-        # recons_amps, global_tlist = self.get_reconstructed_pulses_with_uniform_time()
-
-        fig, ax = plt.subplots()
-        ax.plot(self.tlist, infidelities, color='k')
-        ax.axhline((1 - self.FID_THRESH) * 100., color='g', ls='--')
-        ax.set_title(f'Fidelity evolution  T={self.T}')
-        ax.set_ylabel('Fidelity (%)')
-        ax.set_ylabel('Step')
-        fig.savefig(os.path.splitext(save_path)[0] + '_fidelity.pdf')
-        ax.set_yscale('log')
-        fig.savefig(os.path.splitext(save_path)[0] + '_fidelity_logscale.pdf')
-
-
 
         # Setup figure and axes
         fig = plt.figure(figsize=(15, 10))
@@ -617,8 +602,6 @@ class ZCQPEE(Env):
         return f"ZCQPEE_pl-{self.pulse_length}_T-{self.T:.1f}ns{'_delta_mode' if self.delta_mode else '_abs_mode'}"
 
 
-
-
 if __name__ == '__main__':
     import os
     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
@@ -626,5 +609,3 @@ if __name__ == '__main__':
     pulse_file = os.path.join(par_dir, 'data_lilmc.csv')
     save_path = os.path.join(par_dir, 'data_lilmc.mp4')
     ZCQPEE.evaluate_pulse(pulse_file, save_path)
-
-
