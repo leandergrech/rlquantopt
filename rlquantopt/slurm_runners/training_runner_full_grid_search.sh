@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CNT=5
+CNT=20
 SIDX=0
 
 for i in {0..8}; do

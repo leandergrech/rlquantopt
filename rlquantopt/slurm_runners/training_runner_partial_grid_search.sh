@@ -3,14 +3,14 @@
 #SBATCH --partition=research_gpu
 #SBATCH --gres=gpu:ampere:1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem-per-cpu=1G
-#SBATCH --time=3000
+#SBATCH --time=2400
 # job parameters
 #SBATCH --job-name=rlquantopt-training
 #SBATCH --account=rlquantopt
 # email user with progress
-# SBATCH --mail-user=leander.grech@um.edu.mt
+#SBATCH --mail-user=leander.grech@um.edu.mt
 # SBATCH --mail-type=all
 #
 echo Running on $(hostname)
@@ -89,9 +89,9 @@ if [ "$slurm_set" = true ]; then
     fi
 
     # Install project dependencies
-    REQ_PATH=$PROJ_DIR/requirements.txt
-    echo Updating requirements from $REQ_PATH
-    pip install -r $REQ_PATH
+#    REQ_PATH=$PROJ_DIR/requirements.txt
+#    echo Updating requirements from $REQ_PATH
+#    pip install -r $REQ_PATH
 
     # Install RLQuantOpt package in editable mode
     pip uninstall rlquantopt
@@ -119,7 +119,7 @@ BATCH_SIZES=(2048 4096)
 SEEDS=(123 234 345 456 567)
 
 # Training parameters
-N_TRAIN=1000000
+N_TRAIN=400000
 SAVE_FREQ=64
 #EVAL_FREQ=1000
 #LOG_INTERVAL=500
