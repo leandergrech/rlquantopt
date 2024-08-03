@@ -108,40 +108,40 @@ SCRIPT_PATH=$SCRIPT_DIR/train_zcqpee_sb3.py
 
 # Grid-search parameters
 ALGO=RecurrentPPO
-N_ENVS=8
-PULSE_LENGTHS=(1000 2000 3000)
+N_ENVS=(64 128)
+PULSE_LENGTHS=(2048 4096)
 A_NORM_MAX=5
 A_SCALE=1
 T=300
-FID_THRESHES=(0.99 0.995 0.999)
-N_STEPS=(4096 8192)
-BATCH_SIZES=(128 256)
+FID_THRESH=0.995
+N_STEPS=(32 64)
+BATCH_SIZES=(2048 4096)
 SEEDS=(123 234 345 456 567)
 
 # Training parameters
 N_TRAIN=1000000
-SAVE_FREQ=1000
-EVAL_FREQ=1000
-LOG_INTERVAL=500
+SAVE_FREQ=64
+#EVAL_FREQ=1000
+#LOG_INTERVAL=500
 
 # Grid-search
 idx=0
 limit=$((start_idx + cnt))
 for SEED in "${SEEDS[@]}"; do
     for PL in "${PULSE_LENGTHS[@]}"; do
-        for FID_THRESH in "${FID_THRESHES[@]}"; do
+        for N_ENV in "${N_ENVS[@]}"; do
             for N_STEP in "${N_STEPS[@]}"; do
                 for BATCH_SIZE in "${BATCH_SIZES[@]}"; do
-                    idx=$((idx + 1))
                     if [ "$idx" -lt "$start_idx" ]; then
                         continue
                     fi
                     echo "seed=$SEED, pl=$PL, FID_THRESH=$FID_THRESH, n_step=$N_STEP, batch_size=$BATCH_SIZE"
                     $PYTHON $SCRIPT_PATH --pulse-length $PL --delta-mode -T $T --a-scale $A_SCALE --a-norm-max $A_NORM_MAX\
                     --fid-thresh $FID_THRESH --algo $ALGO --n-steps $N_STEP --batch-size $BATCH_SIZE --n-train $N_TRAIN \
-                    --save-freq $SAVE_FREQ --eval-freq $EVAL_FREQ --log-interval $LOG_INTERVAL --seed $SEED --n-envs $N_ENVS
+                    --save-freq $SAVE_FREQ --seed $SEED --n-envs $N_ENV
 
-                    if [ "$idx" -gt "$limit" ]; then
+                    idx=$((idx + 1))
+                    if [ "$idx" -ge "$limit" ]; then
                         echo "Reached session nb. of runs limit"
                         exit 0
                     fi

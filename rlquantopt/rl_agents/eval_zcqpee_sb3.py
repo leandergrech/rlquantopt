@@ -21,6 +21,7 @@ def parse_args():
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
     parser.add_argument('-e', '--env-yml-dir', type=str, default='', help='Directory containing only one yaml file with env arguments. Default, model directory.')
     parser.add_argument('--no-term', action='store_true', help='Keep running episode until the end of the pulse not until termination.')
+    parser.add_argument('--clip-best', action='store_true', help='Keep running episode until the end of the pulse, and clip pulse until best performance is reached.')
     parser.add_argument('--n-eps', type=int, help='Nb. of evaluation episodes', default=1)
     parser.add_argument('-r', action='store_true', help='Render the episode/s')
     parser.add_argument('-v', '--verbose', type=int, default=2,
@@ -36,6 +37,11 @@ def parse_args():
 def main():
     args = parse_args()
     no_term = args.no_term
+    if clip_best := args.clip_best:
+        no_term = True
+
+    # assert not (no_term and clip_best), "You can either evaluate until end of pulse (--no-term) OR until best performance observed (--clip-best)."
+
     model_zips = args.model_zip
     if isinstance(model_zips, (list, tuple)):
         for item in model_zips:
@@ -59,6 +65,8 @@ def main():
             algo = PPO
         elif algo_str == 'TRPO':
             algo = TRPO
+        else:
+            raise NotImplementedError
 
         if (env_yml_dir := args.env_yml_dir) == '':
             env_yml_dir = model_dir
@@ -79,16 +87,19 @@ def main():
             os.makedirs(mp4_save_dir)
 
         res_save_dir = os.path.join(save_dir, 'results')
-        if no_term:
+        if clip_best:
+            res_save_dir = os.path.join(res_save_dir, 'clip_best')
+        elif no_term:
             res_save_dir = os.path.join(res_save_dir, 'no_term')
-        for d in (mp4_save_dir, res_save_dir):
-            if not os.path.exists(d):
-                os.makedirs(d)
+        if not os.path.exists(res_save_dir):
+            os.makedirs(res_save_dir)
 
         for i in range(n_eps):
             model_name = os.path.splitext(os.path.basename(model_zip))[0]
             save_name = f"{model_name}_{str(env)}_ep{i}"
-            if no_term:
+            if clip_best:
+                save_name += '_clip_best'
+            elif no_term:
                 save_name += '_no_term'
 
             model = algo.load(model_zip)
@@ -111,7 +122,7 @@ def main():
                 else:
                     a = model.predict(obs, deterministic=True)[0]
                 # a += np.random.normal(0, 1e-3, env.n_act)
-                obs, r, term, trunc, info = env.step(a, can_term=(not no_term))
+                obs, r, term, trunc, info = env.step(a, can_early_term=(not no_term))
 
                 a_denorm = env.denorm_action(a)[0]
                 if env.delta_mode:
@@ -132,7 +143,11 @@ def main():
             idx_best = np.argmin(infidelities)
             t_best = env.tlist[idx_best]
 
-            ep_len = len(infidelities)
+            if clip_best:
+                ep_len = idx_best + 1
+            else:
+                ep_len = len(infidelities)
+
             title = f'Best infidelity {min(infidelities)/100.:.3e}\nFidelity={max_fid:.3f}% @ T={t_best:.1f}ns PL={idx_best + 1} Δt={t_best/(idx_best + 1):.3f}ns'
             if verbose > 0:
                 print(f'Model: {model_zip}; Ep: {i}')
@@ -141,7 +156,7 @@ def main():
             if verbose > 1:
                 fig, ax = plt.subplots()
                 fig.suptitle(title)
-                ax.plot(env.tlist[:ep_len], infidelities, c='k')
+                ax.plot(env.tlist[:ep_len], infidelities[:ep_len], c='k')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Infidelity (%)')
                 ax.set_yscale('log')
@@ -149,7 +164,7 @@ def main():
                 ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
 
                 axx = ax.twinx()
-                axx.plot(env.tlist[:ep_len], np.array(env.fidelities) * 100., c='g')
+                axx.plot(env.tlist[:ep_len], np.array(env.fidelities[:ep_len]) * 100., c='g')
                 axx.set_ylabel('Fidelity (%)', color='g')
                 axx.spines['right'].set_color('g')
                 axx.tick_params(axis='y', colors='g', color='g')
@@ -157,7 +172,7 @@ def main():
                 axx.axhline(max_fid, c='g', linestyle='--', linewidth=0.5)
                 axx.axvline(env.tlist[np.argmax(env.fidelities)], c='g', linestyle='--', linewidth=0.5)
 
-                save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.1f}_fid_vs_infid_plot.pdf')
+                save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.2f}_fid_vs_infid_plot.pdf')
                 if verbose > 2:
                     print(f'Saving result to: {save_path}')
                 fig.savefig(save_path)
@@ -167,7 +182,7 @@ def main():
                 # print(f'Max. Fidelity = {max_fid:.2f}%')
                 fig, ax = plt.subplots()
                 fig.suptitle(title)
-                ax.plot(env.tlist[:ep_len], rews, c='tab:orange')
+                ax.plot(env.tlist[:ep_len], rews[:ep_len], c='tab:orange')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Reward')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
@@ -181,7 +196,7 @@ def main():
                 fig, axs = plt.subplots(2, figsize=(15,10))
                 fig.suptitle(title)
                 ax = axs[0]
-                ax.plot(env.tlist[:ep_len], pulse[:-1], c='k', lw=0.2)
+                ax.plot(env.tlist[:ep_len], pulse[:ep_len], c='k', lw=0.2)
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Pulse amplitude')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
@@ -189,14 +204,26 @@ def main():
                 ax.axvline(t_best, color='g', ls='--', linewidth=0.5)
 
                 ax = axs[1]
-                famps = np.fft.fft(pulse)
-                flist = np.linspace(0, 1/(2*env.dt), len(famps)) / 1e9
-                ax.plot(flist[1:], np.abs(famps)[1:], c='b', lw=0.5)
+                famps = np.fft.fft(pulse)[1:]
+                flist = np.linspace(-1/(2*env.dt), 1/(2*env.dt), len(famps))
+
+                fabsamps = np.abs(famps)
+                faseamps = np.angle(famps)
+                thresh = 0.1 * np.max(fabsamps)
+                spike_idces = np.where(fabsamps > thresh)[0].astype(int)
+                print(len(fabsamps))
+                spike_freqs = [flist[item] for item in spike_idces]
+                spike_amps = [fabsamps[item] for item in spike_idces]
+                ax.plot(flist[1:], fabsamps[1:], c='b', lw=0.5)
+                ax.scatter(spike_freqs, spike_amps, marker='^', color='r')
+                for freq, amp in zip(spike_freqs, spike_amps):
+                    ax.text(freq, amp, f'{freq:.2f}GHz', fontsize=8, ha='center', color='r')
                 ax.set_xlabel('Frequency [GHz]')
                 ax.set_ylabel('Amplitude')
                 axx = ax.twinx()
-                axx.plot(flist, np.angle(famps), c='grey', ls=':', lw=0.5)
+                axx.plot(flist, faseamps, c='grey', ls=':', lw=0.5)
                 axx.set_ylabel('Phase')
+                # plt.show()
 
                 save_path = os.path.join(res_save_dir, f'{save_name}_pulse.pdf')
                 if verbose > 2:
@@ -211,14 +238,16 @@ def main():
 
             # Save pulse to CSV
             dat = pd.DataFrame()
-            dat['amplist'] = pulse
-            dat['tlist'] = tlist
+            dat['amplist'] = pulse[:ep_len]
+            dat['tlist'] = tlist[:ep_len]
             dat.to_csv(os.path.join(res_save_dir, f'{save_name}.csv'))
 
             if render:
                 mp4_save_path = os.path.join(mp4_save_dir, f'{save_name}.mp4')
                 print(f'Saving animations in: {mp4_save_path}')
                 env.render(save_path=mp4_save_path)
+
+            exit(23)
 
 
 if __name__ == '__main__':

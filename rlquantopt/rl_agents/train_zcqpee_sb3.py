@@ -194,6 +194,7 @@ class EvalCallback(EventCallback):
             mean_best_fidelities = np.mean(best_fidelities)
             mean_ep_reward_improvement = mean_best_rewards - mean_init_rewards
             mean_ep_len_best = np.mean([np.argmax(ep_rews) for ep_rews in episode_rewards])
+            mean_best_T_ns = self.eval_env.dt * mean_ep_len_best
             mean_success = np.mean(np.array(self._is_success_buffer).astype(int))
 
             if self.verbose >= 1:
@@ -208,6 +209,7 @@ class EvalCallback(EventCallback):
             self.logger.record('eval/mean_best_rewards', float(mean_best_rewards))
             self.logger.record('eval/mean_best_fidelities', float(mean_best_fidelities))
             self.logger.record('eval/mean_best_infidelities', float(1-mean_best_fidelities))
+            self.logger.record('eval/mean_best_T_ns', float(mean_best_T_ns))
             self.logger.record('eval/mean_ep_len_best', float(mean_ep_len_best))
             self.logger.record('eval/success', float(mean_success))
 
@@ -266,6 +268,7 @@ def parse_args():
                              'NOTE: n_steps * n_envs must be greater than 1 (because of the advantage normalization)'
                              'See https://github.com/pytorch/pytorch/issues/29372')
     parser.add_argument('--n-epochs', type=int, default=10, help='Number of epoch when optimizing the surrogate loss')
+    parser.add_argument('--ent-coef', type=float, default=0.0, help='Entropy coefficient for the loss calculation')
     parser.add_argument('--batch-size', type=int, default=64, help='Mini-batch size')
     parser.add_argument('--gamma', type=float, default=0.99, help='Mini-batch size')
     parser.add_argument('--seed', default=123, type=int, help='Set random seed')
@@ -327,12 +330,13 @@ def main():
     n_eval_eps = int(args.n_eval_eps)
     print(f'n_obs={eval_env.n_obs}\tn_act={eval_env.n_act}')
 
-    # PPO parameter setup
+    # Parameter setup
     n_train = int(args.n_train)
     n_steps = int(args.n_steps)
     batch_size = int(args.batch_size)
     n_epochs = int(args.n_epochs)
-    save_freq = max(n_envs * n_steps, int(args.save_freq))
+    # save_freq = max(n_envs * n_steps, int(args.save_freq))
+    save_freq = int(args.save_freq)
     eval_freq = max(n_envs * n_steps, int(args.eval_freq))
     log_interval = eval_freq
 
@@ -354,16 +358,14 @@ def main():
     policy_type = 'MlpPolicy'
     if algo_str == 'PPO':
         algo = PPO
-        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=0.05, vf_coef=0.2, use_sde=False, stats_window_size=10,
-                       seed=SEED, verbose=1)  # PPO
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=args.ent_coef, vf_coef=0.2, use_sde=False, stats_window_size=10, seed=SEED, verbose=1)  # PPO
     elif algo_str == 'TRPO':
         algo = TRPO
         algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, gamma=gamma, gae_lambda=0.95, seed=SEED, verbose=1)  # TRPO
     elif algo_str == 'RecurrentPPO':
         algo = RecurrentPPO
         policy_type = 'MlpLstmPolicy'
-        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=0.05, vf_coef=0.2, use_sde=False, stats_window_size=10,
-                       seed=SEED, verbose=1)  # PPO
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=ppo_learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=args.ent_coef, vf_coef=0.2, use_sde=False, stats_window_size=10, seed=SEED, verbose=1)  # RecurrentPPO
     else:
         raise NotImplementedError
 
@@ -381,13 +383,14 @@ def main():
         if not os.path.exists(model_path):
             os.makedirs(model_path)
         eval_env.to_yaml(os.path.join(model_path, env_yaml_fn))
-    # else:
-    #     model_dir, model_zip_fn = os.path.split(model_zip)
-    #     work_dir, model_name = os.path.split(model_dir)
-    #     model_name = os.path.splitext(model_zip))[-1]
-
-
-
+        _best_model_path = os.path.join(model_path, 'best_model')
+        if not os.path.exists(_best_model_path):
+            os.makedirs(_best_model_path)
+        eval_env.to_yaml(os.path.join(_best_model_path, env_yaml_fn))
+    else:
+        eval_env.from_yaml(ZCQPEE.find_yaml_in_dir(os.path.dirname(model_zip)))
+        for k, v in env_kw.items():
+            assert eval_env.model_params[k] == v, f'New vs. original training env mismatch! New training env parameters don\'t match the original environment parameters: New {k}: {v} != Original {k}: {eval_env.model_params[k]}'
 
     '''
     SAVE INFORMATION ABOUT THIS TRAINING SESSION
@@ -408,10 +411,10 @@ def main():
         ak = algo_kw.copy()
 
         if not isinstance(ak['learning_rate'], float):
-            ak['learning_rate'] = f'Linear decay from {ppo_learning_rate(1)}'
+            ak['learning_rate'] = f'Linear decay from {ppo_learning_rate(1)} -> {ppo_learning_rate(0)}'
         if 'PPO' in algo_str:
             if not isinstance(ak['clip_range'], float):
-                ak['clip_range'] = f'Linear decay from {ppo_clip_range(1)}'
+                ak['clip_range'] = f'Linear decay from {ppo_clip_range(1)} -> {ppo_clip_range(0)}'
         json.dump(ak, f, indent=10)
 
     '''

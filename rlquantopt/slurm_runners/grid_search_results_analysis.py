@@ -32,7 +32,8 @@ def parse_info_txt(info_txt_path):
 
 
 def main():
-    par_dir = os.path.abspath('.')
+    # par_dir = os.path.abspath('.')
+    par_dir = os.path.abspath('/home/leander/code/rlquantopt/rlquantopt/rl_agents/')
     print(par_dir)
     model_dirs = []
     for env_type_dir in os.listdir(par_dir):
@@ -54,7 +55,7 @@ def main():
         run_data_df = pd.DataFrame([run_data])#, orient='index')
         hparams = pd.concat([hparams, run_data_df], ignore_index=False)
 
-    hparams.to_csv(os.path.join(par_dir, 'grid_search_31072024.csv'))
+    hparams.to_csv(os.path.join(par_dir, 'analysis_03082024_191500.csv'))
 
     # Now estimate best performance of each model
 

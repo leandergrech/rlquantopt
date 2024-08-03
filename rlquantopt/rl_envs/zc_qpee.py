@@ -78,8 +78,8 @@ class ZCQPEE(Env):
 
         self.T = T  # ns
         self.pulse_length = pulse_length
-        self.tlist = np.linspace(0, T, pulse_length)
-        self.dt = T/(self.pulse_length - 1) # dt obtained after np.linspace(0, T, pulse_length)
+        self.tlist = np.linspace(0, T, pulse_length + 1)
+        self.dt = T/(self.pulse_length) # dt obtained after np.linspace(0, T, pulse_length)
         assert self.tlist[1] == self.dt
         self.pulse_amplitudes_denorm = self.init_pulse_amplitudes()
 
@@ -157,6 +157,12 @@ class ZCQPEE(Env):
         self = cls(**kw)
         return self
 
+    @staticmethod
+    def find_yaml_in_dir(dir):
+        for item in os.listdir(dir):
+            if (item.endswith('.yaml') or item.endswith('.yml')) and item.startswith('ZCQPEE_pl-'):
+                return os.path.join(dir, item)
+
     def get_optimal_pulse(self):
         data = pd.read_csv(self.optimised_pulse_path)
         n_keys = len(data.keys())
@@ -173,11 +179,6 @@ class ZCQPEE(Env):
         return coeff, tlist
 
     def init_pulse_amplitudes(self):
-        # return np.zeros((self.n_channels, self.pulse_length))  # First row for u01, second row for d1
-        # buffer = {}
-        # for channel_label in self.channel_labels:
-        #     buffer[channel_label] = np.zeros(self.pulse_length)  # +1 since first amp must be zero
-        # return buffer
         return np.zeros(self.pulse_length)
 
     def reset(self, seed=None, options=None):
@@ -255,11 +256,11 @@ class ZCQPEE(Env):
         SCALE = self.action_scaling['z']
         return np.array(action) * SCALE
 
-    def step(self, action, can_term=False):
+    def step(self, action, can_early_term=False):
         """
         Add a pulse amplitude delta vector (action) on the previous value of the pulse amplitude.
         :param action: Must be list-like with `self.n_abs` dimensions
-        :param can_term: If True, episode will terminate iff reward threshold is exceeded. Used during evaluation to get a shorter pulse ...
+        :param can_early_term: If True, episode will terminate iff reward threshold is exceeded. Used during evaluation to get a shorter pulse ...
         :return: observation_tp1, reward, terminated, truncated, info
         """
         action = np.array(action)
@@ -298,7 +299,7 @@ class ZCQPEE(Env):
 
         self.rewards.append(reward)
 
-        if reward > 0 and can_term:
+        if reward > 0 and can_early_term:
             terminated = True
 
         # Construct observation for agent using state probabilities and normed actions
@@ -309,6 +310,11 @@ class ZCQPEE(Env):
         return self.current_state, reward, terminated, truncated, {}
 
     def forward_dynamics(self, amp_delta_norm):
+        """
+        Requires self.cur_idx==0 during the first step. This is to calculate the pulse time correctly.
+        :param amp_delta_norm [float]: Normalised action value. If delta_mode, action is delta amp, otherwise action is abs amp
+        :return: final_states [list[Qobj]], oob_pulse [bool]
+        """
         oob_pulse = False  # Out of bounds absolute pulse
 
         # Delta formalism
@@ -330,11 +336,11 @@ class ZCQPEE(Env):
         # Save amplitude to pulse
         self.pulse_amplitudes_denorm[self.cur_idx] = abs_action_denorm
 
-        # Step through the simulator with new amplitude for dt time
+        # Step through the simulator with new amplitude until next time-step in simulation
         self.amps_cur = abs_action_denorm
         final_states = []
         for k, solver in enumerate(self.solvers):
-            t = self.tlist[self.cur_idx]
+            t = self.tlist[self.cur_idx + 1]    # Think that the first action needs the first time-step since the first is always amp=0 @t=0
             s = self.solvers[k].step(t, args={'A': self.amps_cur})
             final_states.append(s.copy())
 
@@ -436,14 +442,14 @@ class ZCQPEE(Env):
         ax = ax_action
         ax.axhline(y=0, linestyle='dashed', color='gray')
         ax.set_xlim(0, self.T)
-        K_delta = self.action_scaling['z']
-        K =  K_delta * self.A_norm_max
-        ax.set_ylim(-K, K)  # Adjust based on action range
+        ax_lim_border = np.ptp(self.pulse_amplitudes_denorm) * 0.1
+        ax.set_ylim(min(self.pulse_amplitudes_denorm) - ax_lim_border, max(self.pulse_amplitudes_denorm) + ax_lim_border)  # Adjust based on action range
         ax.set_ylabel('Pulse amplitude')  # Adjust based on action range
         ax.set_xlabel('Time [ns]')  # Adjust based on action range
 
         ax_action_deltas = None
         if self.delta_mode:
+            K_delta = self.action_scaling['z']
             ax_action_deltas = fig.add_subplot(gs[2, :])
             ax = ax_action_deltas
             ax.axhline(y=0, linestyle='dashed', color='gray')
@@ -478,17 +484,17 @@ class ZCQPEE(Env):
 
         ax_reward.set_xlim(0, self.T)
 
-        action_line, = ax_action.plot([], [], lw=1.2, c='tab:orange', label=self.channel_label, marker='.')
+        action_line, = ax_action.plot([], [], lw=1, c='tab:orange', label=self.channel_label)
         ax_action.legend(loc='upper right', ncol=2)
 
         ax_reward.set_title('Time:  Fidelity:')
         ax_reward.grid(which='major', linestyle='--', color='grey', linewidth=1)
         ax_reward.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
-        reward_line, = ax_reward.plot([], [], 'g-', lw=2, marker='.')
+        reward_line, = ax_reward.plot([], [], 'g', lw=1.2)
 
         action_delta_line = None
         if self.delta_mode:
-            action_delta_line, = ax_action_deltas.plot([], [], lw=1.2, label=f'Δ{self.channel_label}', marker='.')
+            action_delta_line, = ax_action_deltas.plot([], [], lw=1, label=f'Δ{self.channel_label}')
             ax_action_deltas.legend(loc='upper right')
         fig.tight_layout()
 
@@ -525,7 +531,7 @@ class ZCQPEE(Env):
 
             return im, action_line, action_delta_line, reward_line, texts
 
-        frames = list(np.arange(0, self.cur_idx, 2)) + [self.cur_idx - 1] * 5
+        frames = list(np.arange(0, self.cur_idx, max(1, int(self.cur_idx/120)))) + [self.cur_idx - 1] * 5
         ani = FuncAnimation(fig, update, frames=frames, interval=5, init_func=init, blit=False)
 
         if save_path is None:
@@ -535,15 +541,15 @@ class ZCQPEE(Env):
         print(f'Saving to: {save_path}')
 
         pbar = tqdm(total=len(frames))
-
         def progress_callback(current_frame: int, total_frames: int):
             nonlocal pbar
             pbar.update(1)
-        pbar.close()
         print(f'Saving to: {save_path}')
 
         ffwriter = mpl.animation.FFMpegWriter(fps=self.FPS)
         ani.save(save_path, dpi=self.DPI, writer=ffwriter, progress_callback=progress_callback)
+        pbar.close()
+        return
 
     @staticmethod
     def evaluate_pulse(pulse_file, save_path, render=True, **env_kwargs):

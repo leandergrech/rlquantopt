@@ -33,6 +33,9 @@ def gen_env_yaml(env_type, pulse_path, save_dir, ret_pulse=True, override_env_kw
 def get_pulse_data(pulse_path):
     data = pd.read_csv(pulse_path, index_col=0)
     col_keys = list(data.keys())
+    if len(col_keys) < 2:
+        data = pd.read_csv(pulse_path)
+        col_keys = list(data.keys())
     tkey, vkey = None, None
     for key in col_keys:
         if 'amplist' in key or 'pulse' in key or 'amp' in key or 'value' in key:
@@ -43,7 +46,6 @@ def get_pulse_data(pulse_path):
             continue
     if tkey is None or vkey is None:
         raise Exception("There's something f***ed with the CSV pulse file.")
-
     return data[tkey].to_numpy(), data[vkey].to_numpy()
 
 
