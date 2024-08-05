@@ -282,7 +282,7 @@ def parse_args():
     parser.add_argument('--n-train', default=250000, type=int, help='Number of training steps')
     parser.add_argument('--save-freq', default=10000, type=int, help='Save model every save_freq calls to env.step')
     parser.add_argument('--eval-freq', default=500, type=int, help='Evaluate model every eval_freq calls to env.step')
-    parser.add_argument('--n-eval-eps', default=3, type=int,
+    parser.add_argument('--n-eval-eps', default=3--, type=int,
                         help='Number of evaluation episodes done every eval_freq calls to env.step')
     parser.add_argument('--log-interval', default=500, type=int, help='Log every N calls to env.step')
     parser.add_argument('--no-cuda', action='store_true')

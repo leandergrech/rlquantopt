@@ -114,7 +114,7 @@ class ZCQubits:
         destroy_op_tb = destroy(self.coupler_dims)
         # Coupler drift self interaction
         l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
-        l.append(-2 * np.pi * self.params['omega_r'] * destroy_op_tb.dag() * destroy_op_tb +
+        l.append(2 * np.pi * (self.params['omega_c_0'] - self.params['omega_r']) * destroy_op_tb.dag() * destroy_op_tb +
                  np.pi * self.params["alpha_c"] * destroy_op_tb.dag() ** 2 * destroy_op_tb ** 2)
         drift.append(tensor(*l))
         # Qubit drift
@@ -123,7 +123,7 @@ class ZCQubits:
             # qubit self interaction
             l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
             l.append(identity(self.coupler_dims))
-            l[m] = (-2 * np.pi * self.params["omega_r"] * destroy_op.dag() * destroy_op +
+            l[m] = (2 * np.pi * (self.params["omega_s"][m] - self.params["omega_r"]) * destroy_op.dag() * destroy_op +
                     np.pi * self.params["alpha_s"][m] * destroy_op.dag() ** 2 * destroy_op ** 2)
             drift.append(tensor(*l))
             # coupler - qubit interaction
@@ -143,7 +143,8 @@ class ZCQubits:
         destroy_op_tb = destroy(self.coupler_dims)
         l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
         l.append(destroy_op_tb.dag() * destroy_op_tb)
-        return 2 * np.pi * self.params['omega_c_0'] * tensor(*l)
+        # return 2 * np.pi * self.params['omega_c_0'] * tensor(*l)
+        return tensor(*l)
 
     def control_func(self) -> Callable:
         _x = np.copy(self.x)
