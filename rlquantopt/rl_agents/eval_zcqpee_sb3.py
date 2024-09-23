@@ -3,6 +3,7 @@ import glob
 import argparse
 import pandas as pd
 import numpy as np
+from IPython.core.pylabtools import figsize
 from sb3_contrib import RecurrentPPO, TRPO
 # from pygments.lexer import default
 from tqdm import tqdm
@@ -43,6 +44,7 @@ def main():
     # assert not (no_term and clip_best), "You can either evaluate until end of pulse (--no-term) OR until best performance observed (--clip-best)."
 
     model_zips = args.model_zip
+    # model_zips = 'ZCQPEE_pl-1000_T-300.0ns_delta_mode-RecurrentPPO/18-09-24_153038/best_model/best_model.zip'
     if isinstance(model_zips, (list, tuple)):
         for item in model_zips:
             if not isinstance(item, str):
@@ -81,6 +83,7 @@ def main():
         if env_yml_path is None:
             raise Exception('No ZCQPEE environment configuration was found')
         env = ZCQPEE.from_yaml(env_yml_path)
+        print(repr(env))
 
         mp4_save_dir = os.path.join(save_dir, 'evals')
         if render and not os.path.exists(mp4_save_dir):
@@ -124,9 +127,10 @@ def main():
                 # a += np.random.normal(0, 1e-3, env.n_act)
                 obs, r, term, trunc, info = env.step(a, can_early_term=(not no_term))
 
-                a_denorm = env.denorm_action(a)[0]
+                a_denorm = env.denorm_action(a).reshape(env.N_TIME_STEPS)
                 if env.delta_mode:
-                    prev_amp += a_denorm
+                    prev_amp += sum(a_denorm)
+                    # prev_amp += a_denorm
                 else:
                     prev_amp = a_denorm
                 pulse.append(prev_amp)
@@ -140,13 +144,15 @@ def main():
             infidelities = 1 - np.array(env.fidelities)
             infidelities *= 100.
 
+            tlist2 = np.linspace(0, env.T, len(infidelities))
             idx_best = np.argmin(infidelities)
-            t_best = env.tlist[idx_best]
+            t_best = tlist2[idx_best]
 
             if clip_best:
                 ep_len = idx_best + 1
             else:
                 ep_len = len(infidelities)
+            tlist2 = tlist2[:ep_len]
 
             title = f'Best infidelity {min(infidelities)/100.:.3e}\nFidelity={max_fid:.3f}% @ T={t_best:.1f}ns PL={idx_best + 1} Δt={t_best/(idx_best + 1):.3f}ns'
             if verbose > 0:
@@ -154,9 +160,9 @@ def main():
                 print(title + '\n')
 
             if verbose > 1:
-                fig, ax = plt.subplots()
+                fig, ax = plt.subplots(figsize=(15, 10))
                 fig.suptitle(title)
-                ax.plot(env.tlist[:ep_len], infidelities[:ep_len], c='k')
+                ax.plot(tlist2, infidelities[:ep_len], c='k')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Infidelity (%)')
                 ax.set_yscale('log')
@@ -164,13 +170,13 @@ def main():
                 ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
 
                 axx = ax.twinx()
-                axx.plot(env.tlist[:ep_len], np.array(env.fidelities[:ep_len]) * 100., c='g')
+                axx.plot(tlist2, np.array(env.fidelities[:ep_len]) * 100., c='g')
                 axx.set_ylabel('Fidelity (%)', color='g')
                 axx.spines['right'].set_color('g')
                 axx.tick_params(axis='y', colors='g', color='g')
 
                 axx.axhline(max_fid, c='g', linestyle='--', linewidth=0.5)
-                axx.axvline(env.tlist[np.argmax(env.fidelities)], c='g', linestyle='--', linewidth=0.5)
+                axx.axvline(tlist2[np.argmax(env.fidelities)], c='g', linestyle='--', linewidth=0.5)
 
                 save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.2f}_fid_vs_infid_plot.pdf')
                 if verbose > 2:
@@ -180,15 +186,15 @@ def main():
             if verbose > 0:
                 # print(f'{os.sep}'.join(model_zip.split(os.sep)[-3:]) + ': ', end='')
                 # print(f'Max. Fidelity = {max_fid:.2f}%')
-                fig, ax = plt.subplots()
+                fig, ax = plt.subplots(figsize=(15,10))
                 fig.suptitle(title)
-                ax.plot(env.tlist[:ep_len], rews[:ep_len], c='tab:orange')
+                ax.plot(tlist2, rews[:ep_len], c='tab:orange')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Reward')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
                 ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
                 ax.axvline(t_best, color='g', ls='--', linewidth=0.5)
-                save_path = os.path.join(res_save_dir, f'{save_name}_rew_plot.pdf')
+                save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.2f}_rew_plot.pdf')
                 if verbose > 2:
                     print(f'Saving result to: {save_path}')
                 fig.savefig(save_path)
@@ -196,7 +202,7 @@ def main():
                 fig, axs = plt.subplots(2, figsize=(15,10))
                 fig.suptitle(title)
                 ax = axs[0]
-                ax.plot(env.tlist[:ep_len], pulse[:ep_len], c='k', lw=0.2)
+                ax.plot(tlist2, pulse[:ep_len], c='k', lw=0.2)
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Pulse amplitude')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
@@ -225,7 +231,7 @@ def main():
                 axx.set_ylabel('Phase')
                 # plt.show()
 
-                save_path = os.path.join(res_save_dir, f'{save_name}_pulse.pdf')
+                save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.2f}_pulse.pdf')
                 if verbose > 2:
                     print(f'Saving result to: {save_path}')
                 fig.savefig(save_path)
@@ -233,9 +239,10 @@ def main():
             infidelities = 1 - np.array(env.fidelities)
             infidelities *= 100.
 
-            tlist = np.arange(len(pulse)) * env.dt
+            # tlist = np.arange(len(pulse)) * env.dt
             # pulse = [env.denorm_action(item) for item in pulse]
 
+            tlist = env.tlist
             # Save pulse to CSV
             dat = pd.DataFrame()
             dat['amplist'] = pulse[:ep_len]
@@ -243,7 +250,7 @@ def main():
             dat.to_csv(os.path.join(res_save_dir, f'{save_name}.csv'))
 
             if render:
-                mp4_save_path = os.path.join(mp4_save_dir, f'{save_name}.mp4')
+                mp4_save_path = os.path.join(mp4_save_dir, f'{save_name}_Fmax-{max_fid:.2f}.mp4')
                 print(f'Saving animations in: {mp4_save_path}')
                 env.render(save_path=mp4_save_path)
 

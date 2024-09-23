@@ -1,9 +1,6 @@
 import os
-from _ast import expr
-from itertools import product
 from collections import defaultdict
 import numpy as np
-from pandas import Series
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pickle as pkl
@@ -12,7 +9,7 @@ from tqdm import tqdm
 import yaml
 from qutip_qip.circuit import QubitCircuit
 
-from rlquantopt.utils import grid_on, get_q_func_filenames, get_q_func_xrange, get_val, get_q_func_step, get_latest_experiment, eval_agent
+from rlquantopt.utils import grid_on, get_q_func_filenames, get_q_func_xrange, get_val, get_latest_experiment, eval_agent
 from rlquantopt.rl_agents.linear_q_function import QValueFunctionLinear
 from rlquantopt.rl_envs import QuPulseEnv
 

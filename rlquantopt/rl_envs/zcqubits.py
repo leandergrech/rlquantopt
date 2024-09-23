@@ -51,9 +51,8 @@ def fidelity(A, B) -> float:
 
 
 def setup_ZCQubits4MKrauss_params(model_params):
-    if model_params is None:
-        model_params = {}
-    ret_model_params = {}
+    model_params = model_params if model_params is not None else {}
+    ret_model_params = dict()
     ret_model_params["omega_s"] = model_params.get("omega_s", [6.0, 5.9])
     ret_model_params["alpha_s"] = model_params.get("alpha_s", [-290e-3, -310e-3])
     ret_model_params["g"] = model_params.get("g", [70e-3, 70e-3])
@@ -111,39 +110,47 @@ class ZCQubits:
 
     def _set_up_drift(self):
         drift = []
-        destroy_op_tb = destroy(self.coupler_dims)
+        b = destroy(self.coupler_dims)
         # Coupler drift self interaction
         l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
-        l.append(2 * np.pi * (self.params['omega_c_0'] - self.params['omega_r']) * destroy_op_tb.dag() * destroy_op_tb +
-                 np.pi * self.params["alpha_c"] * destroy_op_tb.dag() ** 2 * destroy_op_tb ** 2)
+        l.append(2 * np.pi * (self.params['omega_c_0'] - self.params['omega_r']) * b.dag() * b +
+                 np.pi * self.params["alpha_c"] * b.dag() ** 2 * b ** 2)
         drift.append(tensor(*l))
         # Qubit drift
         for m in range(self.num_qubits):
-            destroy_op = destroy(self.qubit_dims[m])
+            a = destroy(self.qubit_dims[m])
             # qubit self interaction
-            l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
+            l = [identity(self.qubit_dims[m_]) for m_ in range(self.num_qubits)]
+            # l.append(-2 * np.pi * self.params['omega_r'] * destroy_op_tb.dag() * destroy_op_tb +
+            #          np.pi * self.params["alpha_c"] * destroy_op_tb.dag() ** 2 * destroy_op_tb ** 2)
+            # l[m] = (-2 * np.pi * self.params["omega_r"] * destroy_op.dag() * destroy_op +
+            #         np.pi * self.params["alpha_s"][m] * destroy_op.dag() ** 2 * destroy_op ** 2)
+            # Meeting MKrauss 05/08/2024 changes
             l.append(identity(self.coupler_dims))
-            l[m] = (2 * np.pi * (self.params["omega_s"][m] - self.params["omega_r"]) * destroy_op.dag() * destroy_op +
-                    np.pi * self.params["alpha_s"][m] * destroy_op.dag() ** 2 * destroy_op ** 2)
+            l[m] = (2 * np.pi * (self.params["omega_s"][m] - self.params["omega_r"]) * a.dag() * a +
+                    np.pi * self.params["alpha_s"][m] * a.dag() ** 2 * a ** 2)
+
             drift.append(tensor(*l))
             # coupler - qubit interaction
             coeff = 2 * np.pi * self.params["g"][m]
-            l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
+            # l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
+            l = [identity(self.qubit_dims[m_]) for m_ in range(self.num_qubits)]
             l.append(identity(self.coupler_dims))
-            l[m] = destroy_op
-            l[-1] = destroy_op_tb.dag()
+            l[m] = a
+            l[-1] = b.dag()
             drift.append(coeff * tensor(*l))
-            l[m] = destroy_op.dag()
-            l[-1] = destroy_op_tb
+            l[m] = a.dag()
+            l[-1] = b
             drift.append(coeff * tensor(*l))
 
         return sum(drift)
 
     def _set_up_control(self):
-        destroy_op_tb = destroy(self.coupler_dims)
+        b = destroy(self.coupler_dims)
         l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
-        l.append(destroy_op_tb.dag() * destroy_op_tb)
+        l.append(b.dag() * b)
         # return 2 * np.pi * self.params['omega_c_0'] * tensor(*l)
+        # return 2 * np.pi * tensor(*l)
         return tensor(*l)
 
     def control_func(self) -> Callable:
@@ -620,6 +627,10 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
     pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
     pulse_dir = os.path.dirname(pulse_file)
+    if 'mkrauss' in pulse_dir:
+        amp_scale = 2.
+    else:
+        amp_scale = 1.
     if save_dir is None:
         save_dir = pulse_dir
     tlist, pulse = get_pulse_data(pulse_file)
@@ -652,8 +663,8 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
     model = ZCQubits(**model_params)
 
     """
-        RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
-        """
+    RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
+    """
     H = QobjEvo([model.drift, [model.control, lambda t, A: A]], args={'A': 0.})
     solver = [SESolver(H) for _ in range(4)]
     e_ops = [state.proj() for state in basis_states]
@@ -669,7 +680,7 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
         fid = 0.
         solver[k].start(s[k], 0)
         for i, t in enumerate(tlist[1:]):
-            cur_amp = pulse[i]
+            cur_amp = pulse[i] * amp_scale
             t = tlist[i]
             s_ = solver[k].step(t, args={'A': cur_amp})
             s[k] = s_
@@ -709,8 +720,12 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
 
 
 def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
-    pulse_dir = os.path.dirname(pulse_file)
     pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
+    pulse_dir = os.path.dirname(pulse_file)
+    if 'mkrauss' in pulse_dir:
+        amp_scale = 2.
+    else:
+        amp_scale = 1.
     if save_dir is None:
         save_dir = pulse_dir
 
@@ -742,7 +757,8 @@ def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
     """
     RUNNING FULL PULSE AT ONCE, starting from each basis_state, respectively
     """
-    H = QobjEvo([model.drift, [model.control, pulse]], args={}, tlist=tlist, order=0)
+    # TODO: fuck around with tlist so it's faster
+    H = QobjEvo([model.drift, [model.control, np.multiply(pulse, amp_scale)]], args={}, tlist=tlist, order=0)
     solver = SESolver(H, options=dict(store_final_state=True))
 
     # noinspection PyUnresolvedReferences

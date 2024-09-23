@@ -1,4 +1,6 @@
 import os
+
+import setuptools.namespaces
 from gymnasium import spaces
 import yaml
 import numpy as np
@@ -10,8 +12,12 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from matplotlib.animation import FuncAnimation
 from gymnasium import Env
+import random
 
 from rlquantopt.rl_envs.zcqubits import ZCQubits, fidelity, setup_ZCQubits4MKrauss_params
+# from rlquantopt.tests.zc_qpee_vs_zcqubits.zc_qpee_vs_zcqubits import env_kwargs
+
+mpl.rcParams['font.size'] = 18
 
 
 class ZCQPEE(Env):
@@ -26,104 +32,109 @@ class ZCQPEE(Env):
     FPS = 25
     DPI = 70
 
-    def __init__(self, pulse_length=120, delta_mode=True, T=50, fid_thresh=0.995, action_scaling=None, a_norm_max=None, optimised_pulse_path=None, model_params=None):
-        self.FID_THRESH = fid_thresh
-        self.REW_THRESH = self.fid2rew(self.FID_THRESH)
-        self.delta_mode = delta_mode
-        if not delta_mode:
-            self.A_norm_max = 1
+    RANDOM_START_PROB = 0.0
+    RANDOM_START_STEPS = 10
 
-        if action_scaling is not None:
-            self.action_scaling = action_scaling
+    REW_SCALE = 1
+    N_TIME_STEPS = 1
+    TV_PENALTY_SCALE = 0
 
-        if a_norm_max is not None:
+    def __init__(self, model_params=None, **env_kwargs):
+        """
+
+        :param model_params:
+        :param env_kwargs:
+        """
+        self.env_kwargs = env_kwargs
+        # Set up random starts
+        if env_kwargs.get('start_basis_states', False):
+            self.RANDOM_START_PROB = 0.
+        self.RANDOM_START_PROB = env_kwargs.get('random_start_prob', self.RANDOM_START_PROB)
+        self.RANDOM_START_STEPS = env_kwargs.get('random_start_steps', self.RANDOM_START_STEPS)
+
+        # General parameters
+        self.pulse_length = env_kwargs.get('pulse_length', 2000)
+        self.delta_mode = env_kwargs.get('delta_mode', True)
+        self.T = env_kwargs.get('T', 300)
+
+        # Reward rekated parameters
+        self.FID_THRESH = env_kwargs.get('fid_thresh', 0.995)
+        self.REW_SCALE = env_kwargs.get('rew_scale', self.REW_SCALE)
+        self.REW_THRESH = self._fid2rew(self.FID_THRESH) * self.REW_SCALE
+
+        self.TV_PENALTY_SCALE = env_kwargs.get('tv_penalty_scale', self.TV_PENALTY_SCALE)
+
+        # Action related parameters
+        self.N_TIME_STEPS = env_kwargs.get('n_time_steps', self.N_TIME_STEPS)
+        self.action_scaling = env_kwargs.get('action_scaling', self.action_scaling)
+        a_norm_max = env_kwargs.get('a_norm_max', None)
+        if a_norm_max is not None and self.delta_mode:
             self.A_norm_max = a_norm_max
-
-        # optimised_pulse_path = 'configs/data_lilmc/data_lilmc.csv'
-        self.optimised_pulse_path = None
-        self.ideal_pulses = None
-        self.channel_label = 'z'
-        if optimised_pulse_path is not None:
-            self.optimised_pulse_path = optimised_pulse_path
-            coeff, tlist = self.get_optimal_pulse()
-            self.ideal_pulses = {'labels': [self.channel_label],
-                                 'coeff': [coeff],
-                                 'tlist': [tlist],
-                                 'max_len': len(coeff),
-                                 'max_time': tlist[-1]}
+        elif not self.delta_mode:
+            self.A_norm_max = 1
 
         # Set up model
         self.model_params = setup_ZCQubits4MKrauss_params(model_params)
-        self.all_model_params = self.model_params.copy()
-        #     # self.model_params["omega_s"] = [5.8899, 5.0311]
-        #     # self.model_params["alpha_s"] = [-324e-3, -235e-3]
-        #     # self.model_params["g"] = [100e-3, 71.4e-3]
-        #     self.n_levels = n_levels = 3
-        #     coupler_dims = 3
-        #     num_qubits = 2
         self.n_levels = self.model_params.get("n_levels")
-        coupler_dims = self.model_params.get("coupler_dims")
-        qubit_dims = self.model_params.get("qubit_dims")
-        full_dims = qubit_dims.copy()
-        full_dims.append(coupler_dims)
-
-        self.psi00 = ket((0, 0, 0), dim=full_dims)
-        self.psi01 = ket((0, 1, 0), dim=full_dims)
-        self.psi10 = ket((1, 0, 0), dim=full_dims)
-        self.psi11 = ket((1, 1, 0), dim=full_dims)
-        self.basis_states_ket = [self.psi00, self.psi01, self.psi10, self.psi11]
-
-        # self.simulators = [ZCQubits(2, qubit_dims=qubit_dims, coupler_dims=coupler_dims, params=self.model_params) for _ in range(len(self.basis_states_ket))]
+        self.channel_label = 'z'
         self.simulator = ZCQubits(**self.model_params)
 
-        self.T = T  # ns
-        self.pulse_length = pulse_length
-        self.tlist = np.linspace(0, T, pulse_length + 1)
-        self.dt = T/(self.pulse_length) # dt obtained after np.linspace(0, T, pulse_length)
-        assert self.tlist[1] == self.dt
-        self.pulse_amplitudes_denorm = self.init_pulse_amplitudes()
+        # Set up time axis
+        self.tlist = np.linspace(0, self.T, self.pulse_length + 1)
+        self.dt = self.T / self.pulse_length
+        if self.tlist[1] != self.dt:
+            raise ValueError("tlist diff and dt must be the same")
 
+        # Set up gate
         self.unitary_iswap = U = self.get_iswap_u()
 
-        # Set up state vectors
-
-        self.basis_states = basis_states = self.basis_states_ket.copy()
-        self.basis_states_str = ('$|000\\rangle$', '$|010\\rangle$','$|100\\rangle$','$|110\\rangle$',)
+        # Set up initial states
+        full_dims = self.model_params.get("qubit_dims").copy()
+        full_dims.append(self.model_params.get("coupler_dims"))
+        psi00 = ket((0, 0, 0), dim=full_dims)
+        psi01 = ket((0, 1, 0), dim=full_dims)
+        psi10 = ket((1, 0, 0), dim=full_dims)
+        psi11 = ket((1, 1, 0), dim=full_dims)
+        basis_states_ket = [psi00, psi01, psi10, psi11]
+        self.basis_states = basis_states_ket.copy()
         self.initial_states = self.basis_states.copy()
-        # self.solvers = [SESolver(self.simulator.H) for _ in self.basis_states]
-        self.solvers = [SESolver(self.simulator.H) for i in range(len(self.basis_states))]
 
-        mapped_basis_states = [sum(U[i, j] * basis_states[i]
+        # Set up SE solvers
+        self.solvers = [SESolver(self.simulator.H) for _ in range(len(self.basis_states))]
+
+        self.basis_states_str = ('$|000\\rangle$', '$|010\\rangle$','$|100\\rangle$','$|110\\rangle$',)
+
+        # Set up target states
+        mapped_basis_states = [sum(U[i, j] * self.basis_states[i]
                                    for i in range(U.shape[0])) for j in range(U.shape[1])]
-        # Lots of gates just rearrange the basis states, and we can avoid some complexity by identifying
-        # this and setting the mapped_basis_states to the identical objects as the original basis_states
+        # Lots of gates just rearrange the basis states, and we can avoid some complexity by identifying this and setting the mapped_basis_states to the identical objects as the original basis_states
         for i, state in enumerate(mapped_basis_states):
-            for j, basis_state in enumerate(basis_states):
+            for j, basis_state in enumerate(self.basis_states):
                 if state == basis_state:
                     mapped_basis_states[i] = basis_state
         self.target_states = mapped_basis_states.copy()
+        self.e_ops = [s_.proj() for s_ in self.target_states]
 
         # Set up action space
         self.n_channels = len(self.action_scaling)
-        self.action_space = spaces.Box(low=-1, high=1, shape=(self.n_channels,), dtype=np.float32)
+        self.action_space = spaces.Box(low=-1, high=1, shape=(self.n_channels, self.N_TIME_STEPS), dtype=np.float32)
         self.amps_cur = np.zeros(self.n_channels)
-        self.n_act = self.n_channels
+        self.n_act = self.n_channels * self.N_TIME_STEPS
 
         # Set up observation space
-        # self.n_obs = len(self.basis_states) * 2 * reduce(lambda x, y: x*y, full_dims) + self.n_act + 1  # +1 is the time dimension
-        self.n_obs = 26
+        self.n_obs = 25 + self.N_TIME_STEPS
         self.observation_space = spaces.Box(low=-1, high=1, shape=(self.n_obs,), dtype=np.float32)
 
         # All initialised after first call to reset method
-        self.cur_idx = 0
-        self.final_states_all = None
-        self.pulse_amplitudes_denorm = None
-        self.amps_cur = None
-        self.step_states = None
-        self.current_state = None
-        self.rewards = None
-        self.fidelities = None
-        self.actions_all = None
+        self.cur_idx: int = 0
+        self.final_states_all: list = []
+        self.pulse_amplitudes_denorm: np.ndarray = np.array([])
+        self.pulse_deltas_denorm: np.ndarray = np.array([])
+        self.amps_cur: np.ndarray = np.array([])
+        self.step_states: list = []
+        self.current_obs: np.ndarray = np.array([])
+        self.rewards: list = []
+        self.fidelities: list = []
 
     @staticmethod
     def get_iswap_u():
@@ -134,72 +145,41 @@ class ZCQPEE(Env):
             [0, 0, 0, 1]
         ]), dims=[[2, 2], [2, 2]])  # iSWAP
 
-    def to_yaml(self, save_path=None):
-        data = dict(pulse_length=self.pulse_length,
-                    delta_mode=self.delta_mode,
-                    T=self.T,
-                    fid_thresh=self.FID_THRESH,
-                    action_scaling=self.action_scaling,
-                    a_norm_max=self.A_norm_max,
-                    optimised_pulse_path=self.optimised_pulse_path,
-                    model_params=self.all_model_params)
-
-        if save_path is not None:
-            with open(save_path, 'w') as f:
-                yaml.dump(data, f)
-
-        return data
-
-    @classmethod
-    def from_yaml(cls, load_path):
-        with open(load_path, 'r') as f:
-            kw = yaml.load(f, yaml.SafeLoader)
-        self = cls(**kw)
-        return self
-
-    @staticmethod
-    def find_yaml_in_dir(dir):
-        for item in os.listdir(dir):
-            if (item.endswith('.yaml') or item.endswith('.yml')) and item.startswith('ZCQPEE_pl-'):
-                return os.path.join(dir, item)
-
-    def get_optimal_pulse(self):
-        data = pd.read_csv(self.optimised_pulse_path)
-        n_keys = len(data.keys())
-        if n_keys == 2:
-            tkey, vkey = data.keys()
-        elif n_keys == 3:
-            tkey, vkey = data.keys()[1:]
+    def init_pulse_amplitudes(self, delta):
+        if delta:
+            return np.zeros(self.pulse_length)
         else:
-            raise Exception("There's something fucked with the CSV pulse file.")
+            return np.zeros(self.pulse_length + 1)
 
-        tlist = data[tkey].to_numpy()
-        coeff = data[vkey].to_numpy()
-
-        return coeff, tlist
-
-    def init_pulse_amplitudes(self):
-        return np.zeros(self.pulse_length)
-
-    def reset(self, seed=None, options=None):
+    def reset(self, init_state=None, seed=None, random_starts=False, options=None):
         super().reset(seed=seed, options=options)
         if seed is not None:
             np.random.seed(seed)
         self.cur_idx = 0
         self.final_states_all = [self.initial_states.copy()]
-        self.pulse_amplitudes_denorm = self.init_pulse_amplitudes()
-        self.amps_cur = 0.
-        self.step_states = self.initial_states.copy()
-        # self.current_state = self.extract_current_state(self.step_states, idx=0).astype(np.float32)
-        self.current_state = self.extract_current_cardinal_state(self.step_states).astype(np.float32)
-        self.actions_all = []
+        self.pulse_amplitudes_denorm = self.init_pulse_amplitudes(delta=False)
+        if self.delta_mode:
+            self.pulse_deltas_denorm = self.init_pulse_amplitudes(delta=True)
+        self.amps_cur = np.zeros(self.N_TIME_STEPS)
+        if init_state is not None:
+            self.step_states = init_state
+        else:
+            self.step_states = self.initial_states.copy()
+
+        self.current_obs = self.extract_current_cardinal_state(self.step_states).astype(np.float32)
         self.rewards = []
         self.fidelities = []
 
-        for solver, initial_state in zip(self.solvers, self.initial_states):
-            solver.start(initial_state, 0.)
+        for k, initial_state in enumerate(self.initial_states):
+            self.solvers[k].start(initial_state, 0.)
 
-        return self.current_state, {}
+        if np.random.random() < self.RANDOM_START_PROB and random_starts:
+            info = None
+            for _ in range(self.RANDOM_START_STEPS):
+                *_, info = self.step(self.action_space.sample())
+            self.reset(init_state=info['step_states'], random_starts=False, seed=seed, options=options)
+
+        return self.current_obs, {}
 
     def get_current_amp_time_norm_tuple(self, action=None):
         obs_ampt = []
@@ -209,22 +189,22 @@ class ZCQPEE(Env):
         else:
             obs_ampt.append(np.array(action).reshape(-1, 1))
         # Add the time of current step
-        obs_ampt.append(np.array(self.cur_idx / self.pulse_length).reshape(-1, 1))
+        obs_ampt.append(np.array(self.cur_idx * 2 / self.pulse_length - 1).reshape(-1, 1))
 
         return np.concatenate(obs_ampt)
 
-    def extract_current_state(self, states, action=None, idx=None, state_only=False):
-        obs = []
-        for state in states:
-            if isinstance(state, Qobj):
-                state = state.full()
-            obs.append(np.concatenate([state.real.copy(), state.imag.copy()]))
-        if not state_only:
-            obs.extend(self.get_current_amp_time_norm_tuple(action))
-        obs = np.concatenate(obs).squeeze()
-        return obs.astype(np.float32)
+    # def extract_current_state(self, states, action=None, idx=None, state_only=False):
+    #     obs = []
+    #     for state in states:
+    #         if isinstance(state, Qobj):
+    #             state = state.full()
+    #         obs.append(np.concatenate([state.real.copy(), state.imag.copy()]))
+    #     if not state_only:
+    #         obs.extend(self.get_current_amp_time_norm_tuple(action))
+    #     obs = np.concatenate(obs).squeeze()
+    #     return obs.astype(np.float32)
 
-    def extract_current_cardinal_state(self, states, action=None, idx=None, state_only=False):
+    def extract_current_cardinal_state(self, states, action=None, state_only=False):
         obs = []
         for i, state in enumerate(states):
             if i == 0:
@@ -233,14 +213,18 @@ class ZCQPEE(Env):
             if isinstance(state, Qobj):
                 state = state.full()
 
-            if i < 3:
-                for idx in (1, 3, 9):
+            # Cartesian
+            # extract_complex = lambda z: np.concatenate([s_.real.copy(), s_.imag.copy()])
+            # Polar form
+            extract_complex = lambda z: np.concatenate([(np.absolute(z) * 2) - 1, np.angle(z)/np.pi])
+            if i < 3:       # for states |000>, |010>, |100>
+                for idx in (1, 3, 9):   # Extract only these elements from the state vector @ i < 3
                     s_ = state[idx]
-                    obs.append(np.concatenate([s_.real.copy(), s_.imag.copy()]))
-            elif i == 3:
-                for idx in (2, 4, 6, 10, 12, 18):
+                    obs.append(extract_complex(s_))
+            elif i == 3:    # for state |110>
+                for idx in (2, 4, 6, 10, 12, 18):   # Extract only these elements from the state vector @ i == 3
                     s_ = state[idx]
-                    obs.append(np.concatenate([s_.real.copy(), s_.imag.copy()]))
+                    obs.append(extract_complex(s_))
 
         if not state_only:
             obs.extend(self.get_current_amp_time_norm_tuple(action))
@@ -256,46 +240,53 @@ class ZCQPEE(Env):
         SCALE = self.action_scaling['z']
         return np.array(action) * SCALE
 
-    def step(self, action, can_early_term=False):
+    def step(self, action, can_early_term=True):
         """
         Add a pulse amplitude delta vector (action) on the previous value of the pulse amplitude.
         :param action: Must be list-like with `self.n_abs` dimensions
         :param can_early_term: If True, episode will terminate iff reward threshold is exceeded. Used during evaluation to get a shorter pulse ...
         :return: observation_tp1, reward, terminated, truncated, info
         """
-        action = np.array(action)
+        action = np.array(action).reshape(self.n_channels, self.N_TIME_STEPS)
+        action_denorm = self.denorm_action(action)
 
-        # Absolute amplitude conversion required for rendering
-        self.actions_all.append(action[0])
+        N = self.N_TIME_STEPS
+        if self.delta_mode:
+            try:
+                self.pulse_deltas_denorm[self.cur_idx:self.cur_idx+N] = action_denorm
+            except ValueError as e:
+                print(self.cur_idx)
+                raise e
+            # self.pulse_deltas_denorm.extend(action_denorm)
 
         # Environment dynamics
-        # amp_delta_denorm = self.denorm_action(action.copy())[0]
-        # from_states = self.step_states.copy()
+        amp_abs_denorm, oob_pulse = self.preprocess_action(action_denorm)
+        self.pulse_amplitudes_denorm[self.cur_idx+1:self.cur_idx + N+1] = amp_abs_denorm
+
         crash = False
-        oob_pulse = False
         try:
-            self.step_states, oob_pulse = self.forward_dynamics(amp_delta_norm=action)
+            self.step_states = self.forward_dynamics(amp_abs_denorm)
         except Exception as e:
             print(e)
             crash = True
 
         self.final_states_all.append(self.step_states.copy())
 
-        terminated, truncated = False, False
-
-        # Check if episode is done
-        if self.cur_idx >= self.pulse_length - 1:
-            terminated = True
+        terminated, truncated, terminal = False, False, False
 
         # Calculate reward for current action
-        reward = self.reward_function(self.step_states) - self.REW_THRESH
-        if crash:
-            reward = -10
-            truncated = True
+        reward, tv_penalty, fidelity = self._reward_function(self.step_states, self.amps_cur)
+        reward *= self.REW_SCALE
+        reward -= self.REW_THRESH   # so that any fidelity below the threshold obtains a negative reward, and positive otherwise
 
-        # Assign penalty if pulse in delta-mode is OOB
-        if oob_pulse and self.delta_mode:
-            reward = -10
+        # Assign penalty if pulse crashed the simulator & send trancation signal to stop the episode
+        if crash:
+            reward = -50
+            truncated = True
+        # Assign smaller penalty if the pulse os OOB
+        elif oob_pulse:
+            reward = -30 * (1 - (self.cur_idx / self.pulse_length))
+            truncated = True
 
         self.rewards.append(reward)
 
@@ -303,99 +294,112 @@ class ZCQPEE(Env):
             terminated = True
 
         # Construct observation for agent using state probabilities and normed actions
-        # self.current_state = self.extract_current_state(self.step_states, self.cur_idx)
-        self.current_state = self.extract_current_cardinal_state(self.step_states)
+        self.current_obs = self.extract_current_cardinal_state(self.step_states)
 
-        self.cur_idx += 1
-        return self.current_state, reward, terminated, truncated, {}
+        self.cur_idx += N
 
-    def forward_dynamics(self, amp_delta_norm):
-        """
-        Requires self.cur_idx==0 during the first step. This is to calculate the pulse time correctly.
-        :param amp_delta_norm [float]: Normalised action value. If delta_mode, action is delta amp, otherwise action is abs amp
-        :return: final_states [list[Qobj]], oob_pulse [bool]
-        """
-        oob_pulse = False  # Out of bounds absolute pulse
+        # Check if episode is done
+        if self.cur_idx + N - 1 >= self.pulse_length:
+            terminated = True
+            terminal = True
 
+        return self.current_obs, reward, terminated, truncated, {'tv_penalty': tv_penalty, 'fidelity': fidelity, 'step_states': self.step_states, 'oob_pulse': oob_pulse, 'crash': crash, 'terminal_state': terminal}
+
+    def preprocess_action(self, action_denorm):
+        oob_pulse = False
         # Delta formalism
         if self.delta_mode:
             if self.cur_idx == 0:
-                abs_action_denorm = 0.
+                # First time-step assumes a prev. amplitude of 0 - start from zero-pulse
+                prev_amp_abs_denorm = 0.
             else:
-                abs_action_denorm = self.pulse_amplitudes_denorm[self.cur_idx - 1]
+                # In delta formalism, we need the previous amplitude
+                prev_amp_abs_denorm = self.amps_cur[-1]
 
-            abs_action_denorm += self.denorm_action(amp_delta_norm[0])
-            abs_action_norm = self.norm_action(abs_action_denorm)
-            if abs(abs_action_norm) > self.A_norm_max:
+            amp_abs_denorm = prev_amp_abs_denorm + np.cumsum(action_denorm)  # add the delta amp.
+            # amp_abs_norm = amp_abs_denorm / self.A_norm_max # normalise absolute pulse wrt A_norm_max
+            amp_abs_norm = self.norm_action(amp_abs_denorm)
+            if max(abs(amp_abs_norm)) > self.A_norm_max:
                 oob_pulse = True
-                abs_action_denorm = self.denorm_action(np.sign(abs_action_norm) * self.A_norm_max)
+                amp_abs_norm = np.where(abs(amp_abs_norm) > self.A_norm_max, np.sign(amp_abs_norm) * self.A_norm_max, amp_abs_norm)
+                amp_abs_denorm = self.denorm_action(amp_abs_norm)
         # Absolute formalism
         else:
-            abs_action_denorm = self.denorm_action(amp_delta_norm * self.A_norm_max)
+            # Treat the action as an absolute amplitude value
+            amp_abs_denorm = action_denorm
 
-        # Save amplitude to pulse
-        self.pulse_amplitudes_denorm[self.cur_idx] = abs_action_denorm
+        return amp_abs_denorm, oob_pulse
+
+    def forward_dynamics(self, amp_abs_denorm):
+        """
+        Requires self.cur_idx==0 during the first step.
+        This is to calculate the pulse time correctly.
+        """
 
         # Step through the simulator with new amplitude until next time-step in simulation
-        self.amps_cur = abs_action_denorm
+        self.amps_cur = amp_abs_denorm
         final_states = []
-        for k, solver in enumerate(self.solvers):
-            t = self.tlist[self.cur_idx + 1]    # Think that the first action needs the first time-step since the first is always amp=0 @t=0
-            s = self.solvers[k].step(t, args={'A': self.amps_cur})
-            final_states.append(s.copy())
+        for k, _ in enumerate(self.step_states):
+            # H = QobjEvo([self.simulator.drift, [self.simulator.control, self.amps_cur]], tlist=tlist_, order=0)
+            # solver = SESolver(H, options=dict(store_final_state=True))
+            # result = solver.run(s_, tlist_, e_ops=self.e_ops)
+            # final_states.append(result.final_state)
+            for i in range(self.N_TIME_STEPS):
+                t = self.tlist[self.cur_idx + i]
+                final_state = self.solvers[k].step(t, args=dict(A=amp_abs_denorm[i]))
+            final_states.append(final_state)
 
-        return final_states, oob_pulse
+        return final_states
 
-    def reward_function(self, step_states):
+    def _compute_total_variation(self, acts):
+        return np.sum(np.abs(np.diff(acts)))
+
+    def _reward_function(self, step_states, acts=None):
         f = np.mean([fidelity(s, t) for s, t in zip(step_states, self.target_states)])
         self.fidelities.append(f)
+        rew = self._fid2rew(f)
+        if f >= self.FID_THRESH:    # remove tv penalty upon successful pulse
+            return rew, 0.0, f
 
-        rew = self.fid2rew(f)   # - self.REW_THRESH
-        return rew
+        if acts is None:
+            return rew, 0.0, f
+
+        total_variation = self._compute_total_variation(acts)
+        tv_penalty = total_variation * self.TV_PENALTY_SCALE
+        rew -= tv_penalty
+
+        return rew, tv_penalty, f
 
     @staticmethod
-    def fid2rew(fid):
+    def _fid2rew(fid):
         return -np.log10(1 - fid)
 
+    def to_yaml(self, save_path=None):
+        data = dict(env_kwargs=self.env_kwargs,
+                    model_params=self.model_params)
+
+        if save_path is not None:
+            with open(save_path, 'w') as f:
+                yaml.dump(data, f)
+
+        return data
+
+    @classmethod
+    def from_yaml(cls, load_path):
+        with open(load_path, 'r') as f:
+            kw = yaml.load(f, yaml.SafeLoader)
+        self = cls(model_params=kw['model_params'], **kw['env_kwargs'])
+        return self
+
     @staticmethod
-    def rew2fid(rew):
-        rew = float(rew)
-        return 1 - np.power(10, -rew)
-
-    def get_reconstructed_pulses_with_uniform_time(self):
-        ideal_pulses = self.ideal_pulses
-        ideal_amps = ideal_pulses['coeff']
-        tlists = ideal_pulses['tlist']
-        T = ideal_pulses['max_time']
-        N = self.pulse_length
-        global_tlist = np.linspace(0, T, N)
-
-        if N == ideal_pulses['max_len']:
-            return np.array(ideal_amps), global_tlist
-
-            # Obtain ideal amplitudes reconstructions
-        recons_amps = np.zeros(shape=(len(ideal_amps), N))
-        for i, t in enumerate(global_tlist[:-1]):
-            for j, tli in enumerate(tlists):
-                idx = np.argmin(np.square(tli - t))
-                if tli[idx] < t:
-                    idx1 = idx - 1
-                    idx2 = idx
-                else:
-                    idx1 = idx
-                    idx2 = idx + 1
-
-                recons_amp = ideal_amps[j][idx1] + ((t - tli[idx1]) / (tli[idx2] - tli[idx1])) * (
-                        ideal_amps[j][idx2] - ideal_amps[j][idx1])
-                recons_amps[j][i] = recons_amp
-
-        return np.array(recons_amps), global_tlist
+    def find_yaml_in_dir(dir):
+        for item in os.listdir(dir):
+            if (item.endswith('.yaml') or item.endswith('.yml')) and item.startswith('ZCQPEE_pl-'):
+                return os.path.join(dir, item)
 
     def render(self, mode='human', save_path=None, fps=80, **kwargs):
         mpl.rcParams['font.size'] = 10
-
         states = self.final_states_all
-        # fidelities = (np.clip([self.rew2fid(r) for r in self.rewards], a_min=1e-4, a_max=1)) * 100.
         fidelities = np.multiply(self.fidelities, 100.)
         infidelities = [100 - item for item in fidelities]
 
@@ -415,8 +419,6 @@ class ZCQPEE(Env):
 
         ax_state = fig.add_subplot(gs[0, :])
         ax_action = fig.add_subplot(gs[1, :])
-        # if self.delta_mode:
-        #     ax_action_deltas =
         ax_reward = fig.add_subplot(gs[n_rows - 1, :])
 
         # Initialize the plot
@@ -447,18 +449,6 @@ class ZCQPEE(Env):
         ax.set_ylabel('Pulse amplitude')  # Adjust based on action range
         ax.set_xlabel('Time [ns]')  # Adjust based on action range
 
-        ax_action_deltas = None
-        if self.delta_mode:
-            K_delta = self.action_scaling['z']
-            ax_action_deltas = fig.add_subplot(gs[2, :])
-            ax = ax_action_deltas
-            ax.axhline(y=0, linestyle='dashed', color='gray')
-            ax.set_xlim(0, self.T)
-
-            ax.set_ylim(-K_delta*1.1, K_delta*1.1)  # Adjust based on action range
-            ax.set_ylabel('Pulse deltas')  # Adjust based on action range
-            ax.set_xlabel('Time [ns]')  # Adjust based on action range
-
         nb_orders = lambda x: 10 ** int(np.log10(x))
         ax = ax_reward
         infid_thresh = (1. - self.FID_THRESH) * 100.
@@ -472,11 +462,12 @@ class ZCQPEE(Env):
         ax.set_ylabel('Infidelity (%)')
         ax.set_xlabel('Time [ns]')
 
-        s = np.abs(np.concatenate([s.full() for s in states[0]])).reshape(4, -1)
-        im = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
+        get_state_mat = lambda idx: np.abs(np.flipud(np.concatenate([s_.full() for s_ in states[idx]]).reshape(4, -1)))
+        state_mat = get_state_mat(0)
+        im = ax_state.imshow(state_mat, animated=True, cmap=self.cmap, norm=norm, origin='upper')
         texts = []
         ax = ax_state
-        for i, srow in enumerate(s):
+        for i, srow in enumerate(state_mat):
             for j, selem in enumerate(srow):
                 text = ax.text(j, i, f'{selem:.2f}', horizontalalignment='center', verticalalignment='center', fontsize=6, c='k')
                 texts.append(text)
@@ -492,16 +483,25 @@ class ZCQPEE(Env):
         ax_reward.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
         reward_line, = ax_reward.plot([], [], 'g', lw=1.2)
 
-        action_delta_line = None
+        # Action delta plot if self.delta_mode==True
         if self.delta_mode:
+            k_delta = self.action_scaling['z']
+            ax_action_deltas = fig.add_subplot(gs[2, :])
+            ax = ax_action_deltas
+            ax.axhline(y=0, linestyle='dashed', color='gray')
+            ax.set_xlim(0, self.T)
+
+            ax.set_ylim(-k_delta * 1.1, k_delta * 1.1)  # Adjust based on action range
+            ax.set_ylabel('Pulse deltas')  # Adjust based on action range
+            ax.set_xlabel('Time [ns]')  # Adjust based on action range
             action_delta_line, = ax_action_deltas.plot([], [], lw=1, label=f'Δ{self.channel_label}')
             ax_action_deltas.legend(loc='upper right')
+
         fig.tight_layout()
 
         def init():
-            s = np.abs(np.concatenate([s.full() for s in states[0]])).reshape(4, -1)
-            s = np.flipud(s)
-            im = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
+            s = get_state_mat(0)
+            im_ = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
 
             action_line.set_data([], [])
             reward_line.set_data([], [])
@@ -510,28 +510,28 @@ class ZCQPEE(Env):
 
             for i, srow in enumerate(s):
                 for j, selem in enumerate(srow):
-                    texts[i*len(srow) + j].set_text(f'{selem:.2f}')
+                    texts[i * len(srow) + j].set_text(f'{selem:.2f}')
 
-            return im, action_line, action_delta_line, reward_line, texts
+            return im_, action_line, action_delta_line, reward_line, texts
 
         def update(frame):
-            s = np.clip(np.abs(np.concatenate([s_.full() for s_ in states[frame]])), EPS, 1).reshape(4, -1)
-            s = np.flipud(s)
-            im = ax_state.imshow(s, animated=True, cmap=self.cmap, norm=norm, origin='upper')
+            state_mat = get_state_mat(frame)
+            state_mat = np.clip(state_mat, EPS, 1)
+            im_ = ax_state.imshow(state_mat, animated=True, cmap=self.cmap, norm=norm, origin='upper')
 
             action_line.set_data(self.tlist[:frame], self.denorm_action(self.pulse_amplitudes_denorm[:frame]))
             reward_line.set_data(self.tlist[:frame], infidelities[:frame])
             ax_reward.set_title(f'Time: {self.tlist[frame]:.2f}ns  Fidelity: {100 - infidelities[frame]:.2f}%  (Best fidelity: {max(fidelities):.2f}%)')
             if self.delta_mode:
-                action_delta_line.set_data(self.tlist[:frame], self.denorm_action(self.actions_all[:frame]))
+                action_delta_line.set_data(self.tlist[:frame], self.pulse_deltas_denorm[:frame])
 
-            for i, srow in enumerate(s):
+            for i, srow in enumerate(state_mat):
                 for j, selem in enumerate(srow):
                     texts[i*len(srow) + j].set_text(f'{selem:.3f}')
 
-            return im, action_line, action_delta_line, reward_line, texts
+            return im_, action_line, action_delta_line, reward_line, texts
 
-        frames = list(np.arange(0, self.cur_idx, max(1, int(self.cur_idx/120)))) + [self.cur_idx - 1] * 5
+        frames = list(np.arange(0, self.cur_idx, max(1, int(self.cur_idx/120)))) + [self.cur_idx-1]*3
         ani = FuncAnimation(fig, update, frames=frames, interval=5, init_func=init, blit=False)
 
         if save_path is None:
@@ -554,19 +554,26 @@ class ZCQPEE(Env):
     @staticmethod
     def evaluate_pulse(pulse_file, save_path, render=True, **env_kwargs):
         assert pulse_file.endswith('.csv')
-        assert save_path.endswith('.mp4')
+        # assert save_path.endswith('.mp4')
 
         data = pd.read_csv(pulse_file)
         pulse = data['pulse'].to_numpy()
-        tlist = data['tlist'].to_numpy()
-        pulse_length = len(tlist)
+        pulse_diff = np.insert(np.diff(pulse), 0, 0.)
+        # pulse_diff = np.diff(pulse)
+        tlist = data['time'].to_numpy()
+
+        env_kwargs['pulse_length'] = len(pulse)
+        env_kwargs['T'] = tlist[-1]
+        N = env_kwargs['n_time_steps']
+
+        # N = env_kwargs.get('n_time_steps')
         env = ZCQPEE(**env_kwargs)
 
-        assert int(tlist[1] * 1e6) == int(env.dt * 1e6)
+        dt = env.dt
+        assert np.round(tlist[1] * 1e4) == np.round(env.dt * 1e4)
 
         acts = []
         rews = []
-        fids = []
 
         # obses.append(env.reset()[0])
         env.reset()
@@ -575,43 +582,136 @@ class ZCQPEE(Env):
         terminated = False
         idx = 0
         while not terminated and not truncated:
-            if idx == 0:
-                action = np.array([pulse[0]])
-            else:
-                action = np.array([pulse[idx] - pulse[idx - 1]])
+            action = pulse_diff[idx:idx+N]
+            # if idx == 0:
+            #     action = np.array([pulse_diff[:N]])
+            # else:
+            #     action = np.array([pulse[idx] - pulse[idx - 1]])
 
-            acts.append(pulse[idx])
+            acts.append(action.copy())
             action = env.norm_action(action)
 
-            _, rew, terminated, truncated, _ = env.step(action)
+            _, rew, terminated, truncated, _ = env.step(action, can_early_term=False)
 
             rews.append(rew)
-            fids.append(env.rew2fid(rew))
-            idx += 1
+            idx += N
 
         if render:
             env.render(save_path=save_path)
         states = np.array(env.final_states_all).T
-        return states, np.array(acts), np.array(rews), np.array(fids)
+        return states, np.array(acts), np.array(rews), env.fidelities
 
     def __repr__(self):
-        return (f"ZCQPEE:   pulse_length = {self.pulse_length}\n"
+        return (f"ZCQPEE:   Pulse length = {self.pulse_length}\n"
                 f"          T = {self.T} ns \n"
                 f"          ΔT = {self.dt:.3f} ns\n"
-                f"          Fid. thresh. = {self.FID_THRESH*100.:.2f}%\n"
-                f"          action scaling = {self.action_scaling}\n"
+                f"          Fidelity threshold = {self.FID_THRESH*100.:.2f}%\n"
+                f"          Reward scale = {self.REW_SCALE}\n"
+                f"          TV penalty scale = {self.TV_PENALTY_SCALE}\n"
+                f"          Action scaling = {self.action_scaling}\n"
                 f"          A_norm_max = {self.A_norm_max}\n"
                 f"          ISWAP gate optimisation.\n"
                 f"          Action delta_mode={self.delta_mode}\n")
 
     def __str__(self):
-        return f"ZCQPEE_pl-{self.pulse_length}_T-{self.T:.1f}ns{'_delta_mode' if self.delta_mode else '_abs_mode'}"
+        return f"ZCQPEE_pl-{self.pulse_length}_T-{int(self.T)}ns{'_delta_mode' if self.delta_mode else '_abs_mode'}"
+
+
+def test_actions(axs, pl, N, actions, title=None, seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+
+    env = ZCQPEE(pulse_length=pl, delta_mode=True, T=100, fid_thresh=0.995, n_time_steps=N)
+    env.reset()
+    rews = []
+    tv_penalties = []
+    for a in actions:
+        _, r, _, _, info = env.step(a)
+        tv_penalty = info['tv_penalty']
+        tv_penalties.append(tv_penalty)
+        rews.append(r)
+
+    ax = axs[0]
+    ax.set_title(title)
+    short_tlist = np.linspace(0, env.T, len(rews))
+    ax.plot(short_tlist, rews, c='g', marker='.')
+    ax.set_ylabel('Rew.')
+
+    ax = axs[1]
+    ax.plot(short_tlist, tv_penalties, c='tab:orange', marker='.')
+    ax.set_ylabel('TV pen.')
+
+    ax = axs[2]
+    ax.plot(env.tlist, env.pulse_amplitudes_denorm, c='r', marker='.')
+    ax.set_ylabel('Amp.')
+
+    for ax in axs:
+        ax.set_xlabel('Time [ns]')
+    # fig.tight_layout()
+    # plt.show()
+
+
+def test_tv_penalty():
+    # import numpy as np
+    PL = 4000
+
+    fig, axs = plt.subplots(9, 4, figsize=(35, 20))
+    col_idx = 0
+    for N in (5, 10):
+        row_idx = 0
+        for scale in (1, 0.1, 1e-2):
+            const_batch_actions = np.repeat(np.random.uniform(-1, 1, PL//N).reshape(-1, 1), N, axis=1) * scale
+
+            axs_ = axs[row_idx: row_idx+3, col_idx]
+            test_actions(axs_, pl=PL, N=N, actions=const_batch_actions, title=f'Constant batch N={N} scale={scale}')
+            row_idx += 3
+        col_idx += 1
+
+    for N in (5, 10):
+        row_idx = 0
+        for scale in (1, 0.1, 1e-2):
+            actions = np.random.uniform(-1, 1, (PL//N, N)) * scale
+
+            axs_ = axs[row_idx: row_idx + 3, col_idx]
+            test_actions(axs_, pl=PL, N=N, actions=actions,
+                         title=f'Random batch N={N} scale={scale}')
+            row_idx += 3
+        col_idx += 1
+
+    fig.tight_layout()
+
+    plt.show()
+
+
+def test_mkrauss_pulse():
+    pulse_path = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_mkrauss/good_guess_analytical_correct.csv'
+    data = pd.read_csv(pulse_path)
+    pulse = data['pulse'].to_numpy()
+    pulse_diff = np.insert(np.diff(pulse), 0, 0.)
+    # pulse_diff = np.diff(pulse)
+    tlist = data['time'].to_numpy()
+    pulse_length = len(pulse)
+
+    obses, acts, rews, fids = ZCQPEE.evaluate_pulse(pulse_path, save_path='/home/leander/code/rlquantopt/rlquantopt/rl_envs', render=False, n_time_steps=2, T=tlist[-1], action_scaling=dict(z=1), pulse_length=pulse_length, fid_thresh=0.99, tv_penalty_scale=0)
+
+    tlist2 = np.linspace(tlist[0], tlist[-1], len(rews))
+    print(len(rews), len(pulse))
+    fig, axs = plt.subplots(3)
+    ax = axs[0]
+    t_max = tlist2[np.argmax(fids)]
+    ax.set_title(f'Max fidelity = {max(fids) * 100:.2f}%  @ {t_max:.2f}ns')
+    ax.plot(tlist2, rews, c='g', label='Reward', marker='.')
+    ax.axvline(t_max, color='k', ls='--')
+    ax.axhline(0.0, c='k')
+    ax = axs[1]
+    ax.plot(tlist2, fids, c='k', label='Fidelity', marker='.')
+    ax.axvline(t_max, color='k', ls='--')
+    ax = axs[2]
+    ax.plot(tlist, pulse, c='r', label='Pulse amplitude', marker='.')
+    for ax in axs:
+        ax.legend(loc='best')
+    plt.show()
 
 
 if __name__ == '__main__':
-    import os
-    # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
-    par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs'
-    pulse_file = os.path.join(par_dir, 'data_lilmc.csv')
-    save_path = os.path.join(par_dir, 'data_lilmc.mp4')
-    ZCQPEE.evaluate_pulse(pulse_file, save_path)
+    test_mkrauss_pulse()
