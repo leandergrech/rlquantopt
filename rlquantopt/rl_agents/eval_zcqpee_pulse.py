@@ -16,29 +16,15 @@ def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - evaluating RL agent on ZCQPEE environment')
     # ZCQPEE parameters
     parser.add_argument('pulse_path', type=str, help='Path to pulse CSV file')
-    # parser.add_argument('env_yml_path', type=str, help='Path to environment YAML file')
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
-    # parser.add_argument('--n_eps', type=int, help='Nb. of evaluation episodes', default=1)
-    # parser.add_argument('-r', action='store_true', help='Render the episode/s')
-    # parser.add_argument('-v', '--verbose', type=int, default=2,
-    #                     help='Levels of analysis detail to perform on the pulse.\n'
-    #                          'Level 0 - no analysis\n'
-    #                          'Level 1 - plot rewards\n'
-    #                          'Level 2 - plot rewards & fidelity/infidelities\n'
-    #                          'Level 3 - plot rewards & a holistic projection of the synchronicity of felicity. Need to buy tarot cards.')
 
     return parser.parse_args()
 
+
 def main():
     args = parse_args()
-    # n_eps = args.n_eps
-    # render = args.r
-    # verbose = args.verbose
     pulse_path = args.pulse_path
-    # pulse_path = '../rl_envs/configs/data_mkrauss/pulse_bad_guess.csv'
-    # pulse_path = '../rl_envs/configs/data_lilmc/data_lilmc.csv'
     pulse_dir = os.path.abspath(os.path.dirname(pulse_path))
-    # pulse_name = os.path.splitext(os.path.basename(pulse_path))[0]
 
     if (save_dir := args.save_dir) == '':
         save_dir = pulse_dir
@@ -48,7 +34,7 @@ def main():
         os.makedirs(res_save_dir)
 
     model_params = {}
-    model_params = setup_ZCQubits4MKrauss_params(model_params)
+    model_params = setup_ZCQubits4MKrauss_params(**model_params)
     test_step(model_params=model_params, pulse_file=pulse_path, save_dir=res_save_dir)
     test_full(model_params=model_params, pulse_file=pulse_path, save_dir=res_save_dir)
 

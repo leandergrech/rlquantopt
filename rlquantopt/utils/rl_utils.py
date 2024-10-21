@@ -10,6 +10,18 @@ from stable_baselines3.common import type_aliases
 from stable_baselines3.common.vec_env import DummyVecEnv, VecEnv, VecMonitor, is_vecenv_wrapped
 
 
+def linear_schedule(init_value):
+    def func(x):
+        return init_value * x
+    return func
+
+
+def harmonic_schedule(init_value=3e-4, k=10**0.5, tau=1):
+    def func(x):
+        return init_value / (1. + (k * (1 - x*tau)))
+    return func
+
+
 def gen_env_yaml(env_type, pulse_path, save_dir, ret_pulse=True, override_env_kw=None):
     tlist, pulse = get_pulse_data(pulse_path)
 
@@ -30,7 +42,7 @@ def gen_env_yaml(env_type, pulse_path, save_dir, ret_pulse=True, override_env_kw
         return save_path
 
 
-def get_pulse_data(pulse_path):
+def get_pulse_data(pulse_path, verbose=False):
     data = pd.read_csv(pulse_path, index_col=0)
     col_keys = list(data.keys())
     if len(col_keys) < 2:
@@ -46,9 +58,19 @@ def get_pulse_data(pulse_path):
             continue
     if tkey is None or vkey is None:
         raise Exception("There's something f***ed with the CSV pulse file.")
-    return data[tkey].to_numpy(), data[vkey].to_numpy()
+
+    tlist = data[tkey].to_numpy()
+    amplist = data[vkey].to_numpy()
+    if verbose:
+        print(f'Pulse time: {tlist[0]:.4f}ns -> {tlist[-1]:.4f}ns; ΔT: {tlist[1]:.4f}ns')
+        print(f'Pulse amps: min={min(amplist)}, max={max(amplist)}; PL: {len(amplist)}')
+
+    return tlist, amplist
 
 
+'''
+DEPRECATED
+'''
 def evaluate_policy(
     model: "type_aliases.PolicyPredictor",
     env: Union[gym.Env, VecEnv],

@@ -18,7 +18,9 @@ def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - evaluating RL agent on ZCQPEE environment')
     # ZCQPEE parameters
     parser.add_argument('model_zip', type=str, nargs='+', help='Path to model zip file')
-    parser.add_argument('-a', '--algo', type=str, default='RecurrentPPO', help='Type of RL algorithm')
+    parser.add_argument('-a', '--algo', type=str, default='PPO', help='Type of RL algorithm')
+    parser.add_argument('-x', '--max-t', type=float, default=300., help='')
+
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
     parser.add_argument('-e', '--env-yml-dir', type=str, default='', help='Directory containing only one yaml file with env arguments. Default, model directory.')
     parser.add_argument('--no-term', action='store_true', help='Keep running episode until the end of the pulse not until termination.')
@@ -44,7 +46,7 @@ def main():
     # assert not (no_term and clip_best), "You can either evaluate until end of pulse (--no-term) OR until best performance observed (--clip-best)."
 
     model_zips = args.model_zip
-    # model_zips = 'ZCQPEE_pl-1000_T-300.0ns_delta_mode-RecurrentPPO/18-09-24_153038/best_model/best_model.zip'
+    # model_zips = 'ZCQPEE_pl-2000_T-300ns_delta_mode-PPO/24-09-24_013133/rl_model_8667136_steps.zip'
     if isinstance(model_zips, (list, tuple)):
         for item in model_zips:
             if not isinstance(item, str):
@@ -118,43 +120,59 @@ def main():
             pulse = [prev_amp]
             lstm_states = None
             episode_starts = np.ones((1,), dtype=bool)
-            while not (term or trunc):
+            # while not (term or trunc):
+            while not term:
                 idx += 1
                 if 'Recurrent' in algo_str:
                     a, lstm_states = model.predict(obs, state=lstm_states, episode_start=episode_starts, deterministic=True)
                 else:
                     a = model.predict(obs, deterministic=True)[0]
-                # a += np.random.normal(0, 1e-3, env.n_act)
+
                 obs, r, term, trunc, info = env.step(a, can_early_term=(not no_term))
 
                 a_denorm = env.denorm_action(a).reshape(env.N_TIME_STEPS)
                 if env.delta_mode:
-                    prev_amp += sum(a_denorm)
-                    # prev_amp += a_denorm
+                    amp_abs_denorm = prev_amp + np.cumsum(a_denorm)
                 else:
-                    prev_amp = a_denorm
-                pulse.append(prev_amp)
+                    amp_abs_denorm = a_denorm
+                prev_amp = amp_abs_denorm[-1]
+                pulse.extend(amp_abs_denorm)
 
                 rews.append(r)
                 if verbose > 3:
                     pbar.update(1)
 
-            max_fid = max(env.fidelities) * 100
+
 
             infidelities = 1 - np.array(env.fidelities)
             infidelities *= 100.
 
-            tlist2 = np.linspace(0, env.T, len(infidelities))
-            idx_best = np.argmin(infidelities)
-            t_best = tlist2[idx_best]
+            tlist_coarse = np.arange(len(infidelities)) * env.dt * env.N_TIME_STEPS
+            tlist_fine = np.arange(len(pulse)) * env.dt
+            if args.max_t == 300:
+                idx_best_coarse = np.argmin(infidelities)
+                t_best = tlist_coarse[idx_best_coarse]
+                idx_best_fine = np.searchsorted(tlist_fine, t_best)
+            else:
+                t_best = args.max_t
+                idx_best_coarse = np.searchsorted(tlist_coarse, t_best)
+                idx_best_fine = np.searchsorted(tlist_fine, t_best)
 
             if clip_best:
-                ep_len = idx_best + 1
+                ep_len_short = idx_best_coarse + 1
+                ep_len_long = idx_best_fine + 1
             else:
-                ep_len = len(infidelities)
-            tlist2 = tlist2[:ep_len]
+                ep_len_short = len(infidelities)
+                ep_len_long = len(pulse)
+            tlist_coarse = tlist_coarse[:ep_len_short]
+            tlist_fine = tlist_fine[:ep_len_long]
+            pulse = pulse[:ep_len_long]
+            infidelities = infidelities[:ep_len_short]
+            fidelities  = np.array(env.fidelities[:ep_len_short]) * 100.
+            rews = rews[:ep_len_short]
 
-            title = f'Best infidelity {min(infidelities)/100.:.3e}\nFidelity={max_fid:.3f}% @ T={t_best:.1f}ns PL={idx_best + 1} Δt={t_best/(idx_best + 1):.3f}ns'
+            max_fid = env.fidelities[idx_best_coarse] * 100.
+            title = f'Best infidelity {100.-max_fid:.3e}\nFidelity={max_fid:.3f}% @ T={t_best:.1f}ns PL={idx_best_coarse + 1} Δt={t_best/(idx_best_coarse + 1):.3f}ns'
             if verbose > 0:
                 print(f'Model: {model_zip}; Ep: {i}')
                 print(title + '\n')
@@ -162,7 +180,7 @@ def main():
             if verbose > 1:
                 fig, ax = plt.subplots(figsize=(15, 10))
                 fig.suptitle(title)
-                ax.plot(tlist2, infidelities[:ep_len], c='k')
+                ax.plot(tlist_coarse, infidelities, c='k')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Infidelity (%)')
                 ax.set_yscale('log')
@@ -170,13 +188,13 @@ def main():
                 ax.grid(which='minor', linestyle=':', color='lightgrey', linewidth=0.5)
 
                 axx = ax.twinx()
-                axx.plot(tlist2, np.array(env.fidelities[:ep_len]) * 100., c='g')
+                axx.plot(tlist_coarse, fidelities, c='g')
                 axx.set_ylabel('Fidelity (%)', color='g')
                 axx.spines['right'].set_color('g')
                 axx.tick_params(axis='y', colors='g', color='g')
 
                 axx.axhline(max_fid, c='g', linestyle='--', linewidth=0.5)
-                axx.axvline(tlist2[np.argmax(env.fidelities)], c='g', linestyle='--', linewidth=0.5)
+                axx.axvline(tlist_coarse[idx_best_coarse], c='g', linestyle='--', linewidth=0.5)
 
                 save_path = os.path.join(res_save_dir, f'{save_name}_Fmax-{max_fid:.2f}_fid_vs_infid_plot.pdf')
                 if verbose > 2:
@@ -188,7 +206,7 @@ def main():
                 # print(f'Max. Fidelity = {max_fid:.2f}%')
                 fig, ax = plt.subplots(figsize=(15,10))
                 fig.suptitle(title)
-                ax.plot(tlist2, rews[:ep_len], c='tab:orange')
+                ax.plot(tlist_coarse, rews[:ep_len_short], c='tab:orange')
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Reward')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
@@ -202,7 +220,7 @@ def main():
                 fig, axs = plt.subplots(2, figsize=(15,10))
                 fig.suptitle(title)
                 ax = axs[0]
-                ax.plot(tlist2, pulse[:ep_len], c='k', lw=0.2)
+                ax.plot(tlist_fine, pulse, c='k', lw=0.2)
                 ax.set_xlabel('Time [ns]')
                 ax.set_ylabel('Pulse amplitude')
                 ax.grid(which='major', linestyle='--', color='grey', linewidth=1)
@@ -215,7 +233,7 @@ def main():
 
                 fabsamps = np.abs(famps)
                 faseamps = np.angle(famps)
-                thresh = 0.1 * np.max(fabsamps)
+                thresh = 0.25 * np.max(fabsamps)
                 spike_idces = np.where(fabsamps > thresh)[0].astype(int)
                 print(len(fabsamps))
                 spike_freqs = [flist[item] for item in spike_idces]
@@ -227,6 +245,7 @@ def main():
                 ax.set_xlabel('Frequency [GHz]')
                 ax.set_ylabel('Amplitude')
                 axx = ax.twinx()
+                ax.set_yscale('log')
                 axx.plot(flist, faseamps, c='grey', ls=':', lw=0.5)
                 axx.set_ylabel('Phase')
                 # plt.show()
@@ -242,11 +261,10 @@ def main():
             # tlist = np.arange(len(pulse)) * env.dt
             # pulse = [env.denorm_action(item) for item in pulse]
 
-            tlist = env.tlist
             # Save pulse to CSV
             dat = pd.DataFrame()
-            dat['amplist'] = pulse[:ep_len]
-            dat['tlist'] = tlist[:ep_len]
+            dat['amplist'] = pulse
+            dat['tlist'] = tlist_fine
             dat.to_csv(os.path.join(res_save_dir, f'{save_name}.csv'))
 
             if render:
@@ -254,7 +272,7 @@ def main():
                 print(f'Saving animations in: {mp4_save_path}')
                 env.render(save_path=mp4_save_path)
 
-            exit(23)
+            # exit(23)
 
 
 if __name__ == '__main__':

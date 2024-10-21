@@ -7,6 +7,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from qutip import QobjEvo, SESolver, expect
 from qutip.core import destroy, identity, tensor, Qobj, ket
+# from rlquantopt.tests.zcqpee_tests import step_states
 from scipy.interpolate import interp1d, CubicSpline
 from scipy.optimize import minimize
 import pandas as pd
@@ -50,8 +51,8 @@ def fidelity(A, B) -> float:
     return f[0, 0]
 
 
-def setup_ZCQubits4MKrauss_params(model_params):
-    model_params = model_params if model_params is not None else {}
+def setup_ZCQubits4MKrauss_params(**model_params):
+    # model_params = model_params if model_params is not None else {}
     ret_model_params = dict()
     ret_model_params["omega_s"] = model_params.get("omega_s", [6.0, 5.9])
     ret_model_params["alpha_s"] = model_params.get("alpha_s", [-290e-3, -310e-3])
@@ -59,12 +60,47 @@ def setup_ZCQubits4MKrauss_params(model_params):
     ret_model_params["alpha_c"] = model_params.get("alpha_c", -200e-3)
     ret_model_params["omega_r"] = model_params.get("omega_r", 6.2)
     ret_model_params["omega_c_0"] = model_params.get("omega_c_0", 6.7)
-    ret_model_params["n_levels"] = model_params.get("n_levels", 3)
-    ret_model_params["num_qubits"] = model_params.get("num_qubits", 2)
+    ret_model_params["n_levels"] = n_levels = model_params.get("n_levels", 3)
+    ret_model_params["num_qubits"] = num_qubits = model_params.get("num_qubits", 2)
     ret_model_params["coupler_dims"] = model_params.get("coupler_dims", 3)
-    ret_model_params["qubit_dims"] = [ret_model_params["n_levels"]] * ret_model_params["num_qubits"]
+    ret_model_params["qubit_dims"] = [n_levels] * num_qubits
 
     return ret_model_params
+
+
+def setup_iswap_problem(**model_params):
+    qubit_dims = model_params.get('qubit_dims')
+    coupler_dims = model_params.get('coupler_dims')
+
+    full_dims = qubit_dims.copy()
+    full_dims.append(coupler_dims)
+
+    # 2 computational qubits
+    psi00 = ket((0, 0, 0), dim=full_dims)
+    psi01 = ket((0, 1, 0), dim=full_dims)
+    psi10 = ket((1, 0, 0), dim=full_dims)
+    psi11 = ket((1, 1, 0), dim=full_dims)
+    basis_states = [psi00, psi01, psi10, psi11]
+
+    # iSWAP gate
+    U = Qobj(np.array([
+        [1, 0, 0, 0],
+        [0, 0, 1j, 0],
+        [0, 1j, 0, 0],
+        [0, 0, 0, 1]
+    ]), dims=[[2, 2], [2, 2]])
+
+    mapped_basis_states = [sum(U[i, j] * basis_states[i]
+                               for i in range(U.shape[0])) for j in range(U.shape[1])]
+
+    for i, state in enumerate(mapped_basis_states):
+        for j, basis_state in enumerate(basis_states):
+            if state == basis_state:
+                mapped_basis_states[i] = basis_state
+    target_states = mapped_basis_states.copy()
+    e_ops = [state.proj() for state in target_states]
+
+    return basis_states, target_states, e_ops
 
 
 class ZCQubits:
@@ -627,80 +663,112 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
     pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
     pulse_dir = os.path.dirname(pulse_file)
-    if 'mkrauss' in pulse_dir:
-        amp_scale = 2.
-    else:
-        amp_scale = 1.
+    # if 'mkrauss' in pulse_dir:
+    #     amp_scale = 2.
+    # else:
+    amp_scale = 1.
     if save_dir is None:
         save_dir = pulse_dir
-    tlist, pulse = get_pulse_data(pulse_file)
-    print(f'T={tlist[-1]}')
-
-    num_qubits = 2  # KEEP 2
-    qubit_dims = [3, 3]
-    coupler_dims = 3
-
-    full_dims = qubit_dims.copy()
-    full_dims.append(coupler_dims)
-
-    psi00 = ket((0, 0, 0), dim=full_dims)
-    psi01 = ket((0, 1, 0), dim=full_dims)
-    psi10 = ket((1, 0, 0), dim=full_dims)
-    psi11 = ket((1, 1, 0), dim=full_dims)
-
-    basis_states = [psi00, psi01, psi10, psi11]
-
-    unitary = Qobj(np.array([
-        [1, 0, 0, 0],
-        [0, 0, 1j, 0],
-        [0, 1j, 0, 0],
-        [0, 0, 0, 1]
-    ]), dims=[[2, 2], [2, 2]])
-
-    target_states = [sum(unitary[i, j] * basis_states[i]
-                         for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
+    tlist, pulse = get_pulse_data(pulse_file, verbose=True)
 
     model = ZCQubits(**model_params)
+    basis_states, target_states, e_ops = setup_iswap_problem(**model_params)
 
     """
     RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
     """
-    H = QobjEvo([model.drift, [model.control, lambda t, A: A]], args={'A': 0.})
-    solver = [SESolver(H) for _ in range(4)]
-    e_ops = [state.proj() for state in basis_states]
+    # s = basis_states.copy()
+    # states = [[s[i]] for i in range(len(basis_states))]
+    states = np.array(basis_states).copy().reshape(-1, 1).tolist()
 
-    f = []
+    solver = [SESolver(model.H) for _ in range(len(basis_states))]
+
+    # reset function
+    # f = []
     all_f = []
     expectations = []
-    s = basis_states.copy()
-    states = [[s[i]] for i in range(len(basis_states))]
-    for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
-        l = [[expect(e, basis_state)] for e in e_ops]
+
+    step_states = basis_states.copy()
+
+    for k, basis_state in enumerate(basis_states):
+        solver[k].start(basis_state, 0)
+        l = [[expect(e, step_states[k])] for e in e_ops]
         all_f.append([])
-        fid = 0.
-        solver[k].start(s[k], 0)
-        for i, t in enumerate(tlist[1:]):
-            cur_amp = pulse[i] * amp_scale
-            t = tlist[i]
-            s_ = solver[k].step(t, args={'A': cur_amp})
-            s[k] = s_
-            states[k].append(s_)
-            for j, e in enumerate(e_ops):
-                l[j].append(expect(e, s_))
-            fid = fidelity(s_, target_state)
-            all_f[-1].append(fid)
-        f.append(fid)
         expectations.append(l)
 
+    # Iterate over the pulse amplitudes per time-step
+    for i, (cur_amp, t) in enumerate(zip(pulse, tlist)):
+        if i == 0:
+            continue
+
+        cur_amp *= amp_scale
+
+        # Episode step function
+        for k, target_state in enumerate(target_states):
+
+            s_ = solver[k].step(t, args={'A': cur_amp})
+            # s[k] = s_
+            step_states[k] = s_
+            states[k].append(s_)
+            for j, e in enumerate(e_ops):
+                expectations[k][j].append(expect(e, s_))
+            fid = fidelity(s_, target_state)
+            all_f[k].append(fid)
+
+
+    # for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
+    #     l = [[expect(e, basis_state)] for e in e_ops]
+    #     all_f.append([])
+    #     fid = 0.
+    #     solver[k].start(basis_state, 0)
+    #     for i, t in enumerate(tlist[1:]):
+    #         cur_amp = pulse[i + 1] * amp_scale
+    #         t = tlist[i]
+    #         s_ = solver[k].step(t, args={'A': cur_amp})
+    #         # s[k] = s_
+    #         states[k].append(s_)
+    #         for j, e in enumerate(e_ops):
+    #             l[j].append(expect(e, s_))
+    #         fid = fidelity(s_, target_state)
+    #         all_f[-1].append(fid)
+    #     f.append(fid)
+    #     expectations.append(l)
+
     print('Step pulse')
-    res_str = f"Final fidelities={f}, Mean={np.mean(f)*100.:.2f}%"
+    avg_fidelities = np.mean(all_f, axis=0)
+    res_str = f"Max fidelities={np.max(all_f, axis=1)}, Max mean fidelity={np.max(avg_fidelities)*100.:.2f}%"
     print(res_str)
 
     if plot:
         title = f'RL step pulse ({pulse_name})\npulse length = {len(pulse)} ; T={tlist[-1]}ns\n{res_str}'
-        fig, ax = plt.subplots()
+        fig, axs = plt.subplots(2)
+        ax = axs[0]
         ax.plot(tlist, pulse)
         ax.set_title(title)
+
+        famps = np.fft.fft(pulse)[1:]
+        dt = tlist[1]
+        flist = np.linspace(-1 / (2 * dt), 1 / (2 * dt), len(famps))
+
+        ax = axs[1]
+        fabsamps = np.abs(famps)
+        faseamps = np.angle(famps)
+        thresh = 0.25 * np.max(fabsamps)
+        spike_idces = np.where(fabsamps > thresh)[0].astype(int)
+        print(len(fabsamps))
+        spike_freqs = [flist[item] for item in spike_idces]
+        spike_amps = [fabsamps[item] for item in spike_idces]
+        ax.plot(flist[1:], fabsamps[1:], c='b', lw=0.5)
+        ax.scatter(spike_freqs, spike_amps, marker='^', color='r')
+        for freq, amp in zip(spike_freqs, spike_amps):
+            ax.text(freq, amp, f'{freq:.2f}GHz', fontsize=8, ha='center', color='r')
+        ax.set_xlabel('Frequency [GHz]')
+        ax.set_ylabel('Amplitude')
+        axx = ax.twinx()
+        ax.set_yscale('log')
+        axx.plot(flist, faseamps, c='grey', ls=':', lw=0.5)
+        axx.set_ylabel('Phase')
+
         fig.savefig(os.path.join(save_dir, f'{pulse_name}_pulse-step.pdf'))
 
         fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(16, 8))
@@ -722,52 +790,52 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
 def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
     pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
     pulse_dir = os.path.dirname(pulse_file)
-    if 'mkrauss' in pulse_dir:
-        amp_scale = 2.
-    else:
-        amp_scale = 1.
+    # if 'mkrauss' in pulse_dir:
+    #     amp_scale = 2.
+    # else:
+    # amp_scale = 1.
     if save_dir is None:
         save_dir = pulse_dir
 
-    tlist, pulse = get_pulse_data(pulse_file)
-    print(f'T={tlist[-1]}')
+    tlist, pulse = get_pulse_data(pulse_file, verbose=True)
+    basis_states, target_states, e_ops = setup_iswap_problem(**model_params)
 
-    full_dims = model_params["qubit_dims"].copy()
-    full_dims.append(model_params["coupler_dims"])
-
-    psi00 = ket((0, 0, 0), dim=full_dims)
-    psi01 = ket((0, 1, 0), dim=full_dims)
-    psi10 = ket((1, 0, 0), dim=full_dims)
-    psi11 = ket((1, 1, 0), dim=full_dims)
-
-    basis_states = [psi00, psi01, psi10, psi11]
-
-    unitary = Qobj(np.array([
-        [1, 0, 0, 0],
-        [0, 0, 1j, 0],
-        [0, 1j, 0, 0],
-        [0, 0, 0, 1]
-    ]), dims=[[2, 2], [2, 2]])
-
-    target_states = [sum(unitary[i, j] * basis_states[i]
-                         for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
+    # full_dims = model_params["qubit_dims"].copy()
+    # full_dims.append(model_params["coupler_dims"])
+    #
+    # psi00 = ket((0, 0, 0), dim=full_dims)
+    # psi01 = ket((0, 1, 0), dim=full_dims)
+    # psi10 = ket((1, 0, 0), dim=full_dims)
+    # psi11 = ket((1, 1, 0), dim=full_dims)
+    #
+    # basis_states = [psi00, psi01, psi10, psi11]
+    #
+    # unitary = Qobj(np.array([
+    #     [1, 0, 0, 0],
+    #     [0, 0, 1j, 0],
+    #     [0, 1j, 0, 0],
+    #     [0, 0, 0, 1]
+    # ]), dims=[[2, 2], [2, 2]])
+    #
+    # target_states = [sum(unitary[i, j] * basis_states[i]
+    #                      for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
 
     model = ZCQubits(**model_params)
 
     """
     RUNNING FULL PULSE AT ONCE, starting from each basis_state, respectively
     """
-    # TODO: fuck around with tlist so it's faster
-    H = QobjEvo([model.drift, [model.control, np.multiply(pulse, amp_scale)]], args={}, tlist=tlist, order=0)
-    solver = SESolver(H, options=dict(store_final_state=True))
+    # TODO: mess around with tlist so it's faster
+    H = QobjEvo([model.drift, [model.control, pulse]], args={}, tlist=tlist)
+    solvers = [SESolver(H, options=dict(store_final_state=True)) for _ in basis_states]
 
     # noinspection PyUnresolvedReferences
     e_ops = [state.proj() for state in target_states]
-    results = [solver.run(basis_state, tlist, e_ops=e_ops) for basis_state in basis_states]
+    results = [solvers[k].run(basis_state, tlist, e_ops=e_ops) for k, basis_state in enumerate(basis_states)]
 
     states = [res.final_state for res in results]
 
-    f = [fidelity(s, t) for s, t in zip(states, target_states)]
+    f = [fidelity(s_, t_) for s_, t_ in zip(states, target_states)]
     expectations = [res.expect for res in results]
 
     print('Full pulse')
@@ -800,6 +868,6 @@ if __name__ == "__main__":
     save_dir = os.path.splitext(pulse_file)[0]
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    test_full(pulse_file=pulse_file, save_dir=save_dir)
-    test_step(pulse_file=pulse_file, save_dir=save_dir)
+    test_step(pulse_file=pulse_file, save_dir=save_dir, model_params=setup_ZCQubits4MKrauss_params())
+    test_full(pulse_file=pulse_file, save_dir=save_dir, model_params=setup_ZCQubits4MKrauss_params())
     # main()

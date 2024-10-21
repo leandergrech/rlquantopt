@@ -1,4 +1,5 @@
 import os
+import re
 from abc import ABC
 import random
 import string
@@ -224,14 +225,36 @@ def get_val(qvf: QFuncBaseClass, state, nb_actions):
     return np.max([qvf.value(state, a_) for a_ in range(nb_actions)])
 
 
+# def get_latest_experiment(lab_dir, pattern='sarsa', offset=0):
+#     experiments = []
+#     for fn in os.listdir(lab_dir):
+#         if pattern in fn and fn.endswith('.zip'):
+#             experiments.append(fn)
+#     experiments = sorted(experiments)
+#
+#     experiment_name = experiments[-1-offset]
+#
+#     return os.path.join(lab_dir, experiment_name)
+
 def get_latest_experiment(lab_dir, pattern='sarsa', offset=0):
     experiments = []
-    for fn in os.listdir(lab_dir):
-        if pattern in fn:
-            experiments.append(fn)
-    experiments = sorted(experiments)
 
-    experiment_name = experiments[-1-offset]
+    # Regex to extract the step number from the filename
+    step_pattern = re.compile(r'_([\d]+)_steps\.zip')
+
+    for fn in os.listdir(lab_dir):
+        if pattern in fn and fn.endswith('.zip'):
+            # Find the step number in the filename
+            match = step_pattern.search(fn)
+            if match:
+                step_number = int(match.group(1))  # Extract and convert to integer
+                experiments.append((fn, step_number))
+
+    # Sort based on the step number (second element of the tuple)
+    experiments = sorted(experiments, key=lambda x: x[1])
+
+    # Get the filename of the latest experiment considering the offset
+    experiment_name = experiments[-1 - offset][0]
 
     return os.path.join(lab_dir, experiment_name)
 

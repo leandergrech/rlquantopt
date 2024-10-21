@@ -1,46 +1,21 @@
-import os
-import shutil
 import argparse
-import json
-from gymnasium.wrappers import NormalizeReward, NormalizeObservation
-import torch as tc
-from datetime import datetime as dt
-
-from jupyter_core.version import pattern
-from sb3_contrib import RecurrentPPO, TRPO
-from stable_baselines3.common.logger import configure
-from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.callbacks import CheckpointCallback, StopTrainingOnNoModelImprovement
-from stable_baselines3 import PPO, SAC
-from stable_baselines3.sac.policies import SACPolicy
-
-# from rlquantopt.rl_agents.qpee_sb3_training import ppo_learning_rate
-from rlquantopt.rl_envs.zc_qpee import ZCQPEE
-from rlquantopt.rl_agents.callbacks import EvalCallback
-from rlquantopt.utils.utils import get_latest_experiment
-from rlquantopt.utils.rl_utils import linear_schedule, harmonic_schedule
-
-
-DT_FMT_STR = '%d-%m-%y_%H%M%S'
 
 
 def parse_args():
-    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
+    parser = argparse.ArgumentParser('RLQuantOpt - meta-training MAML agent on ZCQPEE environment')
     # ZCQPEE parameters
     parser.add_argument('-p', '--pulse-length', default=500, type=int, help='Maximum number of samples in a pulse')
     # parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
     parser.add_argument('-T', '--max-time-ns', default=300.0, type=float, help='Pulse duration in ns')
     parser.add_argument('-N', '--n-time-steps', default=3, type=int, help='Number of time-steps per action')
     parser.add_argument('--tv-penalty-scale', default=1e-1, type=float, help='Number of time-steps per action')
-    parser.add_argument('-o', '--act-poly-order', default=1, type=float, help='Order of action transformation polynomial ')
-    parser.add_argument('-a', '--add-prev-obs', action='store_true', help='Add previous observable w/o the action and time, to the current observable.')
-    parser.add_argument('--a-scale', default=0.5, type=float, help='Set action scaling during normalisation')
-    parser.add_argument('--a-norm-max', default=1.0, type=float, help='Set the maximum normalised amplitude when using delta-mode')
-    parser.add_argument('--rew-scale', default=1., type=float, help='Multiply reward by rew_scale after each step')
+    parser.add_argument('--a-scale', default=1., type=float, help='Set action scaling during normalisation')
+    parser.add_argument('--a-norm-max', default=5.0, type=float, help='Set the maximum normalised amplitude when using delta-mode')
+    parser.add_argument('--rew-scale', default=10., type=float, help='Multiply reward by rew_scale after each step')
     parser.add_argument('--fid-thresh', default=0.99, type=float, help='Set goal fidelity threshold')
 
     # RL agent paramters
-    parser.add_argument('--algo', type=str, default='TRPO', help='Type of RL agent')
+    parser.add_argument('--algo', type=str, default='PPO', help='Type of RL agent')
     n_steps = 2048
     n_envs = 8
     parser.add_argument('--n-steps', type=int, default=n_steps, help='The number of steps to run for each environment per update'
@@ -49,7 +24,7 @@ def parse_args():
                              'See https://github.com/pytorch/pytorch/issues/29372')
     parser.add_argument('--n-epochs', type=int, default=10, help='Number of epoch when optimizing the surrogate loss')
     parser.add_argument('--ent-coef', type=float, default=0, help='Entropy coefficient for the loss calculation')
-    parser.add_argument('--batch-size', type=int, default=128, help='Mini-batch size')
+    parser.add_argument('--batch-size', type=int, default=64, help='Mini-batch size')
     # parser.add_argument('--batch-size', type=int, default=256, help='Mini-batch size')  # SAC
     parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor')
     parser.add_argument('--seed', default=123, type=int, help='Set random seed')
@@ -65,30 +40,14 @@ def parse_args():
     parser.add_argument('--msg', default='', type=str, help='User message to add to info.txt')
     parser.add_argument('-L', '--hidden-layer-size', default=128, type=int, help='Network hidden layer size. All layers are equal size')
     parser.add_argument('-H', '--n-hidden-layers', default=2, type=int, help='Nb. of hidden layers in last layer MLP')
+    # parser.add_argument('--lstm_hidden_size', default=256, type=int, help='LSTM network hidden layer size. All layers are equal size')
+    # parser.add_argument('--n-lstm-layers', default=2, type=int, help='Nb. of hidden layers in LSTM module')
 
     # Fine-tuning an existing model
     parser.add_argument('-r', '--retrain-model', type=str, default=None,
                         help='By passing the path the model directory where the zip files are located, you are instructing to continue training with these new parameters')
 
     return parser.parse_args()
-
-
-def copy_scripts_to_model_path(model_path):
-
-    save_dir = os.path.join(model_path, 'saved_scripts')
-    os.makedirs(save_dir, exist_ok=True)
-
-    def copy_file_to_dir(file_path):
-        nonlocal save_dir
-        file_name = os.path.basename(file_path)
-        shutil.copy(file_path, os.path.join(save_dir, file_name))
-
-    import rlquantopt.rl_envs.zcqubits as temp
-    copy_file_to_dir(temp.__file__)
-    import rlquantopt.rl_envs.zc_qpee as temp
-    copy_file_to_dir(temp.__file__)
-    import rlquantopt.rl_agents.train_zcqpee_sb3 as temp
-    copy_file_to_dir(temp.__file__)
 
 
 def main():
@@ -103,9 +62,7 @@ def main():
                   action_scaling={'z': float(args.a_scale)},
                   a_norm_max=float(args.a_norm_max),
                   n_time_steps=args.n_time_steps,
-                  tv_penalty_scale=args.tv_penalty_scale,
-                  act_poly_order=args.act_poly_order,
-                  add_prev_obs=args.add_prev_obs)
+                  tv_penalty_scale=args.tv_penalty_scale)
     n_envs = args.n_envs
     gamma = args.gamma
 
@@ -122,10 +79,8 @@ def main():
     print(f'n_obs={eval_env.n_obs}\tn_act={eval_env.n_act}')
 
     # Parameter setup
-    learning_rate = harmonic_schedule(init_value=3e-4, k=10**0.4)
+    learning_rate = harmonic_schedule(init_value=3e-4, k=10 ** 0.4)
     lr_type = 'Harmonic decay'
-    # learning_rate = 3e-4
-    # lr_type = 'Constant'
     ppo_clip_range = lambda x: 0.2
     # ppo_learning_rate = 3e-4
 
@@ -151,7 +106,7 @@ def main():
     algo_str = args.algo
 
     # Network architecture setup
-    net_arch = dict(pi=[L]*H, vf=[L]*H)
+    net_arch = dict(pi=[L] * H, vf=[L] * H)
     if 'SAC' in algo_str: net_arch['qf'] = net_arch.pop('vf')
     policy_kwargs = dict(activation_fn=tc.nn.ReLU,
                          net_arch=net_arch
@@ -173,7 +128,8 @@ def main():
                        gamma=gamma, seed=SEED, verbose=1)
     elif algo_str == 'SAC':
         algo = SAC
-        algo_kw = dict(learning_starts=1000, train_freq=(10, 'step'), batch_size=batch_size, learning_rate=learning_rate,
+        algo_kw = dict(learning_starts=1000, train_freq=(10, 'step'), batch_size=batch_size,
+                       learning_rate=learning_rate,
                        device=device, gamma=gamma, seed=SEED, verbose=1)
     elif algo_str == 'RecurrentPPO':
         algo = RecurrentPPO
@@ -204,7 +160,7 @@ def main():
         model_checkpoint = get_latest_experiment(model_path, pattern='rl_model_')
         eval_env.from_yaml(ZCQPEE.find_yaml_in_dir(model_path))
         # for k, v in env_kw.items():
-            # assert eval_env.model_params[k] == v, f'New vs. original training env mismatch! New training env parameters don\'t match the original environment parameters: New {k}: {v} != Original {k}: {eval_env.model_params[k]}'
+        # assert eval_env.model_params[k] == v, f'New vs. original training env mismatch! New training env parameters don\'t match the original environment parameters: New {k}: {v} != Original {k}: {eval_env.model_params[k]}'
 
     '''
     SAVE INFORMATION ABOUT THIS TRAINING SESSION
@@ -231,7 +187,7 @@ def main():
 
             if not isinstance(ak['learning_rate'], float):
                 ak['learning_rate'] = f'{lr_type} from {learning_rate(1)} -> {learning_rate(0)}'
-            if 'PPO' in algo_str:# or 'TRPO' in algo_str:
+            if 'PPO' in algo_str:  # or 'TRPO' in algo_str:
                 if not isinstance(ak['clip_range'], float):
                     ak['clip_range'] = f'Constant clip range {ppo_clip_range(1)} -> {ppo_clip_range(0)}'
             json.dump(ak, f, indent=10)
@@ -274,9 +230,9 @@ def main():
     '''
     START TRAINING MODEL
     '''
-    print(f'\nTraining {model_name} in {model_path}...\n')
-    model.learn(total_timesteps=n_train, progress_bar=False, log_interval=log_interval, tb_log_name=model_name,
-                callback=[checkpoint_callback, eval_callback], reset_num_timesteps=reset_num_timesteps)
+    # print(f'\nTraining {model_name} in {model_path}...\n')
+    # model.learn(total_timesteps=n_train, progress_bar=False, log_interval=log_interval, tb_log_name=model_name,
+    #             callback=[checkpoint_callback, eval_callback], reset_num_timesteps=reset_num_timesteps)
 
 
 if __name__ == '__main__':

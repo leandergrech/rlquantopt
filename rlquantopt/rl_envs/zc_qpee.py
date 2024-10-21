@@ -24,20 +24,25 @@ class ZCQPEE(Env):
     # Action scaling parameters
     action_scaling = {'z': 1}    # Only applicable in delta_mode==True
     A_norm_max = 5
+    FID_THRESH = 0.99
+
+    ACT_POLY_ORDER = 2          # Action transformation polynomial order, i.e. 1 = linear, 2 = quadratic, etc.
+
+    ADD_PREV_OBS = False
 
     # Rendering parameters
     PREC = 5e-4
-    PLOT_LOG_EPS = 1e-3
+    PLOT_LOG_EPS = 1e-4
     cmap = mpl.colormaps["CMRmap"]
-    FPS = 25
-    DPI = 70
+    FPS = 10
+    DPI = 80
 
     RANDOM_START_PROB = 0.0
     RANDOM_START_STEPS = 10
 
     REW_SCALE = 1
-    N_TIME_STEPS = 1
-    TV_PENALTY_SCALE = 0
+    N_TIME_STEPS = 3
+    TV_PENALTY_SCALE = 0.1
 
     def __init__(self, model_params=None, **env_kwargs):
         """
@@ -53,15 +58,17 @@ class ZCQPEE(Env):
         self.RANDOM_START_STEPS = env_kwargs.get('random_start_steps', self.RANDOM_START_STEPS)
 
         # General parameters
-        self.pulse_length = env_kwargs.get('pulse_length', 2000)
+        self.pulse_length = env_kwargs.get('pulse_length', 500)
         self.delta_mode = env_kwargs.get('delta_mode', True)
         self.T = env_kwargs.get('T', 300)
 
         # Reward rekated parameters
-        self.FID_THRESH = env_kwargs.get('fid_thresh', 0.995)
+        self.FID_THRESH = env_kwargs.get('fid_thresh', self.FID_THRESH)
         self.REW_SCALE = env_kwargs.get('rew_scale', self.REW_SCALE)
         self.REW_THRESH = self._fid2rew(self.FID_THRESH) * self.REW_SCALE
 
+        self.ACT_POLY_ORDER = env_kwargs.get('act_poly_order', self.ACT_POLY_ORDER)
+        self.ADD_PREV_OBS = env_kwargs.get('add_prev_obs', self.ADD_PREV_OBS)
         self.TV_PENALTY_SCALE = env_kwargs.get('tv_penalty_scale', self.TV_PENALTY_SCALE)
 
         # Action related parameters
@@ -74,7 +81,9 @@ class ZCQPEE(Env):
             self.A_norm_max = 1
 
         # Set up model
-        self.model_params = setup_ZCQubits4MKrauss_params(model_params)
+        if model_params is None:
+            model_params = dict()
+        self.model_params = setup_ZCQubits4MKrauss_params(**model_params)
         self.n_levels = self.model_params.get("n_levels")
         self.channel_label = 'z'
         self.simulator = ZCQubits(**self.model_params)
@@ -118,11 +127,16 @@ class ZCQPEE(Env):
         # Set up action space
         self.n_channels = len(self.action_scaling)
         self.action_space = spaces.Box(low=-1, high=1, shape=(self.n_channels, self.N_TIME_STEPS), dtype=np.float32)
-        self.amps_cur = np.zeros(self.n_channels)
+        # self.amps_cur = np.zeros(self.n_channels)
         self.n_act = self.n_channels * self.N_TIME_STEPS
 
         # Set up observation space
-        self.n_obs = 25 + self.N_TIME_STEPS
+        # self.n_obs = 25 + self.N_TIME_STEPS
+        if self.ADD_PREV_OBS:
+            self.n_obs = (24 * 2) + 1 + self.N_TIME_STEPS
+        else:
+            self.n_obs = 25 + self.N_TIME_STEPS
+
         self.observation_space = spaces.Box(low=-1, high=1, shape=(self.n_obs,), dtype=np.float32)
 
         # All initialised after first call to reset method
@@ -132,6 +146,7 @@ class ZCQPEE(Env):
         self.pulse_deltas_denorm: np.ndarray = np.array([])
         self.amps_cur: np.ndarray = np.array([])
         self.step_states: list = []
+        self.prev_step_states: list = []
         self.current_obs: np.ndarray = np.array([])
         self.rewards: list = []
         self.fidelities: list = []
@@ -162,11 +177,17 @@ class ZCQPEE(Env):
             self.pulse_deltas_denorm = self.init_pulse_amplitudes(delta=True)
         self.amps_cur = np.zeros(self.N_TIME_STEPS)
         if init_state is not None:
-            self.step_states = init_state
+            self.prev_step_states = init_state.copy()
+            self.step_states = init_state.copy()
         else:
+            self.prev_step_states = self.initial_states.copy()
             self.step_states = self.initial_states.copy()
 
-        self.current_obs = self.extract_current_cardinal_state(self.step_states).astype(np.float32)
+        if self.ADD_PREV_OBS:
+            self.current_obs = np.concatenate([self.extract_current_cardinal_state(self.prev_step_states, state_only=True), self.extract_current_cardinal_state(self.step_states).astype(np.float32)])
+        else:
+            self.current_obs = self.extract_current_cardinal_state(self.step_states).astype(np.float32)
+
         self.rewards = []
         self.fidelities = []
 
@@ -181,30 +202,20 @@ class ZCQPEE(Env):
 
         return self.current_obs, {}
 
-    def get_current_amp_time_norm_tuple(self, action=None):
+    def get_current_amp_time_norm_tuple(self, action=None, include_time=True):
         obs_ampt = []
         # Add the action
         if action is None:
             obs_ampt.append(np.array([self.amps_cur / self.A_norm_max]).reshape(-1, 1))
         else:
             obs_ampt.append(np.array(action).reshape(-1, 1))
-        # Add the time of current step
-        obs_ampt.append(np.array(self.cur_idx * 2 / self.pulse_length - 1).reshape(-1, 1))
+        if include_time:
+            # Add the time of current step
+            obs_ampt.append(np.array(self.cur_idx * 2 / self.pulse_length - 1).reshape(-1, 1))
 
         return np.concatenate(obs_ampt)
 
-    # def extract_current_state(self, states, action=None, idx=None, state_only=False):
-    #     obs = []
-    #     for state in states:
-    #         if isinstance(state, Qobj):
-    #             state = state.full()
-    #         obs.append(np.concatenate([state.real.copy(), state.imag.copy()]))
-    #     if not state_only:
-    #         obs.extend(self.get_current_amp_time_norm_tuple(action))
-    #     obs = np.concatenate(obs).squeeze()
-    #     return obs.astype(np.float32)
-
-    def extract_current_cardinal_state(self, states, action=None, state_only=False):
+    def extract_current_cardinal_state(self, states, action=None, state_only=False, include_time=True):
         obs = []
         for i, state in enumerate(states):
             if i == 0:
@@ -227,7 +238,7 @@ class ZCQPEE(Env):
                     obs.append(extract_complex(s_))
 
         if not state_only:
-            obs.extend(self.get_current_amp_time_norm_tuple(action))
+            obs.extend(self.get_current_amp_time_norm_tuple(action, include_time=include_time))
 
         obs = np.concatenate(obs).squeeze()
         return obs.astype(np.float32)
@@ -240,29 +251,33 @@ class ZCQPEE(Env):
         SCALE = self.action_scaling['z']
         return np.array(action) * SCALE
 
-    def step(self, action, can_early_term=True):
+    def transform_action(self, action):
+        signs = np.sign(action)
+        # action = np.clip(np.abs(action), 0, 1 - np.exp(-5))
+        # action = -0.2 * np.log(np.ones_like(action) - action)
+        action = np.power(np.abs(action), self.ACT_POLY_ORDER)
+        return signs * action
+
+    def step(self, action, can_early_term=False):
         """
         Add a pulse amplitude delta vector (action) on the previous value of the pulse amplitude.
         :param action: Must be list-like with `self.n_abs` dimensions
         :param can_early_term: If True, episode will terminate iff reward threshold is exceeded. Used during evaluation to get a shorter pulse ...
         :return: observation_tp1, reward, terminated, truncated, info
         """
+        action = self.transform_action(action)  # More expressive around the 0 region
         action = np.array(action).reshape(self.n_channels, self.N_TIME_STEPS)
         action_denorm = self.denorm_action(action)
 
         N = self.N_TIME_STEPS
         if self.delta_mode:
-            try:
-                self.pulse_deltas_denorm[self.cur_idx:self.cur_idx+N] = action_denorm
-            except ValueError as e:
-                print(self.cur_idx)
-                raise e
-            # self.pulse_deltas_denorm.extend(action_denorm)
+            self.pulse_deltas_denorm[self.cur_idx:self.cur_idx+N] = action_denorm
 
-        # Environment dynamics
+        # Prepare action and append to memory
         amp_abs_denorm, oob_pulse = self.preprocess_action(action_denorm)
         self.pulse_amplitudes_denorm[self.cur_idx+1:self.cur_idx + N+1] = amp_abs_denorm
 
+        # Environment dynamics
         crash = False
         try:
             self.step_states = self.forward_dynamics(amp_abs_denorm)
@@ -270,12 +285,10 @@ class ZCQPEE(Env):
             print(e)
             crash = True
 
-        self.final_states_all.append(self.step_states.copy())
-
         terminated, truncated, terminal = False, False, False
 
         # Calculate reward for current action
-        reward, tv_penalty, fidelity = self._reward_function(self.step_states, self.amps_cur)
+        reward, tv_penalty, fid = self._reward_function(self.step_states, self.amps_cur)
         reward *= self.REW_SCALE
         reward -= self.REW_THRESH   # so that any fidelity below the threshold obtains a negative reward, and positive otherwise
 
@@ -288,13 +301,21 @@ class ZCQPEE(Env):
             reward = -30 * (1 - (self.cur_idx / self.pulse_length))
             truncated = True
 
-        self.rewards.append(reward)
-
         if reward > 0 and can_early_term:
             terminated = True
 
+        # Collect for rendering
+        self.final_states_all.append(self.step_states.copy())
+        self.rewards.append(reward)
+        self.fidelities.append(fid)
+
         # Construct observation for agent using state probabilities and normed actions
-        self.current_obs = self.extract_current_cardinal_state(self.step_states)
+        if self.ADD_PREV_OBS:
+            self.current_obs = np.concatenate([self.extract_current_cardinal_state(self.prev_step_states, state_only=True), self.extract_current_cardinal_state(self.step_states, include_time=True)])
+        else:
+            self.current_obs = self.extract_current_cardinal_state(self.step_states, include_time=True)
+
+        self.prev_step_states = self.step_states
 
         self.cur_idx += N
 
@@ -303,7 +324,7 @@ class ZCQPEE(Env):
             terminated = True
             terminal = True
 
-        return self.current_obs, reward, terminated, truncated, {'tv_penalty': tv_penalty, 'fidelity': fidelity, 'step_states': self.step_states, 'oob_pulse': oob_pulse, 'crash': crash, 'terminal_state': terminal}
+        return self.current_obs, reward, terminated, truncated, {'tv_penalty': tv_penalty, 'fidelity': fid, 'step_states': self.step_states, 'oob_pulse': oob_pulse, 'crash': crash, 'terminal_state': terminal}
 
     def preprocess_action(self, action_denorm):
         oob_pulse = False
@@ -340,12 +361,8 @@ class ZCQPEE(Env):
         self.amps_cur = amp_abs_denorm
         final_states = []
         for k, _ in enumerate(self.step_states):
-            # H = QobjEvo([self.simulator.drift, [self.simulator.control, self.amps_cur]], tlist=tlist_, order=0)
-            # solver = SESolver(H, options=dict(store_final_state=True))
-            # result = solver.run(s_, tlist_, e_ops=self.e_ops)
-            # final_states.append(result.final_state)
             for i in range(self.N_TIME_STEPS):
-                t = self.tlist[self.cur_idx + i]
+                t = self.tlist[self.cur_idx + i + 1]    # The +1 will skip the first time sample @ 0ns
                 final_state = self.solvers[k].step(t, args=dict(A=amp_abs_denorm[i]))
             final_states.append(final_state)
 
@@ -356,7 +373,6 @@ class ZCQPEE(Env):
 
     def _reward_function(self, step_states, acts=None):
         f = np.mean([fidelity(s, t) for s, t in zip(step_states, self.target_states)])
-        self.fidelities.append(f)
         rew = self._fid2rew(f)
         if f >= self.FID_THRESH:    # remove tv penalty upon successful pulse
             return rew, 0.0, f
@@ -462,14 +478,14 @@ class ZCQPEE(Env):
         ax.set_ylabel('Infidelity (%)')
         ax.set_xlabel('Time [ns]')
 
-        get_state_mat = lambda idx: np.abs(np.flipud(np.concatenate([s_.full() for s_ in states[idx]]).reshape(4, -1)))
+        get_state_mat = lambda idx: np.square(np.abs(np.flipud(np.concatenate([s_.full() for s_ in states[idx]]).reshape(4, -1))))  # Transform state vector to probabilities
         state_mat = get_state_mat(0)
         im = ax_state.imshow(state_mat, animated=True, cmap=self.cmap, norm=norm, origin='upper')
         texts = []
         ax = ax_state
         for i, srow in enumerate(state_mat):
             for j, selem in enumerate(srow):
-                text = ax.text(j, i, f'{selem:.2f}', horizontalalignment='center', verticalalignment='center', fontsize=6, c='k')
+                text = ax.text(j, i, f'{selem:.2f}', horizontalalignment='center', verticalalignment='center', fontsize=9, c='k')
                 texts.append(text)
         fig.colorbar(im, ax=ax_state)
 
@@ -519,11 +535,12 @@ class ZCQPEE(Env):
             state_mat = np.clip(state_mat, EPS, 1)
             im_ = ax_state.imshow(state_mat, animated=True, cmap=self.cmap, norm=norm, origin='upper')
 
-            action_line.set_data(self.tlist[:frame], self.denorm_action(self.pulse_amplitudes_denorm[:frame]))
-            reward_line.set_data(self.tlist[:frame], infidelities[:frame])
-            ax_reward.set_title(f'Time: {self.tlist[frame]:.2f}ns  Fidelity: {100 - infidelities[frame]:.2f}%  (Best fidelity: {max(fidelities):.2f}%)')
+            idx_ = frame * self.N_TIME_STEPS
+            action_line.set_data(self.tlist[:idx_], self.denorm_action(self.pulse_amplitudes_denorm[:idx_]))
+            reward_line.set_data(self.tlist[0:idx_:self.N_TIME_STEPS], infidelities[:frame])
+            ax_reward.set_title(f'Time: {self.tlist[idx_]:.2f}ns  Fidelity: {100 - infidelities[frame - 1]:.2f}%  (Best fidelity: {max(fidelities):.2f}%)')
             if self.delta_mode:
-                action_delta_line.set_data(self.tlist[:frame], self.pulse_deltas_denorm[:frame])
+                action_delta_line.set_data(self.tlist[:idx_], self.pulse_deltas_denorm[:idx_])
 
             for i, srow in enumerate(state_mat):
                 for j, selem in enumerate(srow):
@@ -531,7 +548,9 @@ class ZCQPEE(Env):
 
             return im_, action_line, action_delta_line, reward_line, texts
 
-        frames = list(np.arange(0, self.cur_idx, max(1, int(self.cur_idx/120)))) + [self.cur_idx-1]*3
+        # frames = list(np.arange(0, self.cur_idx, max(1, int(self.cur_idx/120)))) + [self.cur_idx-1]*3
+        max_render_steps = len(fidelities)
+        frames = np.arange(max_render_steps).tolist() + [max_render_steps - 1] * 2
         ani = FuncAnimation(fig, update, frames=frames, interval=5, init_func=init, blit=False)
 
         if save_path is None:
@@ -548,7 +567,9 @@ class ZCQPEE(Env):
 
         ffwriter = mpl.animation.FFMpegWriter(fps=self.FPS)
         ani.save(save_path, dpi=self.DPI, writer=ffwriter, progress_callback=progress_callback)
+
         pbar.close()
+        plt.close()
         return
 
     @staticmethod
@@ -611,7 +632,8 @@ class ZCQPEE(Env):
                 f"          Action scaling = {self.action_scaling}\n"
                 f"          A_norm_max = {self.A_norm_max}\n"
                 f"          ISWAP gate optimisation.\n"
-                f"          Action delta_mode={self.delta_mode}\n")
+                f"          Action delta_mode={self.delta_mode}\n"
+                f"          Action polynomial order={self.ACT_POLY_ORDER}")
 
     def __str__(self):
         return f"ZCQPEE_pl-{self.pulse_length}_T-{int(self.T)}ns{'_delta_mode' if self.delta_mode else '_abs_mode'}"

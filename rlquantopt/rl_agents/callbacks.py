@@ -136,10 +136,11 @@ class EvalCallback(EventCallback):
             episode_start = np.ones((1,), dtype=bool)
             ep_len = 0
             while not done:
-                if self.algo == 'PPO' or self.algo == 'TRPO':
-                    actions = self.model.predict(obs, deterministic=True)[0]
-                elif self.algo == 'RecurrentPPO':
+                if 'Recurrent' in self.algo:
                     actions, lstm_states = self.model.predict(obs, state=lstm_states, episode_start=episode_start, deterministic=True)
+                else:
+                    actions = self.model.predict(obs, deterministic=True)[0]
+
 
                 obs, rew, te, tr, info = self.eval_env.step(actions)
                 fid = info.get('fidelity', 0.0)
