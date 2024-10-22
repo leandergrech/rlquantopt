@@ -142,7 +142,49 @@ class ZCQubits:
         self._control_func = None
         self.threads = None
 
-        self.H = QobjEvo([self.drift, [self.control, lambda t, A: A]], args={'A': 0.}, order=0)
+        # self.H = QobjEvo([self.drift, [self.control, lambda t, A: A]], args={'A': 0.}, order=0)
+        self.H = QobjEvo([self.drift, [self.control, self.bubu]], args={'A': 0.}, order=0)
+
+    @staticmethod
+    def bubu(t, A):
+        return A
+
+    def _set_up_drift(self):
+        drift = []
+        b = destroy(self.coupler_dims)
+        # Coupler drift self interaction
+        l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
+        l.append(2 * np.pi * (self.params['omega_c_0'] - self.params['omega_r']) * b.dag() * b +
+                 np.pi * self.params["alpha_c"] * b.dag() ** 2 * b ** 2)
+        drift.append(tensor(*l))
+        # Qubit drift
+        for m in range(self.num_qubits):
+            a = destroy(self.qubit_dims[m])
+            # qubit self interaction
+            l = [identity(self.qubit_dims[m_]) for m_ in range(self.num_qubits)]
+            # l.append(-2 * np.pi * self.params['omega_r'] * destroy_op_tb.dag() * destroy_op_tb +
+            #          np.pi * self.params["alpha_c"] * destroy_op_tb.dag() ** 2 * destroy_op_tb ** 2)
+            # l[m] = (-2 * np.pi * self.params["omega_r"] * destroy_op.dag() * destroy_op +
+            #         np.pi * self.params["alpha_s"][m] * destroy_op.dag() ** 2 * destroy_op ** 2)
+            # Meeting MKrauss 05/08/2024 changes
+            l.append(identity(self.coupler_dims))
+            l[m] = (2 * np.pi * (self.params["omega_s"][m] - self.params["omega_r"]) * a.dag() * a +
+                    np.pi * self.params["alpha_s"][m] * a.dag() ** 2 * a ** 2)
+
+            drift.append(tensor(*l))
+            # coupler - qubit interaction
+            coeff = 2 * np.pi * self.params["g"][m]
+            # l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
+            l = [identity(self.qubit_dims[m_]) for m_ in range(self.num_qubits)]
+            l.append(identity(self.coupler_dims))
+            l[m] = a
+            l[-1] = b.dag()
+            drift.append(coeff * tensor(*l))
+            l[m] = a.dag()
+            l[-1] = b
+            drift.append(coeff * tensor(*l))
+
+        return sum(drift)
 
     def _set_up_drift(self):
         drift = []

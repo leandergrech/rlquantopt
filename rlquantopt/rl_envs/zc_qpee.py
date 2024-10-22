@@ -227,7 +227,9 @@ class ZCQPEE(Env):
             # Cartesian
             # extract_complex = lambda z: np.concatenate([s_.real.copy(), s_.imag.copy()])
             # Polar form
-            extract_complex = lambda z: np.concatenate([(np.absolute(z) * 2) - 1, np.angle(z)/np.pi])
+            def extract_complex(z):
+                return np.concatenate([(np.absolute(z) * 2) - 1, np.angle(z)/np.pi])
+            # extract_complex = lambda z: np.concatenate([(np.absolute(z) * 2) - 1, np.angle(z)/np.pi])
             if i < 3:       # for states |000>, |010>, |100>
                 for idx in (1, 3, 9):   # Extract only these elements from the state vector @ i < 3
                     s_ = state[idx]
@@ -465,7 +467,10 @@ class ZCQPEE(Env):
         ax.set_ylabel('Pulse amplitude')  # Adjust based on action range
         ax.set_xlabel('Time [ns]')  # Adjust based on action range
 
-        nb_orders = lambda x: 10 ** int(np.log10(x))
+        # nb_orders = lambda x: 10 ** int(np.log10(x))
+        def nb_orders(x):
+            return 10 ** int(np.log10(x))
+
         ax = ax_reward
         infid_thresh = (1. - self.FID_THRESH) * 100.
         rew_lim_min = min(nb_orders(min(infidelities)), nb_orders(infid_thresh)) / 10.
@@ -478,7 +483,10 @@ class ZCQPEE(Env):
         ax.set_ylabel('Infidelity (%)')
         ax.set_xlabel('Time [ns]')
 
-        get_state_mat = lambda idx: np.square(np.abs(np.flipud(np.concatenate([s_.full() for s_ in states[idx]]).reshape(4, -1))))  # Transform state vector to probabilities
+        # get_state_mat = lambda idx: np.square(np.abs(np.flipud(np.concatenate([s_.full() for s_ in states[idx]]).reshape(4, -1))))  # Transform state vector to probabilities
+        def get_state_mat(idx):
+            return np.square(np.abs(np.flipud(np.concatenate([s_.full() for s_ in states[idx]]).reshape(4, -1))))
+
         state_mat = get_state_mat(0)
         im = ax_state.imshow(state_mat, animated=True, cmap=self.cmap, norm=norm, origin='upper')
         texts = []
@@ -637,6 +645,10 @@ class ZCQPEE(Env):
 
     def __str__(self):
         return f"ZCQPEE_pl-{self.pulse_length}_T-{int(self.T)}ns{'_delta_mode' if self.delta_mode else '_abs_mode'}"
+
+    def model_str(self):
+        p = self.model_params
+        return f"ω_s={p['omega_s']}, α_s={p['alpha_s']}, g={p['g']}, α_c={p['alpha_c']}, ω_r={p['omega_r']}, ω_c0={p['omega_c_0']} GHz"
 
 
 def test_actions(axs, pl, N, actions, title=None, seed=42):

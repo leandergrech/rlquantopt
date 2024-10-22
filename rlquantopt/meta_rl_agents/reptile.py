@@ -1,61 +1,88 @@
-import argparse
+import os
 import copy
-import numpy as np
+from sys import prefix
+
+import torch
+from sb3_contrib import TRPO
 
 from rlquantopt.meta_rl_agents.sampler import sample_zcqpee_tasks
-from rlquantopt.meta_rl_agents.train_utils import train_agent, validate_meta_policy, save_checkpoint
+from rlquantopt.meta_rl_agents.train_utils import train_agent, save_checkpoint, copy_params
+from rlquantopt.meta_rl_agents.eval_reptile_agent import validate_meta_policy, log_metrics
 
 
 def reptile_meta_learning_zcqpee(initial_policy_params,
                                  trpo_kw,
                                  save_dir,
+                                 writer,
+                                 trpo_n_envs=8,
                                  save_every=10,
                                  n_tasks=10,
-                                 val_n_envs=5,
-                                 val_eps=5e-2,  # Let's make validation easier for now
+                                 n_eval_envs=5,
+                                 eval_eps=5e-2,  # Let's make validation easier for now
                                  meta_iterations=1000,
                                  inner_steps=10,
                                  meta_step_size=0.1,
                                  eps=1e-1,
+                                 device='cpu',
                                  **env_kwargs):
     meta_policy_params = copy.deepcopy(initial_policy_params)
 
-    val_envs = sample_zcqpee_tasks(n_tasks=val_n_envs, eps=val_eps, **env_kwargs)
+    networks = ('pi', 'vf')
 
     try:
         for it in range(meta_iterations):
+            print(f'-> Iteration {it}')
+            print(f'\t`-> Sampling {n_tasks} tasks')
             task_batch = sample_zcqpee_tasks(n_tasks, eps, **env_kwargs)
 
-            meta_policy_update = {
-                'pi': np.zeros_like(meta_policy_params['pi']),
-                'vf': np.zeros_like(meta_policy_params['vf'])
-            }
+            meta_policy_update = dict()
+            for network in networks:
+                meta_policy_update[network] = {}
+                for key in meta_policy_params[network]:
+                    meta_policy_update[network][key] = torch.zeros_like(meta_policy_params[network][key], dtype=float).to(device)
 
+            print(f'\t`-> Training inner loops:')
             for env in task_batch:
+                print(f'\t\t`-> {env.model_str()}')
                 # Copy initial policy parameters and train agent for `inner_steps` steps
-                task_policy_params = copy.deepcopy(meta_policy_params)
-                task_policy_params = train_agent(task_policy_params, env, trpo_kw, inner_steps)
+                task_policy_params = copy_params(meta_policy_params)
 
-                # Calculate parameter difference from initial and add to task batch policy parameters update
+                task_policy_params = train_agent(policy_params=task_policy_params,
+                                                 env=env,
+                                                 algo=TRPO,
+                                                 algo_kw=trpo_kw,
+                                                 steps=inner_steps,
+                                                 n_envs=trpo_n_envs)
+
                 # Calculate the parameter differences for the meta-update
-                meta_policy_update['pi'] += task_policy_params['pi'] - meta_policy_params['pi']
-                meta_policy_update['vf'] += task_policy_params['vf'] - meta_policy_params['vf']
+                for network in networks:
+                    for key in meta_policy_params[network]:
+                        meta_policy_update[network][key] += task_policy_params[network][key] - meta_policy_params[network][key]
 
-            # Regularise and update meta policy parameters
-            meta_policy_update['pi'] /= n_tasks
-            meta_policy_update['vf'] /= n_tasks
+            # # Regularise and update meta policy parameters
+            for network in networks:
+                for key in meta_policy_params[network]:
+                    meta_policy_update[network][key] /= n_tasks
+                    meta_policy_params[network][key] += meta_step_size * meta_policy_update[network][key]
 
-            # Update the meta-policy parameters
-            meta_policy_params['pi'] += meta_step_size * meta_policy_update['pi']
-            meta_policy_params['vf'] += meta_step_size * meta_policy_update['vf']
-
-            print(f"Iteration {it + 1}/{meta_iterations} - Meta-policy updated")
+            print(f'\t`-> Updated meta policy:')
 
             if it % save_every == 0:
                 chkpt_dir = os.path.join(save_dir, f'chkpt_{it}')
                 os.makedirs(chkpt_dir, exist_ok=False)
                 save_checkpoint(meta_policy_params, chkpt_dir)
-                validate_meta_policy(meta_policy_params, val_envs, trpo_kw, writer)
+                print(f'\t\t`-> Saved checkpoint in: {chkpt_dir}')
+                print(f'\t\t`-> Validating meta policy:')
+                eval_env = sample_zcqpee_tasks(n_tasks=1,
+                                               eps=eval_eps,
+                                               **env_kwargs)[0]
+                eval_before, eval_after = validate_meta_policy(meta_policy_params=meta_policy_params,
+                                                               algo=TRPO,
+                                                               algo_kw=trpo_kw,
+                                                               eval_env=eval_env,
+                                                               verbose=True)
+                log_metrics(eval_before, step=it, writer=writer, prefix='eval/before-tuning')
+                log_metrics(eval_after, step=it, writer=writer, prefix='eval/after-tuning')
 
     except KeyboardInterrupt:
         pass
