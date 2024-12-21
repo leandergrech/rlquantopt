@@ -16,7 +16,7 @@ def linear_schedule(init_value):
     return func
 
 
-def harmonic_schedule(init_value=3e-4, k=10**0.5, tau=1):
+def harmonic_schedule(init_value=3e-4, k=10**0.4, tau=1):
     def func(x):
         return init_value / (1. + (k * (1 - x*tau)))
     return func
@@ -42,13 +42,17 @@ def gen_env_yaml(env_type, pulse_path, save_dir, ret_pulse=True, override_env_kw
         return save_path
 
 
+
+
+
 def get_pulse_data(pulse_path, verbose=False):
-    data = pd.read_csv(pulse_path, index_col=0)
+    data = pd.read_csv(pulse_path)
     col_keys = list(data.keys())
     if len(col_keys) < 2:
         data = pd.read_csv(pulse_path)
         col_keys = list(data.keys())
     tkey, vkey = None, None
+    print(col_keys)
     for key in col_keys:
         if 'amplist' in key or 'pulse' in key or 'amp' in key or 'value' in key:
             vkey = key
@@ -210,7 +214,6 @@ if __name__ == '__main__':
  from stable_baselines3.ppo import PPO
  model_path = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/VQPEE-PPO/16-05-24_164915_32-envs/rl_model_501952_steps.zip'
  model = PPO.load(model_path)
- from rlquantopt.rl_envs.qu_pulse_episodic_env import QuPulseEpisodicEnv as QPEE
- from rlquantopt.rl_envs.vec_qu_pulse_episodic_env import VecQuPulseEpisodicEnv as VQPEE
+ from rlquantopt.rl_envs.old.vec_qu_pulse_episodic_env import VecQuPulseEpisodicEnv as VQPEE
  env = VQPEE(num_envs=5, pulse_length=50, sparse_reward=False, use_full_liouville=False, inc_off_diag=False)
  print(evaluate_policy(model, env, n_eval_episodes=5, deterministic=True))

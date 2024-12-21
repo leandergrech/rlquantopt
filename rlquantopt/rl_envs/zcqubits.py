@@ -1,18 +1,15 @@
 import os.path
 from copy import deepcopy
-# from functools import partial
-# from multiprocessing import Pool
+import pickle as pkl
 from typing import Callable
 import numpy as np
 from matplotlib import pyplot as plt
 from qutip import QobjEvo, SESolver, expect
 from qutip.core import destroy, identity, tensor, Qobj, ket
-# from rlquantopt.tests.zcqpee_tests import step_states
 from scipy.interpolate import interp1d, CubicSpline
 from scipy.optimize import minimize
 import pandas as pd
 from scipy.linalg import sqrtm
-from stable_baselines3 import PPO
 
 from rlquantopt.utils.rl_utils import get_pulse_data
 
@@ -50,9 +47,15 @@ def fidelity(A, B) -> float:
 
     return f[0, 0]
 
+# def overlap(A: Qobj, B: Qobj):
 
-def setup_ZCQubits4MKrauss_params(**model_params):
-    # model_params = model_params if model_params is not None else {}
+
+def setup_ZCQubits4MKrauss_params_hard(**model_params):
+    '''
+    After discussion with MK + CK
+    :param model_params:
+    :return:
+    '''
     ret_model_params = dict()
     ret_model_params["omega_s"] = model_params.get("omega_s", [6.0, 5.9])
     ret_model_params["alpha_s"] = model_params.get("alpha_s", [-290e-3, -310e-3])
@@ -68,7 +71,23 @@ def setup_ZCQubits4MKrauss_params(**model_params):
     return ret_model_params
 
 
-def setup_iswap_problem(**model_params):
+def setup_ZCQubits4MKrauss_params(**model_params):
+    ret_model_params = dict()
+    ret_model_params["omega_s"] = model_params.get("omega_s", [5.0311, 5.8899])
+    ret_model_params["alpha_s"] = model_params.get("alpha_s", [-324e-3, -235e-3])
+    ret_model_params["g"] = model_params.get("g", [100e-3, 71.4e-3])
+    ret_model_params["alpha_c"] = model_params.get("alpha_c", -230e-3)
+    ret_model_params["omega_r"] = model_params.get("omega_r", 6.0)
+    ret_model_params["omega_c_0"] = model_params.get("omega_c_0", 7.445)
+    ret_model_params["n_levels"] = n_levels = model_params.get("n_levels", 3)
+    ret_model_params["num_qubits"] = num_qubits = model_params.get("num_qubits", 2)
+    ret_model_params["coupler_dims"] = model_params.get("coupler_dims", 3)
+    ret_model_params["qubit_dims"] = [n_levels] * num_qubits
+
+    return ret_model_params
+
+
+def setup_basis_states(**model_params):
     qubit_dims = model_params.get('qubit_dims')
     coupler_dims = model_params.get('coupler_dims')
 
@@ -82,6 +101,51 @@ def setup_iswap_problem(**model_params):
     psi11 = ket((1, 1, 0), dim=full_dims)
     basis_states = [psi00, psi01, psi10, psi11]
 
+    return basis_states
+
+
+def setup_full_basis_states(**model_params):
+    qubit_dims = model_params.get('qubit_dims')
+    coupler_dims = model_params.get('coupler_dims')
+
+    full_dims = qubit_dims.copy()
+    full_dims.append(coupler_dims)
+
+    # 2 computational qubits
+    basis_states = [
+        ket((0, 0, 0), dim=full_dims),
+        ket((0, 0, 1), dim=full_dims),
+        ket((0, 0, 2), dim=full_dims),
+        ket((0, 1, 0), dim=full_dims),
+        ket((0, 1, 1), dim=full_dims),
+        ket((0, 1, 2), dim=full_dims),
+        ket((0, 2, 0), dim=full_dims),
+        ket((0, 2, 1), dim=full_dims),
+        ket((0, 2, 2), dim=full_dims),
+        ket((1, 0, 0), dim=full_dims),
+        ket((1, 0, 1), dim=full_dims),
+        ket((1, 0, 2), dim=full_dims),
+        ket((1, 1, 0), dim=full_dims),
+        ket((1, 1, 1), dim=full_dims),
+        ket((1, 1, 2), dim=full_dims),
+        ket((1, 2, 0), dim=full_dims),
+        ket((1, 2, 1), dim=full_dims),
+        ket((1, 2, 2), dim=full_dims),
+        ket((2, 0, 0), dim=full_dims),
+        ket((2, 0, 1), dim=full_dims),
+        ket((2, 0, 2), dim=full_dims),
+        ket((2, 1, 0), dim=full_dims),
+        ket((2, 1, 1), dim=full_dims),
+        ket((2, 1, 2), dim=full_dims),
+        ket((2, 2, 0), dim=full_dims),
+        ket((2, 2, 1), dim=full_dims),
+        ket((2, 2, 2), dim=full_dims),
+    ]
+
+    return basis_states
+
+
+def setup_iswap_problem(basis_states):
     # iSWAP gate
     U = Qobj(np.array([
         [1, 0, 0, 0],
@@ -100,7 +164,7 @@ def setup_iswap_problem(**model_params):
     target_states = mapped_basis_states.copy()
     e_ops = [state.proj() for state in target_states]
 
-    return basis_states, target_states, e_ops
+    return target_states, e_ops
 
 
 class ZCQubits:
@@ -143,48 +207,12 @@ class ZCQubits:
         self.threads = None
 
         # self.H = QobjEvo([self.drift, [self.control, lambda t, A: A]], args={'A': 0.}, order=0)
-        self.H = QobjEvo([self.drift, [self.control, self.bubu]], args={'A': 0.}, order=0)
+        self.H = QobjEvo([self.drift, [self.control, self.bubu]], args={'A': 0.}, order=3)
 
     @staticmethod
     def bubu(t, A):
+        # This is required when using parallel processes since lambda functions have no reference
         return A
-
-    def _set_up_drift(self):
-        drift = []
-        b = destroy(self.coupler_dims)
-        # Coupler drift self interaction
-        l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
-        l.append(2 * np.pi * (self.params['omega_c_0'] - self.params['omega_r']) * b.dag() * b +
-                 np.pi * self.params["alpha_c"] * b.dag() ** 2 * b ** 2)
-        drift.append(tensor(*l))
-        # Qubit drift
-        for m in range(self.num_qubits):
-            a = destroy(self.qubit_dims[m])
-            # qubit self interaction
-            l = [identity(self.qubit_dims[m_]) for m_ in range(self.num_qubits)]
-            # l.append(-2 * np.pi * self.params['omega_r'] * destroy_op_tb.dag() * destroy_op_tb +
-            #          np.pi * self.params["alpha_c"] * destroy_op_tb.dag() ** 2 * destroy_op_tb ** 2)
-            # l[m] = (-2 * np.pi * self.params["omega_r"] * destroy_op.dag() * destroy_op +
-            #         np.pi * self.params["alpha_s"][m] * destroy_op.dag() ** 2 * destroy_op ** 2)
-            # Meeting MKrauss 05/08/2024 changes
-            l.append(identity(self.coupler_dims))
-            l[m] = (2 * np.pi * (self.params["omega_s"][m] - self.params["omega_r"]) * a.dag() * a +
-                    np.pi * self.params["alpha_s"][m] * a.dag() ** 2 * a ** 2)
-
-            drift.append(tensor(*l))
-            # coupler - qubit interaction
-            coeff = 2 * np.pi * self.params["g"][m]
-            # l = [identity(self.qubit_dims[m]) for m in range(self.num_qubits)]
-            l = [identity(self.qubit_dims[m_]) for m_ in range(self.num_qubits)]
-            l.append(identity(self.coupler_dims))
-            l[m] = a
-            l[-1] = b.dag()
-            drift.append(coeff * tensor(*l))
-            l[m] = a.dag()
-            l[-1] = b
-            drift.append(coeff * tensor(*l))
-
-        return sum(drift)
 
     def _set_up_drift(self):
         drift = []
@@ -701,7 +729,7 @@ class ZCQubits:
 #     fig.savefig(os.path.join(model_dir, f'{model_name}_step-pulse_population.pdf'))
 
 LABELS = ['|000⟩', '|010⟩', '|100⟩', '|110⟩']
-def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
+def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True, transform_pulse=lambda x: x):
     # par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE120pl-PPO/13-06-24_115241_ZCQPEE120pl/best_model/pulses'
     pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
     pulse_dir = os.path.dirname(pulse_file)
@@ -713,8 +741,11 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
         save_dir = pulse_dir
     tlist, pulse = get_pulse_data(pulse_file, verbose=True)
 
+    pulse = transform_pulse(pulse)
+
     model = ZCQubits(**model_params)
-    basis_states, target_states, e_ops = setup_iswap_problem(**model_params)
+    basis_states = setup_basis_states(**model_params)
+    target_states, e_ops = setup_iswap_problem(basis_states)
 
     """
     RUNNING PULSE STEP-WISE, starting from each basis_state, respectively. Each intermittent state is obtained from the previous step call
@@ -727,17 +758,19 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
 
     # reset function
     # f = []
-    all_f = []
+    # all_f = []
     expectations = []
 
     step_states = basis_states.copy()
+    all_states = [[] for _ in range(len(target_states))]
 
     for k, basis_state in enumerate(basis_states):
         solver[k].start(basis_state, 0)
         l = [[expect(e, step_states[k])] for e in e_ops]
-        all_f.append([])
+        # all_f.append([])
         expectations.append(l)
 
+    all_f = []
     # Iterate over the pulse amplitudes per time-step
     for i, (cur_amp, t) in enumerate(zip(pulse, tlist)):
         if i == 0:
@@ -749,14 +782,20 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
         for k, target_state in enumerate(target_states):
 
             s_ = solver[k].step(t, args={'A': cur_amp})
+            all_states[k].append(s_)
             # s[k] = s_
             step_states[k] = s_
             states[k].append(s_)
             for j, e in enumerate(e_ops):
                 expectations[k][j].append(expect(e, s_))
-            fid = fidelity(s_, target_state)
-            all_f[k].append(fid)
+        overlaps = [s.overlap(t) for s, t in zip(step_states, target_states)]
+        fid_i = (np.abs(np.sum(overlaps)) ** 2) / (len(overlaps) ** 2)
+        all_f.append(fid_i)
+            # fid = fidelity(s_, target_state)
+            # all_f[k].append(fid)
 
+    with open(os.path.join(save_dir, pulse_name + '_all_states.pkl'), 'wb') as f:
+        pkl.dump(all_states, f)
 
     # for k, (basis_state, target_state) in enumerate(zip(basis_states, target_states)):
     #     l = [[expect(e, basis_state)] for e in e_ops]
@@ -777,8 +816,8 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
     #     expectations.append(l)
 
     print('Step pulse')
-    avg_fidelities = np.mean(all_f, axis=0)
-    res_str = f"Max fidelities={np.max(all_f, axis=1)}, Max mean fidelity={np.max(avg_fidelities)*100.:.2f}%"
+    max_fid_time = tlist[np.argmax(all_f)]
+    res_str = f"Max fidelity={np.max(all_f) * 100.:.2f}% @ {max_fid_time:.2f} ns"
     print(res_str)
 
     if plot:
@@ -829,7 +868,7 @@ def test_step(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
     return states, pulse, all_f
 
 
-def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True):
+def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt/rl_envs/configs/data_lilmc.csv', save_dir=None, plot=True, transform_pulse=lambda x: x):
     pulse_name = os.path.splitext(os.path.basename(pulse_file))[0]
     pulse_dir = os.path.dirname(pulse_file)
     # if 'mkrauss' in pulse_dir:
@@ -840,27 +879,10 @@ def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
         save_dir = pulse_dir
 
     tlist, pulse = get_pulse_data(pulse_file, verbose=True)
-    basis_states, target_states, e_ops = setup_iswap_problem(**model_params)
+    pulse = transform_pulse(pulse)
 
-    # full_dims = model_params["qubit_dims"].copy()
-    # full_dims.append(model_params["coupler_dims"])
-    #
-    # psi00 = ket((0, 0, 0), dim=full_dims)
-    # psi01 = ket((0, 1, 0), dim=full_dims)
-    # psi10 = ket((1, 0, 0), dim=full_dims)
-    # psi11 = ket((1, 1, 0), dim=full_dims)
-    #
-    # basis_states = [psi00, psi01, psi10, psi11]
-    #
-    # unitary = Qobj(np.array([
-    #     [1, 0, 0, 0],
-    #     [0, 0, 1j, 0],
-    #     [0, 1j, 0, 0],
-    #     [0, 0, 0, 1]
-    # ]), dims=[[2, 2], [2, 2]])
-    #
-    # target_states = [sum(unitary[i, j] * basis_states[i]
-    #                      for i in range(unitary.shape[0])) for j in range(unitary.shape[1])]
+    basis_states = setup_basis_states(**model_params)
+    target_states, e_ops = setup_iswap_problem(basis_states)
 
     model = ZCQubits(**model_params)
 
@@ -877,11 +899,13 @@ def test_full(model_params, pulse_file='/home/leander/code/rlquantopt/rlquantopt
 
     states = [res.final_state for res in results]
 
-    f = [fidelity(s_, t_) for s_, t_ in zip(states, target_states)]
+    overlaps = [s.overlap(t) for s, t in zip(states, target_states)]
+    f = (np.abs(np.sum(overlaps)) ** 2) / (len(overlaps) ** 2)
+    # f = [fidelity(s_, t_) for s_, t_ in zip(states, target_states)]
     expectations = [res.expect for res in results]
 
     print('Full pulse')
-    res_str = f"Final fidelities={f}, Mean={np.mean(f)*100.:.2f}%"
+    res_str = f"Final fidelity={f*100.:.2f}%"
     print(res_str)
 
     if plot:

@@ -6,7 +6,7 @@ import string
 import numpy as np
 from copy import deepcopy
 import yaml
-
+import json
 from matplotlib.ticker import MultipleLocator
 
 
@@ -298,9 +298,10 @@ def animate_matrices(matrices, n_levels, EPS=1e-5):
         ax.axvline(i-0.5, color='w', linestyle='-', linewidth=1)
 
     # Add a colorbar
-    fig.colorbar(im, ax=ax)#, boundaries=np.linspace(0, 1, 11))
+    fig.colorbar(im, ax=ax)
 
     n = len(matrices)
+
     # Update function for the animation
     def update(frame):
         ax.set_title(f'{(frame+1) * 100./n:.2f}%')
@@ -312,3 +313,18 @@ def animate_matrices(matrices, n_levels, EPS=1e-5):
     frames = list(range(n)) + [n - 1] * 100
     ani = FuncAnimation(fig, update, frames=frames, blit=False, interval=20)
     return ani
+
+
+def save_exp_info(info_path, training_message='\n', **kwargs):
+    if not os.path.exists(info_path):
+        with open(info_path, 'w') as f:
+            f.write(training_message)
+
+            for k, v in kwargs.items():
+                f.write(f'\n{k}:')
+                if isinstance(v, str):
+                    f.write(f'\t{v}\n')
+                else:
+                    json.dump(v, f, indent=10)
+    else:
+        raise Exception('info_path already exists. Does not overwrite experiment parameters by default.')

@@ -2,22 +2,18 @@ import os
 import shutil
 import argparse
 import json
-from gymnasium.wrappers import NormalizeReward, NormalizeObservation
 import torch as tc
 from datetime import datetime as dt
 
-from jupyter_core.version import pattern
-from sb3_contrib import RecurrentPPO, TRPO
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.callbacks import CheckpointCallback, StopTrainingOnNoModelImprovement
 from stable_baselines3 import PPO, SAC
-from stable_baselines3.sac.policies import SACPolicy
+from sb3_contrib import RecurrentPPO, TRPO
 
-# from rlquantopt.rl_agents.qpee_sb3_training import ppo_learning_rate
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.rl_agents.callbacks import EvalCallback
-from rlquantopt.utils.utils import get_latest_experiment
+from rlquantopt.utils.utils import get_latest_experiment, save_exp_info
 from rlquantopt.utils.rl_utils import linear_schedule, harmonic_schedule
 
 
@@ -27,22 +23,26 @@ DT_FMT_STR = '%d-%m-%y_%H%M%S'
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
     # ZCQPEE parameters
-    parser.add_argument('-p', '--pulse-length', default=500, type=int, help='Maximum number of samples in a pulse')
-    # parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
-    parser.add_argument('-T', '--max-time-ns', default=300.0, type=float, help='Pulse duration in ns')
+    parser.add_argument('-p', '--pulse-length', default=1000, type=int, help='Maximum number of samples in a pulse')
+    parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
+    parser.add_argument('-T', '--max-time-ns', default=50.0, type=float, help='Pulse duration in ns')
     parser.add_argument('-N', '--n-time-steps', default=3, type=int, help='Number of time-steps per action')
-    parser.add_argument('--tv-penalty-scale', default=1e-1, type=float, help='Number of time-steps per action')
+    parser.add_argument('--tv-penalty-scale', default=1e-3, type=float, help='Number of time-steps per action')
     parser.add_argument('-o', '--act-poly-order', default=1, type=float, help='Order of action transformation polynomial ')
     parser.add_argument('-a', '--add-prev-obs', action='store_true', help='Add previous observable w/o the action and time, to the current observable.')
-    parser.add_argument('--a-scale', default=0.5, type=float, help='Set action scaling during normalisation')
+    parser.add_argument('-f', '--use-fidelity', action='store_true', help='Use fidelity metric to form reward instead of concurrence & unitarity')
+    parser.add_argument('--a-scale', default=20., type=float, help='Set action scaling during normalisation')
     parser.add_argument('--a-norm-max', default=1.0, type=float, help='Set the maximum normalised amplitude when using delta-mode')
-    parser.add_argument('--rew-scale', default=1., type=float, help='Multiply reward by rew_scale after each step')
+    parser.add_argument('--rew-scale', default=1.0, type=float, help='Multiply reward by rew_scale after each step')
+    parser.add_argument('--fid-thresh', default=0.99, type=float, help='Set goal fidelity threshold')
+    parser.add_argument('--concurrence_weight', default=1, type=float, help='When --use-fidelity is not active, sets the weight of concurrence in the reward function')
+    parser.add_argument('--unitarity_weight', default=3, type=float, help='When --use-fidelity is not active, sets the weight of unitarity in the reward function')
     parser.add_argument('--fid-thresh', default=0.99, type=float, help='Set goal fidelity threshold')
 
     # RL agent paramters
     parser.add_argument('--algo', type=str, default='TRPO', help='Type of RL agent')
     n_steps = 2048
-    n_envs = 8
+    n_envs = 4
     parser.add_argument('--n-steps', type=int, default=n_steps, help='The number of steps to run for each environment per update'
                              '(i.e. rollout buffer size is n_steps * n_envs where n_envs is number of environment copies running in parallel)'
                              'NOTE: n_steps * n_envs must be greater than 1 (because of the advantage normalization)'
@@ -97,7 +97,7 @@ def main():
     # Define environment parameters
     env_kw = dict(pulse_length=int(args.pulse_length),
                   rew_scale=float(args.rew_scale),
-                  delta_mode=True,
+                  delta_mode=args.delta_mode,
                   T=float(args.max_time_ns),
                   fid_thresh=float(args.fid_thresh),
                   action_scaling={'z': float(args.a_scale)},
@@ -105,7 +105,11 @@ def main():
                   n_time_steps=args.n_time_steps,
                   tv_penalty_scale=args.tv_penalty_scale,
                   act_poly_order=args.act_poly_order,
-                  add_prev_obs=args.add_prev_obs)
+                  add_prev_obs=args.add_prev_obs,
+                  use_fidelity=args.use_fidelity,
+                  concurrence_weight=args.concurrence_weight,
+                  unitarity_weight=args.unitarity_weight
+                  )
     n_envs = args.n_envs
     gamma = args.gamma
 
@@ -213,30 +217,24 @@ def main():
     print(f'Using {os.path.abspath(model_path)} directory')
 
     info_path = os.path.join(model_path, info_fn)
-    if not os.path.exists(info_path):
-        with open(info_path, 'w') as f:
-            f.write(TRAINING_MESSAGE)
-            f.write(f'\nRL algo:  {algo_str}\n')
 
-            f.write('\nenv_kwargs:\n')
-            json.dump(env_kw, f, indent=10)
+    _pk = policy_kwargs.copy()
+    _pk.pop('activation_fn')
+    _ak = algo_kw.copy()
+    if not isinstance(_ak['learning_rate'], float):
+        _ak['learning_rate'] = f'{lr_type} from {learning_rate(1)} -> {learning_rate(0)}'
+    if 'PPO' in algo_str:
+        if not isinstance(_ak['clip_range'], float):
+            _ak['clip_range'] = f'Constant clip range {ppo_clip_range(1)} -> {ppo_clip_range(0)}'
 
-            f.write('\npolicy_kwargs:\n')
-            pk = policy_kwargs.copy()
-            pk.pop('activation_fn')
-            json.dump(pk, f, indent=10)
+    save_exp_info(info_path=info_path,
+                  training_message=TRAINING_MESSAGE,
+                  env_kwargs=env_kw,
+                  rl_algo=algo_str,
+                  algo_kwargs=_ak,
+                  policy_kwargs=_pk)
 
-            f.write('\nalgo_kwargs:\n')
-            ak = algo_kw.copy()
-
-            if not isinstance(ak['learning_rate'], float):
-                ak['learning_rate'] = f'{lr_type} from {learning_rate(1)} -> {learning_rate(0)}'
-            if 'PPO' in algo_str:# or 'TRPO' in algo_str:
-                if not isinstance(ak['clip_range'], float):
-                    ak['clip_range'] = f'Constant clip range {ppo_clip_range(1)} -> {ppo_clip_range(0)}'
-            json.dump(ak, f, indent=10)
-
-        copy_scripts_to_model_path(model_path)
+    copy_scripts_to_model_path(model_path)
 
     '''
     INITIALISE NEW MODEL OR LOAD LATEST CHECKPOINT
@@ -266,6 +264,7 @@ def main():
                                  log_path=os.path.join(model_path, 'evals'),
                                  callback_after_eval=stop_train_callback,
                                  verbose=1,
+                                 norm_rewards=False,
                                  algo=algo_str)
 
     new_logger = configure(os.path.join(model_path, 'logs'), ['stdout', 'tensorboard'])
