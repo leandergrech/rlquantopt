@@ -38,6 +38,7 @@ step_numbers = []
 spectra = []
 concurrences = []
 unitarities = []
+rewards = []
 
 
 # Collecting all relevant CSV files and their spectra
@@ -56,23 +57,27 @@ for root, _, files in os.walk(exp_path):
                 continue
 
             tlist_fine, amps = get_pulse_data(pulse_file)
-            tlist_coarse, concurs, unitars = get_metrics_data(metrics_file)
+            tlist_coarse, concurs, unitars, rews = get_metrics_data(metrics_file)
 
             flist, fabsamps = get_pulse_spectrum(tlist_fine, amps)
             step_numbers.append(step_number)
             spectra.append(fabsamps)
             concurrences.append(concurs)
             unitarities.append(unitars)
+            rewards.append(rews)
 
 # Sort by step number
 sorted_indices = np.argsort(step_numbers)
 step_numbers = np.array(step_numbers)[sorted_indices]
 spectra = np.array(spectra)[sorted_indices]
 concurrences = np.array(concurrences)[sorted_indices]
+concurrences = 1 - concurrences
 unitarities = np.array(unitarities)[sorted_indices]
+unitarities = 1 - unitarities
+rewards = np.array(rewards)[sorted_indices]
 
 # Plotting the spectral evolution
-log_x = True
+log_x = False
 fig, ax = plt.subplots(figsize=(15, 10))
 im = ax.imshow(
     spectra.T, aspect='auto', extent=[min(step_numbers), max(step_numbers),flist[0], flist[-1]],
@@ -92,11 +97,11 @@ ax.set_ylabel("Frequency [GHz]")
 fig.tight_layout()
 # fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_spectra_evolution_between_{min_rl_step:.1e}-{max_rl_step:.1e}_steps{'_logx' if log_x else ''}.pdf"))
 # fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_spectra_evolution_steps_{min_rl_step}-{max_rl_step}{'_logx' if log_x else ''}.pdf"))
-fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_spectra_evolution.pdf"))
+fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_spectra_evolution_lin.pdf"))
 # plt.show()
 
 # Plotting the concurrence evolution
-log_x = True
+log_x = False
 fig, ax = plt.subplots(figsize=(15, 10))
 im = ax.imshow(
     concurrences.T, aspect='auto', extent=[min(step_numbers), max(step_numbers), 0, tlist_coarse[-1]],
@@ -116,11 +121,11 @@ ax.set_ylabel("Pulse time [ns]")
 fig.tight_layout()
 # fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_concurrence_evolution_between_{min_rl_step:.1e}-{max_rl_step:.1e}_steps{'_logx' if log_x else ''}.pdf"))
 # fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_concurrence_evolution_steps_{min_rl_step}-{max_rl_step}{'_logx' if log_x else ''}.pdf"))
-fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_concurrence_evolution.pdf"))
-plt.show()
+fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_concurrence_evolution_lin_inv.pdf"))
+# plt.show()
 
 # Plotting the unitarities evolution
-log_x = True
+log_x = False
 fig, ax = plt.subplots(figsize=(15, 10))
 im = ax.imshow(
     unitarities.T, aspect='auto', extent=[min(step_numbers), max(step_numbers), 0, tlist_coarse[-1]],
@@ -140,7 +145,30 @@ ax.set_ylabel("Pulse time [ns]")
 fig.tight_layout()
 # fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_concurrence_evolution_between_{min_rl_step:.1e}-{max_rl_step:.1e}_steps{'_logx' if log_x else ''}.pdf"))
 # fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_unitarity_evolution_steps_{min_rl_step}-{max_rl_step}{'_logx' if log_x else ''}.pdf"))
-fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_unitarity_evolution_steps.pdf"))
+fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_unitarity_evolution_steps_lin_inv.pdf"))
+
+# Plotting the rewards evolution
+log_x = False
+fig, ax = plt.subplots(figsize=(15, 10))
+im = ax.imshow(
+    rewards.T, aspect='auto', extent=[min(step_numbers), max(step_numbers), 0, tlist_coarse[-1]],
+    origin='lower', cmap=cmap
+)
+fig.suptitle("Reward evolution during RL training")
+ax.set_title(f'Experiment: {exp_type} - {exp_date}')
+for k, v in vlines.items():
+    if k == 'Best agent' and v['v'] > max_rl_step:
+        continue
+    ax.axvline(v['v'], color=v['c'], lw=1.4, linestyle=v['ls'], label=k)
+ax.legend(loc='best')
+fig.colorbar(im, label='Mag. [a.u]')
+if log_x: ax.set_xscale('log')
+ax.set_xlabel("RL training step")
+ax.set_ylabel("Pulse time [ns]")
+fig.tight_layout()
+# fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_concurrence_evolution_between_{min_rl_step:.1e}-{max_rl_step:.1e}_steps{'_logx' if log_x else ''}.pdf"))
+# fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_unitarity_evolution_steps_{min_rl_step}-{max_rl_step}{'_logx' if log_x else ''}.pdf"))
+fig.savefig(os.path.join(f"{exp_type}_{exp_date}_pulse_reward_evolution_steps_lin.pdf"))
 plt.show()
 
 
