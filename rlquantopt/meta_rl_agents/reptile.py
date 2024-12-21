@@ -7,7 +7,7 @@ from sb3_contrib import TRPO
 
 from rlquantopt.meta_rl_agents.sampler import sample_zcqpee_tasks
 from rlquantopt.meta_rl_agents.train_utils import train_agent, save_checkpoint, copy_params
-from rlquantopt.meta_rl_agents.eval_reptile_agent import validate_meta_policy, log_metrics
+from rlquantopt.meta_rl_agents.eval_reptile_agent import evaluate_meta_policy, log_metrics
 
 
 def reptile_meta_learning_zcqpee(initial_policy_params,
@@ -76,7 +76,7 @@ def reptile_meta_learning_zcqpee(initial_policy_params,
                 eval_env = sample_zcqpee_tasks(n_tasks=1,
                                                eps=eval_eps,
                                                **env_kwargs)[0]
-                eval_before, eval_after = validate_meta_policy(meta_policy_params=meta_policy_params,
+                eval_before, eval_after = evaluate_meta_policy(meta_policy_params=meta_policy_params,
                                                                algo=TRPO,
                                                                algo_kw=trpo_kw,
                                                                eval_env=eval_env,

@@ -10,7 +10,7 @@ from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.meta_rl_agents.train_utils import get_initial_trpo_params, train_agent
 
 
-def evaluate_reptile_zcqpee(
+def evaluate_params_zcqpee(
     meta_policy_params,
     algo,
     algo_kw,
@@ -89,7 +89,6 @@ def evaluate_reptile_zcqpee(
 
         observations = new_observations
 
-
     episode_rewards = np.array(episode_rewards)
     best_rewards = [max(ep_rews) for ep_rews in episode_rewards],
     worst_rewards = [min(ep_rews) for ep_rews in episode_rewards],
@@ -117,7 +116,7 @@ def log_metrics(data, step, writer: SummaryWriter, prefix=None):
         writer.add_scalar(f'{prefix}{k}', v, global_step=step)
 
 
-def validate_meta_policy(meta_policy_params,
+def evaluate_meta_policy(meta_policy_params,
                          algo,
                          algo_kw,
                          eval_env,
@@ -125,12 +124,12 @@ def validate_meta_policy(meta_policy_params,
                          fine_tuning_n_envs=1,
                          verbose=False):
     if verbose: print(f'\t\t\t`-> Evaluating initial parameters')
-    eval_data_before = evaluate_reptile_zcqpee(meta_policy_params, algo, algo_kw, eval_env, True)
+    eval_data_before = evaluate_params_zcqpee(meta_policy_params, algo, algo_kw, eval_env, True)
     if verbose: print(f'\t\t\t`-> Fine-tuning meta policy parameters')
     meta_policy_params = train_agent(policy_params=meta_policy_params, algo=algo, algo_kw=algo_kw,
                 env=eval_env, steps=fine_tuning_steps, n_envs=fine_tuning_n_envs)
     if verbose:
         print(f'\t\t\t`-> Evaluating initial parameters')
-    eval_data_after = evaluate_reptile_zcqpee(meta_policy_params, algo, algo_kw, eval_env, True)
+    eval_data_after = evaluate_params_zcqpee(meta_policy_params, algo, algo_kw, eval_env, True)
     return eval_data_before, eval_data_after
 

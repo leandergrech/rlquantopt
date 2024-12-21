@@ -5,7 +5,7 @@ from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.meta_rl_agents.train_utils import copy_params
 
 
-def _train_agent_with_id(agent_id, policy_params, env, algo, algo_kw, steps, n_envs=1):
+def _train_agent_with_id(agent_id, policy_params, env, algo, algo_kw, steps, inner_loop_tb_dir=None, n_envs=1):
     """
     Train a single agent on a specific environment.
 
@@ -25,14 +25,14 @@ def _train_agent_with_id(agent_id, policy_params, env, algo, algo_kw, steps, n_e
         return ZCQPEE(model_params=model_params, **env_kw)
     env = make_vec_env(env_factory, n_envs=n_envs)
 
-    model = algo("MlpPolicy", env, **algo_kw)
+    model = algo("MlpPolicy", env, tensorboard_log=inner_loop_tb_dir, **algo_kw)
 
     policy_params = copy_params(policy_params)
     model.policy.load_state_dict(policy_params['pi'])
     model.policy.value_net.load_state_dict(policy_params['vf'])
 
     real_steps = steps * n_envs * algo_kw.get('n_steps', 1)
-    model.learn(total_timesteps=real_steps, log_interval=1, progress_bar=True)
+    model.learn(total_timesteps=real_steps, log_interval=1, progress_bar=True, tb_log_name=f'agent_{agent_id}')
 
     updated_policy_params = {
         'pi': model.policy.state_dict(),
@@ -43,7 +43,7 @@ def _train_agent_with_id(agent_id, policy_params, env, algo, algo_kw, steps, n_e
     return agent_id, updated_policy_params
 
 
-def vec_train_agents(policy_params, envs, algo, algo_kw, steps=10, n_envs=1):
+def vec_train_agents(policy_params, envs, algo, algo_kw, inner_loop_tb_dir=None, steps=10, n_envs=1):
     """
     Train multiple RL agents in parallel using multiprocessing.
 
@@ -61,7 +61,7 @@ def vec_train_agents(policy_params, envs, algo, algo_kw, steps=10, n_envs=1):
     n_agents = len(envs)
 
     # Prepare arguments for all agents (ensure it's a tuple of all parameters)
-    tasks = [(agent_id, policy_params, envs[agent_id], algo, algo_kw, steps, n_envs) for agent_id in range(n_agents)]
+    tasks = [(agent_id, policy_params, envs[agent_id], algo, algo_kw, steps, inner_loop_tb_dir, n_envs) for agent_id in range(n_agents)]
 
     # Use pool.starmap for parallelism
     with multiprocessing.Pool(processes=n_agents) as pool:
