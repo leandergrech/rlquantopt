@@ -1,1 +1,11 @@
 *.ini
+rlquantopt/meta_rl_agents/*
+rlquantopt/rl_agents/bubumatic.py
+rlquantopt/rl_agents/tb_logs/
+rlquantopt/rl_analysis/check_pulses/check_pulses.py
+rlquantopt/rl_analysis/pulse_freqs/band_filter/
+rlquantopt/rl_envs/configs/qsl/pulse_check/
+rlquantopt/rl_envs/old/test_qupulseenv.ipynb
+rlquantopt/rl_envs/old/vec_qu_pulse_episodic_env.py
+rlquantopt/tests/qpee_tests.py
+rlquantopt/tests/timing_qpee.py
