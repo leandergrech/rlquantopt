@@ -55,12 +55,13 @@ def main():
     # elif env_yml_dir.startswith('../'):
     #     env_yml_dir = os.path.abspath(os.path.join(pulse_dir, env_yml_dir))
 
-    pulse_file = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE_pl-1000_T-50ns_delta_mode-TRPO/05-12-24_201634/results/no_term/rl_model_12566528_steps_ZCQPEE_pl-1000_T-50ns_delta_mode_ep0_no_term.csv'
+    par_dir = '/home/leander/code/rlquantopt/rlquantopt/rl_agents/ZCQPEE_pl-1000_T-50ns_delta_mode-TRPO/05-12-24_201634'
+    pulse_file = os.path.join(par_dir, 'results/no_term/rl_model_12566528_steps_ZCQPEE_pl-1000_T-50ns_delta_mode_ep0_no_term.csv')
     no_term = True
     clip_best = False
     save_suffix = ""
     save_dir = ''
-    env_yml_dir = '.'
+    env_yml_dir = par_dir
     verbose = 0
     max_t = 50.
 
@@ -127,6 +128,9 @@ def main():
         a = env.norm_action(a)
 
         idx += 1
+        if len(a) < env.N_TIME_STEPS:
+            break
+
         obs, r, term, trunc, info = env.step(a, can_early_term=(not no_term))
 
         realised_gates.append(info['realised_gate'])
@@ -191,7 +195,6 @@ def main():
     if verbose > 0:
         print(f'Pulse: {pulse_file}; Ep: {i}')
         print(title + '\n')
-
 
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument('-p', '--pulse-csv', default='', type=str, help='Path to pulse CSV file')
 
     parser.add_argument('-a', '--algo', type=str, default='TRPO', help='Type of RL algorithm')
-    parser.add_argument('-x', '--max-t', type=float, default=300., help='')
+    parser.add_argument('-x', '--max-t', type=float, default=50., help='')
 
     parser.add_argument('--save-dir', type=str, default='', help='Path to save evaluation results')
     parser.add_argument('-e', '--env-yml-dir', type=str, default='', help='Directory containing only one yaml file with env arguments. Default, model directory.')

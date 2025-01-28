@@ -13,31 +13,27 @@ from sb3_contrib import RecurrentPPO, TRPO
 
 from rlquantopt.rl_envs.zc_qpee import ZCQPEE
 from rlquantopt.rl_agents.callbacks import EvalCallback
-from rlquantopt.utils.utils import get_latest_experiment, save_exp_info
+from rlquantopt.utils.utils import get_latest_experiment, save_exp_info, DT_FMT_STR
 from rlquantopt.utils.rl_utils import linear_schedule, harmonic_schedule
-
-
-DT_FMT_STR = '%d-%m-%y_%H%M%S'
 
 
 def parse_args():
     parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
     # ZCQPEE parameters
+    # parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
+    parser.add_argument('-a', '--add-prev-obs', action='store_true', help='Add previous observable w/o the action and time, to the current observable.')
+    parser.add_argument('-f', '--use-fidelity', action='store_true', help='Use fidelity metric to form reward instead of concurrence & unitarity')
     parser.add_argument('-p', '--pulse-length', default=1000, type=int, help='Maximum number of samples in a pulse')
-    parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
     parser.add_argument('-T', '--max-time-ns', default=50.0, type=float, help='Pulse duration in ns')
     parser.add_argument('-N', '--n-time-steps', default=3, type=int, help='Number of time-steps per action')
     parser.add_argument('--tv-penalty-scale', default=1e-3, type=float, help='Number of time-steps per action')
     parser.add_argument('-o', '--act-poly-order', default=1, type=float, help='Order of action transformation polynomial ')
-    parser.add_argument('-a', '--add-prev-obs', action='store_true', help='Add previous observable w/o the action and time, to the current observable.')
-    parser.add_argument('-f', '--use-fidelity', action='store_true', help='Use fidelity metric to form reward instead of concurrence & unitarity')
     parser.add_argument('--a-scale', default=20., type=float, help='Set action scaling during normalisation')
     parser.add_argument('--a-norm-max', default=1.0, type=float, help='Set the maximum normalised amplitude when using delta-mode')
     parser.add_argument('--rew-scale', default=1.0, type=float, help='Multiply reward by rew_scale after each step')
     parser.add_argument('--fid-thresh', default=0.99, type=float, help='Set goal fidelity threshold')
     parser.add_argument('--concurrence_weight', default=1, type=float, help='When --use-fidelity is not active, sets the weight of concurrence in the reward function')
     parser.add_argument('--unitarity_weight', default=3, type=float, help='When --use-fidelity is not active, sets the weight of unitarity in the reward function')
-    parser.add_argument('--fid-thresh', default=0.99, type=float, help='Set goal fidelity threshold')
 
     # RL agent paramters
     parser.add_argument('--algo', type=str, default='TRPO', help='Type of RL agent')
@@ -62,7 +58,7 @@ def parse_args():
     parser.add_argument('--log-interval', default=n_steps, type=int, help='Log every N calls to env.step')
     parser.add_argument('--n-eval-eps', default=1, type=int, help='Number of evaluation episodes done every eval_freq calls to env.step')
     parser.add_argument('--no-cuda', action='store_true')
-    parser.add_argument('--msg', default='', type=str, help='User message to add to info.txt')
+    parser.add_argument('--msg', default='REW_THRESH=0', type=str, help='User message to add to info.txt')
     parser.add_argument('-L', '--hidden-layer-size', default=128, type=int, help='Network hidden layer size. All layers are equal size')
     parser.add_argument('-H', '--n-hidden-layers', default=2, type=int, help='Nb. of hidden layers in last layer MLP')
 
@@ -91,28 +87,63 @@ def copy_scripts_to_model_path(model_path):
     copy_file_to_dir(temp.__file__)
 
 
-def main():
-    args = parse_args()
+def train_single_agent(retrain_model: str,
+                       pulse_length: int,
+                       rew_scale: float,
+                       max_time_ns: float,
+                       fid_thresh: float,
+                       a_scale: float,
+                       a_norm_max: float,
+                       n_time_steps: int,
+                       tv_penalty_scale: float,
+                       act_poly_order: int,
+                       add_prev_obs: bool,
+                       use_fidelity: bool,
+                       concurrence_weight: float,
+                       unitarity_weight: float,
+                       n_envs: int,
+                       gamma: float,
+                       n_train: int,
+                       n_steps: int,
+                       batch_size: int,
+                       n_epochs: int,
+                       save_freq: int,
+                       eval_freq: int,
+                       n_eval_eps: int,
+                       hidden_layer_size: int,
+                       n_hidden_layers: int,
+                       no_cuda: bool,
+                       algo_str: str,
+                       training_msg: str,
+                       seed: int,
+                       **kwargs):
+    # delta_mode = args.delta_mode
+    delta_mode = True     # We're sticking to this in the scope of RLQuantOpt
+
+    # Variable learning rates setup
+    lr_type = 'Harmonic decay'
+    learning_rate = harmonic_schedule(init_value=3e-4, k=10 ** 0.4)
+    # lr_type = 'Constant'
+    # learning_rate = 3e-4
+    def ppo_clip_range(): return 0.2
 
     # Define environment parameters
-    env_kw = dict(pulse_length=int(args.pulse_length),
-                  rew_scale=float(args.rew_scale),
-                  delta_mode=args.delta_mode,
-                  T=float(args.max_time_ns),
-                  fid_thresh=float(args.fid_thresh),
-                  action_scaling={'z': float(args.a_scale)},
-                  a_norm_max=float(args.a_norm_max),
-                  n_time_steps=args.n_time_steps,
-                  tv_penalty_scale=args.tv_penalty_scale,
-                  act_poly_order=args.act_poly_order,
-                  add_prev_obs=args.add_prev_obs,
-                  use_fidelity=args.use_fidelity,
-                  concurrence_weight=args.concurrence_weight,
-                  unitarity_weight=args.unitarity_weight
-                  )
-    n_envs = args.n_envs
-    gamma = args.gamma
 
+    env_kw = dict(pulse_length=pulse_length,
+                  rew_scale=rew_scale,
+                  delta_mode=delta_mode,
+                  T=max_time_ns,
+                  fid_thresh=fid_thresh,
+                  action_scaling={'z': a_scale},
+                  a_norm_max=a_norm_max,
+                  n_time_steps=n_time_steps,
+                  tv_penalty_scale=tv_penalty_scale,
+                  act_poly_order=act_poly_order,
+                  add_prev_obs=add_prev_obs,
+                  use_fidelity=use_fidelity,
+                  concurrence_weight=concurrence_weight,
+                  unitarity_weight=unitarity_weight,
+                  )
     # env = make_vec_env(lambda: NormalizeObservation(NormalizeReward(ZCQPEE(**env_kw), gamma=gamma), epsilon=1e-8), n_envs=n_envs)
     env = make_vec_env(lambda: ZCQPEE(**env_kw), n_envs=n_envs)
 
@@ -121,38 +152,20 @@ def main():
 
     # Prepare training info message
     info_fn = 'info.txt'
-    TRAINING_MESSAGE = f"{repr(eval_env)}\n" + f"Nb. envs: {n_envs}\n\n{args.msg}\n. "
+    TRAINING_MESSAGE = f"{repr(eval_env)}\n" + f"Nb. envs: {n_envs}\n\n{training_msg}\n. "
 
     print(f'n_obs={eval_env.n_obs}\tn_act={eval_env.n_act}')
 
-    # Parameter setup
-    learning_rate = harmonic_schedule(init_value=3e-4, k=10**0.4)
-    lr_type = 'Harmonic decay'
-    # learning_rate = 3e-4
-    # lr_type = 'Constant'
-    ppo_clip_range = lambda x: 0.2
-    # ppo_learning_rate = 3e-4
-
-    n_train = int(args.n_train)
-    n_steps = int(args.n_steps)
-    batch_size = int(args.batch_size)
-    n_epochs = int(args.n_epochs)
-    save_freq = int(args.save_freq)
-    eval_freq = max(n_envs * n_steps, int(args.eval_freq))
+    eval_freq = max(n_envs * n_steps, eval_freq)
     log_interval = eval_freq
-    n_eval_eps = int(args.n_eval_eps)
-    SEED = args.seed
-    L = args.hidden_layer_size
-    H = args.n_hidden_layers
+    L = hidden_layer_size
+    H = n_hidden_layers
 
     # Setting device on the CPU only for now since I am working on my laptop
-    if args.no_cuda:
+    if no_cuda:
         device = 'cpu'
     else:
         device = 'cuda'
-
-    # RL algorithm setup
-    algo_str = args.algo
 
     # Network architecture setup
     net_arch = dict(pi=[L]*H, vf=[L]*H)
@@ -160,31 +173,28 @@ def main():
     policy_kwargs = dict(activation_fn=tc.nn.ReLU,
                          net_arch=net_arch
                          )
+
     if 'Recurrent' in algo_str:
-        policy_kwargs.update(dict(lstm_hidden_size=args.lstm_hidden_size,
-                                  n_lstm_layers=args.n_lstm_layers,
+        policy_kwargs.update(dict(lstm_hidden_size=kwargs.get('lstm_hidden_size'),
+                                  n_lstm_layers=kwargs.get('n_lstm_layers'),
                                   enable_critic_lstm=True))
 
     policy_type = 'MlpPolicy'
     if algo_str == 'PPO':
         algo = PPO
-        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=learning_rate, device=device,
-                       n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95,
-                       ent_coef=args.ent_coef, vf_coef=0.5, use_sde=False, stats_window_size=100, seed=SEED, verbose=1)
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=learning_rate, device=device, n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95, ent_coef=kwargs.get('ent_coef', 0.0), vf_coef=0.5, use_sde=False, stats_window_size=100, seed=seed, verbose=1)
     elif algo_str == 'TRPO':
         algo = TRPO
-        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=learning_rate, device=device,
-                       gamma=gamma, seed=SEED, verbose=1)
+        algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=learning_rate, device=device, gamma=gamma, seed=seed, verbose=1)
     elif algo_str == 'SAC':
         algo = SAC
-        algo_kw = dict(learning_starts=1000, train_freq=(10, 'step'), batch_size=batch_size, learning_rate=learning_rate,
-                       device=device, gamma=gamma, seed=SEED, verbose=1)
+        algo_kw = dict(learning_starts=1000, train_freq=(10, 'step'), batch_size=batch_size, learning_rate=learning_rate, device=device, gamma=gamma, seed=seed, verbose=1)
     elif algo_str == 'RecurrentPPO':
         algo = RecurrentPPO
         policy_type = 'MlpLstmPolicy'
         algo_kw = dict(batch_size=batch_size, n_steps=n_steps, learning_rate=learning_rate, device=device,
                        n_epochs=n_epochs, gamma=gamma, clip_range=ppo_clip_range, max_grad_norm=0.5, gae_lambda=0.95,
-                       ent_coef=args.ent_coef, vf_coef=0.2, use_sde=False, stats_window_size=10, seed=SEED, verbose=1)
+                       ent_coef=kwargs.get('ent_coef', 0.0), vf_coef=0.2, use_sde=False, stats_window_size=10, seed=seed, verbose=1)
     else:
         raise NotImplementedError
 
@@ -192,8 +202,7 @@ def main():
     NAME NEW MODEL OR RETRAIN FROM MODEL CHECKPOINT
     '''
     model_checkpoint = None
-    model_path = args.retrain_model
-    if model_path is None:
+    if retrain_model is None:
         model_name = f"{dt.now().strftime(DT_FMT_STR)}"
         model_path = os.path.join(os.path.join(f'{str(eval_env)}-{algo_str}'), model_name)
         if not os.path.exists(model_path):
@@ -204,9 +213,10 @@ def main():
             os.makedirs(_best_model_path)
         eval_env.to_yaml(os.path.join(_best_model_path, env_yaml_fn))
     else:
-        model_name = os.path.basename(model_path)
-        model_checkpoint = get_latest_experiment(model_path, pattern='rl_model_')
-        eval_env.from_yaml(ZCQPEE.find_yaml_in_dir(model_path))
+        model_name = os.path.basename(retrain_model)
+        model_checkpoint = get_latest_experiment(retrain_model, pattern='rl_model_')
+        model_path = retrain_model
+        # eval_env = eval_env.from_yaml(ZCQPEE.find_yaml_in_dir(retrain_model))
         # for k, v in env_kw.items():
             # assert eval_env.model_params[k] == v, f'New vs. original training env mismatch! New training env parameters don\'t match the original environment parameters: New {k}: {v} != Original {k}: {eval_env.model_params[k]}'
 
@@ -279,4 +289,34 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    train_single_agent(pulse_length=args.pulse_length,
+                       rew_scale=args.rew_scale,
+                       max_time_ns=args.max_time_ns,
+                       fid_thresh=args.fid_thresh,
+                       a_scale=args.a_scale,
+                       a_norm_max=args.a_norm_max,
+                       n_time_steps=args.n_time_steps,
+                       tv_penalty_scale=args.tv_penalty_scale,
+                       act_poly_order=args.act_poly_order,
+                       add_prev_obs=args.add_prev_obs,
+                       use_fidelity=args.use_fidelity,
+                       concurrence_weight=args.concurrence_weight,
+                       unitarity_weight=args.unitarity_weight,
+                       n_envs=args.n_envs,
+                       gamma=args.gamma,
+                       n_train=args.n_train,
+                       n_steps=args.n_steps,
+                       batch_size=args.batch_size,
+                       n_epochs=args.n_epochs,
+                       save_freq=args.save_freq,
+                       eval_freq=args.eval_freq,
+                       n_eval_eps=args.n_eval_eps,
+                       hidden_layer_size=args.hidden_layer_size,
+                       n_hidden_layers=args.n_hidden_layers,
+                       no_cuda=args.no_cuda,
+                       algo_str=args.algo,
+                       training_msg=args.msg,
+                       seed=args.seed,
+                       retrain_model=args.retrain_model,
+                       )

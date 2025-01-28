@@ -8,6 +8,9 @@ from copy import deepcopy
 import yaml
 import json
 from matplotlib.ticker import MultipleLocator
+from datetime import datetime as dt
+
+DT_FMT_STR = '%d-%m-%y_%H%M%S'
 
 
 def decimal_to_base3(n):
@@ -316,15 +319,18 @@ def animate_matrices(matrices, n_levels, EPS=1e-5):
 
 
 def save_exp_info(info_path, training_message='\n', **kwargs):
-    if not os.path.exists(info_path):
-        with open(info_path, 'w') as f:
-            f.write(training_message)
+    if os.path.isdir(info_path):
+        info_path = os.path.join(info_path, 'info.txt')
 
-            for k, v in kwargs.items():
-                f.write(f'\n{k}:')
-                if isinstance(v, str):
-                    f.write(f'\t{v}\n')
-                else:
-                    json.dump(v, f, indent=10)
-    else:
-        raise Exception('info_path already exists. Does not overwrite experiment parameters by default.')
+    if os.path.exists(info_path):
+        info_path = os.path.join(os.path.dirname(info_path), f'info_retrain_{dt.now().strftime(DT_FMT_STR)}.txt')
+
+    with open(info_path, 'w') as f:
+        f.write(training_message)
+
+        for k, v in kwargs.items():
+            f.write(f'\n{k}:')
+            if isinstance(v, str):
+                f.write(f'\t{v}\n')
+            else:
+                json.dump(v, f, indent=10)

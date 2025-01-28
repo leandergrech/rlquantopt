@@ -20,5 +20,6 @@ setup(
         'stable-baselines3==2.3.1',
         'sb3-contrib==2.3.0',
         'tensorboard',
+        'weylchamber'
     ],
 )

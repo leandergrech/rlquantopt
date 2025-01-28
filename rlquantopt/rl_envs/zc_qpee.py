@@ -7,7 +7,7 @@ import numpy as np
 # from keras.src.backend import shape
 from tqdm import tqdm
 import pandas as pd
-from qutip import Qobj, ket, QobjEvo, SESolver, expect
+from qutip import Qobj, ket, QobjEvo, SESolver, expect, MESolver
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
@@ -91,6 +91,7 @@ class ZCQPEE(Env):
     # Random-walk episode initialisation - off by default
     RANDOM_START_PROB = 0.0
     RANDOM_START_STEPS = 10
+
     def __init__(self, model_params=None, **env_kwargs):
         """
         Initializes the ZCQPEE environment with specified Hamiltonian and control settings.
@@ -125,12 +126,14 @@ class ZCQPEE(Env):
         self.UNITARITY_WEIGHT = env_kwargs.get('unitarity_weight', self.UNITARITY_WEIGHT)
 
         # Calculate reward threshold
+        self.REW_THRESH = 0
+        '''
         if self.USE_FIDELITY:
-            self.REW_THRESH = self._fid2rew(self.FID_THRESH) * self.REW_SCALE
+            pass
+            # self.REW_THRESH = self._fid2rew(self.FID_THRESH) * self.REW_SCALE
         else:
-            # self.REW_THRESH = -(np.log10(self.CONCURRENCE_LIM) + np.log10(self.UNITARITY_LIM)) * self.REW_SCALE
             self.REW_THRESH = self._fid2rew(self.LOG_LIM) * self.REW_SCALE
-
+        '''
         # Observable related parameters
         self.ADD_PREV_OBS = env_kwargs.get('add_prev_obs', self.ADD_PREV_OBS)
         self.OBS_SCALE = env_kwargs.get('obs_scale', self.OBS_SCALE)
@@ -163,7 +166,8 @@ class ZCQPEE(Env):
             raise ValueError("tlist diff and dt must be the same")
 
         # Set up gate
-        self.unitary_iswap = U = self.get_iswap_u()
+        # self.unitary_iswap = U = self.get_iswap_u()
+        self.unitary_iswap = U = self.get_sqrtiswap_u()
 
         # Set up initial states
         full_dims = self.model_params.get("qubit_dims").copy()
@@ -177,9 +181,10 @@ class ZCQPEE(Env):
         self.initial_states = self.basis_states.copy()
 
         # Set up SE solvers
-        options = dict(method='adams')#, atol=1e-10, rtol=1e-8, order=5)
-        # options = dict(method='diag')
+        # options = dict(method='adams')#, atol=1e-10, rtol=1e-8, order=5)
+        options = dict(method='adams', atol=1e-10, rtol=1e-8)
         self.solvers = [SESolver(self.simulator.H, options=options) for _ in range(len(self.basis_states))]
+        # self.solvers = [MESolver(self.simulator.H, options=options) for _ in range(len(self.basis_states))]
 
         self.basis_states_str = ('$|000\\rangle$', '$|010\\rangle$','$|100\\rangle$','$|110\\rangle$',)
 
@@ -241,6 +246,25 @@ class ZCQPEE(Env):
             [0, 1j, 0, 0],
             [0, 0, 0, 1]
         ]), dims=[[2, 2], [2, 2]])  # iSWAP
+
+    @staticmethod
+    def get_sqrtswap_u():
+        return Qobj(np.array([
+            [1, 0, 0, 0],
+            [0, (1+1j)/2, (1-1j)/2, 0],
+            [0, (1-1j)/2, (1+1j)/2, 0],
+            [0, 0, 0, 1]
+        ]), dims=[[2, 2], [2, 2]])
+
+    @staticmethod
+    def get_sqrtiswap_u():
+        inv_sqrt2 = 1 / np.sqrt(2)
+        return Qobj(np.array([
+            [1, 0, 0, 0],
+            [0, inv_sqrt2, inv_sqrt2*1j, 0],
+            [0, inv_sqrt2*1j, inv_sqrt2, 0],
+            [0, 0, 0, 1]
+        ]), dims=[[2, 2], [2, 2]])
 
     def init_pulse_amplitudes(self, delta):
         if delta:
@@ -557,7 +581,7 @@ class ZCQPEE(Env):
         Computes the reward for the current step based on metrics on realised quantum gate and pulse smoothness.
 
         The reward includes:
-        - Fidelity-based metric for target iSWAP gate or Concurrence-Unitarity-based metric.
+        - Fidelity-based metric for target sqrtiSWAP gate or Concurrence-Unitarity-based metric.
         - Penalties for abrupt action changes (TV penalty).
 
         Args:
@@ -649,6 +673,7 @@ class ZCQPEE(Env):
         for item in os.listdir(dir):
             if (item.endswith('.yaml') or item.endswith('.yml')) and item.startswith('ZCQPEE_pl-'):
                 return os.path.join(dir, item)
+        return None
 
     def render(self, mode='human', save_path=None, fps=80, **kwargs):
         """
@@ -670,7 +695,7 @@ class ZCQPEE(Env):
 
         # Setup figure and axes
         fig = plt.figure(figsize=(15, 10))
-        fig.suptitle(f'iSWAP\naction scale={self.action_scaling[self.channel_label]:.2e}')
+        fig.suptitle(f'sqrtiSWAP\naction scale={self.action_scaling[self.channel_label]:.2e}')
         if self.delta_mode:
             n_rows = 4
         else:
@@ -886,7 +911,7 @@ class ZCQPEE(Env):
                 f"          TV penalty scale = {self.TV_PENALTY_SCALE}\n"
                 f"          Action scaling = {self.action_scaling}\n"
                 f"          A_norm_max = {self.A_norm_max}\n"
-                f"          ISWAP gate optimisation.\n"
+                f"          sqrt_iSWAP gate optimisation.\n"
                 f"          Action delta_mode={self.delta_mode}\n"
                 f"          Action polynomial order={ZCQPEE.ACT_POLY_ORDER}")
 
