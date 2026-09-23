@@ -23,7 +23,10 @@ def weyl_eigenvalues(G):
 
 
 def c1c2c3(G, digits=WEYL_DIGITS):
-    """Weyl chamber coordinates (units of π) of a block-diagonal 4x4 gate, as weylchamber.c1c2c3."""
+    """Weyl chamber coordinates (units of π) of a block-diagonal 4x4 gate, as weylchamber.c1c2c3.
+
+    ``digits=None`` skips the final rounding, which otherwise has zero gradient (use it for GRAPE).
+    """
     two_S = jnp.angle(weyl_eigenvalues(G)) / jnp.pi
     two_S = jnp.where(two_S <= -0.5, two_S + 2.0, two_S)
     S = jnp.sort(two_S / 2.0)[::-1]
@@ -33,7 +36,8 @@ def c1c2c3(G, digits=WEYL_DIGITS):
     c1, c2, c3 = _M @ S[:3]
     c1 = jnp.where(c3 < 0, 1 - c1, c1)
     c3 = jnp.abs(c3)
-    return jnp.round(jnp.stack([c1, c2, c3]), digits) + 0.0
+    c = jnp.stack([c1, c2, c3])
+    return c if digits is None else jnp.round(c, digits) + 0.0
 
 
 def concurrence(c):
@@ -50,9 +54,9 @@ def unitarity(G):
     return jnp.sum(jnp.abs(G) ** 2) / 4
 
 
-def cost_JT(G, concurrence_weight=1.0, unitarity_weight=3.0):
+def cost_JT(G, concurrence_weight=1.0, unitarity_weight=3.0, digits=WEYL_DIGITS):
     """J_T = 1 - (w_c C + w_u U)/(w_c + w_u); paper eq. 2 with the default 1:3 weights."""
-    C = concurrence(c1c2c3(G))
+    C = concurrence(c1c2c3(G, digits))
     U = unitarity(G)
     K = concurrence_weight + unitarity_weight
     return 1 - (concurrence_weight * C + unitarity_weight * U) / K, C, U
