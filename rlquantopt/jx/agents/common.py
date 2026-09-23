@@ -121,8 +121,12 @@ def gae(traj: Transition, last_value, gamma, lam):
     return adv, adv + traj.value
 
 
-def evaluate(model: ActorCritic, params, cfg: jenv.EnvConfig, omega_s=None):
-    """Deterministic episode (mean actions). Returns per-step reward, J_T, C, U, t and the pulse."""
+def evaluate(model: ActorCritic, params, cfg: jenv.EnvConfig, omega_s=None, stop_on_truncation=True):
+    """Deterministic episode (mean actions). Returns per-step reward, J_T, C, U, t and the pulse.
+
+    With ``stop_on_truncation=False`` the episode keeps going after an out-of-bounds step (amplitudes
+    stay clipped), as the v1 analysis notebooks did; ``alive`` then only ends at the time limit.
+    """
     omega_s = jnp.asarray(cfg.model.omega_s if omega_s is None else omega_s)
     obs, state = jenv.reset_to(omega_s, cfg)
 
@@ -132,7 +136,8 @@ def evaluate(model: ActorCritic, params, cfg: jenv.EnvConfig, omega_s=None):
         obs, state, r, term, trunc, info = jenv.step(state, mean, cfg)
         out = dict(reward=r, JT=info["JT"], concurrence=info["concurrence"], unitarity=info["unitarity"],
                    t=info["t"], amps=state.amps_cur, alive=alive)
-        return (obs, state, alive & ~(term | trunc)), out
+        ended = term | trunc if stop_on_truncation else term
+        return (obs, state, alive & ~ended), out
 
     _, out = jax.lax.scan(body, (obs, state, jnp.array(True)), None, cfg.n_steps)
     return out
