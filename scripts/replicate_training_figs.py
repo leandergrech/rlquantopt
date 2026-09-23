@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
+from matplotlib.colors import LogNorm, Normalize
 from scipy.ndimage import minimum_filter1d
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -69,7 +69,7 @@ def main():
         panel(axs[0, j], steps, f[keep], S[:, keep], f"{name}: pulse spectrum (Fig. 5)", "frequency [GHz]",
               LogNorm(vmin=max(S[:, keep].max() * 1e-4, 1e-3), vmax=S[:, keep].max()), "magma")
         axs[0, j].axhline(0.8588, c="c", lw=0.8, ls="--")
-        panel(axs[1, j], steps, t, d["reward"], "reward (Fig. 6)", "pulse time [ns]", cmap="viridis")
+        panel(axs[1, j], steps, t, d["reward"], "reward (Fig. 6)", "pulse time [ns]", Normalize(0, 4), "viridis")
         err_c = np.clip(1 - d["C"], 1e-6, 1)
         panel(axs[2, j], steps, t, err_c, "1 - C (Fig. 7)", "pulse time [ns]", LogNorm(1e-6, 1), "magma_r")
         err_u = minimum_filter1d(np.nan_to_num(np.clip(1 - d["U"], 1e-6, 1), nan=1.0), size=7, axis=1)
