@@ -31,20 +31,22 @@ is jit-able, vmap-able and differentiable.
 
 Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 
-| Version | Milestone | Done when |
-| ------- | --------- | --------- |
-| 2.0.0 | This plan; version bump; `rlquantopt.jx` package skeleton | Plan committed |
-| 2.1.0 | Physics + metrics: sector Hamiltonians, exact propagators, gate extraction, Weyl coordinates, concurrence, unitarity, J_T | Unit tests agree with QuTiP (27-dim) and `weylchamber` to ~1e-8 on random pulses and on the paper's RL pulse |
-| 2.2.0 | Functional `ZCQPEE` env (`reset`/`step` pure functions, auto-reset, vmap over thousands of envs), matching v1 observation, action, reward and termination semantics | Step-by-step equivalence test against v1 `ZCQPEE` on random action sequences |
-| 2.3.0 | Pulse evaluation tools: robustness map (paper Fig. 10-12) for any stored pulse; JAX evaluation of the paper's RL and Krotov pulses | Maps reproduce the paper's qualitative picture; stored pulses reach the paper's J_T |
-| 2.4.0 | PPO in pure JAX (PureJaxRL style: env + agent in one `jit`/`scan`) | Learns the task; throughput benchmark vs v1 |
-| 2.5.0 | TRPO in pure JAX (conjugate gradient + line search, same hyper-parameters as the paper: [128,128] tanh, γ=0.99, λ=0.95, KL 0.01, harmonic LR) | Replicates paper Figs. 5-8 trends: ~10 ns PE gate, C > 0.9999, U > 0.999 |
-| 2.6.0 | Policy-level generalisation sweep (Fig. 13-16) and domain randomisation ±0.1 % (Fig. 17) | Island structure and DR trade-off reproduced |
-| 2.7.0 | Differentiable GRAPE baseline on the same simulator; QSL curve J_T(T) for several amplitude limits (Fig. 3) | QSL ≈ 10 ns at the 1.5 GHz limit |
-| 2.8.0 | Replication report (`docs/replication.md`) with all figures, seeds and wall-clock numbers | Report committed |
+| Version | Milestone | Status |
+| ------- | --------- | ------ |
+| 2.0.0 | This plan; version bump; `rlquantopt.jx` package skeleton | done |
+| 2.1.0 | Physics + metrics (sector propagators, closed-form Weyl coordinates), cross-checked against QuTiP and `weylchamber` | done |
+| 2.2.0 | Functional `ZCQPEE` env (jit/vmap), step-by-step equivalent to v1 | done |
+| 2.3.0 | Robustness maps of the stored RL and Krotov pulses vs the paper's Julia data (Figs. 10-12) | done |
+| 2.4.0 | PPO and TRPO in pure JAX; SB3 checkpoint import; training CLI | done |
+| 2.5.0 | Policy-level generalisation with the paper's own policies (Figs. 13-17) | done |
+| 2.6.0 | TRPO training replication from scratch (Figs. 5-8) | done, 1 seed |
+| 2.7.0 | Differentiable GRAPE baseline and QSL curve (Fig. 3) | done |
+| 2.8.0 | Replication report, `docs/replication.md` | done |
 
 ## Beyond replication (next minor versions, not in this pass)
 
+0. More seeds (≥5) of the TRPO replication, to tell seed variance from a systematic gap (best J_T
+   1e-3 here vs 1e-4 in the paper).
 1. Named-gate targets (CZ, √iSWAP) with average gate fidelity and leakage reported separately.
 2. Fair baselines at equal simulator budget: ensemble GRAPE over the ±Δω distribution; RL → GRAPE refinement; RL from demonstrations; ≥5 seeds per method.
 3. Context-conditioned policies (Δω estimates or measurement history in the observation) to remove the domain-randomisation error floor.

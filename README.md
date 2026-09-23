@@ -25,6 +25,20 @@ against Krotov-optimised pulses in terms of robustness and generalisation.
 | `rlquantopt_mc/` | One- and two-qubit quantum optimal control baselines. |
 | `rlquantopt/slurm_runners/` | SLURM job scripts used for cluster training. |
 
+## v2: JAX re-implementation
+
+`rlquantopt/jx` re-implements the environment and the agents in JAX. It propagates only the
+excitation-number sectors the gate lives in, exactly, and computes the reward in closed form, so
+it runs ~100× faster than v1 on a CPU and is differentiable end to end. It reproduces the
+paper's physics, robustness maps and generalisation sweeps, and runs the paper's own trained
+policies; see [docs/replication.md](docs/replication.md) and [docs/v2_jax_plan.md](docs/v2_jax_plan.md).
+
+```bash
+pip install -r requirements-jax.txt && pip install -e . --no-deps
+pytest tests/
+JAX_PLATFORMS=cpu python -m rlquantopt.jx.train --algo trpo --seed 123    # the paper's TRPO setup
+```
+
 ## Installation
 
 ```bash
