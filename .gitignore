@@ -45,3 +45,7 @@ rlquantopt/rl_analysis/noisy_simulation/step_states_no_noise.pkl
 rlquantopt/rl_analysis/noisy_simulation/step_states_t1.pkl
 rlquantopt/rl_analysis/generalisation/sweep-fine_*/
 *.json.broken
+
+# rlquantopt.jx training outputs
+runs/
+runs_*.log
