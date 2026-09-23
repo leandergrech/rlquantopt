@@ -112,7 +112,7 @@ class ZCQubits:
         self.x = x
 
         results = self.mesolve(self.x, self.tlist, self.initial_states)
-        states = [res.states[-1] for res in results]
+        states = [res.all_states[-1] for res in results]
 
         self.F = self.fidelity(states, self.target_states)
 
@@ -195,7 +195,7 @@ if __name__ == "__main__":
     data = pd.read_csv('configs/data.csv')
 
     results = model.mesolve(data['1'].to_numpy(), data['0'].to_numpy(), basis_states)
-    states = [res.states[-1] for res in results]
+    states = [res.all_states[-1] for res in results]
 
     print(model.fidelity(states, mapped_basis_states))
 

@@ -89,7 +89,7 @@ class OneQubit:
 	def wrapped_mesolve(args):
 		H, psi, tlist = args
 		sol = mesolve(H, psi, tlist)
-		return sol.states[-1]
+		return sol.all_states[-1]
 
 	@staticmethod
 	def get_params(x, tlist):

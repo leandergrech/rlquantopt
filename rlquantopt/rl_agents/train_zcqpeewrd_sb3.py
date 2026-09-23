@@ -11,14 +11,14 @@ from stable_baselines3.common.callbacks import CheckpointCallback, StopTrainingO
 from stable_baselines3 import PPO, SAC
 from sb3_contrib import RecurrentPPO, TRPO
 
-from rlquantopt.rl_envs.zc_qpee import ZCQPEE
+from rlquantopt.rl_envs.zc_qpee_wrd import ZCQPEEWRD as ZCQPEE
 from rlquantopt.rl_agents.callbacks import EvalCallback
 from rlquantopt.utils.utils import get_latest_experiment, save_exp_info, DT_FMT_STR
 from rlquantopt.utils.rl_utils import linear_schedule, harmonic_schedule
 
 
 def parse_args():
-    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEE environment')
+    parser = argparse.ArgumentParser('RLQuantOpt - training RL agent on ZCQPEEWRD environment')
     # ZCQPEE parameters
     # parser.add_argument('-d', '--delta-mode', action='store_true', help='Use ZCQPEE environment in delta action mode')
     parser.add_argument('-a', '--add-prev-obs', action='store_true', help='Add previous observable w/o the action and time, to the current observable.')
@@ -81,9 +81,9 @@ def copy_scripts_to_model_path(model_path):
 
     import rlquantopt.rl_envs.zcqubits as temp
     copy_file_to_dir(temp.__file__)
-    import rlquantopt.rl_envs.zc_qpee as temp
+    import rlquantopt.rl_envs.zc_qpee_wrd as temp
     copy_file_to_dir(temp.__file__)
-    import rlquantopt.rl_agents.train_zcqpee_sb3 as temp
+    import rlquantopt.rl_agents.train_zcqpeewrd_sb3 as temp
     copy_file_to_dir(temp.__file__)
 
 
@@ -170,11 +170,7 @@ def train_single_agent(retrain_model: str,
     # Network architecture setup
     net_arch = dict(pi=[L]*H, vf=[L]*H)
     if 'SAC' in algo_str: net_arch['qf'] = net_arch.pop('vf')
-    # policy_kwargs = dict(activation_fn=tc.nn.ReLU,
-    #                      net_arch=net_arch
-    #                      )
-    # LG 5/06/2025 CHANGE
-    policy_kwargs = dict(activation_fn=tc.nn.Tanh,
+    policy_kwargs = dict(activation_fn=tc.nn.ReLU,
                          net_arch=net_arch
                          )
 

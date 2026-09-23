@@ -4,7 +4,7 @@ import pickle as pkl
 from typing import Callable
 import numpy as np
 from matplotlib import pyplot as plt
-from qutip import QobjEvo, SESolver, expect
+from qutip import QobjEvo, SESolver, expect, MESolver
 from qutip.core import destroy, identity, tensor, Qobj, ket
 from scipy.interpolate import interp1d, CubicSpline
 from scipy.optimize import minimize
@@ -207,7 +207,7 @@ class ZCQubits:
         self.threads = None
 
         # self.H = QobjEvo([self.drift, [self.control, lambda t, A: A]], args={'A': 0.}, order=0)
-        self.H = QobjEvo([self.drift, [self.control, self.bubu]], args={'A': 0.}, order=3)
+        self.H = QobjEvo([self.drift, [self.control, self.bubu]], args={'A': 0.}, order=0)
 
     @staticmethod
     def bubu(t, A):

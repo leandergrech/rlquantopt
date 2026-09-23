@@ -33,3 +33,15 @@ rlquantopt/tests/timing_qpee.py
 rlquantopt/tests/zcqpee_renders
 rlquantopt/tests/zcqpee_tests.py
 rlquantopt/tests/zc_qpee_vs_zcqubits
+
+# Python / Jupyter clutter
+__pycache__/
+*.egg-info/
+build/
+.ipynb_checkpoints/
+
+# Large generated data (too big for GitHub)
+rlquantopt/rl_analysis/noisy_simulation/step_states_no_noise.pkl
+rlquantopt/rl_analysis/noisy_simulation/step_states_t1.pkl
+rlquantopt/rl_analysis/generalisation/sweep-fine_*/
+*.json.broken

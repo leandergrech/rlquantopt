@@ -120,6 +120,7 @@ def main():
 
             all_actions = [0.]
             policy = model.policy
+            qobjs = []
             while not term:
                 obs_tensor, vectorized_env = policy.obs_to_tensor(obs)
                 with th.no_grad():
@@ -127,7 +128,8 @@ def main():
                 a_mean = a_dist.mean.cpu().numpy()
                 a_scale = a_dist.scale.cpu().numpy()
                 # a = a_dist.get_actions(deterministic=False)
-                a = np.random.normal(a_mean, a_scale)
+                # a = np.random.normal(a_mean, a_scale)
+                a = a_mean
 
                 # Convert to numpy, and reshape to the original action shape
                 # a = a.cpu().numpy().reshape((-1, env.N_TIME_STEPS))
@@ -138,6 +140,8 @@ def main():
                 all_actions.extend(list(a.squeeze()).copy())
                 idx += 1
                 obs, r, term, trunc, info = env.step(a, can_early_term=(not no_term))
+
+                qobjs.append(info['step_states'])
 
                 rews.append(r)
                 if verbose >= 0:

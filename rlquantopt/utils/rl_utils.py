@@ -16,9 +16,14 @@ def linear_schedule(init_value):
     return func
 
 
-def harmonic_schedule(init_value=3e-4, k=10**0.4, tau=1):
+# def harmonic_schedule(init_value=3e-4, k=10**0.4, tau=1):
+#     def func(x):
+#         return init_value / (1. + (k * (1 - x*tau)))
+#     return func
+
+def harmonic_schedule(init_value=3e-4, k=10**0.4):
     def func(x):
-        return init_value / (1. + (k * (1 - x*tau)))
+        return init_value / (1. + (k * (1 - x)))
     return func
 
 
@@ -52,7 +57,6 @@ def get_pulse_data(pulse_path, verbose=False):
         data = pd.read_csv(pulse_path)
         col_keys = list(data.keys())
     tkey, vkey = None, None
-    print(col_keys)
     for key in col_keys:
         if 'amplist' in key or 'pulse' in key or 'amp' in key or 'value' in key:
             vkey = key

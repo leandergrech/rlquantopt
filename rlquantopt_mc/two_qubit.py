@@ -149,7 +149,7 @@ class TwoQubit:
 	def wrapped_mesolve(args):
 		H, psi, tlist, c_ops = args
 		sol = mesolve(H, psi, tlist, c_ops=c_ops)
-		return sol.states[-1]
+		return sol.all_states[-1]
 
 	# noinspection PyUnusedLocal,PyTypeChecker
 	def cost_fun(self, x, *args):

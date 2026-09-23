@@ -32,7 +32,8 @@ class ZCQPEE(Env):
     entanglers, using a three-qutrit system with a central coupler. ZCQPEE allows RL agents to learn optimal
     control strategies for generating high-fidelity pulses under varying Hamiltonian dynamics.
 
-    Key Features:
+    Key Features
+    ------------
         - Interaction with a quantum simulator to evolve state vectors based on pulse amplitudes.
         - Support for delta-based and absolute amplitude control.
         - Reward functions emphasizing either fidelity for the iSWAP gate or a weighted sum of the concurrence and
@@ -40,7 +41,8 @@ class ZCQPEE(Env):
         - Action transformations to test policies under different smoothness conditions.
         - Configurable action and observation spaces tailored for RL training.
 
-    Attributes:
+    Attributes
+    ----------
         pulse_length (int): Number of discrete time steps for the pulse.
         T (float): Total duration of the pulse in nanoseconds.
         delta_mode (bool): If True, actions represent delta amplitudes; otherwise, absolute values.
