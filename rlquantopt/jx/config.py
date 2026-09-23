@@ -1,8 +1,9 @@
 """Numerical precision for rlquantopt.jx.
 
-Double precision is on by default because gate errors of 1e-4 accumulate over
-1000 propagation steps. Set RLQO_X64=0 before importing to train in single
-precision (much faster on consumer GPUs).
+Double precision is on by default and is required for training: in float32 the
+rounding error of 1000 propagation steps is ~1e-4 in J_T (the paper's RL pulse
+reads J_T_min = 8e-6 instead of 9.5e-5), which is the scale the agent optimises.
+RLQO_X64=0 switches to float32 for quick smoke tests only.
 """
 import os
 
