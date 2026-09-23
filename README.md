@@ -1,5 +1,7 @@
 # RLQuantOpt
 
+[![DOI](https://img.shields.io/badge/DOI-10.1088%2F2058--9565%2Fae2c16-blue)](https://doi.org/10.1088/2058-9565/ae2c16) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Release](https://img.shields.io/badge/release-v1.0.0-green)](https://github.com/leandergrech/rlquantopt/releases/tag/v1.0.0)
+
 Code and data for the paper:
 
 > L. Grech, M. G. Krauss, M. Consiglio, T. J. G. Apollaro, C. P. Koch, S. Hirlaender and G. Valentino,
@@ -66,3 +68,7 @@ Some large generated files are not in the repository: the noisy-simulation state
 
 Project RLQuantOpt is financed by Xjenza Malta, for and on behalf of the Foundation for Science and Technology,
 through the FUSION: R&I Research Excellence Programme.
+
+## License
+
+Released under the [MIT License](LICENSE). If you use this code, please cite the paper above.
