@@ -32,10 +32,14 @@ S2_POS_110 = 4
 
 
 class ModelParams(NamedTuple):
-    """Physical parameters, GHz. Defaults are setup_ZCQubits4MKrauss_params (the paper run)."""
-    omega_s: jnp.ndarray = jnp.array([5.0311, 5.8899])
-    alpha_s: jnp.ndarray = jnp.array([-324e-3, -235e-3])
-    g: jnp.ndarray = jnp.array([100e-3, 71.4e-3])
+    """Physical parameters, GHz. Defaults are setup_ZCQubits4MKrauss_params (the paper run).
+
+    Plain floats/tuples so the params can sit in a static (hashable) config; any field
+    may be replaced by a traced array, e.g. ``params._replace(omega_s=omega)``.
+    """
+    omega_s: tuple = (5.0311, 5.8899)
+    alpha_s: tuple = (-324e-3, -235e-3)
+    g: tuple = (100e-3, 71.4e-3)
     alpha_c: float = -230e-3
     omega_r: float = 6.0
     omega_c_0: float = 7.445
