@@ -1,0 +1,16 @@
+# RLQuantOpt v2 (JAX) stack. Install with:
+#   pip install -r requirements-jax.txt && pip install -e . --no-deps
+jax[cuda12]>=0.7
+optax>=0.2
+flax>=0.10
+numpy
+scipy
+matplotlib
+pandas
+pyyaml
+tqdm
+pytest
+# Only needed to run the cross-check tests against the v1 reference implementation
+qutip==5.0.2
+weylchamber
+gymnasium==0.29.1
