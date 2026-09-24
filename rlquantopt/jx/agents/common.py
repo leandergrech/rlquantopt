@@ -85,6 +85,7 @@ class RunnerState(NamedTuple):
     key: jnp.ndarray
 
 
+# --8<-- [start:collect]
 def collect(model: ActorCritic, runner: RunnerState, cfg: jenv.EnvConfig, n_steps: int, gamma: float,
             resample_drift: bool = True):
     """Roll out ``n_steps`` in every env. Arrays in the returned Transition are (n_steps, n_envs, ...)."""
@@ -107,8 +108,10 @@ def collect(model: ActorCritic, runner: RunnerState, cfg: jenv.EnvConfig, n_step
         return RunnerState(params, env_state, next_obs, key), tr
 
     return jax.lax.scan(body, runner, None, n_steps)
+# --8<-- [end:collect]
 
 
+# --8<-- [start:gae]
 def gae(traj: Transition, last_value, gamma, lam):
     def body(carry, tr):
         next_adv, next_value = carry
@@ -119,6 +122,7 @@ def gae(traj: Transition, last_value, gamma, lam):
 
     _, adv = jax.lax.scan(body, (jnp.zeros_like(last_value), last_value), traj, reverse=True)
     return adv, adv + traj.value
+# --8<-- [end:gae]
 
 
 def evaluate(model: ActorCritic, params, cfg: jenv.EnvConfig, omega_s=None, stop_on_truncation=True):

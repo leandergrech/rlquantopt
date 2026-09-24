@@ -84,6 +84,7 @@ def main(argv=None):
         json.dump(dict(args=vars(args), env=dataclasses.asdict(env_cfg), algo=dataclasses.asdict(algo_cfg),
                        backend=jax.default_backend(), x64=bool(jax.config.jax_enable_x64)), f, indent=2, default=str)
 
+# --8<-- [start:train_loop]
     model, runner, opt_state = algo.init(jax.random.PRNGKey(args.seed), env_cfg, algo_cfg)
     update = algo.make_update(model, env_cfg, algo_cfg)
     eval_fn = jax.jit(lambda params: evaluate(model, params, env_cfg))
@@ -111,6 +112,7 @@ def main(argv=None):
         rows.append(row)
         if (i + 1) % 10 == 0 or i == algo_cfg.n_updates - 1:
             _write_csv(os.path.join(out, "progress.csv"), rows)
+# --8<-- [end:train_loop]
     return out
 
 

@@ -42,13 +42,16 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.6.0 | TRPO training replication from scratch (Figs. 5-8) | done, 1 seed |
 | 2.7.0 | Differentiable GRAPE baseline and QSL curve (Fig. 3) | done |
 | 2.8.0 | Replication report, `docs/replication.md` | done |
+| 2.9.0 | RL → GRAPE refinement and robust (ensemble) GRAPE ([results](experiments/rl-grape-robust.md)) | done |
+| 2.10.0 | Documentation site (MkDocs, GitHub Pages) | done |
 
 ## Beyond replication (next minor versions, not in this pass)
 
 0. More seeds (≥5) of the TRPO replication, to tell seed variance from a systematic gap (best J_T
    1e-3 here vs 1e-4 in the paper).
 1. Named-gate targets (CZ, √iSWAP) with average gate fidelity and leakage reported separately.
-2. Fair baselines at equal simulator budget: ensemble GRAPE over the ±Δω distribution; RL → GRAPE refinement; RL from demonstrations; ≥5 seeds per method.
+2. Fair baselines: ensemble GRAPE over the ±Δω distribution and RL → GRAPE refinement are done
+   (v2.9.0); still open: RL from demonstrations, ≥5 seeds per method, a hardware-justified drift range.
 3. Context-conditioned policies (Δω estimates or measurement history in the observation) to remove the domain-randomisation error floor.
 4. Open-system training (Lindblad T1/T2, coupler 1/f flux noise) and a flux-line transfer function.
 5. Measurement-based observations (finite-shot populations) and model-based RL.

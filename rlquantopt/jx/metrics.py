@@ -13,6 +13,7 @@ WEYL_DIGITS = 8     # weylchamber.prec.DEFAULT_WEYL_PRECISSION
 _M = jnp.array([[1., 1., 0.], [1., 0., 1.], [0., 1., 1.]])
 
 
+# --8<-- [start:weyl]
 def weyl_eigenvalues(G):
     g00, a, b, c, d, e = G[0, 0], G[1, 1], G[1, 2], G[2, 1], G[2, 2], G[3, 3]
     p = a * d + b * c
@@ -38,8 +39,10 @@ def c1c2c3(G, digits=WEYL_DIGITS):
     c3 = jnp.abs(c3)
     c = jnp.stack([c1, c2, c3])
     return c if digits is None else jnp.round(c, digits) + 0.0
+# --8<-- [end:weyl]
 
 
+# --8<-- [start:cost]
 def concurrence(c):
     """Gate concurrence from Weyl coordinates, as weylchamber.concurrence."""
     c1, c2, c3 = c
@@ -60,3 +63,4 @@ def cost_JT(G, concurrence_weight=1.0, unitarity_weight=3.0, digits=WEYL_DIGITS)
     U = unitarity(G)
     K = concurrence_weight + unitarity_weight
     return 1 - (concurrence_weight * C + unitarity_weight * U) / K, C, U
+# --8<-- [end:cost]

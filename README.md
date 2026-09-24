@@ -31,7 +31,8 @@ against Krotov-optimised pulses in terms of robustness and generalisation.
 excitation-number sectors the gate lives in, exactly, and computes the reward in closed form, so
 it runs ~100× faster than v1 on a CPU and is differentiable end to end. It reproduces the
 paper's physics, robustness maps and generalisation sweeps, and runs the paper's own trained
-policies; see [docs/replication.md](docs/replication.md) and [docs/v2_jax_plan.md](docs/v2_jax_plan.md).
+policies. Documentation, code walkthrough and results: **https://leandergrech.github.io/rlquantopt/**
+(sources in [docs/](docs/)).
 
 ```bash
 pip install -r requirements-jax.txt && pip install -e . --no-deps

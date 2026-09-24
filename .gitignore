@@ -49,3 +49,6 @@ rlquantopt/rl_analysis/generalisation/sweep-fine_*/
 # rlquantopt.jx training outputs
 runs/
 runs_*.log
+
+# mkdocs build output
+site/

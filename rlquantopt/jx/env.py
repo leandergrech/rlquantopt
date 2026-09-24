@@ -92,6 +92,7 @@ def reset(key, cfg: EnvConfig):
     return reset_to(sample_omega_s(key, cfg), cfg)
 
 
+# --8<-- [start:observation]
 def observation(state: EnvState, idx_for_time, cfg: EnvConfig):
     z = physics.sector_amplitudes(state.sector)
     polar = jnp.stack([2 * jnp.abs(z) - 1, jnp.angle(z) / jnp.pi], axis=-1).reshape(-1)
@@ -99,8 +100,10 @@ def observation(state: EnvState, idx_for_time, cfg: EnvConfig):
     t = idx_for_time * 2 / cfg.pulse_length - 1
     obs = jnp.concatenate([polar, amps, jnp.atleast_1d(t)]) * cfg.obs_scale
     return obs.astype(fdtype())
+# --8<-- [end:observation]
 
 
+# --8<-- [start:step]
 def step(state: EnvState, action, cfg: EnvConfig):
     """One env step. ``action`` in [-1, 1]^K (clipped, as SB3 does) are amplitude deltas."""
     K = cfg.n_time_steps
@@ -130,8 +133,10 @@ def step(state: EnvState, action, cfg: EnvConfig):
     info = dict(JT=JT, concurrence=C, unitarity=U, tv_penalty=tv, oob=oob,
                 t=cur_idx * cfg.dt)
     return obs, new_state, reward, terminated, truncated, info
+# --8<-- [end:step]
 
 
+# --8<-- [start:step_autoreset]
 def step_autoreset(key, state: EnvState, action, cfg: EnvConfig, resample=True):
     """Step, and reset when the episode ends. Returns the pre-reset obs as ``info['final_obs']``.
 
@@ -146,6 +151,7 @@ def step_autoreset(key, state: EnvState, action, cfg: EnvConfig, resample=True):
     obs_out = jnp.where(done, obs_reset, obs)
     info = dict(info, final_obs=obs)
     return obs_out, state_out, reward, terminated, truncated, info
+# --8<-- [end:step_autoreset]
 
 
 def rollout_pulse(amps, cfg: EnvConfig, omega_s=None):

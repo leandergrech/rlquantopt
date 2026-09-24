@@ -1,0 +1,95 @@
+# Environment: `rlquantopt/jx/env.py`
+
+`env.py` is a functional re-implementation of v1 `ZCQPEE` with the semantics of the paper run
+(`05-12-24_201634`). There is no environment object: state is an explicit pytree and every
+function is pure.
+
+```python
+cfg = EnvConfig()                                   # static: sets shapes and episode length
+obs, state = reset(key, cfg)
+obs, state, reward, terminated, truncated, info = step(state, action, cfg)
+```
+
+## The MDP in one table
+
+| | Value (paper run) |
+| --- | --- |
+| Pulse | 1000 samples of 50 ps (T = 50 ns), piecewise constant |
+| Step | K = 3 samples; 333 steps per episode |
+| Action | \(a \in [-1, 1]^3\): amplitude **deltas**, × 20 rad/ns, cumulatively summed |
+| Amplitude bound | \(|u| \le 20\) rad/ns (10/π ≈ 3.18 GHz); leaving it clips \(u\) and truncates the episode |
+| Observation | 28 numbers: 12 complex amplitudes in polar form, the 3 segment amplitudes / 20, time, all × 0.9 |
+| Reward | \(-\log_{10} J_T - 0.0044 - 10^{-3}\sum|\Delta u|\) per step; \(-20(1 - t/T)\) on truncation |
+
+## One step
+
+```python
+--8<-- "rlquantopt/jx/env.py:step"
+```
+
+Read it in four blocks:
+
+1. **Action → amplitudes.** The deltas are summed onto the last amplitude of the previous segment
+   (0 at the first step). If any amplitude leaves the bound, it is clipped and `oob` is set.
+2. **Physics.** `propagate` applies the three samples to the sector state; `realised_gate` and
+   `cost_JT` give \(J_T\), \(C\), \(U\) at the end of this segment.
+3. **Reward.** \(-\log_{10} J_T\) minus the v1 offset `rew_thresh` (\(-\log_{10} 0.99\)) minus the TV
+   penalty on the segment. On `oob` the reward is replaced by the truncation penalty.
+4. **Bookkeeping.** The observation uses the time **before** the index advances (as v1 does); the
+   episode terminates when the next segment would run past the pulse.
+
+Nothing here is a Python branch on data: `jnp.where` replaces `if`, so the step can be compiled
+and vectorised.
+
+## Observation
+
+```python
+--8<-- "rlquantopt/jx/env.py:observation"
+```
+
+`sector_amplitudes` returns the N=1 images of \|010⟩ and \|100⟩ (3 amplitudes each) and the N=2
+image of \|110⟩ (6 amplitudes): exactly the 12 entries v1 extracted from the 27-dim state vector.
+Each complex amplitude \(z\) becomes \((2|z| - 1,\ \arg z / \pi)\).
+
+!!! note "The observation is a simulator privilege"
+    State amplitudes are not measurable on hardware. That is fine for replicating the paper, but a
+    sim-to-real version needs measurement-based observations (roadmap item 5).
+
+## Auto-reset for training
+
+Training runs thousands of environments in lock-step, so an environment that finishes must
+restart inside the compiled loop:
+
+```python
+--8<-- "rlquantopt/jx/env.py:step_autoreset"
+```
+
+- Both branches are computed and `tree_map(jnp.where, ...)` picks one per environment.
+- `info["final_obs"]` keeps the last observation of the finished episode, so the agent can
+  bootstrap the value of a truncated episode (as Stable-Baselines3 does).
+- `resample=True` draws new qubit frequencies at every reset (domain randomisation as the paper
+  describes it). `resample=False` keeps the frequencies of the environment, which is what v1
+  `ZCQPEEWRD` actually did: its drift was drawn once per env instance.
+
+## Domain randomisation
+
+```python
+cfg = EnvConfig(max_drift=1e-3)       # omega_s *= 1 + U(-0.1 %, +0.1 %) at every reset
+```
+
+`sample_omega_s` draws the frequencies and `reset_to(omega, cfg)` builds the episode's sector
+Hamiltonian, which lives in the state (`state.ham`). A `vmap` over environments therefore gives
+each environment its own physics at no extra cost.
+
+## Evaluating a fixed pulse
+
+`rollout_pulse(amps, cfg, omega_s)` applies a stored pulse sample by sample and returns \(J_T\),
+\(C\), \(U\) after every sample. The convention matches v1: `amps[k]` is held on \((t_k, t_{k+1}]\),
+which is `amplist[k + 1]` in the pulse CSVs.
+
+## Verified against v1
+
+`tests/test_jx_env.py` replays three random action sequences (small, medium and saturating, the
+last one hitting the amplitude bound) through v1 `ZCQPEE` and the JAX env, comparing observations,
+rewards, termination and truncation at every step. The JAX env is also checked against full-space
+`expm` to 1e-12; v1's adaptive ODE drifts ~1e-8 from exact over an episode.

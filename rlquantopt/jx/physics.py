@@ -81,6 +81,7 @@ def full_hamiltonian(params: ModelParams):
     return jnp.asarray(drift, cdtype()), jnp.asarray(control, fdtype())
 
 
+# --8<-- [start:sector_hamiltonian]
 def sector_hamiltonian(params: ModelParams) -> SectorHamiltonian:
     drift, control = full_hamiltonian(params)
     blk = lambda M, idx: M[np.ix_(idx, idx)]
@@ -88,8 +89,10 @@ def sector_hamiltonian(params: ModelParams) -> SectorHamiltonian:
         drift1=blk(drift, SECTOR1_IDX), control1=jnp.diag(control)[SECTOR1_IDX],
         drift2=blk(drift, SECTOR2_IDX), control2=jnp.diag(control)[SECTOR2_IDX],
     )
+# --8<-- [end:sector_hamiltonian]
 
 
+# --8<-- [start:propagate]
 def _expm_herm(H, dt):
     """exp(-i H dt) for Hermitian H via eigendecomposition (exact, GPU friendly)."""
     w, v = jnp.linalg.eigh(H)
@@ -115,8 +118,10 @@ def propagate(h: SectorHamiltonian, state: SectorState, amps, dt) -> SectorState
         return SectorState(P1 @ s.U1, P2 @ s.psi2), None
     state, _ = jax.lax.scan(body, state, jnp.asarray(amps))
     return state
+# --8<-- [end:propagate]
 
 
+# --8<-- [start:realised_gate]
 def realised_gate(state: SectorState):
     """4x4 matrix G[i, j] = <psi_i(t)|b_j> in the basis |00>, |01>, |10>, |11> (v1 convention).
 
@@ -130,6 +135,7 @@ def realised_gate(state: SectorState):
     G = jnp.zeros((4, 4), cdtype())
     G = G.at[0, 0].set(1.0).at[1:3, 1:3].set(V).at[3, 3].set(e)
     return G
+# --8<-- [end:realised_gate]
 
 
 def sector_amplitudes(state: SectorState):

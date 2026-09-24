@@ -28,6 +28,7 @@ def sb3_activation(zip_path):
     return m.group(1).lower() if m else "tanh"
 
 
+# --8<-- [start:load_sb3_policy]
 def load_sb3_policy(zip_path):
     import torch
     with zipfile.ZipFile(zip_path) as z:
@@ -50,6 +51,7 @@ def load_sb3_policy(zip_path):
     params = dict(actor=dict(net=mlp("policy_net", "action_net"), log_std=jnp.asarray(sd["log_std"], jnp.float32)),
                   critic=mlp("value_net", "value_net"))
     return model, params
+# --8<-- [end:load_sb3_policy]
 
 
 def sb3_predict(zip_path, obs):

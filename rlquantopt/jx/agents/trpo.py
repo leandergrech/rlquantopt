@@ -85,6 +85,7 @@ def conjugate_gradient(Avp, b, n_iter, tol=1e-10):
 def make_update(model: ActorCritic, env_cfg: jenv.EnvConfig, cfg: TRPOConfig):
     tx = make_optimizer(cfg)
 
+# --8<-- [start:actor_step]
     def actor_step(actor_params, obs, action, logp_old, adv):
         flat0, unravel = ravel_pytree(actor_params)
         mean_old, log_std_old = jax.lax.stop_gradient(model.dist(actor_params, obs))
@@ -116,10 +117,12 @@ def make_update(model: ActorCritic, env_cfg: jenv.EnvConfig, cfg: TRPOConfig):
         stats = dict(policy_objective=jnp.where(success, objs[first], obj0),
                      kl=jnp.where(success, kls[first], 0.0), line_search_success=success.astype(jnp.float32))
         return unravel(new_flat), stats
+# --8<-- [end:actor_step]
 
     def value_loss(critic_params, obs, ret):
         return jnp.mean((ret - model.value(critic_params, obs)) ** 2)
 
+# --8<-- [start:trpo_update]
     @jax.jit
     def update(runner: RunnerState, opt_state):
         runner, traj = collect(model, runner, env_cfg, cfg.n_steps, cfg.gamma, cfg.resample_drift)
@@ -153,5 +156,6 @@ def make_update(model: ActorCritic, env_cfg: jenv.EnvConfig, cfg: TRPOConfig):
         stats.update(value_loss=v_losses.mean(), mean_reward=traj.reward.mean(), min_JT=traj.JT.min(),
                      frac_done=traj.done.mean(), std=jnp.exp(actor["log_std"]).mean())
         return runner, opt_state, stats
+# --8<-- [end:trpo_update]
 
     return update
