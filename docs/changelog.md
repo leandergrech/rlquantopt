@@ -3,6 +3,16 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.14.0: fabrication-range study, test T1, the gate-time control (2026-09-24)
+
+Robust GRAPE over the fabrication range (±18.5 MHz) keeps J_T ≤ 7.6e-4 everywhere: one pulse still
+suffices for two drifting frequencies. A PPO policy trained over that range does not reach 1e-3 alone,
+but as a GRAPE warm start it beats a random start by 1-3 orders of magnitude at matched gate time and
+equal budget (new control, `scripts/matched_gate_time.py`, after finding that policy pulses run
+~40 ns against 17.25 ns for GRAPE from scratch). Test T1: policies trained with 3 and 5 drifting
+parameters are worse alone at equal budget, but the extra parameters were not sensitive enough to
+matter. Training and refinement budget tables; a correction note on the recool comparison.
+
 ## 2.13.0: the hypothesis page, drift literature tied to experiments (2026-09-24)
 
 New research-question page testing the hypothesis that drift favours learned policies: three

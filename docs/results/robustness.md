@@ -1,9 +1,10 @@
 # Robustness to hardware drift
 
-**Answer so far.** At the paper's gate time and amplitude bound, the RL pulse is no more robust than
-a plain GRAPE pulse. Robust GRAPE, which optimises the mean error over the recool drift range, keeps
-J_T below 1.4e-4 everywhere in that range, about 30× better than RL on average. What RL can offer
-instead is adaptation: see [RL vs GRAPE: cost per device](#rl-vs-grape-cost-per-device) below.
+**Answer so far.** A single robust GRAPE pulse covers even the fabrication-targeting range
+(J_T ≤ 7.6e-4 over ±18.5 MHz) when the two qubit frequencies drift, so in this model there is no need
+for per-device adaptation. What an RL policy trained over the drift offers is a much better starting
+point for per-device refinement: at equal gate time and GRAPE budget it beats a random start by 1-3
+orders of magnitude. The single RL pulse itself is no more robust than a plain GRAPE pulse.
 
 ## How the experiments are calibrated
 
@@ -100,6 +101,12 @@ redraws the qubit frequencies from the recool range every episode.
 \* A single random restart on the nominal device happened to stall; the drifted devices show the
 typical GRAPE result.
 
+!!! warning "Gate times differ in this comparison"
+    The RL pulses here are cut at their best step, 38 ns in the median, while GRAPE from scratch runs at
+    17.25 ns, so the quality columns do not compare equal gate times. The
+    [fabrication-range control](#the-gate-time-confound-and-its-control) repeats GRAPE at matched gate
+    times and finds the RL warm start still far better at equal budget.
+
 What it shows:
 
 1. **Training with drift works as intended.** The drift-trained agent's gates hardly change across
@@ -122,7 +129,74 @@ per-device GRAPE.
 
 ## Fabrication-range experiment
 
-!!! info "Running"
-    The same comparison over the fabrication-targeting range (±18.5 MHz): a PPO agent trained with
-    drift over that range, robust GRAPE on a ±18.5 MHz ensemble, and the RL training budget
-    (2M-20M steps) and GRAPE refinement budget varied. Results will appear here.
+The same comparison over the fabrication-targeting range (±18.5 MHz on each qubit): a PPO agent
+trained with drift redrawn every episode over ±0.35 % (±17.6 MHz and ±20.6 MHz on the two qubits),
+robust GRAPE on a 5 × 5 ensemble spanning ±18.5 MHz, and 24 held-out devices drawn from the range.
+
+**A single robust pulse still covers the whole range.** Robust GRAPE trained over ±18.5 MHz:
+
+| Pulse | Nominal J_T | Recool: mean / worst | Fabrication: mean / worst | Optimisation |
+| --- | --- | --- | --- | --- |
+| Robust GRAPE, recool ensemble (above) | 9.4e-7 | 3.1e-5 / 1.4e-4 | 8.6e-4 / 6.5e-3 | 44 min |
+| **Robust GRAPE, fabrication ensemble** | 3.5e-5 | 3.7e-5 / 6.4e-5 | **1.0e-4 / 7.6e-4** | 37 min |
+| RL → robust GRAPE, fabrication ensemble | 1.9e-4 | 2.3e-4 / 4.2e-4 | 7.9e-4 / 4.1e-3 | 34 min |
+
+Trading a little nominal quality buys a pulse with J_T ≤ 7.6e-4 everywhere in the fabrication range.
+With two drifting frequencies, even ±18.5 MHz is not wide enough to need per-device adaptation in
+this model.
+
+![Cost and quality, fabrication range](../figures/sample_efficiency_fab.png)
+
+| Method | J_T on devices: median [quartiles] | Reaches 1e-3 | One-off cost | Cost per device |
+| --- | --- | --- | --- | --- |
+| GRAPE per device (17.25 ns, random start) | 3.1e-5 [1.9e-5, 6.5e-5] | 96 % | 0 | 6.7e5 samples |
+| Robust GRAPE, fabrication ensemble | 5.5e-5 [3.4e-5, 8.1e-5] | 100 % | 2.1e8 samples, 37 min | 0 |
+| RL trained without drift | 1.6e-2 [8.4e-3, 4.3e-2] | 0 % | 6.0e7 samples | 1 rollout |
+| RL trained over the fabrication range | 5.5e-3 [3.7e-3, 6.8e-3] | 0 % | 6.0e7 samples | 1 rollout |
+| RL (fabrication range) → 200 GRAPE steps | **1.4e-5** [5.8e-6, 4.2e-5] | 100 % | 6.0e7 samples | 2.0e5 samples |
+
+### The gate-time confound, and its control
+
+The policy's pulse is cut at its best step, which here falls at 45 ns (median; quartiles 41-48 ns,
+`docs/figures/gate_times.json`), while GRAPE from scratch runs at 17.25 ns. A longer pulse gives GRAPE
+more freedom, so "RL → GRAPE beats GRAPE" could simply mean "a 45 ns pulse beats a 17 ns pulse". The
+control is GRAPE from a random guess **at each device's own RL gate time** (`scripts/matched_gate_time.py`):
+
+| GRAPE steps | From a random guess, matched gate time: median J_T (reach 1e-3) | From the RL pulse: median J_T (reach 1e-3) |
+| --- | --- | --- |
+| 50 | 4.9e-2 (0 %) | 1.9e-3 (17 %) |
+| 100 | 3.0e-2 (0 %) | 4.1e-4 (67 %) |
+| 200 | 1.3e-2 (0 %) | 1.4e-5 (100 %) |
+| 500 | 6.6e-5 (96 %) | 3.8e-8 (100 %) |
+
+At equal gate time and equal GRAPE budget the RL warm start is 1-3 orders of magnitude better, and
+it reaches the target in 200 steps where a random start needs close to 500. **The warm start is
+genuinely informative, not an artefact of pulse length.** A longer gate is itself a cost on hardware
+(more decoherence), which these closed-system numbers do not include.
+
+### Training and refinement budgets
+
+J_T of the RL (fabrication range) policy at earlier checkpoints, alone and after 200 GRAPE steps:
+
+| Training | Policy alone: median J_T | + 200 GRAPE steps: median J_T | Reach 1e-3 |
+| --- | --- | --- | --- |
+| 2M steps | 1.2e-2 | 7.3e-8 | 88 % |
+| 5M | 8.4e-3 | 2.8e-4 | 79 % |
+| 10M | 4.7e-3 | 1.8e-4 | 92 % |
+| 20M (final policy) | 8.1e-3 | 1.2e-3 | 38 % |
+
+The policy's own quality improves up to 10M steps; the final policy had degraded (the late PPO
+instability seen in [Training](training.md)), so the best checkpoint should be used, as in the main
+table. The refined quality does not follow training monotonically: it depends on where each
+checkpoint's pulses end, i.e. on gate time. A policy trained for **2M steps** (6e6 samples, a tenth
+of the budget) is already a good warm start, which moves the break-even against per-device GRAPE
+from ~130 devices (full training) to about 13.
+
+### What the fabrication range shows
+
+1. **One robust pulse still suffices for two drifting frequencies**, even over ±18.5 MHz.
+2. **The RL policy alone does not reach 1e-3** at this range, but it is a strong warm start: at equal
+   gate time and GRAPE budget it beats a random start by 1-3 orders of magnitude.
+3. **Where RL can win is therefore not "one pulse per range" but "fast per-device refinement"**, and
+   that advantage matters only when no single robust pulse covers the range, i.e. with more sensitive
+   drifting parameters; see [test T1](../hypothesis/drift-and-dimension.md#t1-policies-trained-with-more-drifting-parameters).

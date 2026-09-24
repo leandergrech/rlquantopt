@@ -148,11 +148,11 @@ Each of these is discussed, with what it would take to remove it, in
 ## What changed recently
 
 !!! abstract "Latest"
-    - New: the project's central hypothesis, split into testable claims with the evidence for and
-      against ([Drift, dimension and learned policies](hypothesis/drift-and-dimension.md)).
-    - Every robustness result is now tied to the hardware measurement it is calibrated on
-      ([Robustness](results/robustness.md#how-the-experiments-are-calibrated)).
-    - Running: the comparison over the fabrication range (±18.5 MHz) and policies trained with 3 and
-      5 drifting parameters.
+    - One robust GRAPE pulse covers the whole fabrication-targeting range (±18.5 MHz), and an RL policy
+      trained over it is a GRAPE warm start 1-3 orders of magnitude better than a random start at equal
+      gate time ([Robustness](results/robustness.md#fabrication-range-experiment)).
+    - Test T1 of the hypothesis: policies trained with 3 and 5 drifting parameters
+      ([Drift, dimension and learned policies](hypothesis/drift-and-dimension.md#t1-policies-trained-with-more-drifting-parameters)).
+    - A confound found and controlled: policy pulses are ~2.5× longer than the GRAPE baseline's.
 
 The full history is in the [changelog](changelog.md).

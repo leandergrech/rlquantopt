@@ -18,6 +18,9 @@ Every figure in these docs is produced by one of these. Run them from the reposi
 | `python scripts/sample_efficiency.py --static-run RUN --dr-run RUN` | `docs/figures/sample_efficiency.{png,json,npz}`: cost per device, RL vs GRAPE (`--replot` redraws) | ~15 min |
 | `python scripts/plot_grape_losses.py` | `docs/figures/grape_losses.png`: GRAPE losses and final distributions | seconds |
 | `python scripts/drift_dimension.py [--absolute-mhz 5.7 --tag _absolute]` | `docs/figures/drift_dimension*.{png,json}`: pulse coverage vs number of drifting parameters | ~5 min |
+| `python scripts/drift_dimension_policies.py --runs D2=RUN D3=RUN D5=RUN` | `docs/figures/drift_dimension_policies.{png,json}`: test T1 | ~40 min |
+| `python scripts/gate_times.py --fab-dr RUN --t1 D2=RUN D3=RUN D5=RUN` | `docs/figures/gate_times.json`: gate times the policies choose | ~5 min |
+| `python scripts/matched_gate_time.py` | `docs/figures/matched_gate_time.json`: GRAPE from random at the policies' gate times | ~40 min |
 | `python scripts/pulse_sampling.py` | `docs/figures/pulse_sampling.png`: the RL pulse at coarser sampling | ~10 s |
 | `python scripts/make_bibliography.py` | `docs/bib/*`, `docs/bibliography.md` from DOIs | ~30 s |
 

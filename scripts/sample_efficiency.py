@@ -106,7 +106,7 @@ def main():
 
     robust_u = jnp.asarray(np.load(args.robust_npz)["pulse_robust"])
     robust_cost = None
-    rj = os.path.join(os.path.dirname(args.robust_npz), "rl_grape_robust.json")
+    rj = args.robust_npz[:-4] + ".json"        # the JSON written next to the robust pulse
     if os.path.exists(rj):
         rows = {r["name"]: r for r in json.load(open(rj))["results"]}
         robust_cost = rows["robust"]["simulator_pulse_evals"] / 2 * N_GRAPE * SAMPLES_PER_ITER
