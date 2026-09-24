@@ -230,8 +230,68 @@ trained with a gate-time penalty would recover much of the difference.
 
 ## Large coupler drift
 
-!!! info "Running"
-    Qubits drifting over the recool range (±5.7 MHz) and the coupler over ±140 MHz, the worst-loop
-    flux drift after 17 days ([Hardware drift ranges](../system/drift.md#the-coupler-drifts-too-and-more)).
-    Robust GRAPE over a 35-member ensemble spanning both, a PPO policy trained over the same drift, and
-    per-device GRAPE with and without the policy's warm start at matched gate time.
+Qubits drifting over the recool range (±5.7 MHz each) and the coupler over ±140 MHz, the worst-loop
+flux drift after 17 days ([Hardware drift ranges](../system/drift.md#the-coupler-drifts-too-and-more)).
+Three drifting parameters, one of them very wide. Script: `scripts/coupler_drift_experiment.py`.
+
+- **Robust GRAPE, 3D**: one 17.25 ns pulse optimised over 35 members (7 coupler offsets from −140 to
+  +140 MHz × the centre and 4 corners of the qubit box), 2 restarts × 2000 iterations.
+- **PPO trained over the same drift** (seed 123, 20M steps, drift redrawn every episode; best
+  checkpoint at 7.8M steps), alone and as a warm start for 200 GRAPE steps.
+- **Controls**: GRAPE from a random guess at each device's own RL gate time (matched) and at 17.25 ns,
+  1000 iterations each; the fabrication-range robust pulse, which never saw coupler drift.
+- 24 held-out devices drawn uniformly from the 3D box. Target J_T ≤ 1e-3.
+
+![Large coupler drift](../figures/coupler_drift.png)
+
+| Method | J_T on devices: median [quartiles] | Reaches 1e-3 | One-off, core-hours | Per device, core-seconds |
+| --- | --- | --- | --- | --- |
+| Robust GRAPE, 3D ensemble | 4.4e-2 [3.6e-2, 6.5e-2] | **0 %** | 0.40 | never reaches |
+| Robust GRAPE, fabrication range (no coupler drift) | 2.6e-2 [4.4e-3, 7.3e-2] | 21 % | 0.58 | never reaches |
+| RL trained without drift | 1.5e-2 [1.1e-2, 2.6e-2] | 0 % | 0.81 | never reaches |
+| RL trained over the coupler drift | 1.3e-2 [8.1e-3, 2.6e-2] | 0 % | 0.81 | never reaches |
+| RL (coupler drift) → 200 GRAPE steps | **3.7e-8** [1.7e-8, 4.6e-7] | 83 % | 0.81 | **5.0** |
+| GRAPE, random start, matched gate time (46 ns), 1000 steps | 2.3e-5 [1.9e-5, 6.0e-5] | 96 % | 0 | 54 |
+| GRAPE, random start, 17.25 ns, 1000 steps | 2.7e-5 [1.3e-5, 6.9e-5] | 100 % | 0 | 15 |
+
+Per-device core time is to the first iteration below 1e-3 (median over devices). The policy's gates
+last 46 ns in the median (quartiles 37-49 ns).
+
+| GRAPE steps | RL warm start: median J_T (reach 1e-3) | Random, matched gate time | Random, 17.25 ns |
+| --- | --- | --- | --- |
+| 0 | 1.3e-2 (0 %) | | |
+| 50 | 2.3e-3 (29 %) | 6.4e-2 (0 %) | 4.0e-2 (0 %) |
+| 100 | 1.3e-4 (83 %) | 3.2e-2 (0 %) | 1.7e-2 (0 %) |
+| 200 | 3.7e-8 (83 %) | 2.2e-2 (0 %) | 9.7e-3 (0 %) |
+| 500 | | 4.9e-3 (4 %) | 3.0e-3 (13 %) |
+| 1000 | | 2.3e-5 (96 %) | 2.7e-5 (100 %) |
+
+### What large coupler drift shows
+
+1. **For the first time, one pulse does not cover the range.** Robust GRAPE cannot even fit its own
+   35 members (mean J_T 2.7e-2 over the ensemble) and reaches 1e-3 on none of the held-out devices.
+   The fabrication-range robust pulse reaches it only on the 5 devices whose coupler sits within
+   11 MHz of nominal, consistent with its 64 MHz-wide coupler window in the [coupler scan](../system/drift.md#the-coupler-drifts-too-and-more)
+   (narrower here, where the qubits drift too). This is the regime the [hypothesis](../hypothesis/drift-and-dimension.md) is about.
+2. **The policy alone is not enough either.** Trained over the drift or not, it gives J_T ≈ 1e-2:
+   the drift-trained policy is barely better, so at this width the policy has not learned to
+   compensate the coupler by itself.
+3. **But its pulse is a very strong warm start.** 100 GRAPE steps from it reach 1e-3 on 83 % of the
+   devices; from a random start at the same gate time, 100 steps reach none, and 1000 are needed.
+   Where it converges, the refined gate is three orders of magnitude better than GRAPE from scratch
+   (median 3.7e-8 vs 2.3e-5). On 4 of 24 devices the warm start stalls above 1e-3 within 200 steps, with no pattern in their
+   coupler offsets (+120, −99, −87 and −9 MHz).
+4. **Compute.** Per device, RL + GRAPE takes 5.0 core-seconds against 54 for GRAPE at matched gate
+   time and 15 for GRAPE at 17.25 ns. The 0.81 core-hours of training pay back after ≈ 60 devices
+   against the matched control and ≈ 300 against 17.25 ns GRAPE.
+
+!!! warning "What this does not show yet"
+    The robust pulse was optimised at 17.25 ns, while the policy's pulses run 46 ns. A longer robust
+    pulse has more freedom and might cover the range; until that is tested, "no single pulse suffices"
+    holds at 17.25 ns only. Robust GRAPE was also given only 35 members and 2 restarts. The next runs:
+    robust GRAPE at 46 ns with more members, and more restarts for the 4 devices where refinement
+    stalls.
+
+The robust optimisation took about 66 minutes of wall time on the shared machine (from file
+timestamps; the script did not wait for the asynchronous JAX result, since fixed); the core-hours
+above come from its iteration count.

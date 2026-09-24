@@ -6,6 +6,7 @@ Quantum 2, 040313 (2021), converted with an assumed f_max = 8 GHz (scripts/coupl
 
     python scripts/coupler_drift_experiment.py robust                       # robust GRAPE, 3D ensemble
     python scripts/coupler_drift_experiment.py evaluate --dr-run RUN --static-run RUN
+    python scripts/coupler_drift_experiment.py replot                       # redraw from the saved JSON
 
 Methods on 24 held-out devices: the 3D robust pulse, the fabrication-range robust pulse (which never
 saw coupler drift), the nominal and the drift-trained PPO policies, the drift-trained policy's pulse
@@ -182,6 +183,14 @@ def plot(d, H):
     ax.set_title(f"{len(rec['RL + GRAPE'])} devices: qubits ±{W_Q} MHz, coupler ±{W_C:.0f} MHz", fontsize=10)
     ax = axs[1]
     for k, c in (("RL + GRAPE", cols[4]), ("GRAPE, random, matched T", cols[5]), ("GRAPE, random, 17.25 ns", cols[6])):
+        if H is None:       # no saved histories: the medians at the reported budgets
+            b = d["by_iterations"][k]
+            x = [int(n) for n in b]
+            y = [b[n]["median_JT"] for n in b]
+            if k == "RL + GRAPE":
+                x, y = [0] + x, [float(np.median(rec["RL, coupler drift"]))] + y
+            ax.semilogy(x, y, "o-", c=c, lw=2, label=k)
+            continue
         L = min(len(h) for h in H[k])
         A = np.stack([h[:L] for h in H[k]])
         x = np.arange(L)
@@ -191,7 +200,7 @@ def plot(d, H):
     ax.set_xscale("symlog", linthresh=1)
     ax.set_xlim(0, None)
     ax.set_xlabel("GRAPE iteration (0 = starting pulse)")
-    ax.set_ylabel("best $J_T$ so far (median, quartiles)")
+    ax.set_ylabel("best $J_T$ so far (median" + (", quartiles)" if H is not None else " at each budget)"))
     ax.set_title("Per-device GRAPE: warm start vs random start", fontsize=10)
     ax.legend(fontsize=8)
     ax = axs[2]
@@ -218,7 +227,8 @@ def plot(d, H):
 
 
 def replot():
-    H = dict(np.load(os.path.join(FIG, "coupler_drift_hist.npz")))
+    hist = os.path.join(FIG, "coupler_drift_hist.npz")
+    H = dict(np.load(hist)) if os.path.exists(hist) else None
     plot(json.load(open(os.path.join(FIG, "coupler_drift.json"))), H)
 
 

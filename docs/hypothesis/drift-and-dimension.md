@@ -161,6 +161,26 @@ are sensitive enough that no single pulse covers them. That needs larger drift i
 flux-tunable element, see [Hardware drift ranges](../system/drift.md#what-is-not-covered-yet)) or a
 larger system (T5).
 
+### Where one pulse fails: large coupler drift
+
+The coupler over ±140 MHz (worst-loop flux drift after 17 days) with both qubits over the recool
+range: three drifting parameters, one of them wide and sensitive
+([Robustness: large coupler drift](../results/robustness.md#large-coupler-drift)).
+
+- **No single 17.25 ns pulse covers it.** Robust GRAPE over a 35-member ensemble cannot fit its own
+  members (mean J_T 2.7e-2) and reaches J_T ≤ 1e-3 on none of 24 held-out devices. This is the first
+  setting here where the premise of H1 holds.
+- **The policy alone does not adapt** (median J_T 1.3e-2, no better than a policy trained without
+  drift), so the policy is not yet the per-device solution the hypothesis imagines.
+- **As a warm start it is decisive.** 100 GRAPE steps from the policy's pulse reach 1e-3 on 83 % of
+  the devices; from a random start at the same gate time, 100 steps reach none and about 1000 are
+  needed. Per device: 5.0 core-seconds against 54 (matched gate time); the 0.81 core-hours of training
+  pay back after ≈ 60 devices.
+
+The support is partial. The robust pulse was limited to 17.25 ns while the policy uses 46 ns, and the
+policy's advantage comes through refinement, not from the policy alone. Robust GRAPE at 46 ns is the
+test that would close the gap.
+
 ### H3: not tested yet
 
 All results here use exact simulator gradients, which is the setting most favourable to GRAPE. On
@@ -197,6 +217,7 @@ once the range exceeds what any single pulse can cover.
 | **T1** Train drift-aware policies with 2, 3 and 5 drifting parameters (ω₀ ω₁; + ω_c; + g₀ g₁) at equal budget | Policy quality and per-device warm-start cost versus D | Quality and warm-start cost degrade slowly with D. **Done (v2.14.0):** warm starts stay strong for every D; the policy alone got worse with D, but the added parameters were not sensitive enough to matter |
 | **T2** Robust GRAPE with grid and random ensembles versus D | Cost to reach a coverage target | Cost grows quickly with D |
 | **T3** Fabrication-range comparison | Whether one robust pulse still suffices over ±18.5 MHz | Per-device or policy methods overtake the single robust pulse. **Done (v2.14.0): one robust pulse still suffices** (J_T ≤ 7.6e-4); the RL warm start beats per-device GRAPE at matched gate time |
+| **T3b** Large coupler drift (±140 MHz) with qubits over the recool range | Whether one robust pulse suffices when a wide, sensitive parameter drifts | **Done (v2.15.0): no single 17.25 ns pulse suffices** (0 % of devices); the RL warm start reaches 1e-3 on 83 % in 100 steps, random starts need ~1000. Open: robust GRAPE at the policy's 46 ns |
 | **T4** GRAPE with gradients estimated from finite shots (parameter-shift or finite differences) versus RL learning from shot-noisy rewards | Measurements per device to reach J_T ≤ 1e-3 | RL needs fewer measurements per device, including amortised training |
 | **T5** Three-qubit model with a spectator | Effective dimension versus system size | D_eff, and the calibrations needed, grow faster than linearly |
 

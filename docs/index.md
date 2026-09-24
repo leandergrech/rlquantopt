@@ -153,7 +153,10 @@ Each of these is discussed, with what it would take to remove it, in
       ([RL-initialised optimal control](hypothesis/rl-initialised-qoc.md)).
     - Where next: pulse-level hardware access today, Rydberg atoms vs transmons vs ions, and what to do
       before hardware ([Beyond two transmons](next/platforms.md)).
-    - Coupler drift from measured flux drift; a ±140 MHz experiment is running
-      ([Hardware drift ranges](system/drift.md#the-coupler-drifts-too-and-more)).
+    - **Large coupler drift (±140 MHz)**: the first regime where one robust pulse fails (0 % of devices);
+      100 GRAPE steps from the RL policy's pulse reach the target on 83 %, random starts need ~1000
+      ([Large coupler drift](results/robustness.md#large-coupler-drift)).
+    - All compute comparisons in logical-core hours
+      ([how it is counted](results/robustness.md#how-compute-is-counted)).
 
 The full history is in the [changelog](changelog.md).

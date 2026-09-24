@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='rlquantopt',
-    version='2.14.2',
+    version='2.15.0',
     license='MIT',
     packages=find_packages(),
     install_requires=[

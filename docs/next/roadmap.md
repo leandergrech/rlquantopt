@@ -48,6 +48,9 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.12.0 | PPO seeds, losses, drift-range robustness, RL vs GRAPE cost per device, site redesign | done |
 | 2.13.0 | Hypothesis page (drift, dimension, learned policies); drift literature tied to experiments; coupler/coupling drift in the env | done |
 | 2.14.0 | Fabrication-range comparison; test T1; matched-gate-time control | done |
+| 2.14.2 | Compute in logical-core hours (benchmarked step prices) | done |
+| 2.15.0 | Large coupler drift (±140 MHz): first regime where one robust pulse fails; RL warm start reaches the target in 100 steps | done |
+| next | Robust GRAPE at the policy's 46 ns; gate-time penalty in training; three-qubit model with a spectator (T5) | open |
 
 ## Beyond replication (next minor versions, not in this pass)
 

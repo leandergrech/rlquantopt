@@ -1,0 +1,9 @@
+{
+  "members": 35,
+  "restarts": 2,
+  "iters": 2000,
+  "mean_JT_ensemble": 0.0266099832311797,
+  "wall_s": 3960.0,
+  "simulator_samples": 144900000.0,
+  "wall_note": "measured from file timestamps (the run did not block on the asynchronous JAX result); approximate, shared CPU"
+}

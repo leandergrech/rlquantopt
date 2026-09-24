@@ -22,6 +22,7 @@ flowchart LR
 | --- | --- | --- |
 | The warm start is informative, not an artefact of pulse length | At equal gate time and 200 GRAPE steps: median J_T 1.4e-5 from the RL pulse vs 1.3e-2 from a random start (100 % vs 0 % of devices below 1e-3), fabrication-range devices | [Robustness](../results/robustness.md#the-gate-time-confound-and-its-control) |
 | It holds as drift dimensions are added | Policies trained with 2, 3 or 5 drifting parameters all refine to the target on 75-100 % of devices within 200 steps; on the D = 5 devices a random start at the same gate time reaches 0 % | [T1](drift-and-dimension.md#t1-policies-trained-with-more-drifting-parameters) |
+| It matters where one pulse fails | Coupler over ±140 MHz: a robust 17.25 ns pulse reaches J_T ≤ 1e-3 on 0 % of devices; 100 GRAPE steps from the policy's pulse reach 83 %, random starts at the same gate time 0 % (they need ~1000) | [Large coupler drift](../results/robustness.md#large-coupler-drift) |
 | The policy alone is not enough | Median J_T 1.4e-3 to 2e-2 across experiments; the refinement is what reaches the target | [Robustness](../results/robustness.md) |
 | Pretraining pays back | In logical-core time, break-even against per-device GRAPE after ~220-350 devices with full training (0.81 core-hours), ~36 with a 2M-step policy (5 core-minutes) | [Robustness](../results/robustness.md#training-and-refinement-budgets) |
 | Cheap to train | A usable policy in 2M environment steps: 5 core-minutes on a laptop CPU with the JAX environment | [Training](../results/training.md) |
@@ -49,16 +50,18 @@ somewhere; the combination, and the cost analysis under realistic drift, does no
 2. **Hardware-shaped constraints**: the vendor's sampling rate, amplitude and bandwidth limits, and
    the refinement done from measured data (finite shots), not exact gradients. This is test T4 of the
    [hypothesis](drift-and-dimension.md#tests-that-would-settle-it).
-3. **A scaling study** where a single robust pulse fails (larger coupler drift, more qubits, or a
-   platform whose drift dimension grows with system size), since that is where the framework should win.
+3. **A scaling study** where a single robust pulse fails, since that is where the framework should win.
+   Large coupler drift is the first such case here ([results](../results/robustness.md#large-coupler-drift));
+   more qubits, or a platform whose drift dimension grows with system size, are next.
 4. **One hardware demonstration.** Even a small one: a policy trained in simulation, refined on the
    device across two cooldowns or two devices.
 
 ## Risks, stated plainly
 
-- **Robust optimisation may cover the relevant drift** as it did here up to ±18.5 MHz, removing the
-  need for per-device adaptation. The framework's value is conditional on drift that no single pulse
-  covers.
+- **Robust optimisation may cover the relevant drift** as it did here up to ±18.5 MHz of qubit drift,
+  removing the need for per-device adaptation. The framework's value is conditional on drift that no
+  single pulse covers; ±140 MHz of coupler drift is such a case at 17.25 ns, but a longer robust pulse
+  is untested.
 - **Longer gates.** Our policies choose 36-45 ns gates, against 17 ns for GRAPE. On hardware, gate time
   costs coherence; the policy should be trained with a gate-time penalty or a fixed duration.
 - **The simulator gap.** A policy trained on an idealised model may give a poor warm start on hardware.

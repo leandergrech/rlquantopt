@@ -3,6 +3,16 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.15.0: large coupler drift (2026-09-25)
+
+Coupler drifting over ±140 MHz (worst-loop flux drift, Dai et al. 2021) with both qubits over the
+recool range. For the first time no single pulse covers the range: robust GRAPE at 17.25 ns over a
+35-member ensemble reaches J_T ≤ 1e-3 on none of 24 held-out devices. A PPO policy trained over the
+drift does not adapt by itself (median 1.3e-2), but 100 GRAPE steps from its pulse reach 1e-3 on 83 %
+of devices (median 3.7e-8 after 200), where random starts at the same gate time need ~1000 steps.
+Per device 5.0 core-seconds against 54; training pays back after ≈ 60 devices. Open: robust GRAPE at
+the policy's 46 ns. Policy saved in `results/jax_ppo_dr_coupler140`.
+
 ## 2.14.2: compute in logical-core hours (2026-09-25)
 
 All cost comparisons are now in logical-core time on the laptop CPU instead of simulated samples.
