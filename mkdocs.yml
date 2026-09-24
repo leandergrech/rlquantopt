@@ -63,6 +63,8 @@ nav:
       - Replication of the paper: results/replication.md
       - Training RL agents: results/training.md
       - Robustness to hardware drift: results/robustness.md
+  - Research question:
+      - Drift, dimension and learned policies: hypothesis/drift-and-dimension.md
   - Next steps:
       - Open decisions: next/decisions.md
       - Named gates and a richer model: next/named-gates.md

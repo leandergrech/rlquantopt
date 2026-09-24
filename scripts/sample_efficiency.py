@@ -56,6 +56,13 @@ def best_params(run):
     raise FileNotFoundError(run)
 
 
+def params_at(run, step):
+    """Parameters of the checkpoint closest to ``step`` (for the training-budget study)."""
+    cands = [int(f[7:-4]) for f in os.listdir(run) if f.startswith("params_") and f[7:-4].isdigit()]
+    s = min(cands, key=lambda c: abs(c - step))
+    return pickle.load(open(os.path.join(run, f"params_{s}.pkl"), "rb")), s
+
+
 def rollout(model, params, cfg, omega):
     ep = jax.device_get(evaluate(model, params, cfg, jnp.asarray(omega)))
     JT = np.where(ep["alive"], ep["JT"], np.inf)
@@ -75,7 +82,14 @@ def main():
     p.add_argument("--robust-npz", default=os.path.join(ROOT, "docs", "figures", "rl_grape_robust.npz"))
     p.add_argument("--n-devices", type=int, default=24)
     p.add_argument("--grape-iters", type=int, default=1000)
-    p.add_argument("--refine-iters", type=int, default=200)
+    p.add_argument("--refine-iters", type=int, default=500)
+    p.add_argument("--refine-report", type=int, nargs="+", default=[10, 50, 100, 200, 500],
+                   help="refinement budgets reported (J_T after this many GRAPE steps)")
+    p.add_argument("--cost-refine-iters", type=int, default=200, help="refinement budget used in the cost comparison")
+    p.add_argument("--budget-steps", type=float, nargs="*", default=[2e6, 5e6, 10e6, 20e6],
+                   help="RL training budgets to evaluate (nearest checkpoints of the drift-trained run)")
+    p.add_argument("--range", default="recool", choices=sorted(DRIFT_RANGES), help="drift range of the test devices")
+    p.add_argument("--tag", default="", help="suffix for the output files, e.g. _fab")
     p.add_argument("--refine-lr", type=float, default=3e-4, help="small steps keep GRAPE in the RL pulse's basin")
     p.add_argument("--threshold", type=float, default=1e-3)
     p.add_argument("--fleet", type=int, default=100, help="number of devices/recalibrations in scenario (c)")
@@ -86,7 +100,7 @@ def main():
     model_d, params_d, step_d, train_d, wall_d = best_params(args.dr_run)
     cfg = jenv.EnvConfig()
     w0 = np.asarray(cfg.model.omega_s)
-    half = DRIFT_RANGES["recool"].half_width_mhz
+    half = DRIFT_RANGES[args.range].half_width_mhz
     rng = np.random.default_rng(2026)
     devices = [w0] + [w0 + rng.uniform(-half, half, 2) * 1e-3 for _ in range(args.n_devices)]   # index 0 = nominal
 
@@ -102,6 +116,7 @@ def main():
     rcfg = grape.GrapeConfig(n_iter=args.refine_iters, lr=args.refine_lr)
     rec = {k: [] for k in ("grape", "robust grape", "rl", "rl-dr", "rl-dr+grape")}
     hist_grape, hist_ref, cost, wall = [], [], {k: [] for k in rec}, {k: [] for k in rec}
+    pulse_len = []
     for i, om in enumerate(devices):
         ham = physics.sector_hamiltonian(cfg.model._replace(omega_s=jnp.asarray(om)))
         t0 = time.perf_counter()
@@ -109,6 +124,7 @@ def main():
         wall["rl"].append(time.perf_counter() - t0)
         t0 = time.perf_counter()
         JT_d, u_d = rollout(model_d, params_d, cfg, om)
+        pulse_len.append(len(u_d))
         wall["rl-dr"].append(time.perf_counter() - t0)
         rec["rl"].append(JT_s)
         rec["rl-dr"].append(JT_d)
@@ -132,10 +148,12 @@ def main():
         t0 = time.perf_counter()
         _, JT_r, _, _, h = grape.optimise(jnp.asarray(u_d)[None], ham, U_MAX, rcfg)
         h = np.concatenate([[JT_d], np.asarray(h[0])])
-        wall["rl-dr+grape"].append(time.perf_counter() - t0 + wall["rl-dr"][-1])
-        rec["rl-dr+grape"].append(float(min(JT_r[0], JT_d)))
+        wall["rl-dr+grape"].append((time.perf_counter() - t0) * args.cost_refine_iters / args.refine_iters
+                                   + wall["rl-dr"][-1])
+        h_cost = h[:args.cost_refine_iters + 1]
+        rec["rl-dr+grape"].append(float(np.min(h_cost)))
         hist_ref.append(h)
-        cost["rl-dr+grape"].append(cfg.n_steps * 3 + (iters_to(h, args.threshold) - 1) * len(u_d) * SAMPLES_PER_ITER)
+        cost["rl-dr+grape"].append(cfg.n_steps * 3 + (iters_to(h_cost, args.threshold) - 1) * len(u_d) * SAMPLES_PER_ITER)
         print(f"device {i:2d} Δω=({(om[0] - w0[0]) * 1e3:+5.2f},{(om[1] - w0[1]) * 1e3:+5.2f}) MHz  "
               + "  ".join(f"{k}={v[-1]:.1e}" for k, v in rec.items()), flush=True)
 
@@ -165,17 +183,44 @@ def main():
                           wall_fleet_s=float(train_wall[k] + args.fleet * per_dev_wall))
         print(k, {a: f"{b:.3g}" for a, b in summary[k].items()})
 
+    # Refinement budget: J_T after k GRAPE steps from the drift-trained RL pulse
+    Hr = np.minimum.accumulate(np.stack(hist_ref)[1:], axis=1)
+    refine_budget = {int(k): dict(JT_median=float(np.median(Hr[:, min(k, Hr.shape[1] - 1)])),
+                                  fraction_reaching=float(np.mean(Hr[:, min(k, Hr.shape[1] - 1)] <= args.threshold)),
+                                  per_device_cost_samples=float(cfg.n_steps * 3 + k * np.median(pulse_len[1:]) * SAMPLES_PER_ITER))
+                     for k in args.refine_report}
+    print("refinement budget", refine_budget)
+
+    # Training budget: the drift-trained policy at earlier checkpoints
+    bcfg = grape.GrapeConfig(n_iter=args.cost_refine_iters, lr=args.refine_lr)
+    training_budget = {}
+    for target in args.budget_steps:
+        params_b, s_b = params_at(args.dr_run, target)
+        JTs, JTr = [], []
+        for i, om in enumerate(devices[1:]):
+            ham = physics.sector_hamiltonian(cfg.model._replace(omega_s=jnp.asarray(om)))
+            JT_b, u_b = rollout(model_d, params_b, cfg, om)
+            _, JT_rb, *_ = grape.optimise(jnp.asarray(u_b)[None], ham, U_MAX, bcfg)
+            JTs.append(JT_b)
+            JTr.append(float(min(JT_rb[0], JT_b)))
+        training_budget[int(s_b)] = dict(training_samples=float(s_b * 3), rl_JT_median=med(JTs),
+                                         rl_grape_JT_median=med(JTr),
+                                         rl_grape_fraction_reaching=float(np.mean(np.asarray(JTr) <= args.threshold)))
+        print("training budget", s_b, training_budget[int(s_b)], flush=True)
+
     os.makedirs(args.out, exist_ok=True)
-    json.dump(dict(settings={k: v for k, v in vars(args).items() if k not in ("out", "robust_npz")}
-                   | dict(static_best_step=int(step_s), dr_best_step=int(step_d), recool_half_width_mhz=half),
-                   summary=summary, per_device={k: v for k, v in rec.items()}),
-              open(os.path.join(args.out, "sample_efficiency.json"), "w"), indent=2)
-    np.savez_compressed(os.path.join(args.out, "sample_efficiency.npz"),
+    json.dump(dict(settings={k: v for k, v in vars(args).items() if k not in ("out", "robust_npz", "tag")}
+                   | dict(static_best_step=int(step_s), dr_best_step=int(step_d), range_half_width_mhz=half),
+                   summary=summary, per_device={k: v for k, v in rec.items()},
+                   refinement_budget=refine_budget, training_budget=training_budget),
+              open(os.path.join(args.out, f"sample_efficiency{args.tag}.json"), "w"), indent=2)
+    np.savez_compressed(os.path.join(args.out, f"sample_efficiency{args.tag}.npz"),
                         hist_grape=np.stack(hist_grape), hist_refine=np.stack(hist_ref))
-    plot(summary, rec, args.threshold, args.fleet, os.path.join(args.out, "sample_efficiency.png"))
+    plot(summary, rec, args.threshold, args.fleet, os.path.join(args.out, f"sample_efficiency{args.tag}.png"),
+         DRIFT_RANGES[args.range])
 
 
-def plot(summary, rec, threshold, fleet, path):
+def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
     """Bars: total cost to reach the threshold in three scenarios; dots: gate quality per device."""
     names = ["grape", "robust grape", "rl", "rl-dr", "rl-dr+grape"]
     labels = {"grape": "GRAPE per device", "robust grape": "robust GRAPE (one pulse)", "rl": "RL, trained without drift",
@@ -194,7 +239,8 @@ def plot(summary, rec, threshold, fleet, path):
             return s["one_off_cost_samples"] if ok else np.inf
         return s["one_off_cost_samples"] + (s["per_device_cost_samples"] if np.isfinite(s["per_device_cost_samples"]) else 0)
 
-    scen = ["no drift\n(nominal device)", "1 new device\n(recool drift)", f"{fleet} devices or cooldowns\n(recool drift)"]
+    what = {"recool": "recool", "fab_targeting": "fabrication"}.get(rng.name, rng.name)
+    scen = ["no drift\n(nominal device)", f"1 new device\n({what} drift)", f"{fleet} devices\n({what} drift)"]
     vals = {n: [nominal_cost(n), summary[n]["cost_1_device"], summary[n]["cost_fleet"]] for n in names}
     finite = [v for n in names for v in vals[n] if np.isfinite(v) and v > 0]
     top = max(finite) * 4
@@ -228,19 +274,24 @@ def plot(summary, rec, threshold, fleet, path):
                                       "RL with drift\n→ GRAPE"], fontsize=8)
     ax.axhline(threshold, c="k", ls="--", lw=0.8)
     ax.set_ylabel("$J_T$")
-    ax.set_title("Gate quality: nominal device (★) and 24 recool-drifted devices (dots)", fontsize=10)
+    ax.set_title(f"Gate quality: nominal device (★) and {len(rec['rl']) - 1} devices, ±{rng.half_width_mhz} MHz (dots)",
+                 fontsize=10)
     for a in axs:
         a.grid(alpha=0.3, axis="y")
     fig.savefig(path, dpi=120)
     print("wrote", path)
 
 
-def replot():
-    d = json.load(open(os.path.join(ROOT, "docs", "figures", "sample_efficiency.json")))
+def replot(tag=""):
+    d = json.load(open(os.path.join(ROOT, "docs", "figures", f"sample_efficiency{tag}.json")))
+    rng = DRIFT_RANGES[d["settings"].get("range", "recool")]
     plot(d["summary"], d["per_device"], d["settings"]["threshold"], d["settings"]["fleet"],
-         os.path.join(ROOT, "docs", "figures", "sample_efficiency.png"))
+         os.path.join(ROOT, "docs", "figures", f"sample_efficiency{tag}.png"), rng)
 
 
 if __name__ == "__main__":
     import sys
-    replot() if "--replot" in sys.argv else main()
+    if "--replot" in sys.argv:
+        replot(sys.argv[sys.argv.index("--replot") + 1] if len(sys.argv) > sys.argv.index("--replot") + 1 else "")
+    else:
+        main()

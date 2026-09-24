@@ -1,0 +1,170 @@
+{
+  "settings": {
+    "delta": 0.0011,
+    "absolute_mhz": 5.7,
+    "samples": 1000,
+    "threshold": 0.001,
+    "order": [
+      "\u03c9\u2080",
+      "\u03c9\u2081",
+      "\u03c9_c",
+      "\u03b1\u2080",
+      "\u03b1\u2081",
+      "\u03b1_c",
+      "g\u2080",
+      "g\u2081"
+    ]
+  },
+  "results": {
+    "RL (paper)": [
+      {
+        "D": 1,
+        "fraction_covered": 0.795,
+        "median_JT": 0.00046406512601454564,
+        "calibrations_needed": 1.2578616352201257
+      },
+      {
+        "D": 2,
+        "fraction_covered": 0.409,
+        "median_JT": 0.0011842363082527063,
+        "calibrations_needed": 2.444987775061125
+      },
+      {
+        "D": 3,
+        "fraction_covered": 0.327,
+        "median_JT": 0.0018166453201869937,
+        "calibrations_needed": 3.058103975535168
+      },
+      {
+        "D": 4,
+        "fraction_covered": 0.307,
+        "median_JT": 0.0018413942383860293,
+        "calibrations_needed": 3.257328990228013
+      },
+      {
+        "D": 5,
+        "fraction_covered": 0.295,
+        "median_JT": 0.0018078485662008092,
+        "calibrations_needed": 3.3898305084745766
+      },
+      {
+        "D": 6,
+        "fraction_covered": 0.323,
+        "median_JT": 0.001830958024304441,
+        "calibrations_needed": 3.095975232198142
+      },
+      {
+        "D": 7,
+        "fraction_covered": 0.251,
+        "median_JT": 0.0021130972795345704,
+        "calibrations_needed": 3.9840637450199203
+      },
+      {
+        "D": 8,
+        "fraction_covered": 0.204,
+        "median_JT": 0.002287063243475995,
+        "calibrations_needed": 4.901960784313726
+      }
+    ],
+    "GRAPE": [
+      {
+        "D": 1,
+        "fraction_covered": 0.589,
+        "median_JT": 0.0007081386757489816,
+        "calibrations_needed": 1.697792869269949
+      },
+      {
+        "D": 2,
+        "fraction_covered": 0.516,
+        "median_JT": 0.0009608903052422124,
+        "calibrations_needed": 1.937984496124031
+      },
+      {
+        "D": 3,
+        "fraction_covered": 0.368,
+        "median_JT": 0.0015231301691248644,
+        "calibrations_needed": 2.717391304347826
+      },
+      {
+        "D": 4,
+        "fraction_covered": 0.364,
+        "median_JT": 0.0015047243810771271,
+        "calibrations_needed": 2.7472527472527473
+      },
+      {
+        "D": 5,
+        "fraction_covered": 0.342,
+        "median_JT": 0.0016267070966627384,
+        "calibrations_needed": 2.923976608187134
+      },
+      {
+        "D": 6,
+        "fraction_covered": 0.35,
+        "median_JT": 0.001626745884988512,
+        "calibrations_needed": 2.857142857142857
+      },
+      {
+        "D": 7,
+        "fraction_covered": 0.217,
+        "median_JT": 0.0022271259114574615,
+        "calibrations_needed": 4.6082949308755765
+      },
+      {
+        "D": 8,
+        "fraction_covered": 0.151,
+        "median_JT": 0.0025307975348491385,
+        "calibrations_needed": 6.622516556291391
+      }
+    ],
+    "robust GRAPE (recool, \u03c9\u2080 \u03c9\u2081)": [
+      {
+        "D": 1,
+        "fraction_covered": 1.0,
+        "median_JT": 1.0703949638923849e-05,
+        "calibrations_needed": 1.0
+      },
+      {
+        "D": 2,
+        "fraction_covered": 1.0,
+        "median_JT": 1.9120011530038283e-05,
+        "calibrations_needed": 1.0
+      },
+      {
+        "D": 3,
+        "fraction_covered": 1.0,
+        "median_JT": 2.885557587534171e-05,
+        "calibrations_needed": 1.0
+      },
+      {
+        "D": 4,
+        "fraction_covered": 1.0,
+        "median_JT": 2.7590587576731274e-05,
+        "calibrations_needed": 1.0
+      },
+      {
+        "D": 5,
+        "fraction_covered": 1.0,
+        "median_JT": 2.8508044590203063e-05,
+        "calibrations_needed": 1.0
+      },
+      {
+        "D": 6,
+        "fraction_covered": 1.0,
+        "median_JT": 2.9660790039298668e-05,
+        "calibrations_needed": 1.0
+      },
+      {
+        "D": 7,
+        "fraction_covered": 0.989,
+        "median_JT": 7.626086851053593e-05,
+        "calibrations_needed": 1.0111223458038423
+      },
+      {
+        "D": 8,
+        "fraction_covered": 0.888,
+        "median_JT": 0.00013159926462313898,
+        "calibrations_needed": 1.1261261261261262
+      }
+    ]
+  }
+}

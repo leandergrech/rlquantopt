@@ -47,3 +47,19 @@ Keys in brackets are the BibTeX keys.
 <span id="dhieb2025"></span>**[dhieb2025]** Dhieb, C., Weber, J., Taubenberger, S., Guizan, C. M., Lang, S. J. K., Luo, Z., Music, E., Maiwald, A., Lerch, W., Nebrich, L., Tornow, M., Mayer, T., Zahn, D., Pereira, R. N., &amp; Kutter, C. (2025). <i>Stability studies on subtractively-fabricated CMOS-compatible superconducting transmon qubits</i> (Version 2). arXiv. https://doi.org/10.48550/ARXIV.2512.18037
 
 <span id="groszkowski2021"></span>**[groszkowski2021]** Groszkowski, P., & Koch, J. (2021). Scqubits: a Python package for superconducting qubits. Quantum, 5, 583. CLOCKSS. https://doi.org/10.22331/q-2021-11-17-583
+
+<span id="egger2014"></span>**[egger2014]** Egger, D.  J., & Wilhelm, F.  K. (2014). Adaptive Hybrid Optimal Quantum Control for Imprecisely Characterized Systems. Physical Review Letters, 112(24). https://doi.org/10.1103/physrevlett.112.240503
+
+<span id="wu2018"></span>**[wu2018]** Wu, R.-B., Chu, B., Owens, D. H., & Rabitz, H. (2018). Data-driven gradient algorithm for high-precision quantum control. Physical Review A, 97(4). https://doi.org/10.1103/physreva.97.042122
+
+<span id="schuld2019"></span>**[schuld2019]** Schuld, M., Bergholm, V., Gogolin, C., Izaac, J., & Killoran, N. (2019). Evaluating analytic gradients on quantum hardware. Physical Review A, 99(3). https://doi.org/10.1103/physreva.99.032331
+
+<span id="kelly2018"></span>**[kelly2018]** Kelly, J., O'Malley, P., Neeley, M., Neven, H., &amp; Martinis, J. M. (2018). <i>Physical qubit calibration on a directed acyclic graph</i> (Version 1). arXiv. https://doi.org/10.48550/ARXIV.1803.03226
+
+<span id="proctor2020"></span>**[proctor2020]** Proctor, T., Revelle, M., Nielsen, E., Rudinger, K., Lobser, D., Maunz, P., Blume-Kohout, R., & Young, K. (2020). Detecting and tracking drift in quantum information processors. Nature Communications, 11(1). https://doi.org/10.1038/s41467-020-19074-4
+
+<span id="klimov2024"></span>**[klimov2024]** Klimov, P. V., Bengtsson, A., Quintana, C., Bourassa, A., Hong, S., Dunsworth, A., Satzinger, K. J., Livingston, W. P., Sivak, V., Niu, M. Y., Andersen, T. I., Zhang, Y., Chik, D., Chen, Z., Neill, C., Erickson, C., Grajales Dau, A., Megrant, A., Roushan, P., et al. (2024). Optimizing quantum gates towards the scale of logical qubits. Nature Communications, 15(1). https://doi.org/10.1038/s41467-024-46623-y
+
+<span id="nesterov2017"></span>**[nesterov2017]** Nesterov, Y., & Spokoiny, V. (2015). Random Gradient-Free Minimization of Convex Functions. Foundations of Computational Mathematics, 17(2), 527–566. https://doi.org/10.1007/s10208-015-9296-2
+
+<span id="amos2023"></span>**[amos2023]** Amos, B. (2023). Tutorial on Amortized Optimization. Foundations and Trends® in Machine Learning, 16(5), 592–732. https://doi.org/10.1561/2200000102

@@ -5,6 +5,23 @@ a plain GRAPE pulse. Robust GRAPE, which optimises the mean error over the recoo
 J_T below 1.4e-4 everywhere in that range, about 30× better than RL on average. What RL can offer
 instead is adaptation: see [RL vs GRAPE: cost per device](#rl-vs-grape-cost-per-device) below.
 
+## How the experiments are calibrated
+
+Every drift range on this page is a measured property of real fixed-frequency transmons, taken
+from the literature collected in [Hardware drift ranges](../system/drift.md). Each range stands
+for an operational question, and the results answer it in those terms:
+
+| Hardware measurement | Range used | Operational question | Answer from this page |
+| --- | --- | --- | --- |
+| Frequency wander within one cooldown: 1-3 kHz typical, up to 20 kHz [[burnett2019]](../bibliography.md#burnett2019); single-TLS shifts 5-140 kHz [[schlor2019]](../bibliography.md#schlor2019); within 100 kHz over 95 h [[dhieb2025]](../bibliography.md#dhieb2025) | ±0.1 MHz | Does a calibrated pulse need re-calibrating during a cooldown? | **No.** Every pulse keeps its nominal J_T within a factor of ~4, in line with Burnett et al.'s conclusion that kHz shifts need no re-calibration. |
+| "Recool stability of 5.7 MHz" after thermal cycling, IBM multi-qubit processors [[zhang2022]](../bibliography.md#zhang2022) | ±5.7 MHz | Does a pulse survive a warm-up and cool-down of the fridge? | **Only a robust one.** RL and plain GRAPE pulses come back at J_T ≈ 1.5e-3 on average (from 1e-4-1e-6) and need re-calibration; robust GRAPE stays ≤ 1.4e-4. |
+| "Frequency assignment precision of 18.5 MHz" for new devices after laser annealing [[zhang2022]](../bibliography.md#zhang2022) | ±18.5 MHz | Can a pulse (or policy) designed on the model transfer to a newly fabricated chip? | **No single pulse does.** Even robust GRAPE averages 8.6e-4 and reaches 6.5e-3 in the worst case; a per-device or adaptive method is needed ([fabrication-range experiment](#fabrication-range-experiment)). |
+
+Two hardware limits sit outside these numbers. The control can move the coupler by up to ±3.2 GHz,
+more than a real flux-tunable coupler allows, and only the two qubit frequencies drift; the coupler,
+being flux-tunable, is expected to drift more (~500 kHz, [[burnett2019]](../bibliography.md#burnett2019)).
+Both are listed in [Named gates and a richer model](../next/named-gates.md#limits-of-the-current-hamiltonian).
+
 ## Pulses under the three drift ranges
 
 All pulses last 17.25 ns (the paper RL pulse's best time) and respect the RL bound
@@ -101,5 +118,11 @@ What it shows:
 **Where RL should win, and the next experiment.** Over the fabrication-targeting range
 (±18.5 MHz), robust GRAPE's worst case already degrades to 6.5e-3 (table above). That is where a
 policy that adapts per device, plus a short refinement, should beat both a single robust pulse and
-per-device GRAPE. We will repeat this comparison at that range, with the refinement budget and
-the RL training budget varied.
+per-device GRAPE.
+
+## Fabrication-range experiment
+
+!!! info "Running"
+    The same comparison over the fabrication-targeting range (±18.5 MHz): a PPO agent trained with
+    drift over that range, robust GRAPE on a ±18.5 MHz ensemble, and the RL training budget
+    (2M-20M steps) and GRAPE refinement budget varied. Results will appear here.

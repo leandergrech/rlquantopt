@@ -9244,5 +9244,6489 @@
   },
   "article-number": "583",
   "id": "groszkowski2021"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     3
+    ]
+   ],
+   "date-time": "2026-09-03T05:10:13Z",
+   "timestamp": 1788412213396,
+   "version": "build-2803163510"
+  },
+  "reference-count": 42,
+  "publisher": "American Physical Society (APS)",
+  "issue": "24",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2014,
+       6,
+       20
+      ]
+     ],
+     "date-time": "2014-06-20T00:00:00Z",
+     "timestamp": 1403222400000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "http://link.aps.org/licenses/aps-default-license"
+   }
+  ],
+  "content-domain": {
+   "domain": [],
+   "crossmark-restriction": false
+  },
+  "DOI": "10.1103/physrevlett.112.240503",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2014,
+     6,
+     20
+    ]
+   ],
+   "date-time": "2014-06-20T17:08:18Z",
+   "timestamp": 1403284098000
+  },
+  "source": "Crossref",
+  "is-referenced-by-count": 120,
+  "title": "Adaptive Hybrid Optimal Quantum Control for Imprecisely Characterized Systems",
+  "prefix": "10.1103",
+  "volume": "112",
+  "author": [
+   {
+    "given": "D. J.",
+    "family": "Egger",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "F. K.",
+    "family": "Wilhelm",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "16",
+  "published-online": {
+   "date-parts": [
+    [
+     2014,
+     6,
+     20
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "PhysRevLett.112.240503Cc1R1",
+    "volume-title": "Quantum Computing and Quantum Information",
+    "author": "M. A. Nielsen",
+    "year": "2000"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc2R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.85.2733"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc3R1",
+    "volume-title": "Optical Control of Molecular Dynamics",
+    "author": "S. Rice",
+    "year": "2000"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc4R1",
+    "volume-title": "Principles of the Quantum Control of Molecular Processes",
+    "author": "P. Brumer",
+    "year": "2003"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc5R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.75.012302"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc6R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/j.jmr.2004.11.004"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc7R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.280.5362.421"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc8R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/j.jmr.2010.09.003"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc9R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.85.023611"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc10R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.107.130404"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc11R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.106.190501"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc12R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.109.153603"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc13R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nphys1992"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc14R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.88.035601"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc15R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1367-2630/11/10/105032"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc16R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.99.170501"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc17R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.103.110501"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc18R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/0953-2048/27/1/014001"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc19R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1093/comjnl/7.4.308"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc20R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.88.013414"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc21R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature07128"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc22R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.68.1500"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc23R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.88.021601"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc24R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1367-2630/12/7/075008"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc25R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature07951"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc26R1",
+    "doi-asserted-by": "crossref",
+    "first-page": "240504",
+    "DOI": "10.1103/PhysRevLett.112.240504",
+    "volume": "112",
+    "author": "J. Kelly",
+    "year": "2014",
+    "journal-title": "Phys. Rev. Lett.",
+    "ISSN": "https://id.crossref.org/issn/0031-9007",
+    "issn-type": "print"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc27R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature13171"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc28R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.84.022307"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc29R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.86.022315"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc30R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.85.022306"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc31R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.73.030302"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc32R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1367-2630/14/7/073023"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc33R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.109.080505"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc34R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.102.090502"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc35R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.106.180504"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc37R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/S1090-7807(03)00153-8"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc38R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.83.012308"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc39R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.1208517"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc40R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.85.042321"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc41R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.84.022305"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc42R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nphys2385"
+   },
+   {
+    "key": "PhysRevLett.112.240503Cc43R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.86.032324"
+   }
+  ],
+  "container-title": "Physical Review Letters",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "http://link.aps.org/article/10.1103/PhysRevLett.112.240503",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "syndication"
+   },
+   {
+    "URL": "http://harvest.aps.org/v2/journals/articles/10.1103/PhysRevLett.112.240503/fulltext",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2025,
+     1,
+     2
+    ]
+   ],
+   "date-time": "2025-01-02T17:37:00Z",
+   "timestamp": 1735839420000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://link.aps.org/doi/10.1103/PhysRevLett.112.240503"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2014,
+     6,
+     20
+    ]
+   ]
+  },
+  "references-count": 42,
+  "journal-issue": {
+   "issue": "24",
+   "published-print": {
+    "date-parts": [
+     [
+      2014,
+      6
+     ]
+    ]
+   }
+  },
+  "URL": "http://dx.doi.org/10.1103/PhysRevLett.112.240503",
+  "relation": {},
+  "ISSN": [
+   "0031-9007",
+   "1079-7114"
+  ],
+  "subject": [],
+  "container-title-short": "Phys. Rev. Lett.",
+  "published": {
+   "date-parts": [
+    [
+     2014,
+     6,
+     20
+    ]
+   ]
+  },
+  "article-number": "240503",
+  "id": "egger2014"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     12
+    ]
+   ],
+   "date-time": "2026-09-12T00:11:36Z",
+   "timestamp": 1789171896866,
+   "version": "build-2803163510"
+  },
+  "reference-count": 28,
+  "publisher": "American Physical Society (APS)",
+  "issue": "4",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2018,
+       4,
+       24
+      ]
+     ],
+     "date-time": "2018-04-24T00:00:00Z",
+     "timestamp": 1524528000000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://link.aps.org/licenses/aps-default-license"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2019,
+       4,
+       24
+      ]
+     ],
+     "date-time": "2019-04-24T00:00:00Z",
+     "timestamp": 1556064000000
+    },
+    "content-version": "am",
+    "delay-in-days": 365,
+    "URL": "https://link.aps.org/licenses/aps-default-accepted-manuscript-license"
+   }
+  ],
+  "funder": [
+   {
+    "DOI": "10.13039/501100001809",
+    "name": "National Natural Science Foundation of China",
+    "doi-asserted-by": "publisher",
+    "award": [
+     "61773232"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "61773232"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/501100001809",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/501100001809",
+    "name": "National Natural Science Foundation of China",
+    "doi-asserted-by": "publisher",
+    "award": [
+     "61374091"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "61374091"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/501100001809",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/501100001809",
+    "name": "National Natural Science Foundation of China",
+    "doi-asserted-by": "publisher",
+    "award": [
+     "61134008"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "61134008"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/501100001809",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100000183",
+    "name": "Army Research Office",
+    "doi-asserted-by": "publisher",
+    "award": [
+     "W911NF-16-1-0014"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "W911NF-16-1-0014"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/100000183",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "journals.aps.org"
+   ],
+   "crossmark-restriction": true
+  },
+  "DOI": "10.1103/physreva.97.042122",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2018,
+     4,
+     24
+    ]
+   ],
+   "date-time": "2018-04-24T09:58:06Z",
+   "timestamp": 1524563886000
+  },
+  "update-policy": "https://doi.org/10.1103/crossmark-policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 60,
+  "title": "Data-driven gradient algorithm for high-precision quantum control",
+  "prefix": "10.1103",
+  "volume": "97",
+  "author": [
+   {
+    "given": "Re-Bing",
+    "family": "Wu",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Bing",
+    "family": "Chu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "David H.",
+    "family": "Owens",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Herschel",
+    "family": "Rabitz",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "16",
+  "published-online": {
+   "date-parts": [
+    [
+     2018,
+     4,
+     24
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "PhysRevA.97.042122Cc1R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.54.3824"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc2R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature13171"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc3R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.113.220501"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc4R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nnano.2014.216"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc5R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/ncomms9748"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc6R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/0034-4885/76/7/076001"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc7R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/j.jmr.2004.11.004"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc8R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.1093649"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc9R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.86.013405"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc10R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1751-8121/aa6b77"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc11R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.91.052306"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc12R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.68.1500"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc13R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1367-2630/12/7/075008"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc14R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.80.043415"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc15R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.87.030301"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc16R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.112.240503"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc17R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.112.240504"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc18R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.79.053417"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc19R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.118.150503"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc20R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-017-0045-z"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc21R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevApplied.7.041001"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc22R1",
+    "volume-title": "Quantum Computation and Quantum Information",
+    "author": "M. A. Nielsen",
+    "year": "2000"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc23R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/TCST.2015.2390191"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc24R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/S1090-7807(03)00245-3"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc25R1",
+    "volume-title": "Numerical Recipes: The Art of Scientific Computing",
+    "author": "W. Press",
+    "year": "2007"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc26R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-017-0016-4"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc27R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.95.012302"
+   },
+   {
+    "key": "PhysRevA.97.042122Cc28R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1134/S0021364016190024"
+   }
+  ],
+  "container-title": "Physical Review A",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://link.aps.org/accepted/10.1103/PhysRevA.97.042122",
+    "content-type": "application/pdf",
+    "content-version": "am",
+    "intended-application": "unspecified"
+   },
+   {
+    "URL": "https://link.aps.org/article/10.1103/PhysRevA.97.042122",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "syndication"
+   },
+   {
+    "URL": "http://harvest.aps.org/v2/journals/articles/10.1103/PhysRevA.97.042122/fulltext",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2018,
+     4,
+     24
+    ]
+   ],
+   "date-time": "2018-04-24T09:58:12Z",
+   "timestamp": 1524563892000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://link.aps.org/doi/10.1103/PhysRevA.97.042122"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2018,
+     4,
+     24
+    ]
+   ]
+  },
+  "references-count": 28,
+  "journal-issue": {
+   "issue": "4",
+   "published-print": {
+    "date-parts": [
+     [
+      2018,
+      4
+     ]
+    ]
+   }
+  },
+  "URL": "http://dx.doi.org/10.1103/PhysRevA.97.042122",
+  "relation": {},
+  "ISSN": [
+   "2469-9926",
+   "2469-9934"
+  ],
+  "subject": [],
+  "container-title-short": "Phys. Rev. A",
+  "published": {
+   "date-parts": [
+    [
+     2018,
+     4,
+     24
+    ]
+   ]
+  },
+  "article-number": "042122",
+  "id": "wu2018"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     24
+    ]
+   ],
+   "date-time": "2026-09-24T08:02:43Z",
+   "timestamp": 1790236963919,
+   "version": "4.1.0"
+  },
+  "reference-count": 12,
+  "publisher": "American Physical Society (APS)",
+  "issue": "3",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2019,
+       3,
+       21
+      ]
+     ],
+     "date-time": "2019-03-21T00:00:00Z",
+     "timestamp": 1553126400000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://link.aps.org/licenses/aps-default-license"
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "journals.aps.org"
+   ],
+   "crossmark-restriction": true
+  },
+  "DOI": "10.1103/physreva.99.032331",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2019,
+     3,
+     21
+    ]
+   ],
+   "date-time": "2019-03-21T08:40:23Z",
+   "timestamp": 1553157623000
+  },
+  "update-policy": "https://doi.org/10.1103/crossmark-policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 988,
+  "title": "Evaluating analytic gradients on quantum hardware",
+  "prefix": "10.1103",
+  "volume": "99",
+  "author": [
+   {
+    "given": "Maria",
+    "family": "Schuld",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ville",
+    "family": "Bergholm",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Christian",
+    "family": "Gogolin",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Josh",
+    "family": "Izaac",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Nathan",
+    "family": "Killoran",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "16",
+  "published-online": {
+   "date-parts": [
+    [
+     2019,
+     3,
+     21
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "PhysRevA.99.032331Cc1R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/ncomms5213"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc3R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/2058-9565/aa8072"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc4R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.122.040504"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc5R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41586-019-0980-2"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc11R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.98.032309"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc12R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.98.062324"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc13R1",
+    "first-page": "0901",
+    "volume": "12",
+    "author": "A. M. Childs",
+    "year": "2012",
+    "journal-title": "Quantum Inf. Comput."
+   },
+   {
+    "key": "PhysRevA.99.032331Cc16R1",
+    "volume-title": "ICML 2015 AutoML Workshop",
+    "author": "D. Maclaurin",
+    "year": "2015"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc19R1",
+    "first-page": "1",
+    "volume": "18",
+    "author": "A. G. Baydin",
+    "year": "2018",
+    "journal-title": "J. Mach. Learn. Res."
+   },
+   {
+    "key": "PhysRevA.99.032331Cc23R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.107.080502"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc25R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/RevModPhys.84.621"
+   },
+   {
+    "key": "PhysRevA.99.032331Cc26R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.22331/q-2019-03-11-129"
+   }
+  ],
+  "container-title": "Physical Review A",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://link.aps.org/article/10.1103/PhysRevA.99.032331",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "syndication"
+   },
+   {
+    "URL": "http://harvest.aps.org/v2/journals/articles/10.1103/PhysRevA.99.032331/fulltext",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2019,
+     3,
+     21
+    ]
+   ],
+   "date-time": "2019-03-21T08:40:31Z",
+   "timestamp": 1553157631000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://link.aps.org/doi/10.1103/PhysRevA.99.032331"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     3,
+     21
+    ]
+   ]
+  },
+  "references-count": 12,
+  "journal-issue": {
+   "issue": "3",
+   "published-print": {
+    "date-parts": [
+     [
+      2019,
+      3
+     ]
+    ]
+   }
+  },
+  "URL": "http://dx.doi.org/10.1103/PhysRevA.99.032331",
+  "relation": {},
+  "ISSN": [
+   "2469-9926",
+   "2469-9934"
+  ],
+  "subject": [],
+  "container-title-short": "Phys. Rev. A",
+  "published": {
+   "date-parts": [
+    [
+     2019,
+     3,
+     21
+    ]
+   ]
+  },
+  "article-number": "032331",
+  "id": "schuld2019"
+ },
+ {
+  "type": "article",
+  "id": "kelly2018",
+  "categories": [
+   "Quantum Physics (quant-ph)",
+   "FOS: Physical sciences",
+   "FOS: Physical sciences"
+  ],
+  "author": [
+   {
+    "family": "Kelly",
+    "given": "Julian"
+   },
+   {
+    "family": "O'Malley",
+    "given": "Peter"
+   },
+   {
+    "family": "Neeley",
+    "given": "Matthew"
+   },
+   {
+    "family": "Neven",
+    "given": "Hartmut"
+   },
+   {
+    "family": "Martinis",
+    "given": "John M."
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2018
+    ]
+   ]
+  },
+  "abstract": "High-fidelity control of qubits requires precisely tuned control parameters. Typically, these parameters are found through a series of bootstrapped calibration experiments which successively acquire more accurate information about a physical qubit. However, optimal parameters are typically different between devices and can also drift in time, which begets the need for an efficient calibration strategy. Here, we introduce a framework to understand the relationship between calibrations as a directed graph. With this approach, calibration is reduced to a graph traversal problem that is automatable and extensible.",
+  "DOI": "10.48550/ARXIV.1803.03226",
+  "publisher": "arXiv",
+  "title": "Physical qubit calibration on a directed acyclic graph",
+  "URL": "https://arxiv.org/abs/1803.03226",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "1"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     8,
+     24
+    ]
+   ],
+   "date-time": "2026-08-24T16:18:31Z",
+   "timestamp": 1787588311151,
+   "version": "build-2736575974"
+  },
+  "reference-count": 56,
+  "publisher": "Springer Science and Business Media LLC",
+  "issue": "1",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2020,
+       10,
+       26
+      ]
+     ],
+     "date-time": "2020-10-26T00:00:00Z",
+     "timestamp": 1603670400000
+    },
+    "content-version": "tdm",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2020,
+       10,
+       26
+      ]
+     ],
+     "date-time": "2020-10-26T00:00:00Z",
+     "timestamp": 1603670400000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0"
+   }
+  ],
+  "funder": [
+   {
+    "DOI": "10.13039/100006234",
+    "name": "DOE | LDRD | Sandia National Laboratories",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100006234",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100011039",
+    "name": "ODNI | Intelligence Advanced Research Projects Activity",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100011039",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100006132",
+    "name": "DOE | Office of Science",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100006132",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "link.springer.com"
+   ],
+   "crossmark-restriction": false
+  },
+  "abstract": "<jats:title>Abstract</jats:title>\n                  <jats:p>If quantum information processors are to fulfill their potential, the diverse errors that affect them must be understood and suppressed. But errors typically fluctuate over time, and the most widely used tools for characterizing them assume static error modes and rates. This mismatch can cause unheralded failures, misidentified error modes, and wasted experimental effort. Here, we demonstrate a spectral analysis technique for resolving time dependence in quantum processors. Our method is fast, simple, and statistically sound. It can be applied to time-series data from any quantum processor experiment. We use data from simulations and trapped-ion qubit experiments to show how our method can resolve time dependence when applied to popular characterization protocols, including randomized benchmarking, gate set tomography, and Ramsey spectroscopy. In the experiments, we detect instability and localize its source, implement drift control techniques to compensate for this instability, and then demonstrate that the instability has been suppressed.</jats:p>",
+  "DOI": "10.1038/s41467-020-19074-4",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2020,
+     10,
+     26
+    ]
+   ],
+   "date-time": "2020-10-26T07:06:00Z",
+   "timestamp": 1603695960000
+  },
+  "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 82,
+  "title": "Detecting and tracking drift in quantum information processors",
+  "prefix": "10.1038",
+  "volume": "11",
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-0219-8930",
+    "authenticated-orcid": false,
+    "given": "Timothy",
+    "family": "Proctor",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Melissa",
+    "family": "Revelle",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Erik",
+    "family": "Nielsen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Kenneth",
+    "family": "Rudinger",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Daniel",
+    "family": "Lobser",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Peter",
+    "family": "Maunz",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Robin",
+    "family": "Blume-Kohout",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Kevin",
+    "family": "Young",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "297",
+  "published-online": {
+   "date-parts": [
+    [
+     2020,
+     10,
+     26
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "19074_CR1",
+    "doi-asserted-by": "publisher",
+    "first-page": "041001",
+    "DOI": "10.1103/PhysRevApplied.7.041001",
+    "volume": "7",
+    "author": "MA Rol",
+    "year": "2017",
+    "unstructured": "Rol, M. A. et al. Restless tuneup of high-fidelity qubit gates. Phys. Rev. Appl. 7, 041001 (2017).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "19074_CR2",
+    "unstructured": "Otterbach, J. S. et al. Unsupervised machine learning on a hybrid quantum computer. Preprint at http://arxiv.org/abs/1712.05771 (2017)."
+   },
+   {
+    "key": "19074_CR3",
+    "first-page": "021012",
+    "volume": "8",
+    "author": "N Friis",
+    "year": "2018",
+    "unstructured": "Friis, N. et al. Observation of entangled states of a fully controlled 20-qubit system. Phys. Rev. X 8, 021012 (2018).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "19074_CR4",
+    "doi-asserted-by": "publisher",
+    "first-page": "505",
+    "DOI": "10.1038/s41586-019-1666-5",
+    "volume": "574",
+    "author": "F Arute",
+    "year": "2019",
+    "unstructured": "Arute, F. et al. Quantum supremacy using a programmable superconducting processor. Nature 574, 505–510 (2019).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "19074_CR5",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/ncomms14485",
+    "volume": "8",
+    "author": "R Blume-Kohout",
+    "year": "2017",
+    "unstructured": "Blume-Kohout, R. et al. Demonstration of qubit operations below a rigorous fault tolerance threshold with gate set tomography. Nat. Commun. 8, 14485 (2017).",
+    "journal-title": "Nat. Commun."
+   },
+   {
+    "key": "19074_CR6",
+    "doi-asserted-by": "publisher",
+    "first-page": "062119",
+    "DOI": "10.1103/PhysRevA.87.062119",
+    "volume": "87",
+    "author": "ST Merkel",
+    "year": "2013",
+    "unstructured": "Merkel, S. T. et al. Self-consistent quantum process tomography. Phys. Rev. A 87, 062119 (2013).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR7",
+    "doi-asserted-by": "publisher",
+    "first-page": "012307",
+    "DOI": "10.1103/PhysRevA.77.012307",
+    "volume": "77",
+    "author": "E Knill",
+    "year": "2008",
+    "unstructured": "Knill, E. et al. Randomized benchmarking of quantum gates. Phys. Rev. A 77, 012307 (2008).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR8",
+    "doi-asserted-by": "publisher",
+    "first-page": "180504",
+    "DOI": "10.1103/PhysRevLett.106.180504",
+    "volume": "106",
+    "author": "E Magesan",
+    "year": "2011",
+    "unstructured": "Magesan, E., Gambetta, J. M. & Emerson, J. Scalable and robust randomized benchmarking of quantum processes. Phys. Rev. Lett. 106, 180504 (2011).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR9",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Proctor, T. J. et al. Direct randomized benchmarking for multiqubit devices. Phys. Rev. Lett. 123, 030503 (2019).",
+    "DOI": "10.1103/PhysRevLett.123.030503"
+   },
+   {
+    "key": "19074_CR10",
+    "doi-asserted-by": "publisher",
+    "first-page": "080505",
+    "DOI": "10.1103/PhysRevLett.109.080505",
+    "volume": "109",
+    "author": "E Magesan",
+    "year": "2012",
+    "unstructured": "Magesan, E. et al. Efficient measurement of quantum gate error by interleaved randomized benchmarking. Phys. Rev. Lett. 109, 080505 (2012).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR11",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/npjqi.2016.12",
+    "volume": "2",
+    "author": "AW Cross",
+    "year": "2016",
+    "unstructured": "Cross, A. W., Magesan, E., Bishop, L. S., Smolin, J. A. & Gambetta, J. M. Scalable randomised benchmarking of non-clifford gates. NPJ Quantum Inf. 2, 16012 (2016).",
+    "journal-title": "NPJ Quantum Inf."
+   },
+   {
+    "key": "19074_CR12",
+    "doi-asserted-by": "publisher",
+    "first-page": "030303",
+    "DOI": "10.1103/PhysRevA.90.030303",
+    "volume": "90",
+    "author": "R Barends",
+    "year": "2014",
+    "unstructured": "Barends, R. et al. Rolling quantum dice with a superconducting qubit. Phys. Rev. A 90, 030303 (2014).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR13",
+    "doi-asserted-by": "publisher",
+    "first-page": "060302",
+    "DOI": "10.1103/PhysRevA.92.060302",
+    "volume": "92",
+    "author": "A Carignan-Dugas",
+    "year": "2015",
+    "unstructured": "Carignan-Dugas, A., Wallman, J. J. & Emerson, J. Characterizing universal gate sets via dihedral benchmarking. Phys. Rev. A 92, 060302 (2015).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR14",
+    "doi-asserted-by": "publisher",
+    "first-page": "240504",
+    "DOI": "10.1103/PhysRevLett.109.240504",
+    "volume": "109",
+    "author": "JM Gambetta",
+    "year": "2012",
+    "unstructured": "Gambetta, J. M. et al. Characterization of addressability by simultaneous randomized benchmarking. Phys. Rev. Lett. 109, 240504 (2012).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR15",
+    "doi-asserted-by": "publisher",
+    "first-page": "062315",
+    "DOI": "10.1103/PhysRevA.92.062315",
+    "volume": "92",
+    "author": "S Kimmel",
+    "year": "2015",
+    "unstructured": "Kimmel, S., Low, G. H. & Yoder, T. J. Robust calibration of a universal single-qubit gate set via robust phase estimation. Phys. Rev. A 92, 062315 (2015).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR16",
+    "doi-asserted-by": "publisher",
+    "first-page": "103018",
+    "DOI": "10.1088/1367-2630/18/10/103018",
+    "volume": "18",
+    "author": "JP Dehollain",
+    "year": "2016",
+    "unstructured": "Dehollain, J. P. et al. Optimization of a solid-state electron spin qubit using gate set tomography. New J. Phys. 18, 103018 (2016).",
+    "journal-title": "New J. Phys."
+   },
+   {
+    "key": "19074_CR17",
+    "doi-asserted-by": "publisher",
+    "first-page": "062321",
+    "DOI": "10.1103/PhysRevA.89.062321",
+    "volume": "89",
+    "author": "JM Epstein",
+    "year": "2014",
+    "unstructured": "Epstein, J. M., Cross, A. W., Magesan, E. & Gambetta, J. M. Investigating the limits of randomized benchmarking protocols. Phys. Rev. A 89, 062321 (2014).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR18",
+    "doi-asserted-by": "publisher",
+    "first-page": "025024",
+    "DOI": "10.1088/1367-2630/15/2/025024",
+    "volume": "15",
+    "author": "SJ van Enk",
+    "year": "2013",
+    "unstructured": "van Enk, S. J. & Blume-Kohout, R. When quantum tomography goes wrong: drift of quantum sources and other errors. New J. Phys. 15, 025024 (2013).",
+    "journal-title": "New J. Phys."
+   },
+   {
+    "key": "19074_CR19",
+    "unstructured": "Fong, B. H. & Merkel, S. T. Randomized benchmarking, correlated noise, and ising models. Preprint at http://arxiv.org/abs/1703.09747 (2017)."
+   },
+   {
+    "key": "19074_CR20",
+    "doi-asserted-by": "publisher",
+    "first-page": "090502",
+    "DOI": "10.1103/PhysRevLett.102.090502",
+    "volume": "102",
+    "author": "JM Chow",
+    "year": "2009",
+    "unstructured": "Chow, J. M. et al. Randomized benchmarking and process tomography for gate errors in a solid-state qubit. Phys. Rev. Lett. 102, 090502 (2009).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR21",
+    "doi-asserted-by": "publisher",
+    "first-page": "022326",
+    "DOI": "10.1103/PhysRevA.92.022326",
+    "volume": "92",
+    "author": "MA Fogarty",
+    "year": "2015",
+    "unstructured": "Fogarty, M. A. et al. Nonexponential fidelity decay in randomized benchmarking with low-frequency noise. Phys. Rev. A 92, 022326 (2015).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR22",
+    "doi-asserted-by": "publisher",
+    "first-page": "875",
+    "DOI": "10.1126/science.aaw9415",
+    "volume": "364",
+    "author": "Y Wan",
+    "year": "2019",
+    "unstructured": "Wan, Y. et al. Quantum gate teleportation between separated qubits in a trapped-ion processor. Science 364, 875–878 (2019).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "19074_CR23",
+    "doi-asserted-by": "publisher",
+    "first-page": "117003",
+    "DOI": "10.1103/PhysRevLett.101.117003",
+    "volume": "101",
+    "author": "R Harris",
+    "year": "2008",
+    "unstructured": "Harris, R. et al. Probing noise in flux qubits via macroscopic resonant tunneling. Phys. Rev. Lett. 101, 117003 (2008).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR24",
+    "doi-asserted-by": "publisher",
+    "first-page": "565",
+    "DOI": "10.1038/nphys1994",
+    "volume": "7",
+    "author": "J Bylander",
+    "year": "2011",
+    "unstructured": "Bylander, J. et al. Noise spectroscopy through dynamical decoupling with a superconducting flux qubit. Nat. Phys. 7, 565 (2011).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "19074_CR25",
+    "doi-asserted-by": "publisher",
+    "first-page": "044017",
+    "DOI": "10.1103/PhysRevApplied.10.044017",
+    "volume": "10",
+    "author": "KW Chan",
+    "year": "2018",
+    "unstructured": "Chan, K. W. et al. Assessment of a silicon quantum dot spin qubit environment via noise spectroscopy. Phys. Rev. Appl. 10, 044017 (2018).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "19074_CR26",
+    "doi-asserted-by": "publisher",
+    "first-page": "090502",
+    "DOI": "10.1103/PhysRevLett.121.090502",
+    "volume": "121",
+    "author": "PV Klimov",
+    "year": "2018",
+    "unstructured": "Klimov, P. V. et al. Fluctuations of energy-relaxation times in superconducting qubits. Phys. Rev. Lett. 121, 090502 (2018).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR27",
+    "doi-asserted-by": "publisher",
+    "first-page": "113510",
+    "DOI": "10.1063/1.3693409",
+    "volume": "100",
+    "author": "A Megrant",
+    "year": "2012",
+    "unstructured": "Megrant, A. et al. Planar superconducting resonators with internal quality factors above one million. Appl. Phys. Lett. 100, 113510 (2012).",
+    "journal-title": "Appl. Phys. Lett."
+   },
+   {
+    "key": "19074_CR28",
+    "doi-asserted-by": "publisher",
+    "first-page": "035442",
+    "DOI": "10.1103/PhysRevB.92.035442",
+    "volume": "92",
+    "author": "C Müller",
+    "year": "2015",
+    "unstructured": "Müller, C., Lisenfeld, J., Shnirman, A. & Poletto, S. Interacting two-level defects as sources of fluctuating high-frequency noise in superconducting circuits. Phys. Rev. B 92, 035442 (2015).",
+    "journal-title": "Phys. Rev. B"
+   },
+   {
+    "key": "19074_CR29",
+    "doi-asserted-by": "publisher",
+    "first-page": "180505",
+    "DOI": "10.1103/PhysRevB.97.180505",
+    "volume": "97",
+    "author": "SM Meißner",
+    "year": "2018",
+    "unstructured": "Meißner, S. M., Seiler, A., Lisenfeld, J., Ustinov, A. V. & Weiss, G. Probing individual tunneling fluctuators with coherently controlled tunneling systems. Phys. Rev. B 97, 180505 (2018).",
+    "journal-title": "Phys. Rev. B"
+   },
+   {
+    "key": "19074_CR30",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41467-018-03577-2",
+    "volume": "9",
+    "author": "SE De Graaf",
+    "year": "2018",
+    "unstructured": "De Graaf, S. E. et al. Suppression of low-frequency charge noise in superconducting resonators by surface spin desorption. Nat. Commun. 9, 1143 (2018).",
+    "journal-title": "Nat. Commun."
+   },
+   {
+    "key": "19074_CR31",
+    "doi-asserted-by": "publisher",
+    "first-page": "044702",
+    "DOI": "10.1063/1.5080093",
+    "volume": "90",
+    "author": "B Merkel",
+    "year": "2019",
+    "unstructured": "Merkel, B. et al. Magnetic field stabilization system for atomic physics experiments. Rev. Sci. Instrum 90, 044702 (2019).",
+    "journal-title": "Rev. Sci. Instrum"
+   },
+   {
+    "key": "19074_CR32",
+    "doi-asserted-by": "publisher",
+    "first-page": "54",
+    "DOI": "10.1038/s41534-019-0168-5",
+    "volume": "5",
+    "author": "J Burnett",
+    "year": "2019",
+    "unstructured": "Burnett, J. et al. Decoherence benchmarking of superconducting qubits. NPJ Quantum Inf. 5, 54 (2019).",
+    "journal-title": "NPJ Quantum Inf."
+   },
+   {
+    "key": "19074_CR33",
+    "doi-asserted-by": "publisher",
+    "first-page": "012314",
+    "DOI": "10.1103/PhysRevA.95.012314",
+    "volume": "95",
+    "author": "L Cortez",
+    "year": "2017",
+    "unstructured": "Cortez, L. et al. Rapid estimation of drifting parameters in continuously measured quantum systems. Phys. Rev. A 95, 012314 (2017).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR34",
+    "doi-asserted-by": "publisher",
+    "first-page": "052348",
+    "DOI": "10.1103/PhysRevA.95.052348",
+    "volume": "95",
+    "author": "C Bonato",
+    "year": "2017",
+    "unstructured": "Bonato, C. & Berry, D. W. Adaptive tracking of a time-varying field with a quantum sensor. Phys. Rev. A 95, 052348 (2017).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR35",
+    "doi-asserted-by": "publisher",
+    "first-page": "093601",
+    "DOI": "10.1103/PhysRevLett.104.093601",
+    "volume": "104",
+    "author": "TA Wheatley",
+    "year": "2010",
+    "unstructured": "Wheatley, T. A. Adaptive optical phase estimation using time-symmetric quantum smoothing. Phys. Rev. Lett. 104, 093601 (2010).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "19074_CR36",
+    "doi-asserted-by": "publisher",
+    "first-page": "012314",
+    "DOI": "10.1103/PhysRevA.86.012314",
+    "volume": "86",
+    "author": "KC Young",
+    "year": "2012",
+    "unstructured": "Young, K. C. & Whaley, K. B. Qubits as spectrometers of dephasing noise. Phys. Rev. A 86, 012314 (2012).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR37",
+    "doi-asserted-by": "publisher",
+    "first-page": "064042",
+    "DOI": "10.1103/PhysRevApplied.9.064042",
+    "volume": "9",
+    "author": "RS Gupta",
+    "year": "2018",
+    "unstructured": "Gupta, R. S. & Biercuk, M. J. Machine learning for predictive estimation of qubit dynamics subject to dephasing. Phys. Rev. Appl. 9, 064042 (2018).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "19074_CR38",
+    "doi-asserted-by": "publisher",
+    "first-page": "033024",
+    "DOI": "10.1088/1367-2630/18/3/033024",
+    "volume": "18",
+    "author": "C Granade",
+    "year": "2016",
+    "unstructured": "Granade, C., Combes, J. & Cory, D. G. Practical bayesian tomography. New J. Phys. 18, 033024 (2016).",
+    "journal-title": "New J. Phys."
+   },
+   {
+    "key": "19074_CR39",
+    "doi-asserted-by": "publisher",
+    "first-page": "5",
+    "DOI": "10.22331/q-2017-04-25-5",
+    "volume": "1",
+    "author": "C Granade",
+    "year": "2017",
+    "unstructured": "Granade, C. et al. Qinfer: Statistical inference software for quantum applications. Quantum 1, 5 (2017).",
+    "journal-title": "Quantum"
+   },
+   {
+    "key": "19074_CR40",
+    "doi-asserted-by": "publisher",
+    "first-page": "123032",
+    "DOI": "10.1088/1367-2630/aa916e",
+    "volume": "19",
+    "author": "M-X Huo",
+    "year": "2017",
+    "unstructured": "Huo, M.-X. & Li, Y. Learning time-dependent noise to reduce logical errors: Real time error rate estimation in quantum error correction. N. J. Phys. 19, 123032 (2017).",
+    "journal-title": "N. J. Phys."
+   },
+   {
+    "key": "19074_CR41",
+    "doi-asserted-by": "publisher",
+    "first-page": "032321",
+    "DOI": "10.1103/PhysRevA.94.032321",
+    "volume": "94",
+    "author": "J Kelly",
+    "year": "2016",
+    "unstructured": "Kelly, J. et al. Scalable in situ qubit calibration during repetitive error detection. Phys. Rev. A 94, 032321 (2016).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR42",
+    "unstructured": "Huo, M. & Li, Y. Self-consistent tomography of temporally correlated errors. Preprint at http://arxiv.org/abs/1811.02734 (2018)."
+   },
+   {
+    "key": "19074_CR43",
+    "first-page": "021045",
+    "volume": "9",
+    "author": "K Rudinger",
+    "year": "2019",
+    "unstructured": "Rudinger, K. et al. Probing context-dependent errors in quantum processors. Phys. Rev. X 9, 021045 (2019).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "19074_CR44",
+    "doi-asserted-by": "publisher",
+    "first-page": "1289",
+    "DOI": "10.1109/TIT.2006.871582",
+    "volume": "52",
+    "author": "DL Donoho",
+    "year": "2006",
+    "unstructured": "Donoho, D. L. Compressed sensing. IEEE Trans. Inf. Theory 52, 1289–1306 (2006).",
+    "journal-title": "IEEE Trans. Inf. Theory"
+   },
+   {
+    "key": "19074_CR45",
+    "unstructured": "Lehmann, E. L. & Romano, J. P. Testing Statistical Hypotheses (Springer Science, Business Media, 2006)."
+   },
+   {
+    "key": "19074_CR46",
+    "doi-asserted-by": "publisher",
+    "first-page": "561",
+    "DOI": "10.1146/annurev.ps.46.020195.003021",
+    "volume": "46",
+    "author": "JP Shaffer",
+    "year": "1995",
+    "unstructured": "Shaffer, J. P. Multiple hypothesis testing. Ann. Rev. Psychol. 46, 561–584 (1995).",
+    "journal-title": "Ann. Rev. Psychol."
+   },
+   {
+    "key": "19074_CR47",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Hirotugu, A. A new look at the statistical model identification. IEEE Trans. Autom. Control 19, 716–723 (1974).",
+    "DOI": "10.1109/TAC.1974.1100705"
+   },
+   {
+    "key": "19074_CR48",
+    "doi-asserted-by": "publisher",
+    "first-page": "221",
+    "DOI": "10.1006/jmra.1994.1159",
+    "volume": "109",
+    "author": "W Stephen",
+    "year": "1994",
+    "unstructured": "Stephen, W. Broadband, narrowband, and passband composite pulses for use in advanced nmr experiments. J. Magn. Reson. Series A 109, 221–231 (1994).",
+    "journal-title": "J. Magn. Reson. Series A"
+   },
+   {
+    "key": "19074_CR49",
+    "unstructured": "True Merrill, J. & Kenneth R. B. Progress in compensating pulse sequences for quantum computation. Preprint at http://arxiv.org/abs/1203.6392 (2012)."
+   },
+   {
+    "key": "19074_CR50",
+    "doi-asserted-by": "publisher",
+    "first-page": "032314",
+    "DOI": "10.1103/PhysRevA.80.032314",
+    "volume": "80",
+    "author": "K Khodjasteh",
+    "year": "2009",
+    "unstructured": "Khodjasteh, K. & Viola, L. Dynamical quantum error correction of unitary operations with bounded controls. Phys. Rev. A 80, 032314 (2009).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR51",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Aharonov, D., Kitaev, A. & Nisan, N. Proc. Thirtieth Annual ACM Symposium on Theory of Computing 20–30 (ACM, 1998).",
+    "DOI": "10.1145/276698.276708"
+   },
+   {
+    "key": "19074_CR52",
+    "unstructured": "Nielsen, E. et al. PyGSTi Pre-release of Version 0.9.10: 7c6ddd1. https://github.com/pyGSTio/pyGSTi/tree/7c6ddd1de209b795ea39bfb69d010b687e812d07 (2020)."
+   },
+   {
+    "key": "19074_CR53",
+    "doi-asserted-by": "publisher",
+    "first-page": "044002",
+    "DOI": "10.1088/2058-9565/ab8aa4",
+    "volume": "5",
+    "author": "E Nielsen",
+    "year": "2020",
+    "unstructured": "Nielsen, E. et al. Probing quantum processor performance with pyGSTi. Quantum Sci. Technol. 5, 044002 (2020).",
+    "journal-title": "Quantum Sci. Technol."
+   },
+   {
+    "key": "19074_CR54",
+    "doi-asserted-by": "publisher",
+    "first-page": "344",
+    "DOI": "10.1109/58.585119",
+    "volume": "44",
+    "author": "PTH Fisk",
+    "year": "1997",
+    "unstructured": "Fisk, P. T. H., Sellars, M. J., Lawn, M. A. & Coles, G. Accurate measurement of the 12.6 GHz “clock” transition in trapped 71Yb+ ions. IEEE Trans. Ultrasonics Ferroelectr. Freq. Control 44, 344–354 (1997).",
+    "journal-title": "IEEE Trans. Ultrasonics Ferroelectr. Freq. Control"
+   },
+   {
+    "key": "19074_CR55",
+    "doi-asserted-by": "publisher",
+    "first-page": "052314",
+    "DOI": "10.1103/PhysRevA.76.052314",
+    "volume": "76",
+    "author": "S Olmschenk",
+    "year": "2007",
+    "unstructured": "Olmschenk, S. et al. Manipulation and detection of a trapped Yb+ hyperfine qubit. Phys. Rev. A 76, 052314 (2007).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "19074_CR56",
+    "first-page": "90",
+    "volume": "100",
+    "author": "A Nasir",
+    "year": "1974",
+    "unstructured": "Nasir, A., Natarajan, T. & Rao, K. R. Discrete cosine transform. IEEE Trans. Comput. 100, 90–93 (1974).",
+    "journal-title": "IEEE Trans. Comput."
+   }
+  ],
+  "container-title": "Nature Communications",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://www.nature.com/articles/s41467-020-19074-4.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://www.nature.com/articles/s41467-020-19074-4",
+    "content-type": "text/html",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://www.nature.com/articles/s41467-020-19074-4.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2024,
+     8,
+     16
+    ]
+   ],
+   "date-time": "2024-08-16T08:22:26Z",
+   "timestamp": 1723796546000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://www.nature.com/articles/s41467-020-19074-4"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2020,
+     10,
+     26
+    ]
+   ]
+  },
+  "references-count": 56,
+  "journal-issue": {
+   "issue": "1",
+   "published-online": {
+    "date-parts": [
+     [
+      2020,
+      12
+     ]
+    ]
+   }
+  },
+  "alternative-id": [
+   "19074"
+  ],
+  "URL": "http://dx.doi.org/10.1038/s41467-020-19074-4",
+  "relation": {},
+  "ISSN": [
+   "2041-1723"
+  ],
+  "subject": [],
+  "container-title-short": "Nat Commun",
+  "published": {
+   "date-parts": [
+    [
+     2020,
+     10,
+     26
+    ]
+   ]
+  },
+  "assertion": [
+   {
+    "value": "31 July 2019",
+    "order": 1,
+    "name": "received",
+    "label": "Received",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "21 September 2020",
+    "order": 2,
+    "name": "accepted",
+    "label": "Accepted",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "26 October 2020",
+    "order": 3,
+    "name": "first_online",
+    "label": "First Online",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "The authors declare no competing interests.",
+    "order": 1,
+    "name": "Ethics",
+    "group": {
+     "name": "EthicsHeading",
+     "label": "Competing interests"
+    }
+   }
+  ],
+  "article-number": "5396",
+  "id": "proctor2020"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     19
+    ]
+   ],
+   "date-time": "2026-09-19T17:11:23Z",
+   "timestamp": 1789837883609,
+   "version": "4.0.1"
+  },
+  "reference-count": 70,
+  "publisher": "Springer Science and Business Media LLC",
+  "issue": "1",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2024,
+       3,
+       18
+      ]
+     ],
+     "date-time": "2024-03-18T00:00:00Z",
+     "timestamp": 1710720000000
+    },
+    "content-version": "tdm",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2024,
+       3,
+       18
+      ]
+     ],
+     "date-time": "2024-03-18T00:00:00Z",
+     "timestamp": 1710720000000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0"
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "link.springer.com"
+   ],
+   "crossmark-restriction": false
+  },
+  "abstract": "<jats:title>Abstract</jats:title><jats:p>A foundational assumption of quantum error correction theory is that quantum gates can be scaled to large processors without exceeding the error-threshold for fault tolerance. Two major challenges that could become fundamental roadblocks are manufacturing high-performance quantum hardware and engineering a control system that can reach its performance limits. The control challenge of scaling quantum gates from small to large processors without degrading performance often maps to non-convex, high-constraint, and time-dynamic control optimization over an exponentially expanding configuration space. Here we report on a control optimization strategy that can scalably overcome the complexity of such problems. We demonstrate it by choreographing the frequency trajectories of 68 frequency-tunable superconducting qubits to execute single- and two-qubit gates while mitigating computational errors. When combined with a comprehensive model of physical errors across our processor, the strategy suppresses physical error rates by ~3.7× compared with the case of no optimization. Furthermore, it is projected to achieve a similar performance advantage on a distance-23 surface code logical qubit with 1057 physical qubits. Our control optimization strategy solves a generic scaling challenge in a way that can be adapted to a variety of quantum operations, algorithms, and computing architectures.</jats:p>",
+  "DOI": "10.1038/s41467-024-46623-y",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2024,
+     3,
+     18
+    ]
+   ],
+   "date-time": "2024-03-18T19:02:38Z",
+   "timestamp": 1710788558000
+  },
+  "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 61,
+  "title": "Optimizing quantum gates towards the scale of logical qubits",
+  "prefix": "10.1038",
+  "volume": "15",
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-9481-4456",
+    "authenticated-orcid": false,
+    "given": "Paul V.",
+    "family": "Klimov",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-5264-4025",
+    "authenticated-orcid": false,
+    "given": "Andreas",
+    "family": "Bengtsson",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Chris",
+    "family": "Quintana",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8517-7475",
+    "authenticated-orcid": false,
+    "given": "Alexandre",
+    "family": "Bourassa",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-7421-5635",
+    "authenticated-orcid": false,
+    "given": "Sabrina",
+    "family": "Hong",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Andrew",
+    "family": "Dunsworth",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-5865-0813",
+    "authenticated-orcid": false,
+    "given": "Kevin J.",
+    "family": "Satzinger",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-8399-0975",
+    "authenticated-orcid": false,
+    "given": "William P.",
+    "family": "Livingston",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Volodymyr",
+    "family": "Sivak",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Murphy Yuezhen",
+    "family": "Niu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Trond I.",
+    "family": "Andersen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Yaxing",
+    "family": "Zhang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Desmond",
+    "family": "Chik",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zijun",
+    "family": "Chen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-8509-9836",
+    "authenticated-orcid": false,
+    "given": "Charles",
+    "family": "Neill",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Catherine",
+    "family": "Erickson",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Alejandro",
+    "family": "Grajales Dau",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-6371-6140",
+    "authenticated-orcid": false,
+    "given": "Anthony",
+    "family": "Megrant",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-1917-3879",
+    "authenticated-orcid": false,
+    "given": "Pedram",
+    "family": "Roushan",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Alexander N.",
+    "family": "Korotkov",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-2596-2121",
+    "authenticated-orcid": false,
+    "given": "Julian",
+    "family": "Kelly",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Vadim",
+    "family": "Smelyanskiy",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Yu",
+    "family": "Chen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9681-6746",
+    "authenticated-orcid": false,
+    "given": "Hartmut",
+    "family": "Neven",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "297",
+  "published-online": {
+   "date-parts": [
+    [
+     2024,
+     3,
+     18
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "46623_CR1",
+    "doi-asserted-by": "publisher",
+    "first-page": "R2493",
+    "DOI": "10.1103/PhysRevA.52.R2493",
+    "volume": "52",
+    "author": "PW Shor",
+    "year": "1995",
+    "unstructured": "Shor, P. W. Scheme for reducing decoherence in quantum computer memory. Phys. Rev. A 52, R2493–R2496 (1995).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "46623_CR2",
+    "doi-asserted-by": "publisher",
+    "first-page": "900",
+    "DOI": "10.1103/PhysRevA.55.900",
+    "volume": "55",
+    "author": "E Knill",
+    "year": "1997",
+    "unstructured": "Knill, E. & Laflamme, R. Theory of quantum error-correcting codes. Phys. Rev. A 55, 900–911 (1997).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "46623_CR3",
+    "doi-asserted-by": "publisher",
+    "first-page": "022321",
+    "DOI": "10.1103/PhysRevA.89.022321",
+    "volume": "89",
+    "author": "AM Stephens",
+    "year": "2014",
+    "unstructured": "Stephens, A. M. Fault-tolerant thresholds for quantum error correction with the surface code. Phys. Rev. A 89, 022321 (2014).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "46623_CR4",
+    "doi-asserted-by": "publisher",
+    "first-page": "669",
+    "DOI": "10.1038/s41586-022-04566-8",
+    "volume": "605",
+    "author": "S Krinner",
+    "year": "2022",
+    "unstructured": "Krinner, S. et al. Realizing repeated quantum error correction in a distance-three surface code. Nature 605, 669–674 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR5",
+    "doi-asserted-by": "publisher",
+    "first-page": "030501",
+    "DOI": "10.1103/PhysRevLett.129.030501",
+    "volume": "129",
+    "author": "Y Zhao",
+    "year": "2022",
+    "unstructured": "Zhao, Y. et al. Realization of an error-correcting surface code with superconducting qubits. Phys. Rev. Lett. 129, 030501 (2022).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR6",
+    "doi-asserted-by": "publisher",
+    "first-page": "676",
+    "DOI": "10.1038/s41586-022-05434-1",
+    "volume": "614",
+    "author": "R Acharya",
+    "year": "2023",
+    "unstructured": "Acharya, R. et al. Suppressing quantum errors by scaling a surface code logical qubit. Nature 614, 676–681 (2023).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR7",
+    "unstructured": "Nielsen, M. A. & Chuang, I. L. Quantum Computation and Quantum Information (Cambridge University Press, 2000)."
+   },
+   {
+    "key": "46623_CR8",
+    "doi-asserted-by": "publisher",
+    "first-page": "1543",
+    "DOI": "10.1103/PhysRevLett.55.1543",
+    "volume": "55",
+    "author": "JM Martinis",
+    "year": "1985",
+    "unstructured": "Martinis, J. M., Devoret, M. H. & Clarke, J. Energy-level quantization in the zero-voltage state of a current-biased Josephson junction. Phys. Rev. Lett. 55, 1543–1546 (1985).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR9",
+    "doi-asserted-by": "publisher",
+    "first-page": "042319",
+    "DOI": "10.1103/PhysRevA.76.042319",
+    "volume": "76",
+    "author": "J Koch",
+    "year": "2007",
+    "unstructured": "Koch, J. et al. Charge-insensitive qubit design derived from the Cooper pair box. Phys. Rev. A 76, 042319 (2007).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "46623_CR10",
+    "doi-asserted-by": "publisher",
+    "first-page": "240",
+    "DOI": "10.1038/nature08121",
+    "volume": "460",
+    "author": "L DiCarlo",
+    "year": "2009",
+    "unstructured": "DiCarlo, L. et al. Demonstration of two-qubit algorithms with a superconducting quantum processor. Nature 460, 240–244 (2009).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR11",
+    "doi-asserted-by": "publisher",
+    "first-page": "113",
+    "DOI": "10.1126/science.1175552",
+    "volume": "326",
+    "author": "VE Manucharyan",
+    "year": "2009",
+    "unstructured": "Manucharyan, V. E., Koch, J., Glazman, L. I. & Devoret, M. H. Fluxonium: single cooper-pair circuit free of charge offsets. Science 326, 113–116 (2009).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "46623_CR12",
+    "doi-asserted-by": "publisher",
+    "first-page": "080502",
+    "DOI": "10.1103/PhysRevLett.111.080502",
+    "volume": "111",
+    "author": "R Barends",
+    "year": "2013",
+    "unstructured": "Barends, R. et al. Coherent Josephson qubit suitable for scalable quantum integrated circuits. Phys. Rev. Lett. 111, 080502 (2013).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR13",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Versluis, R. et al. Scalable quantum circuit and control for a superconducting surface code. Phys. Rev. Appl. 8, 034021 (2017).",
+    "DOI": "10.1103/PhysRevApplied.8.034021"
+   },
+   {
+    "key": "46623_CR14",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Lin, Y.-H. et al. Demonstration of protection of a superconducting qubit from energy decay. Phys. Rev. Lett. 120, 150503 (2018).",
+    "DOI": "10.1103/PhysRevLett.120.150503"
+   },
+   {
+    "key": "46623_CR15",
+    "doi-asserted-by": "publisher",
+    "first-page": "180501",
+    "DOI": "10.1103/PhysRevLett.127.180501",
+    "volume": "127",
+    "author": "Y Wu",
+    "year": "2021",
+    "unstructured": "Wu, Y. et al. Strong quantum computational advantage using a superconducting quantum processor. Phys. Rev. Lett. 127, 180501 (2021).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR16",
+    "doi-asserted-by": "publisher",
+    "first-page": "240",
+    "DOI": "10.1016/j.scib.2021.10.017",
+    "volume": "67",
+    "author": "Q Zhu",
+    "year": "2022",
+    "unstructured": "Zhu, Q. et al. Quantum computational advantage via 60-qubit 24-cycle random circuit sampling. Sci. Bull. 67, 240–245 (2022).",
+    "journal-title": "Sci. Bull."
+   },
+   {
+    "key": "46623_CR17",
+    "doi-asserted-by": "publisher",
+    "first-page": "020337",
+    "DOI": "10.1103/PRXQuantum.3.020337",
+    "volume": "3",
+    "author": "JA Valery",
+    "year": "2022",
+    "unstructured": "Valery, J. A., Chowdhury, S., Jones, G. & Didier, N. Dynamical sweet spot engineering via two-tone flux modulation of superconducting qubits. PRX Quantum 3, 020337 (2022).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "46623_CR18",
+    "doi-asserted-by": "publisher",
+    "first-page": "037001",
+    "DOI": "10.1103/PRXQuantum.3.037001",
+    "volume": "3",
+    "author": "LB Nguyen",
+    "year": "2022",
+    "unstructured": "Nguyen, L. B. et al. Blueprint for a high-performance fluxonium quantum processor. PRX Quantum 3, 037001 (2022).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "46623_CR19",
+    "doi-asserted-by": "publisher",
+    "first-page": "010502",
+    "DOI": "10.1103/PhysRevLett.129.010502",
+    "volume": "129",
+    "author": "F Bao",
+    "year": "2022",
+    "unstructured": "Bao, F. et al. Fluxonium: an alternative qubit platform for high-fidelity operations. Phys. Rev. Lett. 129, 010502 (2022).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR20",
+    "doi-asserted-by": "publisher",
+    "first-page": "021318",
+    "DOI": "10.1063/1.5089550",
+    "volume": "6",
+    "author": "P Krantz",
+    "year": "2019",
+    "unstructured": "Krantz, P. et al. A quantum engineer’s guide to superconducting qubits. Appl. Phys. Rev. 6, 021318 (2019).",
+    "journal-title": "Appl. Phys. Rev."
+   },
+   {
+    "key": "46623_CR21",
+    "first-page": "243",
+    "volume": "114",
+    "author": "PAM Dirac",
+    "year": "1927",
+    "unstructured": "Dirac, P. A. M. The quantum theory of the emission and absorption of radiation. Proc. R. Soc. Math. Phys. Eng. Sci. 114, 243–265 (1927).",
+    "journal-title": "Proc. R. Soc. Math. Phys. Eng. Sci."
+   },
+   {
+    "key": "46623_CR22",
+    "doi-asserted-by": "crossref",
+    "first-page": "681",
+    "DOI": "10.1103/PhysRev.69.37",
+    "volume": "69",
+    "author": "EM Purcell",
+    "year": "1946",
+    "unstructured": "Purcell, E. M. Spontaneous emission probabilities at radio frequencies. Phys. Rev. 69, 681 (1946).",
+    "journal-title": "Phys. Rev."
+   },
+   {
+    "key": "46623_CR23",
+    "doi-asserted-by": "publisher",
+    "first-page": "134519",
+    "DOI": "10.1103/PhysRevB.72.134519",
+    "volume": "72",
+    "author": "G Ithier",
+    "year": "2005",
+    "unstructured": "Ithier, G. et al. Decoherence in a superconducting quantum bit circuit. Phys. Rev. B 72, 134519 (2005).",
+    "journal-title": "Phys. Rev. B"
+   },
+   {
+    "key": "46623_CR24",
+    "doi-asserted-by": "publisher",
+    "first-page": "565",
+    "DOI": "10.1038/nphys1994",
+    "volume": "7",
+    "author": "J Bylander",
+    "year": "2011",
+    "unstructured": "Bylander, J. et al. Noise spectroscopy through dynamical decoupling with a superconducting flux qubit. Nat. Phys. 7, 565–570 (2011).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "46623_CR25",
+    "doi-asserted-by": "publisher",
+    "first-page": "044009",
+    "DOI": "10.1103/PhysRevApplied.3.044009",
+    "volume": "3",
+    "author": "PJJ O’Malley",
+    "year": "2015",
+    "unstructured": "O’Malley, P. J. J. et al. Qubit metrology of ultralow phase noise using randomized benchmarking. Phys. Rev. Appl. 3, 044009 (2015).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "46623_CR26",
+    "doi-asserted-by": "publisher",
+    "first-page": "124501",
+    "DOI": "10.1088/1361-6633/ab3a7e",
+    "volume": "82",
+    "author": "C Müller",
+    "year": "2019",
+    "unstructured": "Müller, C., Cole, J. H. & Lisenfeld, J. Towards understanding two-level-systems in amorphous solids: insights from quantum circuits. Rep. Prog. Phys. 82, 124501 (2019).",
+    "journal-title": "Rep. Prog. Phys."
+   },
+   {
+    "key": "46623_CR27",
+    "doi-asserted-by": "publisher",
+    "first-page": "054023",
+    "DOI": "10.1103/PhysRevApplied.12.054023",
+    "volume": "12",
+    "author": "P Mundada",
+    "year": "2019",
+    "unstructured": "Mundada, P., Zhang, G., Hazard, T. & Houck, A. Suppression of qubit crosstalk in a tunable coupling superconducting circuit. Phys. Rev. Appl. 12, 054023 (2019).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "46623_CR28",
+    "doi-asserted-by": "publisher",
+    "first-page": "054001",
+    "DOI": "10.1063/1.5133894",
+    "volume": "116",
+    "author": "MA Rol",
+    "year": "2020",
+    "unstructured": "Rol, M. A. et al. Time-domain characterization and correction of on-chip distortion of control pulses in a quantum processor. Appl. Phys. Lett. 116, 054001 (2020).",
+    "journal-title": "Appl. Phys. Lett."
+   },
+   {
+    "key": "46623_CR29",
+    "doi-asserted-by": "publisher",
+    "first-page": "020306",
+    "DOI": "10.1103/PRXQuantum.2.020306",
+    "volume": "2",
+    "author": "S Huang",
+    "year": "2021",
+    "unstructured": "Huang, S. et al. Microwave package design for superconducting quantum processors. PRX Quantum 2, 020306 (2021).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "46623_CR30",
+    "doi-asserted-by": "publisher",
+    "first-page": "150504",
+    "DOI": "10.1103/PhysRevLett.129.150504",
+    "volume": "129",
+    "author": "T Abad",
+    "year": "2022",
+    "unstructured": "Abad, T., Fernández-Pendás, J., Frisk Kockum, A. & Johansson, G. Universal fidelity reduction of quantum operations from weak dissipation. Phys. Rev. Lett. 129, 150504 (2022).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR31",
+    "doi-asserted-by": "publisher",
+    "first-page": "010314",
+    "DOI": "10.1103/PRXQuantum.4.010314",
+    "volume": "4",
+    "author": "F Marxer",
+    "year": "2023",
+    "unstructured": "Marxer, F. et al. Long-distance transmon coupler with cz-gate fidelity above 99.8%. PRX Quantum 4, 010314 (2023).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "46623_CR32",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-021-00464-5",
+    "volume": "7",
+    "author": "JB Hertzberg",
+    "year": "2021",
+    "unstructured": "Hertzberg, J. B. et al. Laser-annealing Josephson junctions for yielding scaled-up superconducting quantum processors. npj Quantum Inf. 7, 129 (2021).",
+    "journal-title": "npj Quantum Inf."
+   },
+   {
+    "key": "46623_CR33",
+    "doi-asserted-by": "publisher",
+    "first-page": "090502",
+    "DOI": "10.1103/PhysRevLett.121.090502",
+    "volume": "121",
+    "author": "PV Klimov",
+    "year": "2018",
+    "unstructured": "Klimov, P. V. et al. Fluctuations of energy-relaxation times in superconducting qubits. Phys. Rev. Lett. 121, 090502 (2018).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR34",
+    "doi-asserted-by": "publisher",
+    "first-page": "500",
+    "DOI": "10.1038/nature13171",
+    "volume": "508",
+    "author": "R Barends",
+    "year": "2014",
+    "unstructured": "Barends, R. et al. Superconducting quantum circuits at the surface code threshold for fault tolerance. Nature 508, 500–503 (2014).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR35",
+    "unstructured": "Klimov, P. V. & Kelly, J. S. Optimizing qubit operating frequencies. US Patent US20220300847A1 (2018)."
+   },
+   {
+    "key": "46623_CR36",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Ding, Y. et al. Systematic crosstalk mitigation for superconducting qubits via frequency-aware compilation. In: Proceedings of 53rd Annual IEEE/ACM International Symposium on Microarchitecture (MICRO)201-214 (2020).",
+    "DOI": "10.1109/MICRO50266.2020.00028"
+   },
+   {
+    "key": "46623_CR37",
+    "unstructured": "Klimov, P. V. Calibration of quantum processor operator parameters. US Patent US20200387822A1 (2019)."
+   },
+   {
+    "key": "46623_CR38",
+    "unstructured": "Klimov, P. V., Kelly, J., Martinis, J. M. & Neven, H. The snake optimizer for learning quantum processor control parameters (2020). Preprint at http://arXiv.org/abs/2006.04594."
+   },
+   {
+    "key": "46623_CR39",
+    "doi-asserted-by": "publisher",
+    "first-page": "505",
+    "DOI": "10.1038/s41586-019-1666-5",
+    "volume": "574",
+    "author": "F Arute",
+    "year": "2019",
+    "unstructured": "Arute, F. et al. Quantum supremacy using a programmable superconducting processor. Nature 574, 505–510 (2019).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR40",
+    "doi-asserted-by": "publisher",
+    "first-page": "332",
+    "DOI": "10.1038/s41567-020-01105-y",
+    "volume": "17",
+    "author": "MP Harrigan",
+    "year": "2021",
+    "unstructured": "Harrigan, M. P. et al. Quantum approximate optimization of non-planar graph problems on a planar superconducting processor. Nat. Phys. 17, 332–336 (2021).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "46623_CR41",
+    "doi-asserted-by": "publisher",
+    "first-page": "107",
+    "DOI": "10.1038/s41567-021-01432-8",
+    "volume": "18",
+    "author": "M McEwen",
+    "year": "2022",
+    "unstructured": "McEwen, M. et al. Resolving catastrophic error bursts from cosmic rays in large arrays of superconducting qubits. Nat. Phys. 18, 107–111 (2022).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "46623_CR42",
+    "doi-asserted-by": "publisher",
+    "first-page": "1780",
+    "DOI": "10.1038/s41567-023-02226-w",
+    "volume": "19",
+    "author": "KC Miao",
+    "year": "2023",
+    "unstructured": "Miao, K. C. et al. Overcoming leakage in quantum error correction. Nat. Phys. 19, 1780–1786 (2023).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "46623_CR43",
+    "doi-asserted-by": "publisher",
+    "first-page": "1479",
+    "DOI": "10.1126/science.abg5029",
+    "volume": "374",
+    "author": "X Mi",
+    "year": "2021",
+    "unstructured": "Mi, X. et al. Information scrambling in quantum circuits. Science 374, 1479–1483 (2021).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "46623_CR44",
+    "doi-asserted-by": "publisher",
+    "first-page": "1237",
+    "DOI": "10.1126/science.abi8378",
+    "volume": "374",
+    "author": "KJ Satzinger",
+    "year": "2021",
+    "unstructured": "Satzinger, K. J. et al. Realizing topologically ordered states on a quantum processor. Science 374, 1237–1241 (2021).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "46623_CR45",
+    "doi-asserted-by": "publisher",
+    "first-page": "531",
+    "DOI": "10.1038/s41586-021-04257-w",
+    "volume": "601",
+    "author": "X Mi",
+    "year": "2022",
+    "unstructured": "Mi, X. et al. Time-crystalline eigenstate order on a quantum processor. Nature 601, 531–536 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR46",
+    "doi-asserted-by": "publisher",
+    "first-page": "785",
+    "DOI": "10.1126/science.abq5769",
+    "volume": "378",
+    "author": "X Mi",
+    "year": "2022",
+    "unstructured": "Mi, X. et al. Noise-resilient edge modes on a chain of superconducting qubits. Science 378, 785–790 (2022).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "46623_CR47",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Andersen, T. I. et al. Non-abelian braiding of graph vertices in a superconducting processor. Nature 618, 264–269 (2023).",
+    "DOI": "10.1038/s41586-023-05954-4"
+   },
+   {
+    "key": "46623_CR48",
+    "unstructured": "Morvan, A. et al. Phase transition in random circuit sampling (2023). Preprint at http://arXiv.org/abs/2304.11119."
+   },
+   {
+    "key": "46623_CR49",
+    "unstructured": "Neill, C. A Path Towards Quantum Supremacy with Superconducting Qubits. Ph.D. thesis, (UC Santa Barbara, 2017)."
+   },
+   {
+    "key": "46623_CR50",
+    "doi-asserted-by": "publisher",
+    "first-page": "054062",
+    "DOI": "10.1103/PhysRevApplied.10.054062",
+    "volume": "10",
+    "author": "F Yan",
+    "year": "2018",
+    "unstructured": "Yan, F. et al. Tunable coupling scheme for implementing high-fidelity two-qubit gates. Phys. Rev. Appl. 10, 054062 (2018).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "46623_CR51",
+    "doi-asserted-by": "publisher",
+    "first-page": "595",
+    "DOI": "10.1038/s41567-018-0124-x",
+    "volume": "14",
+    "author": "S Boixo",
+    "year": "2018",
+    "unstructured": "Boixo, S. et al. Characterizing quantum supremacy in near-term devices. Nat. Phys. 14, 595–600 (2018).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "46623_CR52",
+    "unstructured": "Klimov, P. V. Iterative supervised learning of quantum processor error models. US Patent US20230359922A1 (2022)."
+   },
+   {
+    "key": "46623_CR53",
+    "doi-asserted-by": "publisher",
+    "first-page": "190504",
+    "DOI": "10.1103/PhysRevLett.112.190504",
+    "volume": "112",
+    "author": "E Jeffrey",
+    "year": "2014",
+    "unstructured": "Jeffrey, E. et al. Fast accurate state measurement with superconducting qubits. Phys. Rev. Lett. 112, 190504 (2014).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "46623_CR54",
+    "unstructured": "Klimov, P. V., Megrant, A. E., Dunsworth, A. L. & Kelly, J. S. Generative modeling of quantum hardware. US Patent US20230259802A1 (2020)."
+   },
+   {
+    "key": "46623_CR55",
+    "unstructured": "Fowler, A. G. & Gidney, C. Low overhead quantum computation using lattice surgery. Preprint at http://arXiv.org/abs/1808.06709 (2019)."
+   },
+   {
+    "key": "46623_CR56",
+    "unstructured": "Bengtsson, A. et al. Model-based optimization of superconducting qubit readout. Preprint at http://arxiv.org/abs/2308.02079 (2023)."
+   },
+   {
+    "key": "46623_CR57",
+    "doi-asserted-by": "publisher",
+    "first-page": "961",
+    "DOI": "10.1103/RevModPhys.85.961",
+    "volume": "85",
+    "author": "FA Zwanenburg",
+    "year": "2013",
+    "unstructured": "Zwanenburg, F. A. et al. Silicon quantum electronics. Rev. Mod. Phys. 85, 961–1019 (2013).",
+    "journal-title": "Rev. Mod. Phys."
+   },
+   {
+    "key": "46623_CR58",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41467-019-08970-z",
+    "volume": "10",
+    "author": "AR Mills",
+    "year": "2019",
+    "unstructured": "Mills, A. R. et al. Shuttling a single charge across a one-dimensional array of silicon quantum dots. Nat. Commun. 10, 1063 (2019).",
+    "journal-title": "Nat. Commun."
+   },
+   {
+    "key": "46623_CR59",
+    "doi-asserted-by": "publisher",
+    "first-page": "011006",
+    "DOI": "10.1103/RevModPhys.95.011006",
+    "volume": "95",
+    "author": "JP Zwolak",
+    "year": "2023",
+    "unstructured": "Zwolak, J. P. & Taylor, J. M. Colloquium: advances in automation of quantum dot devices control. Rev. Mod. Phys. 95, 011006 (2023).",
+    "journal-title": "Rev. Mod. Phys."
+   },
+   {
+    "key": "46623_CR60",
+    "doi-asserted-by": "publisher",
+    "first-page": "1175",
+    "DOI": "10.22331/q-2023-11-08-1175",
+    "volume": "7",
+    "author": "J Durandau",
+    "year": "2023",
+    "unstructured": "Durandau, J. et al. Automated generation of shuttling sequences for a linear segmented ion trap quantum computer. Quantum 7, 1175 (2023).",
+    "journal-title": "Quantum"
+   },
+   {
+    "key": "46623_CR61",
+    "doi-asserted-by": "publisher",
+    "first-page": "1176",
+    "DOI": "10.22331/q-2023-11-08-1176",
+    "volume": "7",
+    "author": "F Kreppel",
+    "year": "2023",
+    "unstructured": "Kreppel, F. et al. Quantum circuit compiler for a shuttling-based trapped-ion quantum computer. Quantum 7, 1176 (2023).",
+    "journal-title": "Quantum"
+   },
+   {
+    "key": "46623_CR62",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-022-00579-3",
+    "volume": "8",
+    "author": "JD Sterk",
+    "year": "2022",
+    "unstructured": "Sterk, J. D. et al. Closed-loop optimization of fast trapped-ion shuttling with sub-quanta excitation. npj Quantum Inf. 8, 68 (2022).",
+    "journal-title": "npj Quantum Inf."
+   },
+   {
+    "key": "46623_CR63",
+    "doi-asserted-by": "publisher",
+    "first-page": "451",
+    "DOI": "10.1038/s41586-022-04592-6",
+    "volume": "604",
+    "author": "D Bluvstein",
+    "year": "2022",
+    "unstructured": "Bluvstein, D. et al. A quantum processor based on coherent transport of entangled atom arrays. Nature 604, 451–456 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "46623_CR64",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Bluvstein, D. et al. Logical quantum processor based on reconfigurable atom arrays. Nature 626, 58–65 (2024).",
+    "DOI": "10.1038/s41586-023-06927-3"
+   },
+   {
+    "key": "46623_CR65",
+    "doi-asserted-by": "publisher",
+    "first-page": "433",
+    "DOI": "10.22331/q-2021-04-15-433",
+    "volume": "5",
+    "author": "C Gidney",
+    "year": "2021",
+    "unstructured": "Gidney, C. & Ekerå, M. How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits. Quantum 5, 433 (2021).",
+    "journal-title": "Quantum"
+   },
+   {
+    "key": "46623_CR66",
+    "unstructured": "Klimov, P. V. Operating quantum devices using a temporal metric. US Patent US20230081120A1 (2022)."
+   },
+   {
+    "key": "46623_CR67",
+    "unstructured": "Jansen, S. Machine Learning for Algorithmic Trading: predictive models to extract signals from the market and alternative data for systematic trading strategies with Python (Packt Publishing, 2020)."
+   },
+   {
+    "key": "46623_CR68",
+    "unstructured": "Sutton, R. S. & Barto, A. G. Reinforcement Learning: An Introduction, 2nd edn (The MIT Press, 2018)."
+   },
+   {
+    "key": "46623_CR69",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Baum, Y. et al. Experimental deep reinforcement learning for error-robust gate-set design on a superconducting quantum computer. PRX Quantum 2, 040324 (2021).",
+    "DOI": "10.1103/PRXQuantum.2.040324"
+   },
+   {
+    "key": "46623_CR70",
+    "first-page": "011059",
+    "volume": "12",
+    "author": "VV Sivak",
+    "year": "2022",
+    "unstructured": "Sivak, V. V. et al. Model-free quantum control with reinforcement learning. Phys. Rev. X 12, 011059 (2022).",
+    "journal-title": "Phys. Rev. X"
+   }
+  ],
+  "container-title": "Nature Communications",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://www.nature.com/articles/s41467-024-46623-y.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://www.nature.com/articles/s41467-024-46623-y",
+    "content-type": "text/html",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://www.nature.com/articles/s41467-024-46623-y.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2024,
+     3,
+     18
+    ]
+   ],
+   "date-time": "2024-03-18T19:03:54Z",
+   "timestamp": 1710788634000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://www.nature.com/articles/s41467-024-46623-y"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2024,
+     3,
+     18
+    ]
+   ]
+  },
+  "references-count": 70,
+  "journal-issue": {
+   "issue": "1",
+   "published-online": {
+    "date-parts": [
+     [
+      2024,
+      12
+     ]
+    ]
+   }
+  },
+  "alternative-id": [
+   "46623"
+  ],
+  "URL": "http://dx.doi.org/10.1038/s41467-024-46623-y",
+  "relation": {},
+  "ISSN": [
+   "2041-1723"
+  ],
+  "subject": [],
+  "container-title-short": "Nat Commun",
+  "published": {
+   "date-parts": [
+    [
+     2024,
+     3,
+     18
+    ]
+   ]
+  },
+  "assertion": [
+   {
+    "value": "16 August 2023",
+    "order": 1,
+    "name": "received",
+    "label": "Received",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "4 March 2024",
+    "order": 2,
+    "name": "accepted",
+    "label": "Accepted",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "18 March 2024",
+    "order": 3,
+    "name": "first_online",
+    "label": "First Online",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "The authors declare no competing interests.",
+    "order": 1,
+    "name": "Ethics",
+    "group": {
+     "name": "EthicsHeading",
+     "label": "Competing interests"
+    }
+   }
+  ],
+  "article-number": "2442",
+  "id": "klimov2024"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     23
+    ]
+   ],
+   "date-time": "2026-09-23T03:35:00Z",
+   "timestamp": 1790134500615,
+   "version": "4.0.1"
+  },
+  "reference-count": 22,
+  "publisher": "Springer Science and Business Media LLC",
+  "issue": "2",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2015,
+       11,
+       30
+      ]
+     ],
+     "date-time": "2015-11-30T00:00:00Z",
+     "timestamp": 1448841600000
+    },
+    "content-version": "tdm",
+    "delay-in-days": 0,
+    "URL": "http://www.springer.com/tdm"
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "link.springer.com"
+   ],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     2017,
+     4
+    ]
+   ]
+  },
+  "DOI": "10.1007/s10208-015-9296-2",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2015,
+     11,
+     30
+    ]
+   ],
+   "date-time": "2015-11-30T14:47:16Z",
+   "timestamp": 1448894836000
+  },
+  "page": "527-566",
+  "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 607,
+  "title": "Random Gradient-Free Minimization of Convex Functions",
+  "prefix": "10.1007",
+  "volume": "17",
+  "author": [
+   {
+    "given": "Yurii",
+    "family": "Nesterov",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Vladimir",
+    "family": "Spokoiny",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "297",
+  "published-online": {
+   "date-parts": [
+    [
+     2015,
+     11,
+     30
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "9296_CR1",
+    "unstructured": "A. Agarwal, O. Dekel, and L. Xiao, Optimal algorithms for online convex optimization with multi-point bandit feedback, in Proceedings of the 23rd Annual Conference on Learning, 2010, pp. 2840."
+   },
+   {
+    "key": "9296_CR2",
+    "doi-asserted-by": "crossref",
+    "first-page": "213",
+    "DOI": "10.1137/110850827",
+    "volume": "23",
+    "author": "A Agarwal",
+    "year": "2013",
+    "unstructured": "A. Agarwal, D. Foster, D. Hsu, S. Kakade, and A. Rakhlin, Stochastic convex optimization with bandit feedback,. SIAM J. on Optimization, 23 (2013), pp. 213-240.",
+    "journal-title": "SIAM J. on Optimization"
+   },
+   {
+    "key": "9296_CR3",
+    "doi-asserted-by": "crossref",
+    "first-page": "540",
+    "DOI": "10.1145/1008731.1008733",
+    "volume": "51",
+    "author": "D Bertsimas",
+    "year": "2004",
+    "unstructured": "D. Bertsimas and S. Vempala, Solving convex programs by random walks, J. of the ACM, 51 (2004), pp. 540-556.",
+    "journal-title": "J. of the ACM"
+   },
+   {
+    "key": "9296_CR4",
+    "volume-title": "Optimization and nonsmooth analysis",
+    "author": "F Clarke",
+    "year": "1983",
+    "unstructured": "F. Clarke, Optimization and nonsmooth analysis, Wliley, New York, 1983."
+   },
+   {
+    "key": "9296_CR5",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1137/1.9780898718768",
+    "volume-title": "Introduction to derivative-free optimization",
+    "author": "A Conn",
+    "year": "2009",
+    "unstructured": "A. Conn, K. Scheinberg, and L. Vicente , Introduction to derivative-free optimization. MPS-SIAM series on optimization, SIAM, Philadelphia, 2009."
+   },
+   {
+    "key": "9296_CR6",
+    "doi-asserted-by": "crossref",
+    "first-page": "165",
+    "DOI": "10.1007/BF00934526",
+    "volume": "39",
+    "author": "C Dorea",
+    "year": "1983",
+    "unstructured": "C. Dorea, Expected number of steps of a random optimization method, JOTA, 39 (1983), pp. 165-171.",
+    "journal-title": "JOTA"
+   },
+   {
+    "key": "9296_CR7",
+    "unstructured": "J. Duchi, M.I. Jordan, M.J. Wainwright, and A. Wibisono, Finite sample convergence rate of zero-order stochastic optimization methods, in NIPS, 2012, pp. 1448-1456."
+   },
+   {
+    "key": "9296_CR8",
+    "unstructured": "A. D. Flaxman, A.T. Kalai, and B.H. Mcmahan, Online convex optimization in the bandit setting: gradient descent without a gradient, in Proceedings of the 16th annual ACM-SIAM symposium on Discrete Algorithms, 2005, pp. 385-394 ."
+   },
+   {
+    "key": "9296_CR9",
+    "doi-asserted-by": "crossref",
+    "unstructured": "R. Kleinberg, A. Slivkins, and E. Upfal, Multi-armed bandits in metric spaces, in Proceedings of the 40th annual ACM symposium on Theory of Computing, 2008, pp. 681-690.",
+    "DOI": "10.1145/1374376.1374475"
+   },
+   {
+    "key": "9296_CR10",
+    "doi-asserted-by": "crossref",
+    "first-page": "112",
+    "DOI": "10.1137/S1052623496303470",
+    "volume": "9",
+    "author": "JC Lagarias",
+    "year": "1998",
+    "unstructured": "J. C. Lagarias, J. A. Reeds, M. H. Wright, and P. E. Wright, Convergence properties of the Nelder-Mead Simplex Algorithm in low dimensions, SIAM J. Optimization, 9 (1998), pp. 112-147.",
+    "journal-title": "SIAM J. Optimization"
+   },
+   {
+    "key": "9296_CR11",
+    "doi-asserted-by": "crossref",
+    "first-page": "501",
+    "DOI": "10.1137/110830150",
+    "volume": "22",
+    "author": "JC Lagarias",
+    "year": "2012",
+    "unstructured": "J. C. Lagarias, B. Poonen, and M. H. Wright, Convergence of the restricted Nelder-Mead algorithm in two dimensions, SIAM J. Optimization, 22 (2012), pp. 501-532.",
+    "journal-title": "SIAM J. Optimization"
+   },
+   {
+    "key": "9296_CR12",
+    "first-page": "246",
+    "volume": "26",
+    "author": "J Matyas",
+    "year": "1965",
+    "unstructured": "J. Matyas, Random optimization. Automation and Remote Control, 26 (1965), pp. 246-253.",
+    "journal-title": "Automation and Remote Control"
+   },
+   {
+    "key": "9296_CR13",
+    "doi-asserted-by": "crossref",
+    "first-page": "308",
+    "DOI": "10.1093/comjnl/7.4.308",
+    "volume": "7",
+    "author": "JA Nelder",
+    "year": "1965",
+    "unstructured": "J. A. Nelder and R. Mead, A simplex method for function minimization, Computer Journal, 7 (1965), pp. 308–3013",
+    "journal-title": "Computer Journal"
+   },
+   {
+    "key": "9296_CR14",
+    "doi-asserted-by": "crossref",
+    "first-page": "1574",
+    "DOI": "10.1137/070704277",
+    "volume": "19",
+    "author": "A Nemirovski",
+    "year": "2009",
+    "unstructured": "A. Nemirovski, A. Juditsky, G. Lan, and A.Shapiro, Robust Stochastic Approximation approach to Stochastic Programming, SIAM J. on Optimization, 19 (2009), pp. 1574-1609.",
+    "journal-title": "SIAM J. on Optimization"
+   },
+   {
+    "key": "9296_CR15",
+    "volume-title": "Problem complexity and method efficiency in optimization",
+    "author": "A Nemirovsky",
+    "year": "1983",
+    "unstructured": "A. Nemirovsky and D.Yudin, Problem complexity and method efficiency in optimization, John Wiley and Sons, New York, 1983."
+   },
+   {
+    "key": "9296_CR16",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-1-4419-8853-9",
+    "volume-title": "Introductory Lectures on Convex Optimization",
+    "author": "Yu Nesterov",
+    "year": "2004",
+    "unstructured": "Yu. Nesterov, Introductory Lectures on Convex Optimization, Kluwer, Boston, 2004."
+   },
+   {
+    "key": "9296_CR17",
+    "doi-asserted-by": "crossref",
+    "first-page": "669",
+    "DOI": "10.1007/s10107-005-0633-0",
+    "volume": "104",
+    "author": "Yu Nesterov",
+    "year": "2005",
+    "unstructured": "Yu. Nesterov, Lexicographic differentiation of nonsmooth functions’, Mathematical Programming, 104 (2005), pp. 669-700.",
+    "journal-title": "Mathematical Programming"
+   },
+   {
+    "key": "9296_CR18",
+    "unstructured": "Yu. Nesterov, Random gradient-free minimization of convex functions, CORE Discussion Paper # 2011/1, (2011)."
+   },
+   {
+    "key": "9296_CR19",
+    "doi-asserted-by": "crossref",
+    "first-page": "341",
+    "DOI": "10.1137/100802001",
+    "volume": "22",
+    "author": "Yu Nesterov",
+    "year": "2012",
+    "unstructured": "Yu. Nesterov, Efficiency of coordinate descent methods on huge-scale optimization problems. SIAM J. on Optimization, 22 (2012), pp. 341-362.",
+    "journal-title": "SIAM J. on Optimization"
+   },
+   {
+    "key": "9296_CR20",
+    "volume-title": "Introduction to Optimization",
+    "author": "B Polyak",
+    "year": "1987",
+    "unstructured": "B. Polyak, Introduction to Optimization. Optimization Software - Inc., Publications Division, New York, 1987."
+   },
+   {
+    "key": "9296_CR21",
+    "doi-asserted-by": "crossref",
+    "first-page": "69",
+    "DOI": "10.1007/BF02312467",
+    "volume": "59",
+    "author": "V Protasov",
+    "year": "1996",
+    "unstructured": "V. Protasov, Algorithms for approximate calculation of the minimum of a convex function from its values, Mathematical Notes, 59 (1996), pp. 69-74.",
+    "journal-title": "Mathematical Notes"
+   },
+   {
+    "key": "9296_CR22",
+    "doi-asserted-by": "crossref",
+    "first-page": "337",
+    "DOI": "10.1007/BF00939542",
+    "volume": "66",
+    "author": "M Sarma",
+    "year": "1990",
+    "unstructured": "M. Sarma, On the convergence of the Baba and Dorea random optimization methods, JOTA, 66 (1990), pp. 337-343.",
+    "journal-title": "JOTA"
+   }
+  ],
+  "container-title": "Foundations of Computational Mathematics",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "http://link.springer.com/content/pdf/10.1007/s10208-015-9296-2.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "http://link.springer.com/article/10.1007/s10208-015-9296-2/fulltext.html",
+    "content-type": "text/html",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "http://link.springer.com/content/pdf/10.1007/s10208-015-9296-2",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   },
+   {
+    "URL": "http://link.springer.com/content/pdf/10.1007/s10208-015-9296-2.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2019,
+     5,
+     29
+    ]
+   ],
+   "date-time": "2019-05-29T07:05:16Z",
+   "timestamp": 1559113516000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "http://link.springer.com/10.1007/s10208-015-9296-2"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2015,
+     11,
+     30
+    ]
+   ]
+  },
+  "references-count": 22,
+  "journal-issue": {
+   "issue": "2",
+   "published-print": {
+    "date-parts": [
+     [
+      2017,
+      4
+     ]
+    ]
+   }
+  },
+  "alternative-id": [
+   "9296"
+  ],
+  "URL": "http://dx.doi.org/10.1007/s10208-015-9296-2",
+  "relation": {},
+  "ISSN": [
+   "1615-3375",
+   "1615-3383"
+  ],
+  "subject": [],
+  "container-title-short": "Found Comput Math",
+  "published": {
+   "date-parts": [
+    [
+     2015,
+     11,
+     30
+    ]
+   ]
+  },
+  "id": "nesterov2017"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     21
+    ]
+   ],
+   "date-time": "2026-09-21T14:22:49Z",
+   "timestamp": 1790000569214,
+   "version": "4.0.1"
+  },
+  "reference-count": 357,
+  "publisher": "Emerald",
+  "issue": "5",
+  "content-domain": {
+   "domain": [],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     2023,
+     6,
+     27
+    ]
+   ]
+  },
+  "abstract": "<jats:p>Optimization is a ubiquitous modeling tool and is often deployed in settings which repeatedly solve similar instances of the same problem. Amortized optimization methods use learning to predict the solutions to problems in these settings, exploiting the shared structure between similar problem instances. These methods have been crucial in variational inference and reinforcement learning and are capable of solving optimization problems many orders of magnitudes times faster than traditional optimization methods that do not use amortization. This tutorial presents an introduction to the amortized optimization foundations behind these advancements and overviews their applications in variational inference, sparse coding, gradient-based meta-learning, control, reinforcement learning, convex optimization, optimal transport, and deep equilibrium networks. The source code for this tutorial is available at https://github.com/facebookresearch/amortized-optimization-tutorial.</jats:p>",
+  "DOI": "10.1561/2200000102",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2023,
+     6,
+     27
+    ]
+   ],
+   "date-time": "2023-06-27T08:10:55Z",
+   "timestamp": 1687853455000
+  },
+  "page": "592-732",
+  "source": "Crossref",
+  "is-referenced-by-count": 28,
+  "title": "Tutorial on Amortized Optimization",
+  "prefix": "10.1108",
+  "volume": "16",
+  "author": [
+   {
+    "given": "Brandon",
+    "family": "Amos",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Meta AI ,",
+      "place": [
+       "USA"
+      ]
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "140",
+  "published-online": {
+   "date-parts": [
+    [
+     2023,
+     6,
+     27
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "2026033012314264300_ref001",
+    "first-page": "265",
+    "volume-title": "Tensorflow: A system for large-scale machine learning",
+    "author": "Abadi",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref002",
+    "volume-title": "Optimization algorithms on matrix manifolds",
+    "author": "Absil",
+    "year": "2009"
+   },
+   {
+    "key": "2026033012314264300_ref003",
+    "volume-title": "Ranking via sinkhorn propagation",
+    "author": "Adams",
+    "year": "2011"
+   },
+   {
+    "key": "2026033012314264300_ref004",
+    "volume-title": "Learning to solve inverse problems using Wasserstein loss",
+    "author": "Adler",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref005",
+    "first-page": "9558",
+    "volume-title": "Differentiable Convex Optimization Layers",
+    "author": "Agrawal",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref006",
+    "volume-title": "TensorFlow Eager: A multi-stage, Python-embedded DSL for machine learning",
+    "author": "Agrawal",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref007",
+    "article-title": "Compilers, principles, techniques",
+    "volume-title": "Addison Wesley",
+    "author": "Aho",
+    "year": "1986"
+   },
+   {
+    "key": "2026033012314264300_ref008",
+    "first-page": "30",
+    "volume-title": "Learning to Prune: Speeding up Repeated Computations",
+    "author": "Alabi",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref009",
+    "first-page": "70",
+    "volume-title": "A Semismooth Newton Method for Fast, Generic Convex Programming",
+    "author": "Ali",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref010",
+    "volume-title": "Numerical continuation methods: An introduction",
+    "author": "Allgower",
+    "year": "2012"
+   },
+   {
+    "key": "2026033012314264300_ref011",
+    "volume-title": "Differentiable Optimization-Based Modeling for Machine Learning",
+    "author": "Amos",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref012",
+    "volume-title": "On amortizing convex conjugates for optimal transport",
+    "author": "Amos",
+    "year": "2023"
+   },
+   {
+    "key": "2026033012314264300_ref013",
+    "volume-title": "Meta Optimal Transport",
+    "author": "Amos",
+    "year": "2023"
+   },
+   {
+    "key": "2026033012314264300_ref014",
+    "first-page": "136",
+    "volume-title": "OptNet: Differentiable Optimization as a Layer in Neural Networks",
+    "author": "Amos",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref015",
+    "volume-title": "The limited multi-label projection layer",
+    "author": "Amos",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref016",
+    "first-page": "8299",
+    "volume-title": "Differentiable MPC for End-to-end Planning and Control",
+    "author": "Amos",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref017",
+    "first-page": "6",
+    "volume-title": "On the model-based stochastic value gradient for continuous reinforcement learning",
+    "author": "Amos",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref018",
+    "first-page": "146",
+    "volume-title": "Input Convex Neural Networks",
+    "author": "Amos",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref019",
+    "first-page": "291",
+    "volume-title": "The Differentiable Cross-Entropy Method",
+    "author": "Amos",
+    "year": "2020"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref020",
+    "doi-asserted-by": "crossref",
+    "first-page": "547",
+    "DOI": "10.1145/321296.321305",
+    "article-title": "Iterative procedures for nonlinear integral equations",
+    "volume": "12",
+    "author": "Anderson",
+    "year": "1965",
+    "journal-title": "Journal of the ACM (JACM)"
+   },
+   {
+    "key": "2026033012314264300_ref021",
+    "first-page": "3981",
+    "volume-title": "Learning to learn by gradient descent by gradient descent",
+    "author": "Andrychowicz",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref022",
+    "volume-title": "How to train your MAML",
+    "author": "Antoniou",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref023",
+    "volume-title": "Amortized Implicit Differentiation for Stochastic Bilevel Optimization",
+    "author": "Arbel",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref024",
+    "first-page": "214",
+    "volume-title": "Wasserstein Generative Adversarial Networks",
+    "author": "Arjovsky",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref025",
+    "volume-title": "Learn2learn: A library for meta-learning research",
+    "author": "Arnold",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref026",
+    "volume-title": "Layer Normalization",
+    "author": "Ba",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref027",
+    "doi-asserted-by": "crossref",
+    "first-page": "8982",
+    "DOI": "10.52202/068431-0653",
+    "article-title": "Amortized proximal optimization",
+    "volume": "35",
+    "author": "Bae",
+    "year": "2022",
+    "journal-title": "Advances in Neural Information Processing Systems"
+   },
+   {
+    "key": "2026033012314264300_ref028",
+    "first-page": "688",
+    "volume-title": "Deep Equilibrium Models",
+    "author": "Bai",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref029",
+    "volume-title": "Multiscale Deep Equilibrium Models",
+    "author": "Bai",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref030",
+    "volume-title": "Neural Deep Equilibrium Solvers",
+    "author": "Bai",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref031",
+    "first-page": "30",
+    "volume-title": "Residual algorithms: Reinforcement learning with function approximation",
+    "author": "Baird",
+    "year": "1995"
+   },
+   {
+    "key": "2026033012314264300_ref032",
+    "first-page": "1",
+    "volume-title": "Learning warm-start points for AC optimal power flow",
+    "author": "Baker",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref033",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1017/9781108637435.036",
+    "volume-title": "Data-driven algorithm design",
+    "author": "Balcan",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref034",
+    "volume-title": "Computer Science and Artificial Intelligence Laboratory Technical Report",
+    "author": "Banerjee",
+    "year": "2015"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref035",
+    "doi-asserted-by": "crossref",
+    "first-page": "102",
+    "DOI": "10.1137/18M1207685",
+    "article-title": "Data-driven nonsmooth optimization",
+    "volume": "30",
+    "author": "Banert",
+    "year": "2020",
+    "journal-title": "SIAM Journal on Optimization"
+   },
+   {
+    "key": "2026033012314264300_ref036",
+    "volume-title": "Accelerated Forward-Backward Optimization using Deep Learning",
+    "author": "Banert",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref037",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-3-0348-6328-5",
+    "volume-title": "Non-linear parametric optimization",
+    "author": "Bank",
+    "year": "1982"
+   },
+   {
+    "key": "2026033012314264300_ref038",
+    "volume-title": "On the differentiability of the solution to convex optimization problems",
+    "author": "Barratt",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref039",
+    "doi-asserted-by": "crossref",
+    "first-page": "71",
+    "DOI": "10.1007/978-1-4615-5529-2_4",
+    "volume-title": "Learning to Learn",
+    "author": "Baxter",
+    "year": "1998"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref040",
+    "doi-asserted-by": "crossref",
+    "first-page": "183",
+    "DOI": "10.1137/080716542",
+    "article-title": "A fast iterative shrinkage-thresholding algorithm for linear inverse problems",
+    "volume": "2",
+    "author": "Beck",
+    "year": "2009",
+    "journal-title": "SIAM Journal on Imaging Sciences"
+   },
+   {
+    "key": "2026033012314264300_ref041",
+    "volume-title": "Deep energy-based models for structured prediction",
+    "author": "Belanger",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref042",
+    "first-page": "983",
+    "volume-title": "Structured Prediction Energy Networks",
+    "author": "Belanger",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref043",
+    "first-page": "429",
+    "volume-title": "End-to-End Learning for Structured Prediction Energy Networks",
+    "author": "Belanger",
+    "year": "2017"
+   },
+   {
+    "issue": "3731",
+    "key": "2026033012314264300_ref044",
+    "doi-asserted-by": "crossref",
+    "first-page": "34",
+    "DOI": "10.1126/science.153.3731.34",
+    "article-title": "Dynamic programming",
+    "volume": "153",
+    "author": "Bellman",
+    "year": "1966",
+    "journal-title": "Science"
+   },
+   {
+    "key": "2026033012314264300_ref045",
+    "first-page": "459",
+    "volume-title": "Neural Optimizer Search with Reinforcement Learning",
+    "author": "Bello",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref046",
+    "first-page": "324",
+    "volume-title": "Use of genetic programming for the search of a new learning rule for neural networks",
+    "author": "Bengio",
+    "year": "1994"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref047",
+    "doi-asserted-by": "crossref",
+    "first-page": "405",
+    "DOI": "10.1016/j.ejor.2020.07.063",
+    "article-title": "Machine learning for combinatorial optimization: a methodological tour d’horizon",
+    "volume": "290",
+    "author": "Bengio",
+    "year": "2021",
+    "journal-title": "European Journal of Operational Research"
+   },
+   {
+    "key": "2026033012314264300_ref048",
+    "volume-title": "Meta-learning with differentiable closed-form solvers",
+    "author": "Bertinetto",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref049",
+    "volume-title": "Neural Solvers for Fast and Accurate Numerical Optimal Control",
+    "author": "Berto",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref050",
+    "volume-title": "Convex optimization algorithms",
+    "author": "Bertsekas",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref051",
+    "volume-title": "Control of uncertain systems with a set-membership description of the uncertainty",
+    "author": "Bertsekas",
+    "year": "1971"
+   },
+   {
+    "key": "2026033012314264300_ref052",
+    "volume-title": "Dynamic Programming and Optimal Control",
+    "author": "Bertsekas",
+    "year": "2000",
+    "edition": "2nd"
+   },
+   {
+    "key": "2026033012314264300_ref053",
+    "volume-title": "Online mixed-integer optimization in milliseconds",
+    "author": "Bertsimas",
+    "year": "2019"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref054",
+    "doi-asserted-by": "crossref",
+    "first-page": "249",
+    "DOI": "10.1007/s10994-020-05893-5",
+    "article-title": "The voice of optimization",
+    "volume": "110",
+    "author": "Bertsimas",
+    "year": "2021",
+    "journal-title": "Machine Learning"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref055",
+    "doi-asserted-by": "crossref",
+    "first-page": "65",
+    "DOI": "10.1137/141000671",
+    "article-title": "Julia: A fresh approach to numerical computing",
+    "volume": "59",
+    "author": "Bezanson",
+    "year": "2017",
+    "journal-title": "SIAM Review"
+   },
+   {
+    "key": "2026033012314264300_ref056",
+    "first-page": "10598",
+    "volume-title": "Differentiable gaussian process motion planning",
+    "author": "Bhardwaj",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref057",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1002/gamm.202100006",
+    "article-title": "Three ways to solve partial differential equations with neural networks—A review",
+    "volume-title": "GAMMMitteilungen:",
+    "author": "Blechschmidt",
+    "year": "2021"
+   },
+   {
+    "issue": "518",
+    "key": "2026033012314264300_ref058",
+    "doi-asserted-by": "crossref",
+    "first-page": "859",
+    "DOI": "10.1080/01621459.2017.1285773",
+    "article-title": "Variational inference: A review for statisticians",
+    "volume": "112",
+    "author": "Blei",
+    "year": "2017",
+    "journal-title": "Journal of the American statistical Association"
+   },
+   {
+    "key": "2026033012314264300_ref059",
+    "first-page": "12145",
+    "volume-title": "Structured Prediction with Projection Oracles",
+    "author": "Blondel",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref060",
+    "first-page": "5230",
+    "article-title": "Efficient and modular implicit differentiation",
+    "volume": "35",
+    "author": "Blondel",
+    "year": "2022",
+    "journal-title": "Advances in Neural Information Processing Systems"
+   },
+   {
+    "key": "2026033012314264300_ref061",
+    "article-title": "Learning with Fenchel-Young losses",
+    "volume": "21",
+    "author": "Blondel",
+    "year": "2020",
+    "journal-title": "Journal of Machine Learning Research"
+   },
+   {
+    "key": "2026033012314264300_ref062",
+    "volume-title": "Perturbation analysis of optimization problems",
+    "author": "Bonnans",
+    "year": "2013"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref063",
+    "doi-asserted-by": "crossref",
+    "first-page": "1",
+    "DOI": "10.1561/2200000016",
+    "article-title": "Distributed optimization and statistical learning via the alternating direction method of multipliers",
+    "volume": "3",
+    "author": "Boyd",
+    "year": "2011",
+    "journal-title": "Foundations and Trends® in Machine Learning"
+   },
+   {
+    "key": "2026033012314264300_ref064",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1017/CBO9780511804441",
+    "volume-title": "Convex optimization",
+    "author": "Boyd",
+    "year": "2004"
+   },
+   {
+    "key": "2026033012314264300_ref065",
+    "first-page": "16",
+    "volume": "4",
+    "author": "Bradbury",
+    "year": "2020",
+    "journal-title": "JAX: composable transformations of Python+ NumPy programs, 2018"
+   },
+   {
+    "key": "2026033012314264300_ref066",
+    "volume-title": "Openai gym",
+    "author": "Brockman",
+    "year": "2016"
+   },
+   {
+    "issue": "92",
+    "key": "2026033012314264300_ref067",
+    "doi-asserted-by": "crossref",
+    "first-page": "577",
+    "DOI": "10.1090/S0025-5718-1965-0198670-6",
+    "article-title": "A class of methods for solving nonlinear simultaneous equations",
+    "volume": "19",
+    "author": "Broyden",
+    "year": "1965",
+    "journal-title": "Mathematics of Computation"
+   },
+   {
+    "issue": "3-4",
+    "key": "2026033012314264300_ref068",
+    "doi-asserted-by": "crossref",
+    "first-page": "231",
+    "DOI": "10.1561/2200000050",
+    "article-title": "Convex optimization: Algorithms and complexity",
+    "volume": "8",
+    "author": "Bubeck",
+    "year": "2015",
+    "journal-title": "Foundations and Trends® in Machine Learning"
+   },
+   {
+    "key": "2026033012314264300_ref069",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.52202/068431-0497",
+    "volume-title": "Supervised training of conditional monge maps",
+    "author": "Bunne",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref070",
+    "volume-title": "Understanding disentangling in //-VAE",
+    "author": "Burgess",
+    "year": "2018"
+   },
+   {
+    "issue": "3",
+    "key": "2026033012314264300_ref071",
+    "doi-asserted-by": "crossref",
+    "first-page": "627",
+    "DOI": "10.1007/s10589-019-00122-9",
+    "article-title": "Solution refinement at regular points of conic problems",
+    "volume": "74",
+    "author": "Busseti",
+    "year": "2019",
+    "journal-title": "Computational Optimization and Applications"
+   },
+   {
+    "key": "2026033012314264300_ref072",
+    "volume-title": "Evaluating Model-Based Planning and Planner Amortization for Continuous Control",
+    "author": "Byravan",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref073",
+    "volume-title": "Imagined Value Gradients: Model-Based Policy Optimization with Transferable Latent Dynamics Models",
+    "author": "Byravan",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref074",
+    "volume-title": "Model predictive control",
+    "author": "Camacho",
+    "year": "2013"
+   },
+   {
+    "key": "2026033012314264300_ref075",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.24963/ijcai.2021/595",
+    "volume-title": "Combinatorial optimization and reasoning with graph neural networks",
+    "author": "Cappart",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref076",
+    "volume-title": "Foundations of mathematical economics",
+    "author": "Carter",
+    "year": "2001"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref077",
+    "doi-asserted-by": "crossref",
+    "first-page": "41",
+    "DOI": "10.1023/A:1007379606734",
+    "article-title": "Multitask learning",
+    "volume": "28",
+    "author": "Caruana",
+    "year": "1997",
+    "journal-title": "Machine Learning"
+   },
+   {
+    "key": "2026033012314264300_ref078",
+    "article-title": "CoCo: Online Mixed-Integer Control via Supervised Learning",
+    "volume-title": "IEEE Robotics and Automation Letters",
+    "author": "Cauligi",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref079",
+    "first-page": "1698",
+    "volume-title": "Learning mixed-integer convex optimization strategies for robot planning and control",
+    "author": "Cauligi",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref080",
+    "first-page": "941",
+    "volume-title": "Learning Action Representations for Reinforcement Learning",
+    "author": "Chandak",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref081",
+    "doi-asserted-by": "publisher",
+    "first-page": "5889",
+    "DOI": "10.1109/ICCV.2017.627",
+    "volume-title": "One Network to Solve Them All - Solving Linear Inverse Problems Using Deep Projection Models",
+    "author": "Chang",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref082",
+    "volume-title": "Linear algebra with transformers",
+    "author": "Charton",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref083",
+    "volume-title": "A deep language model to predict metabolic network equilibria",
+    "author": "Charton",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref084",
+    "first-page": "3583",
+    "volume-title": "Faster Fundamental Graph Algorithms via Learned Predictions",
+    "author": "Chen",
+    "year": "2022"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref085",
+    "doi-asserted-by": "crossref",
+    "first-page": "129",
+    "DOI": "10.1137/S003614450037906X",
+    "article-title": "Atomic decomposition by basis pursuit",
+    "volume": "43",
+    "author": "Chen",
+    "year": "2001",
+    "journal-title": "SIAM Review"
+   },
+   {
+    "key": "2026033012314264300_ref086",
+    "doi-asserted-by": "crossref",
+    "first-page": "109947",
+    "DOI": "10.1016/j.automatica.2021.109947",
+    "article-title": "Large scale model predictive control with neural networks and primal active sets",
+    "volume": "135",
+    "author": "Chen",
+    "year": "2022",
+    "journal-title": "Automatica"
+   },
+   {
+    "key": "2026033012314264300_ref087",
+    "volume-title": "Learning to optimize: A primer and a benchmark",
+    "author": "Chen",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref088",
+    "volume-title": "Training deep nets with sublinear memory cost",
+    "author": "Chen",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref089",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1016/j.jcp.2021.110668",
+    "volume-title": "Solving and learning nonlinear PDEs with gaussian processes",
+    "author": "Chen",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref090",
+    "volume-title": "Modular Meta-Learning with Shrinkage",
+    "author": "Chen",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref091",
+    "first-page": "748",
+    "volume-title": "Learning to Learn without Gradient Descent by Gradient Descent",
+    "author": "Chen",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref092",
+    "doi-asserted-by": "publisher",
+    "first-page": "1724",
+    "DOI": "10.3115/v1/D14-1179",
+    "volume-title": "Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation",
+    "author": "Cho",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref093",
+    "first-page": "2980",
+    "volume-title": "A Recurrent Latent Variable Model for Sequential Data",
+    "author": "Chung",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref094",
+    "first-page": "2028",
+    "volume-title": "Riemannian Convex Potential Maps",
+    "author": "Cohen",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref095",
+    "article-title": "Elements of Information Theory",
+    "volume-title": "Wiley Series in Telecommunications and Signal Processing",
+    "author": "Cover",
+    "year": "2006"
+   },
+   {
+    "key": "2026033012314264300_ref096",
+    "first-page": "1086",
+    "volume-title": "Inference Suboptimality in Variational Autoencoders",
+    "author": "Cremer",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref097",
+    "doi-asserted-by": "publisher",
+    "first-page": "6044",
+    "DOI": "10.1109/CVPR.2017.640",
+    "volume-title": "Deep-PermNet: Visual Permutation Learning",
+    "author": "Cruz",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref098",
+    "first-page": "2292",
+    "volume-title": "Sinkhorn Distances: Lightspeed Computation of Optimal Transport",
+    "author": "Cuturi",
+    "year": "2013"
+   },
+   {
+    "key": "2026033012314264300_ref099",
+    "first-page": "894",
+    "volume-title": "Soft-DTW: a Differentiable Loss Function for Time-Series",
+    "author": "Cuturi",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref100",
+    "volume-title": "Deep Symbolic Regression for Recurrent Sequences",
+    "author": "d’Ascoli",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref101",
+    "doi-asserted-by": "publisher",
+    "first-page": "2202",
+    "DOI": "10.24963/ijcai.2019/305",
+    "volume-title": "Three-Player Wasserstein GAN via Amortised Duality",
+    "author": "Dam",
+    "year": "2019"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref102",
+    "doi-asserted-by": "crossref",
+    "first-page": "641",
+    "DOI": "10.1137/0114053",
+    "article-title": "The theory of max-min, with applications",
+    "volume": "14",
+    "author": "Danskin",
+    "year": "1966",
+    "journal-title": "SIAM Journal on Applied Mathematics"
+   },
+   {
+    "issue": "11",
+    "key": "2026033012314264300_ref103",
+    "doi-asserted-by": "crossref",
+    "first-page": "1413",
+    "DOI": "10.1002/cpa.20042",
+    "article-title": "An iterative thresholding algorithm for linear inverse problems with a sparsity constraint",
+    "volume": "57",
+    "author": "Daubechies",
+    "year": "2004",
+    "journal-title": "Communications on Pure and Applied Mathematics: A Journal Issued by the Courant Institute of Mathematical Sciences"
+   },
+   {
+    "key": "2026033012314264300_ref104",
+    "article-title": "An aggressive approach to loop unrolling",
+    "volume-title": "Tech. rep",
+    "author": "Davidson",
+    "year": "1995"
+   },
+   {
+    "issue": "5",
+    "key": "2026033012314264300_ref105",
+    "doi-asserted-by": "crossref",
+    "first-page": "889",
+    "DOI": "10.1162/neco.1995.7.5.889",
+    "article-title": "The helmholtz machine",
+    "volume": "7",
+    "author": "Dayan",
+    "year": "1995",
+    "journal-title": "Neural Computation"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref106",
+    "doi-asserted-by": "crossref",
+    "first-page": "19",
+    "DOI": "10.1007/s10479-005-5724-z",
+    "article-title": "A tutorial on the cross-entropy method",
+    "volume": "134",
+    "author": "De Boer",
+    "year": "2005",
+    "journal-title": "Annals of Operations Research"
+   },
+   {
+    "key": "2026033012314264300_ref107",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1017/9781108679930",
+    "volume-title": "Mathematics for machine learning",
+    "author": "Deisenroth",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref108",
+    "first-page": "465",
+    "volume-title": "PILCO: A ModelBased and Data-Efficient Approach to Policy Search",
+    "author": "Deisenroth",
+    "year": "2011"
+   },
+   {
+    "key": "2026033012314264300_ref109",
+    "volume-title": "Torchmeta: A meta-learning library for pytorch",
+    "author": "Deleu",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref110",
+    "doi-asserted-by": "publisher",
+    "first-page": "10648",
+    "DOI": "10.1109/CVPR.2019.01090",
+    "volume-title": "Max-Sliced Wasserstein Distance and Its Use for GANs",
+    "author": "Deshpande",
+    "year": "2019"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref111",
+    "first-page": "2909",
+    "article-title": "CVXPY: A Python-embedded modeling language for convex optimization",
+    "volume": "17",
+    "author": "Diamond",
+    "year": "2016",
+    "journal-title": "The Journal of Machine Learning Research"
+   },
+   {
+    "key": "2026033012314264300_ref112",
+    "volume-title": "Analisi infinitesimale",
+    "author": "Dini",
+    "year": "1878"
+   },
+   {
+    "key": "2026033012314264300_ref113",
+    "first-page": "10393",
+    "volume-title": "Faster Matchings via Learned Duals",
+    "author": "Dinitz",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref114",
+    "volume-title": "Tutorial on variational autoencoders",
+    "author": "Doersch",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref115",
+    "first-page": "318",
+    "article-title": "Generic methods for optimization-based modeling",
+    "volume-title": "AISTATS",
+    "author": "Domke",
+    "year": "2012"
+   },
+   {
+    "key": "2026033012314264300_ref116",
+    "first-page": "1",
+    "volume-title": "Smart-PGSim: using neural network to accelerate AC-OPF power grid simulation",
+    "author": "Dong",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref117",
+    "first-page": "2197",
+    "volume-title": "Optimally sparse representation in general (nonorthogonal) dictionaries via 𝓁1 minimization",
+    "author": "Donoho",
+    "year": "2003"
+   },
+   {
+    "key": "2026033012314264300_ref118",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-0-387-87821-8",
+    "volume-title": "Implicit functions and solution mappings",
+    "author": "Dontchev",
+    "year": "2009"
+   },
+   {
+    "key": "2026033012314264300_ref119",
+    "volume-title": "DC3: A learning method for optimization with hard constraints",
+    "author": "Donti",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref120",
+    "volume-title": "A Neural Network Solves and Generates Mathematics Problems by Program Synthesis: Calculus, Differential Equations, Linear Algebra, and More",
+    "author": "Drori",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref121",
+    "first-page": "257",
+    "volume-title": "Adaptive Subgradient Methods for Online Learning and Stochastic Optimization",
+    "author": "Duchi",
+    "year": "2010"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref122",
+    "doi-asserted-by": "crossref",
+    "first-page": "295",
+    "DOI": "10.1137/15M1020575",
+    "article-title": "JuMP: A modeling language for mathematical optimization",
+    "volume": "59",
+    "author": "Dunning",
+    "year": "2017",
+    "journal-title": "SIAM Review"
+   },
+   {
+    "key": "2026033012314264300_ref123",
+    "first-page": "708",
+    "volume-title": "Learning Disentangled Joint Continuous and Discrete Representations",
+    "author": "Dupont",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref124",
+    "volume-title": "Accelerated Optimization on Riemannian Manifolds via Projected Variational Integrators",
+    "author": "Duruisseaux",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref125",
+    "first-page": "6",
+    "article-title": "Tree-based batch mode reinforcement learning",
+    "volume-title": "Journal of Machine Learning Research",
+    "author": "Ernst",
+    "year": "2005"
+   },
+   {
+    "key": "2026033012314264300_ref126",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1201/9781003072119",
+    "volume-title": "Mathematical programming with data perturbations",
+    "author": "Fiacco",
+    "year": "2020"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref127",
+    "doi-asserted-by": "crossref",
+    "first-page": "215",
+    "DOI": "10.1007/BF02055196",
+    "article-title": "Sensitivity and stability analysis for nonlinear programming",
+    "volume": "27",
+    "author": "Fiacco",
+    "year": "1990",
+    "journal-title": "Annals of Operations Research"
+   },
+   {
+    "key": "2026033012314264300_ref128",
+    "first-page": "16951",
+    "volume-title": "Scalable Online Planning via Reinforcement Learning Fine-Tuning",
+    "author": "Fickinger",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref129",
+    "first-page": "1126",
+    "volume-title": "Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks",
+    "author": "Finn",
+    "year": "2017"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref130",
+    "doi-asserted-by": "crossref",
+    "first-page": "121",
+    "DOI": "10.1177/096228029300200202",
+    "article-title": "Review papers: The statistical basis of meta-analysis",
+    "volume": "2",
+    "author": "Fleiss",
+    "year": "1993",
+    "journal-title": "Statistical Methods in Medical Research"
+   },
+   {
+    "key": "2026033012314264300_ref131",
+    "volume-title": "Learning with opponent-learning awareness",
+    "author": "Foerster",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref132",
+    "first-page": "1165",
+    "volume-title": "Forward and Reverse Gradient-Based Hyperparameter Optimization",
+    "author": "Franceschi",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref133",
+    "first-page": "1563",
+    "volume-title": "Bilevel Programming for Hyperparameter Optimization and Meta-Learning",
+    "author": "Franceschi",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref134",
+    "first-page": "1582",
+    "volume-title": "Addressing Function Approximation Error in Actor-Critic Methods",
+    "author": "Fujimoto",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref135",
+    "first-page": "6918",
+    "volume-title": "Why Should I Trust You, Bellman? The Bellman Error is a Poor Replacement for Value Error",
+    "author": "Fujimoto",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref136",
+    "doi-asserted-by": "publisher",
+    "first-page": "7697",
+    "DOI": "10.1109/CVPR42600.2020.00772",
+    "volume-title": "Learning to Optimize on SPD Manifolds",
+    "author": "Gao",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref137",
+    "volume-title": "Fisher-Legendre (FishLeg) optimization of deep neural networks",
+    "author": "Garcia",
+    "year": "2023"
+   },
+   {
+    "key": "2026033012314264300_ref138",
+    "first-page": "1690",
+    "volume-title": "Conditional Neural Processes",
+    "author": "Garnelo",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref139",
+    "first-page": "3205",
+    "article-title": "Is the Bellman residual a bad proxy?",
+    "author": "Geist",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref140",
+    "volume-title": "Amortized inference in probabilistic reasoning",
+    "author": "Gershman",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref141",
+    "volume-title": "Explaining and Harnessing Adversarial Examples",
+    "author": "Goodfellow",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref142",
+    "volume-title": "Meta-Learning Probabilistic Inference for Prediction",
+    "author": "Gordon",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref143",
+    "volume-title": "On differentiating parameterized argmin and argmax problems with application to bi-level optimization",
+    "author": "Gould",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref144",
+    "first-page": "3748",
+    "volume-title": "On the Iteration Complexity of Hypergradient Computation",
+    "author": "Grazzi",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref145",
+    "volume-title": "Generalized Inner Loop Meta-Learning",
+    "author": "Grefenstette",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref146",
+    "first-page": "399",
+    "volume-title": "Learning Fast Approximations of Sparse Coding",
+    "author": "Gregor",
+    "year": "2010"
+   },
+   {
+    "key": "2026033012314264300_ref147",
+    "first-page": "4125",
+    "volume-title": "Memory-Efficient Backpropagation Through Time",
+    "author": "Gruslys",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref148",
+    "first-page": "9",
+    "volume-title": "Neuroanimator: Fast neural network emulation and control of physics-based models",
+    "author": "Grzeszczuk",
+    "year": "1998"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref149",
+    "doi-asserted-by": "crossref",
+    "first-page": "42",
+    "DOI": "10.1007/BF03023004",
+    "article-title": "The principle of maximum entropy",
+    "volume": "7",
+    "author": "Guiasu",
+    "year": "1985",
+    "journal-title": "The Mathematical Intelligencer"
+   },
+   {
+    "key": "2026033012314264300_ref150",
+    "first-page": "16818",
+    "volume-title": "Joint inference and input optimization in equilibrium networks",
+    "author": "Gurumurthy",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref151",
+    "volume-title": "HyperNetworks",
+    "author": "Ha",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref152",
+    "volume-title": "Soft actor-critic algorithms and applications",
+    "author": "Haarnoja",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref153",
+    "doi-asserted-by": "crossref",
+    "first-page": "2",
+    "DOI": "10.1007/978-3-642-10949-2_1",
+    "volume-title": "Stability Problems",
+    "author": "Habets",
+    "year": "2010"
+   },
+   {
+    "key": "2026033012314264300_ref154",
+    "volume-title": "Dream to Control: Learning Behaviors by Latent Imagination",
+    "author": "Hafner",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref155",
+    "first-page": "1976",
+    "volume-title": "Alternating Back-Propagation for Generator Network",
+    "author": "Han",
+    "year": "2017"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref156",
+    "doi-asserted-by": "crossref",
+    "first-page": "51",
+    "DOI": "10.1037/h0062474",
+    "article-title": "The formation of learning sets",
+    "volume": "56",
+    "author": "Harlow",
+    "year": "1949",
+    "journal-title": "Psychological Review"
+   },
+   {
+    "key": "2026033012314264300_ref157",
+    "volume-title": "A Closer Look at Learned Optimization: Stability, Robustness, and Inductive Biases",
+    "author": "Harrison",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref158",
+    "volume-title": "Functorch: JAX-like composable function transforms for PyTorch",
+    "author": "He",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref159",
+    "first-page": "630",
+    "volume-title": "ECCV",
+    "author": "He",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref160",
+    "first-page": "13825",
+    "volume-title": "Learning to predict the cosmological structure formation",
+    "author": "He",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref161",
+    "first-page": "2944",
+    "volume-title": "Learning Continuous Control Policies by Stochastic Value Gradients",
+    "author": "Heess",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref162",
+    "volume-title": "Model-Predictive Policy Learning with Uncertainty Regularization for Driving in Dense Traffic",
+    "author": "Henaff",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref163",
+    "volume-title": "beta-VAE: Learning Basic Visual Concepts with a Constrained Variational Framework",
+    "author": "Higgins",
+    "year": "2017"
+   },
+   {
+    "issue": "8",
+    "key": "2026033012314264300_ref164",
+    "doi-asserted-by": "crossref",
+    "first-page": "1735",
+    "DOI": "10.1162/neco.1997.9.8.1735",
+    "article-title": "Long short-term memory",
+    "volume": "9",
+    "author": "Hochreiter",
+    "year": "1997",
+    "journal-title": "Neural Computation"
+   },
+   {
+    "key": "2026033012314264300_ref165",
+    "first-page": "87",
+    "volume-title": "Learning to learn using gradient descent",
+    "author": "Hochreiter",
+    "year": "2001"
+   },
+   {
+    "issue": "5",
+    "key": "2026033012314264300_ref166",
+    "article-title": "Stochastic variational inference",
+    "volume": "14",
+    "author": "Hoffman",
+    "year": "2013",
+    "journal-title": "Journal of Machine Learning Research"
+   },
+   {
+    "key": "2026033012314264300_ref167",
+    "volume-title": "Meta-learning in neural networks: A survey",
+    "author": "Hospedales",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref168",
+    "volume-title": "Neural repa-rameterization improves structural optimization",
+    "author": "Hoyer",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref169",
+    "doi-asserted-by": "crossref",
+    "first-page": "199",
+    "DOI": "10.1007/s40305-020-00295-9",
+    "article-title": "A Brief Introduction to Manifold Optimization",
+    "volume": "8",
+    "author": "Hu",
+    "year": "2019",
+    "journal-title": "Journal of the Operations Research Society of China"
+   },
+   {
+    "issue": "19",
+    "key": "2026033012314264300_ref170",
+    "doi-asserted-by": "crossref",
+    "first-page": "5052",
+    "DOI": "10.1109/TSP.2016.2576427",
+    "article-title": "A flexible and efficient algorithmic framework for constrained matrix and tensor factorization",
+    "volume": "64",
+    "author": "Huang",
+    "year": "2016",
+    "journal-title": "IEEE Transactions on Signal Processing"
+   },
+   {
+    "key": "2026033012314264300_ref171",
+    "volume-title": "Optimizer Amalgamation",
+    "author": "Huang",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref172",
+    "unstructured": "Huszár, F.\n           (2019). “Notes on iMAML: Meta-Learning with Implicit Gradients”. URL: http://inference.vc."
+   },
+   {
+    "key": "2026033012314264300_ref173",
+    "first-page": "21043",
+    "volume-title": "Accelerating Quadratic Optimization with Reinforcement Learning",
+    "author": "Ichnowski",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref174",
+    "volume-title": "Tutorial on training recurrent neural networks, covering BPPT, RTRL, EKF and the “echo state network” approach",
+    "author": "Jaeger",
+    "year": "2002"
+   },
+   {
+    "key": "2026033012314264300_ref175",
+    "first-page": "3091",
+    "volume-title": "Learning Discrete and Continuous Factors of Data via Alternating Disentanglement",
+    "author": "Jeong",
+    "year": "2019"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref176",
+    "doi-asserted-by": "crossref",
+    "first-page": "183",
+    "DOI": "10.1023/A:1007665907178",
+    "article-title": "An introduction to variational methods for graphical models",
+    "volume": "37",
+    "author": "Jordan",
+    "year": "1999",
+    "journal-title": "Machine Learning"
+   },
+   {
+    "issue": "6",
+    "key": "2026033012314264300_ref177",
+    "doi-asserted-by": "crossref",
+    "first-page": "422",
+    "DOI": "10.1038/s42254-021-00314-5",
+    "article-title": "Physics-informed machine learning",
+    "volume": "3",
+    "author": "Karniadakis",
+    "year": "2021",
+    "journal-title": "Nature Reviews Physics"
+   },
+   {
+    "key": "2026033012314264300_ref178",
+    "volume-title": "Fast inference in sparse coding algorithms with applications to object recognition",
+    "author": "Kavukcuoglu",
+    "year": "2010"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref179",
+    "doi-asserted-by": "crossref",
+    "first-page": "411",
+    "DOI": "10.1037/0033-295X.95.4.411",
+    "article-title": "A layered network model of associative learning: learning to learn and configuration",
+    "volume": "95",
+    "author": "Kehoe",
+    "year": "1988",
+    "journal-title": "Psychological Review"
+   },
+   {
+    "key": "2026033012314264300_ref180",
+    "first-page": "6348",
+    "volume-title": "Learning Combinatorial Optimization Algorithms over Graphs",
+    "author": "Khalil",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref181",
+    "first-page": "724",
+    "volume-title": "Learning to Branch in Mixed Integer Programming",
+    "author": "Khalil",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref182",
+    "first-page": "3542",
+    "article-title": "Learning predictions for algorithms with predictions",
+    "volume": "35",
+    "author": "Khodak",
+    "year": "2022",
+    "journal-title": "Advances in Neural Information Processing Systems"
+   },
+   {
+    "key": "2026033012314264300_ref183",
+    "first-page": "2683",
+    "volume-title": "Semi-Amortized Variational Autoencoders",
+    "author": "Kim",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref184",
+    "volume-title": "Deep latent variable models of natural language",
+    "author": "Kim",
+    "year": "2020"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref185",
+    "doi-asserted-by": "crossref",
+    "first-page": "307",
+    "DOI": "10.1561/2200000056",
+    "article-title": "An Introduction to Variational Autoencoders",
+    "volume": "12",
+    "author": "Kingma",
+    "year": "2019",
+    "journal-title": "Foundations and Trends® in Machine Learning"
+   },
+   {
+    "key": "2026033012314264300_ref186",
+    "volume-title": "Adam: A Method for Stochastic Optimization",
+    "author": "Kingma",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref187",
+    "volume-title": "Auto-Encoding Variational Bayes",
+    "author": "Kingma",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref188",
+    "volume-title": "Optimal control theory: an introduction",
+    "author": "Kirk",
+    "year": "2004"
+   },
+   {
+    "key": "2026033012314264300_ref189",
+    "volume-title": "Nonsmooth equations in optimization: regularity, calculus, methods and applications",
+    "author": "Klatte",
+    "year": "2006"
+   },
+   {
+    "key": "2026033012314264300_ref190",
+    "first-page": "29433",
+    "volume-title": "Parameter Prediction for Unseen Deep Architectures",
+    "author": "Knyazev",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref191",
+    "first-page": "12",
+    "article-title": "Actor-critic algorithms",
+    "volume-title": "Advances in Neural Information Processing Systems",
+    "author": "Konda",
+    "year": "1999"
+   },
+   {
+    "key": "2026033012314264300_ref192",
+    "volume-title": "Wasserstein-2 Generative Networks",
+    "author": "Korotin",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref193",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.24963/ijcai.2021/610",
+    "volume-title": "End-to-end constrained optimization learning: A survey",
+    "author": "Kotary",
+    "year": "2021"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref194",
+    "first-page": "13237",
+    "article-title": "On universal approximation and error bounds for fourier neural operators",
+    "volume": "22",
+    "author": "Kovachki",
+    "year": "2021",
+    "journal-title": "The Journal of Machine Learning Research"
+   },
+   {
+    "key": "2026033012314264300_ref195",
+    "volume-title": "Fast semidefinite programming with feedforward neural networks",
+    "author": "Kriváchy",
+    "year": "2020"
+   },
+   {
+    "issue": "6",
+    "key": "2026033012314264300_ref196",
+    "doi-asserted-by": "crossref",
+    "first-page": "1",
+    "DOI": "10.1145/2816795.2818129",
+    "article-title": "Data-driven fluid simulations using regression forests",
+    "volume": "34",
+    "author": "Ladicky",
+    "year": "2015",
+    "journal-title": "ACM Transactions on Graphics (TOG)"
+   },
+   {
+    "key": "2026033012314264300_ref197",
+    "first-page": "40",
+    "article-title": "Building machines that learn and think like people",
+    "volume-title": "Behavioral and Brain Sciences",
+    "author": "Lake",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref198",
+    "volume-title": "Objective mismatch in model-based reinforcement learning",
+    "author": "Lambert",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref199",
+    "volume-title": "Deep Learning For Symbolic Mathematics",
+    "author": "Lample",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref200",
+    "first-page": "3703",
+    "volume-title": "Batch Policy Learning under Constraints",
+    "author": "Le",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref201",
+    "unstructured": "LeCun, Y.\n           (1998). “The MNIST database of handwritten digits”. URL: http://yann.lecun.com/exdb/mnist/."
+   },
+   {
+    "key": "2026033012314264300_ref202",
+    "first-page": "3744",
+    "volume-title": "Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks",
+    "author": "Lee",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref203",
+    "doi-asserted-by": "publisher",
+    "first-page": "10657",
+    "DOI": "10.1109/CVPR.2019.01091",
+    "volume-title": "Meta-Learning With Differentiable Convex Optimization",
+    "author": "Lee",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref204",
+    "first-page": "1071",
+    "volume-title": "Learning Neural Network Policies with Guided Policy Search under Unknown Dynamics",
+    "author": "Levine",
+    "year": "2014"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref205",
+    "first-page": "1334",
+    "article-title": "End-to-end training of deep visuomotor policies",
+    "volume": "17",
+    "author": "Levine",
+    "year": "2016",
+    "journal-title": "The Journal of Machine Learning Research"
+   },
+   {
+    "key": "2026033012314264300_ref206",
+    "first-page": "1",
+    "volume-title": "Guided Policy Search",
+    "author": "Levine",
+    "year": "2013"
+   },
+   {
+    "key": "2026033012314264300_ref207",
+    "volume-title": "Learning to Optimize",
+    "author": "Li",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref208",
+    "volume-title": "Learning to optimize neural nets",
+    "author": "Li",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref209",
+    "volume-title": "Fourier Neural Operator for Parametric Partial Differential Equations",
+    "author": "Li",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref210",
+    "volume-title": "Physics-informed neural operator for learning partial differential equations",
+    "author": "Li",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref211",
+    "first-page": "3088",
+    "volume-title": "Reviving and Improving Recurrent Back-Propagation",
+    "author": "Liao",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref212",
+    "volume-title": "Continuous control with deep reinforcement learning",
+    "author": "Lillicrap",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref213",
+    "volume-title": "Teaching Networks to Solve Optimization Problems",
+    "author": "Liu",
+    "year": "2022"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref214",
+    "doi-asserted-by": "crossref",
+    "first-page": "207",
+    "DOI": "10.1007/s11750-017-0451-6",
+    "article-title": "On learning and branching: a survey",
+    "volume": "25",
+    "author": "Lodi",
+    "year": "2017",
+    "journal-title": "Top"
+   },
+   {
+    "key": "2026033012314264300_ref215",
+    "doi-asserted-by": "publisher",
+    "first-page": "3431",
+    "DOI": "10.1109/CVPR.2015.7298965",
+    "volume-title": "Fully convolutional networks for semantic segmentation",
+    "author": "Long",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref216",
+    "first-page": "1540",
+    "volume-title": "Optimizing Millions of Hyperparameters by Implicit Differentiation",
+    "author": "Lorraine",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref217",
+    "volume-title": "Plan Online, Learn Offline: Efficient Learning and Exploration via Model-Based Control",
+    "author": "Lowrey",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref218",
+    "first-page": "7827",
+    "volume-title": "Neural Architecture Optimization",
+    "author": "Luo",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref219",
+    "first-page": "2247",
+    "volume-title": "Learning Gradient Descent: Better Generalization and Longer Horizons",
+    "author": "Lv",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref220",
+    "volume-title": "Modeling, inference and optimization with composable differentiable procedures",
+    "author": "Maclaurin",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref221",
+    "volume-title": "Autograd: Effortless gradients in numpy",
+    "author": "Maclaurin",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref222",
+    "first-page": "2113",
+    "volume-title": "Gradient-based Hyperparameter Optimization through Reversible Learning",
+    "author": "Maclaurin",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref223",
+    "first-page": "19910",
+    "volume-title": "Reverse engineering learned optimizers reveals known and novel mechanisms",
+    "author": "Maheswaranathan",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref224",
+    "first-page": "299",
+    "volume-title": "Finite-sample analysis of Bellman residual minimization",
+    "author": "Maillard",
+    "year": "2010"
+   },
+   {
+    "key": "2026033012314264300_ref225",
+    "first-page": "6672",
+    "volume-title": "Optimal transport mapping via input convex neural networks",
+    "author": "Makkuva",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref226",
+    "first-page": "7868",
+    "volume-title": "A General Method for Amortizing Variational Filtering",
+    "author": "Marino",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref227",
+    "first-page": "15667",
+    "volume-title": "Iterative Amortized Policy Optimization",
+    "author": "Marino",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref228",
+    "first-page": "3400",
+    "volume-title": "Iterative Amortized Inference",
+    "author": "Marino",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref229",
+    "volume-title": "PhD thesis",
+    "author": "Marino",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref230",
+    "first-page": "15044",
+    "volume-title": "Parametric Complexity Bounds for Approximating PDEs with Neural Networks",
+    "author": "Marwah",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref231",
+    "doi-asserted-by": "publisher",
+    "first-page": "1799",
+    "DOI": "10.1109/ICCV.2017.198",
+    "volume-title": "Learning Proximal Operators: Using Denoising Networks for Regularizing Inverse Imaging Problems",
+    "author": "Meinhardt",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref232",
+    "volume-title": "Learning Latent Permutations with Gumbel-Sinkhorn Networks",
+    "author": "Mena",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref233",
+    "first-page": "7643",
+    "volume-title": "Learn2Hop: Learned Optimization on Rough Landscapes",
+    "author": "Merchant",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref234",
+    "volume-title": "Gradients are Not All You Need",
+    "author": "Metz",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref235",
+    "volume-title": "VeLO: Training Versatile Learned Optimizers by Scaling Up",
+    "author": "Metz",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref236",
+    "first-page": "4556",
+    "volume-title": "Understanding and correcting pathologies in the training of learned optimizers",
+    "author": "Metz",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref237",
+    "volume-title": "Using learned optimizers to make models robust to input noise",
+    "author": "Metz",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref238",
+    "volume-title": "Unrolled Generative Adversarial Networks",
+    "author": "Metz",
+    "year": "2017"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref239",
+    "doi-asserted-by": "crossref",
+    "first-page": "583",
+    "DOI": "10.1111/1468-0262.00296",
+    "article-title": "Envelope theorems for arbitrary choice sets",
+    "volume": "70",
+    "author": "Milgrom",
+    "year": "2002",
+    "journal-title": "Econometrica"
+   },
+   {
+    "key": "2026033012314264300_ref240",
+    "article-title": "Learning for constrained optimization: Identifying optimal active constraint sets",
+    "volume-title": "INFORMS Journal on Computing",
+    "author": "Misra",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref241",
+    "first-page": "1791",
+    "volume-title": "Neural Variational Inference and Learning in Belief Networks",
+    "author": "Mnih",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref242",
+    "article-title": "Monte Carlo Gradient Estimation in Machine Learning",
+    "volume": "21",
+    "author": "Mohamed",
+    "year": "2020",
+    "journal-title": "Journal of Machine Learning Research"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref243",
+    "doi-asserted-by": "crossref",
+    "first-page": "18",
+    "DOI": "10.1109/MSP.2020.3016905",
+    "article-title": "Algorithm unrolling: Interpretable, efficient deep learning for signal and image processing",
+    "volume": "38",
+    "author": "Monga",
+    "year": "2021",
+    "journal-title": "IEEE Signal Processing Magazine"
+   },
+   {
+    "key": "2026033012314264300_ref244",
+    "first-page": "4008",
+    "volume-title": "Guided Policy Search via Approximate Mirror Descent",
+    "author": "Montgomery",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref245",
+    "volume-title": "Machine learning: a probabilistic perspective",
+    "author": "Murphy",
+    "year": "2012"
+   },
+   {
+    "key": "2026033012314264300_ref246",
+    "first-page": "543",
+    "article-title": "A method for unconstrained convex minimization problem with the rate of convergence O (1/k 2)",
+    "volume": "269",
+    "author": "Nesterov",
+    "year": "1983",
+    "journal-title": "Doklady an ussr"
+   },
+   {
+    "key": "2026033012314264300_ref247",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-3-319-91578-4",
+    "volume-title": "Lectures on convex optimization",
+    "author": "Nesterov",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref248",
+    "volume-title": "Amortized Projection Optimization for Sliced Wasserstein Generative Models",
+    "author": "Nguyen",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref249",
+    "volume-title": "On first-order metalearning algorithms",
+    "author": "Nichol",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref250",
+    "volume-title": "Numerical optimization",
+    "author": "Nocedal",
+    "year": "2006"
+   },
+   {
+    "issue": "3",
+    "key": "2026033012314264300_ref251",
+    "doi-asserted-by": "crossref",
+    "first-page": "1042",
+    "DOI": "10.1007/s10957-016-0892-3",
+    "article-title": "Conic optimization via operator splitting and homogeneous self-dual embedding",
+    "volume": "169",
+    "author": "O’Donoghue",
+    "year": "2016",
+    "journal-title": "Journal of Optimization Theory and Applications"
+   },
+   {
+    "issue": "6583",
+    "key": "2026033012314264300_ref252",
+    "doi-asserted-by": "crossref",
+    "first-page": "607",
+    "DOI": "10.1038/381607a0",
+    "article-title": "Emergence of simple-cell receptive field properties by learning a sparse code for natural images",
+    "volume": "381",
+    "author": "Olshausen",
+    "year": "1996",
+    "journal-title": "Nature"
+   },
+   {
+    "issue": "1-2",
+    "key": "2026033012314264300_ref253",
+    "doi-asserted-by": "crossref",
+    "first-page": "1",
+    "DOI": "10.1561/2300000053",
+    "article-title": "An algorithmic perspective on imitation learning",
+    "volume": "7",
+    "author": "Osa",
+    "year": "2018",
+    "journal-title": "Foundations and Trends® in Robotics"
+   },
+   {
+    "key": "2026033012314264300_ref254",
+    "volume-title": "DeepOPF: A feasibility-optimized deep neural network approach for AC optimal power flow problems",
+    "author": "Pan",
+    "year": "2020"
+   },
+   {
+    "issue": "3",
+    "key": "2026033012314264300_ref255",
+    "doi-asserted-by": "crossref",
+    "first-page": "127",
+    "DOI": "10.1561/2400000003",
+    "article-title": "Proximal algorithms",
+    "volume": "1",
+    "author": "Parikh",
+    "year": "2014",
+    "journal-title": "Foundations and Trends® in Optimization"
+   },
+   {
+    "key": "2026033012314264300_ref256",
+    "first-page": "4062",
+    "volume-title": "PIPPS: Flexible Model-Based Policy Search Robust to the Curse of Chaos",
+    "author": "Parmas",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref257",
+    "first-page": "4078",
+    "volume-title": "A unified view of likelihood ratio and reparameterization gradients",
+    "author": "Parmas",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref258",
+    "first-page": "1310",
+    "volume-title": "On the difficulty of training recurrent neural networks",
+    "author": "Pascanu",
+    "year": "2013"
+   },
+   {
+    "key": "2026033012314264300_ref259",
+    "first-page": "8024",
+    "volume-title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+    "author": "Paszke",
+    "year": "2019"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref260",
+    "doi-asserted-by": "crossref",
+    "first-page": "147",
+    "DOI": "10.1162/neco.1994.6.1.147",
+    "article-title": "Fast exact multiplication by the Hessian",
+    "volume": "6",
+    "author": "Pearlmutter",
+    "year": "1994",
+    "journal-title": "Neural Computation"
+   },
+   {
+    "key": "2026033012314264300_ref261",
+    "volume-title": "An investigation of the gradient descent process in neural networks",
+    "author": "Pearlmutter",
+    "year": "1996"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref262",
+    "doi-asserted-by": "crossref",
+    "first-page": "1",
+    "DOI": "10.1145/1330017.1330018",
+    "article-title": "Reverse-mode AD in a functional framework: Lambda the ultimate backpropagator",
+    "volume": "30",
+    "author": "Pearlmutter",
+    "year": "2008",
+    "journal-title": "ACM Transactions on Programming Languages and Systems (TOPLAS)"
+   },
+   {
+    "issue": "1",
+    "key": "2026033012314264300_ref263",
+    "doi-asserted-by": "crossref",
+    "first-page": "127",
+    "DOI": "10.1007/s10851-006-6228-4",
+    "article-title": "Intrinsic statistics on Riemannian manifolds: Basic tools for geometric measurements",
+    "volume": "25",
+    "author": "Pennec",
+    "year": "2006",
+    "journal-title": "Journal of Mathematical Imaging and Vision"
+   },
+   {
+    "issue": "5-6",
+    "key": "2026033012314264300_ref264",
+    "doi-asserted-by": "crossref",
+    "first-page": "355",
+    "DOI": "10.1561/2200000073",
+    "article-title": "Computational optimal transport: With applications to data science",
+    "volume": "11",
+    "author": "Peyré",
+    "year": "2019",
+    "journal-title": "Foundations and Trends® in Machine Learning"
+   },
+   {
+    "key": "2026033012314264300_ref265",
+    "volume-title": "Hypersolvers: Toward Fast Continuous-Depth Models",
+    "author": "Poli",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref266",
+    "first-page": "17910",
+    "volume-title": "A Simple Guard for Learned Optimizers",
+    "author": "Prémont-Schwarz",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref267",
+    "volume-title": "Rapid Learning or Feature Reuse? Towards Understanding the Effectiveness of MAML",
+    "author": "Raghu",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref268",
+    "first-page": "113",
+    "volume-title": "Meta-Learning with Implicit Gradients",
+    "author": "Rajeswaran",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref269",
+    "volume-title": "Amortized Bayesian Meta-Learning",
+    "author": "Ravi",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref270",
+    "volume-title": "Optimization as a Model for Few-Shot Learning",
+    "author": "Ravi",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref271",
+    "first-page": "8007",
+    "volume-title": "AutoML-Zero: Evolving Machine Learning Algorithms From Scratch",
+    "author": "Real",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref272",
+    "first-page": "1530",
+    "volume-title": "Variational Inference with Normalizing Flows",
+    "author": "Rezende",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref273",
+    "first-page": "1278",
+    "volume-title": "Stochastic Backpropagation and Approximate Inference in Deep Generative Models",
+    "author": "Rezende",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref274",
+    "volume-title": "Taming vaes",
+    "author": "Rezende",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref275",
+    "volume-title": "Theano: A Python framework for fast computation of mathematical expressions",
+    "author": "Al-Rfou",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref276",
+    "first-page": "459",
+    "article-title": "Continuation methods: Theory and applications",
+    "volume-title": "IEEE Transactions on Systems, Man, and Cybernetics",
+    "author": "Richter",
+    "year": "1983"
+   },
+   {
+    "key": "2026033012314264300_ref277",
+    "first-page": "234",
+    "volume-title": "U-net: Convolutional networks for biomedical image segmentation",
+    "author": "Ronneberger",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref278",
+    "volume-title": "An overview of multi-task learning in deep neural networks",
+    "author": "Ruder",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref279",
+    "first-page": "59",
+    "volume-title": "Evolution and design of distributed learning rules",
+    "author": "Runarsson",
+    "year": "2000"
+   },
+   {
+    "issue": "3",
+    "key": "2026033012314264300_ref280",
+    "doi-asserted-by": "crossref",
+    "first-page": "211",
+    "DOI": "10.1007/s11263-015-0816-y",
+    "article-title": "Imagenet large scale visual recognition challenge",
+    "volume": "115",
+    "author": "Russakovsky",
+    "year": "2015",
+    "journal-title": "International Journal of Computer Vision"
+   },
+   {
+    "key": "2026033012314264300_ref281",
+    "volume-title": "Meta-Learning with Latent Embedding Optimization",
+    "author": "Rusu",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref282",
+    "volume-title": "CAQL: Continuous Action Q-Learning",
+    "author": "Ryu",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref283",
+    "first-page": "10549",
+    "volume-title": "Learning to Optimize in Model Predictive Control",
+    "author": "Sacks",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref284",
+    "unstructured": "Sakaue, S. and T.Oki. (2022). “Discrete-Convex-Analysis-Based Framework for Warm-Starting Algorithms with Predictions”. In: Advances in Neural Information Processing Systems. Ed. by A. H.Oh, A.Agarwal, D.Belgrave, and K.Cho. URL: https://openreview.net/forum?id=-GgDBzwZ-e7."
+   },
+   {
+    "key": "2026033012314264300_ref285",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1145/2623330.2630809",
+    "volume-title": "Deep learning",
+    "author": "Salakhutdinov",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref286",
+    "volume-title": "Progressive Distillation for Fast Sampling of Diffusion Models",
+    "author": "Salimans",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref287",
+    "first-page": "8459",
+    "volume-title": "Learning to Simulate Complex Physics with Graph Networks",
+    "author": "Sanchez-Gonzalez",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref288",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-3-319-20828-2",
+    "article-title": "Optimal transport for applied mathematicians",
+    "volume-title": "Birkäuser Cham",
+    "author": "Santambrogio",
+    "year": "2015"
+   },
+   {
+    "key": "2026033012314264300_ref289",
+    "first-page": "959",
+    "volume-title": "Should one compute the Temporal Difference fix point or minimize the Bellman Residual? The unified oblique projection view",
+    "author": "Scherrer",
+    "year": "2010"
+   },
+   {
+    "key": "2026033012314264300_ref290",
+    "volume-title": "Evolutionary principles in self-referential learning, or on learning how to learn: the meta-meta-… hook",
+    "author": "Schmidhuber",
+    "year": "1987"
+   },
+   {
+    "key": "2026033012314264300_ref291",
+    "volume-title": "Tech. rep",
+    "author": "Schmidhuber",
+    "year": "1995"
+   },
+   {
+    "key": "2026033012314264300_ref292",
+    "first-page": "6695",
+    "volume-title": "Can You Learn an Algorithm? Generalizing from Easy to Hard Problems with Recurrent Networks",
+    "author": "Schwarzschild",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref293",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1101/2021.04.08.439084",
+    "volume-title": "Neural Potts Model",
+    "author": "Sercu",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref294",
+    "first-page": "1723",
+    "volume-title": "Truncated Back-propagation for Bilevel Optimization",
+    "author": "Shaban",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref295",
+    "volume-title": "Learning for Robust Combinatorial Optimization: Algorithm and Application",
+    "author": "Shao",
+    "year": "2021"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref296",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1023/A:1022940300114",
+    "article-title": "Sensitivity Analysis of Generalized Equations",
+    "volume": "115",
+    "author": "Shapiro",
+    "year": "2003",
+    "journal-title": "Journal of Mathematical Sciences"
+   },
+   {
+    "key": "2026033012314264300_ref297",
+    "unstructured": "Shu, R.\n           (2017). “Amortized Optimization”. URL: https://ruishu.io/2017/11/07/amortized-optimization/."
+   },
+   {
+    "key": "2026033012314264300_ref298",
+    "volume-title": "Learning by Directional Gradient Descent",
+    "author": "Silver",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref299",
+    "first-page": "387",
+    "volume-title": "Deterministic Policy Gradient Algorithms",
+    "author": "Silver",
+    "year": "2014"
+   },
+   {
+    "key": "2026033012314264300_ref300",
+    "volume-title": "A Tutorial on Parametric Variational Inference",
+    "author": "Sjölund",
+    "year": "2023"
+   },
+   {
+    "key": "2026033012314264300_ref301",
+    "volume-title": "Graph-based Neural Acceleration for Nonnegative Matrix Factorization",
+    "author": "Sjölund",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref302",
+    "first-page": "1377",
+    "volume-title": "Bundle Methods for Machine Learning",
+    "author": "Smola",
+    "year": "2007"
+   },
+   {
+    "key": "2026033012314264300_ref303",
+    "first-page": "3738",
+    "volume-title": "Ladder Variational Autoencoders",
+    "author": "Sønderby",
+    "year": "2016"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref304",
+    "doi-asserted-by": "crossref",
+    "first-page": "185",
+    "DOI": "10.1162/artl.2009.15.2.15202",
+    "article-title": "A hypercube-based encoding for evolving large-scale neural networks",
+    "volume": "15",
+    "author": "Stanley",
+    "year": "2009",
+    "journal-title": "Artificial Life"
+   },
+   {
+    "key": "2026033012314264300_ref305",
+    "first-page": "339",
+    "volume-title": "OSQP: An operator splitting solver for quadratic programs",
+    "author": "Stellato",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref306",
+    "article-title": "Lectures on parametric optimization: An introduction",
+    "volume-title": "Optimization Online",
+    "author": "Still",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref307",
+    "first-page": "3048",
+    "volume-title": "Learning Stochastic Inverses",
+    "author": "Stuhlmüller",
+    "year": "2013"
+   },
+   {
+    "key": "2026033012314264300_ref308",
+    "volume-title": "Reinforcement learning: An introduction",
+    "author": "Sutton",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref309",
+    "first-page": "769",
+    "volume-title": "Amortized Bayesian Optimization over Discrete Spaces",
+    "author": "Swersky",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref310",
+    "doi-asserted-by": "publisher",
+    "first-page": "2818",
+    "DOI": "10.1109/CVPR.2016.308",
+    "volume-title": "Rethinking the Inception Architecture for Computer Vision",
+    "author": "Szegedy",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref311",
+    "volume-title": "2-wasserstein approximation via restricted convex potentials with application to improved training for gans",
+    "author": "Taghvaei",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref312",
+    "volume-title": "Unbiasing truncated backpropagation through time",
+    "author": "Tallec",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref313",
+    "volume-title": "Unbiased Online Recurrent Optimization",
+    "author": "Tallec",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref314",
+    "first-page": "6196",
+    "volume-title": "The Natural Language of Actions",
+    "author": "Tennenholtz",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref315",
+    "volume-title": "Rethinking Initialization of the Sinkhorn Algorithm",
+    "author": "Thornton",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref316",
+    "doi-asserted-by": "crossref",
+    "first-page": "3",
+    "DOI": "10.1007/978-1-4615-5529-2_1",
+    "volume-title": "Learning to Learn",
+    "author": "Thrun",
+    "year": "1998"
+   },
+   {
+    "key": "2026033012314264300_ref317",
+    "first-page": "1",
+    "volume-title": "Machine Learning Computational Fluid Dynamics",
+    "author": "Usman",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref318",
+    "volume-title": "Q-learning in enormous action spaces via amortized approximate maximization",
+    "author": "Van de Wiele",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref319",
+    "first-page": "5998",
+    "volume-title": "Attention is All you Need",
+    "author": "Vaswani",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref320",
+    "first-page": "945",
+    "volume-title": "Plug-and-play priors for model based reconstruction",
+    "author": "Venkatakrishnan",
+    "year": "2013"
+   },
+   {
+    "key": "2026033012314264300_ref321",
+    "volume-title": "Neural Fixed-Point Acceleration for Convex Optimization",
+    "author": "Venkataraman",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref322",
+    "first-page": "10553",
+    "volume-title": "Unbiased Gradient Estimation in Unrolled Computation Graphs with Persistent Evolution Strategies",
+    "author": "Vicol",
+    "year": "2021"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref323",
+    "doi-asserted-by": "crossref",
+    "first-page": "77",
+    "DOI": "10.1023/A:1019956318069",
+    "article-title": "A perspective view and survey of meta-learning",
+    "volume": "18",
+    "author": "Vilalta",
+    "year": "2002",
+    "journal-title": "Artificial Intelligence Review"
+   },
+   {
+    "key": "2026033012314264300_ref324",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-3-540-71050-9",
+    "volume-title": "Optimal transport: old and new",
+    "author": "Villani",
+    "year": "2009"
+   },
+   {
+    "key": "2026033012314264300_ref325",
+    "volume-title": "The potential of machine learning to enhance computational fluid dynamics",
+    "author": "Vinuesa",
+    "year": "2021"
+   },
+   {
+    "issue": "1-2",
+    "key": "2026033012314264300_ref326",
+    "doi-asserted-by": "crossref",
+    "first-page": "1",
+    "DOI": "10.1561/2200000001",
+    "article-title": "Graphical models, exponential families, and variational inference",
+    "volume": "1",
+    "author": "Wainwright",
+    "year": "2008",
+    "journal-title": "Foundations and Trends®in Machine Learning"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref327",
+    "doi-asserted-by": "crossref",
+    "first-page": "1715",
+    "DOI": "10.1137/10078356X",
+    "article-title": "Anderson acceleration for fixed-point iterations",
+    "volume": "49",
+    "author": "Walker",
+    "year": "2011",
+    "journal-title": "SIAM Journal on Numerical Analysis"
+   },
+   {
+    "key": "2026033012314264300_ref328",
+    "first-page": "10991",
+    "volume-title": "Bridging Multi-Task Learning and Meta-Learning: Towards Efficient Training and Effective Adaptation",
+    "author": "Wang",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref329",
+    "volume-title": "Exploring Model-based Planning with Policy Networks",
+    "author": "Wang",
+    "year": "2020"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref330",
+    "doi-asserted-by": "crossref",
+    "first-page": "1",
+    "DOI": "10.1037/h0093534",
+    "article-title": "Reminiscence and rote learning",
+    "volume": "49",
+    "author": "Ward",
+    "year": "1937",
+    "journal-title": "Psychological Monographs"
+   },
+   {
+    "issue": "3-4",
+    "key": "2026033012314264300_ref331",
+    "first-page": "279",
+    "article-title": "Q-learning",
+    "volume": "8",
+    "author": "Watkins",
+    "year": "1992",
+    "journal-title": "Machine Learning"
+   },
+   {
+    "issue": "3",
+    "key": "2026033012314264300_ref332",
+    "doi-asserted-by": "crossref",
+    "first-page": "289",
+    "DOI": "10.1016/0045-7825(89)90053-4",
+    "article-title": "Modern homotopy methods in optimization",
+    "volume": "74",
+    "author": "Watson",
+    "year": "1989",
+    "journal-title": "Computer Methods in Applied Mechanics and Engineering"
+   },
+   {
+    "key": "2026033012314264300_ref333",
+    "first-page": "3074",
+    "volume-title": "Faithful Inversion of Generative Models for Effective Amortized Inference",
+    "author": "Webb",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref334",
+    "unstructured": "Weng, L.\n           (2018). “Meta-Learning: Learning to Learn Fast”. URL: http://lilianweng.github.io/lil-log."
+   },
+   {
+    "key": "2026033012314264300_ref335",
+    "first-page": "1550",
+    "volume-title": "Backpropagation through time: what it does and how to do it",
+    "author": "Werbos",
+    "year": "1990"
+   },
+   {
+    "key": "2026033012314264300_ref336",
+    "first-page": "3751",
+    "volume-title": "Learned Optimizers that Scale and Generalize",
+    "author": "Wichrowska",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref337",
+    "first-page": "71",
+    "volume-title": "Computer Graphics Forum",
+    "author": "Wiewel",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref338",
+    "doi-asserted-by": "crossref",
+    "first-page": "5",
+    "DOI": "10.1007/978-1-4615-3618-5_2",
+    "article-title": "Simple statistical gradient-following algorithms for connectionist reinforcement learning",
+    "volume-title": "Reinforcement Learning:",
+    "author": "Williams",
+    "year": "1992"
+   },
+   {
+    "issue": "2",
+    "key": "2026033012314264300_ref339",
+    "doi-asserted-by": "crossref",
+    "first-page": "270",
+    "DOI": "10.1162/neco.1989.1.2.270",
+    "article-title": "A learning algorithm for continually running fully recurrent neural networks",
+    "volume": "1",
+    "author": "Williams",
+    "year": "1989",
+    "journal-title": "Neural Computation"
+   },
+   {
+    "key": "2026033012314264300_ref340",
+    "first-page": "6404",
+    "volume-title": "Meta-Amortized Variational Inference and Learning",
+    "author": "Wu",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref341",
+    "volume-title": "Understanding Short-Horizon Bias in Stochastic Meta-Optimization",
+    "author": "Wu",
+    "year": "2018"
+   },
+   {
+    "key": "2026033012314264300_ref342",
+    "volume-title": "Amortized Auto-Tuning: Cost-Efficient Transfer Optimization for Hyperparameter Recommendation",
+    "author": "Xiao",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref343",
+    "volume-title": "Latent Skill Planning for Exploration and Transfer",
+    "author": "Xie",
+    "year": "2021"
+   },
+   {
+    "key": "2026033012314264300_ref344",
+    "first-page": "10638",
+    "volume-title": "Amortized Finite Element Analysis for Fast PDE-Constrained Optimization",
+    "author": "Xue",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref345",
+    "volume-title": "Bayesian Modeling and Uncertainty Quantification for Learning to Optimize: What, Why, and How",
+    "author": "You",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref346",
+    "volume-title": "Multi-Scale Context Aggregation by Dilated Convolutions",
+    "author": "Yu",
+    "year": "2016"
+   },
+   {
+    "key": "2026033012314264300_ref347",
+    "first-page": "3391",
+    "volume-title": "Deep Sets",
+    "author": "Zaheer",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref348",
+    "first-page": "1",
+    "volume-title": "Learning optimal solutions for extremely fast AC optimal power flow",
+    "author": "Zamzam",
+    "year": "2020"
+   },
+   {
+    "key": "2026033012314264300_ref349",
+    "volume-title": "Adadelta: an adaptive learning rate method",
+    "author": "Zeiler",
+    "year": "2012"
+   },
+   {
+    "key": "2026033012314264300_ref350",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1609/aaai.v24i1.7639",
+    "volume-title": "Multi-Agent Learning with Policy Prediction",
+    "author": "Zhang",
+    "year": "2010"
+   },
+   {
+    "key": "2026033012314264300_ref351",
+    "volume-title": "Graph HyperNetworks for Neural Architecture Search",
+    "author": "Zhang",
+    "year": "2019"
+   },
+   {
+    "issue": "4",
+    "key": "2026033012314264300_ref352",
+    "doi-asserted-by": "crossref",
+    "first-page": "3170",
+    "DOI": "10.1137/18M1232772",
+    "article-title": "Globally convergent type-I Anderson acceleration for nonsmooth fixed-point iterations",
+    "volume": "30",
+    "author": "Zhang",
+    "year": "2020",
+    "journal-title": "SIAM Journal on Optimization"
+   },
+   {
+    "key": "2026033012314264300_ref353",
+    "doi-asserted-by": "publisher",
+    "first-page": "2808",
+    "DOI": "10.1109/CVPR.2017.300",
+    "volume-title": "Learning Deep CNN Denoiser Prior for Image Restoration",
+    "author": "Zhang",
+    "year": "2017"
+   },
+   {
+    "key": "2026033012314264300_ref354",
+    "first-page": "354",
+    "volume-title": "Safe and near-optimal policy learning for model predictive control using primal-dual neural networks",
+    "author": "Zhang",
+    "year": "2019"
+   },
+   {
+    "key": "2026033012314264300_ref355",
+    "volume-title": "Symbolic Learning to Optimize: Towards Interpretability and Scalability",
+    "author": "Zheng",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref356",
+    "first-page": "27075",
+    "volume-title": "HyperTransformer: Model Generation for Supervised and Semi-Supervised Few-Shot Learning",
+    "author": "Zhmoginov",
+    "year": "2022"
+   },
+   {
+    "key": "2026033012314264300_ref357",
+    "first-page": "7693",
+    "volume-title": "Fast Context Adaptation via Meta-Learning",
+    "author": "Zintgraf",
+    "year": "2019"
+   }
+  ],
+  "container-title": "Foundations and Trends® in Machine Learning",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://www.emerald.com/ftmal/article-pdf/16/5/592/11155937/2200000102en.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "syndication"
+   },
+   {
+    "URL": "https://www.emerald.com/ftmal/article-pdf/16/5/592/11155937/2200000102en.pdf",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2026,
+     4,
+     29
+    ]
+   ],
+   "date-time": "2026-04-29T18:10:55Z",
+   "timestamp": 1777486255000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://www.emerald.com/ftmal/article/16/5/592/1332424/Tutorial-on-Amortized-Optimization"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2023,
+     6,
+     27
+    ]
+   ]
+  },
+  "references-count": 357,
+  "journal-issue": {
+   "issue": "5",
+   "published-print": {
+    "date-parts": [
+     [
+      2023,
+      6,
+      27
+     ]
+    ]
+   }
+  },
+  "URL": "http://dx.doi.org/10.1561/2200000102",
+  "relation": {},
+  "ISSN": [
+   "1935-8237",
+   "1935-8245"
+  ],
+  "subject": [],
+  "published": {
+   "date-parts": [
+    [
+     2023,
+     6,
+     27
+    ]
+   ]
+  },
+  "id": "amos2023"
  }
 ]

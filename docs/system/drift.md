@@ -31,6 +31,14 @@ box is therefore a typical bad case, not an extreme one.
 - **The paper's ±50 MHz maps** (Figs. 10-17) cover about 2.7× the fabrication-targeting range.
   They show the shape of the landscape but overstate the drift a calibrated device sees.
 
+## Where the ranges are used
+
+| Range | Used for | Result |
+| --- | --- | --- |
+| In-cooldown ±0.1 MHz | Scoring pulses | No re-calibration needed within a cooldown ([Robustness](../results/robustness.md#how-the-experiments-are-calibrated)) |
+| Recool ±5.7 MHz | Robust-GRAPE ensemble; domain randomisation of the RL agent (`--max-drift 1.1e-3`); the 24 test devices of the cost-per-device experiment | Robust GRAPE survives a recool; single pulses do not ([Robustness](../results/robustness.md)) |
+| Fabrication ±18.5 MHz | Scoring transfer to a new device; the fabrication-range experiment | No single pulse transfers ([Robustness](../results/robustness.md#fabrication-range-experiment)) |
+
 ## What is not covered yet
 
 !!! note "The coupler drifts too"

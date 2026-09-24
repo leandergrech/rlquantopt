@@ -357,3 +357,164 @@ SP  - 583
 VL  - 5
 SN  - 2521-327X
 ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevlett.112.240503
+UR  - http://dx.doi.org/10.1103/PhysRevLett.112.240503
+TI  - Adaptive Hybrid Optimal Quantum Control for Imprecisely Characterized Systems
+T2  - Physical Review Letters
+AU  - Egger, D. J.
+AU  - Wilhelm, F. K.
+PY  - 2014
+DA  - 2014/06/20
+PB  - American Physical Society (APS)
+IS  - 24
+VL  - 112
+SN  - 0031-9007
+SN  - 1079-7114
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physreva.97.042122
+UR  - http://dx.doi.org/10.1103/PhysRevA.97.042122
+TI  - Data-driven gradient algorithm for high-precision quantum control
+T2  - Physical Review A
+AU  - Wu, Re-Bing
+AU  - Chu, Bing
+AU  - Owens, David H.
+AU  - Rabitz, Herschel
+PY  - 2018
+DA  - 2018/04/24
+PB  - American Physical Society (APS)
+IS  - 4
+VL  - 97
+SN  - 2469-9926
+SN  - 2469-9934
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physreva.99.032331
+UR  - http://dx.doi.org/10.1103/PhysRevA.99.032331
+TI  - Evaluating analytic gradients on quantum hardware
+T2  - Physical Review A
+AU  - Schuld, Maria
+AU  - Bergholm, Ville
+AU  - Gogolin, Christian
+AU  - Izaac, Josh
+AU  - Killoran, Nathan
+PY  - 2019
+DA  - 2019/03/21
+PB  - American Physical Society (APS)
+IS  - 3
+VL  - 99
+SN  - 2469-9926
+SN  - 2469-9934
+ER  -
+
+TY  - GEN
+T1  - Physical qubit calibration on a directed acyclic graph
+AU  - Kelly, Julian
+AU  - O'Malley, Peter
+AU  - Neeley, Matthew
+AU  - Neven, Hartmut
+AU  - Martinis, John M.
+DO  - 10.48550/ARXIV.1803.03226
+UR  - https://arxiv.org/abs/1803.03226
+AB  - High-fidelity control of qubits requires precisely tuned control parameters. Typically, these parameters are found through a series of bootstrapped calibration experiments which successively acquire more accurate information about a physical qubit. However, optimal parameters are typically different between devices and can also drift in time, which begets the need for an efficient calibration strategy. Here, we introduce a framework to understand the relationship between calibrations as a directed graph. With this approach, calibration is reduced to a graph traversal problem that is automatable and extensible.
+KW  - Quantum Physics (quant-ph)
+KW  - FOS: Physical sciences
+KW  - FOS: Physical sciences
+PY  - 2018
+PB  - arXiv
+ER  -
+
+TY  - JOUR
+DO  - 10.1038/s41467-020-19074-4
+UR  - http://dx.doi.org/10.1038/s41467-020-19074-4
+TI  - Detecting and tracking drift in quantum information processors
+T2  - Nature Communications
+AU  - Proctor, Timothy
+AU  - Revelle, Melissa
+AU  - Nielsen, Erik
+AU  - Rudinger, Kenneth
+AU  - Lobser, Daniel
+AU  - Maunz, Peter
+AU  - Blume-Kohout, Robin
+AU  - Young, Kevin
+PY  - 2020
+DA  - 2020/10/26
+PB  - Springer Science and Business Media LLC
+IS  - 1
+VL  - 11
+SN  - 2041-1723
+ER  -
+
+TY  - JOUR
+DO  - 10.1038/s41467-024-46623-y
+UR  - http://dx.doi.org/10.1038/s41467-024-46623-y
+TI  - Optimizing quantum gates towards the scale of logical qubits
+T2  - Nature Communications
+AU  - Klimov, Paul V.
+AU  - Bengtsson, Andreas
+AU  - Quintana, Chris
+AU  - Bourassa, Alexandre
+AU  - Hong, Sabrina
+AU  - Dunsworth, Andrew
+AU  - Satzinger, Kevin J.
+AU  - Livingston, William P.
+AU  - Sivak, Volodymyr
+AU  - Niu, Murphy Yuezhen
+AU  - Andersen, Trond I.
+AU  - Zhang, Yaxing
+AU  - Chik, Desmond
+AU  - Chen, Zijun
+AU  - Neill, Charles
+AU  - Erickson, Catherine
+AU  - Grajales Dau, Alejandro
+AU  - Megrant, Anthony
+AU  - Roushan, Pedram
+AU  - Korotkov, Alexander N.
+AU  - Kelly, Julian
+AU  - Smelyanskiy, Vadim
+AU  - Chen, Yu
+AU  - Neven, Hartmut
+PY  - 2024
+DA  - 2024/03/18
+PB  - Springer Science and Business Media LLC
+IS  - 1
+VL  - 15
+SN  - 2041-1723
+ER  -
+
+TY  - JOUR
+DO  - 10.1007/s10208-015-9296-2
+UR  - http://dx.doi.org/10.1007/s10208-015-9296-2
+TI  - Random Gradient-Free Minimization of Convex Functions
+T2  - Foundations of Computational Mathematics
+AU  - Nesterov, Yurii
+AU  - Spokoiny, Vladimir
+PY  - 2015
+DA  - 2015/11/30
+PB  - Springer Science and Business Media LLC
+SP  - 527-566
+IS  - 2
+VL  - 17
+SN  - 1615-3375
+SN  - 1615-3383
+ER  -
+
+TY  - JOUR
+DO  - 10.1561/2200000102
+UR  - http://dx.doi.org/10.1561/2200000102
+TI  - Tutorial on Amortized Optimization
+T2  - Foundations and Trends® in Machine Learning
+AU  - Amos, Brandon
+PY  - 2023
+DA  - 2023/06/27
+PB  - Emerald
+SP  - 592-732
+IS  - 5
+VL  - 16
+SN  - 1935-8237
+SN  - 1935-8245
+ER  -

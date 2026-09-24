@@ -46,6 +46,8 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.10.0 | Documentation site (MkDocs, GitHub Pages) | done |
 | 2.11.0 | Docs by topic, landing page, bibliography, hardware drift ranges, PPO vs TRPO | done |
 | 2.12.0 | PPO seeds, losses, drift-range robustness, RL vs GRAPE cost per device, site redesign | done |
+| 2.13.0 | Hypothesis page (drift, dimension, learned policies); drift literature tied to experiments; coupler/coupling drift in the env | done |
+| 2.14.0 | Fabrication-range comparison; test T1 (policies vs number of drifting parameters) | running |
 
 ## Beyond replication (next minor versions, not in this pass)
 

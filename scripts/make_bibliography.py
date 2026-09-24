@@ -28,6 +28,14 @@ REFS = [  # (key, DOI), in the order they appear on the bibliography page
     ("zhang2022", "10.1126/sciadv.abi6690"),
     ("dhieb2025", "10.48550/arXiv.2512.18037"),
     ("groszkowski2021", "10.22331/q-2021-11-17-583"),
+    ("egger2014", "10.1103/PhysRevLett.112.240503"),
+    ("wu2018", "10.1103/PhysRevA.97.042122"),
+    ("schuld2019", "10.1103/PhysRevA.99.032331"),
+    ("kelly2018", "10.48550/arXiv.1803.03226"),
+    ("proctor2020", "10.1038/s41467-020-19074-4"),
+    ("klimov2024", "10.1038/s41467-024-46623-y"),
+    ("nesterov2017", "10.1007/s10208-015-9296-2"),
+    ("amos2023", "10.1561/2200000102"),
 ]
 
 

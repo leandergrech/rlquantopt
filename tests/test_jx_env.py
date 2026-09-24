@@ -70,3 +70,13 @@ def test_matches_exact_full_space_expm():
     b = [0, 3, 9, 12]
     G = np.array([[np.conj(U[bj, bi]) for bj in b] for bi in b])
     np.testing.assert_allclose(float(info['unitarity']), np.sum(np.abs(G) ** 2) / 4, atol=1e-12)
+
+
+def test_extra_drift_changes_coupler_and_couplings_only_when_enabled():
+    key = jax.random.PRNGKey(4)
+    base = jenv.sample_model(key, jenv.EnvConfig(max_drift=1e-3))
+    more = jenv.sample_model(key, jenv.EnvConfig(max_drift=1e-3, coupler_drift_mhz=5.7, g_drift_mhz=5.7))
+    np.testing.assert_allclose(np.asarray(base.omega_s), np.asarray(more.omega_s))      # same qubit draw
+    assert base.omega_c_0 == CFG.model.omega_c_0 and abs(float(more.omega_c_0) - CFG.model.omega_c_0) <= 5.7e-3
+    assert np.all(np.abs(np.asarray(more.g) - np.asarray(CFG.model.g)) <= 5.7e-3)
+    assert float(more.omega_c_0) != CFG.model.omega_c_0

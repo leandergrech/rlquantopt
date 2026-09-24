@@ -35,6 +35,8 @@ def parse_args(argv=None):
     p.add_argument("--activation", choices=["relu", "tanh"], default=None,
                    help="default: relu (TRPO, as the paper run) / tanh (PPO)")
     p.add_argument("--max-drift", type=float, default=0.0, help="domain randomisation of omega_s, fraction")
+    p.add_argument("--coupler-drift-mhz", type=float, default=0.0, help="domain randomisation of the coupler frequency, ±MHz")
+    p.add_argument("--g-drift-mhz", type=float, default=0.0, help="domain randomisation of both couplings, ±MHz")
     p.add_argument("--fixed-drift", action="store_true",
                    help="draw the drift once per env (v1 ZCQPEEWRD) instead of every episode")
     p.add_argument("--eval-every", type=int, default=2_000_000, help="env steps between evals/checkpoints")
@@ -44,7 +46,8 @@ def parse_args(argv=None):
 
 
 def build(args):
-    env_cfg = jenv.EnvConfig(max_drift=args.max_drift)
+    env_cfg = jenv.EnvConfig(max_drift=args.max_drift, coupler_drift_mhz=args.coupler_drift_mhz,
+                             g_drift_mhz=args.g_drift_mhz)
     common = dict(total_steps=args.total_steps, lr=args.lr, resample_drift=not args.fixed_drift)
     if args.n_envs:
         common["n_envs"] = args.n_envs

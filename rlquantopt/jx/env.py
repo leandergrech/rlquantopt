@@ -36,6 +36,9 @@ class EnvConfig:
     jt_floor: float = 1e-12             # keeps -log10(J_T) finite for an exactly perfect gate
     # Domain randomisation of the qubit frequencies: omega_s *= 1 + U(-max_drift, max_drift)
     max_drift: float = 0.0
+    # Further drifting parameters (absolute, MHz): coupler frequency omega_c_0 and couplings g_0, g_1
+    coupler_drift_mhz: float = 0.0
+    g_drift_mhz: float = 0.0
     model: physics.ModelParams = physics.ModelParams()
 
     @property
@@ -79,17 +82,34 @@ def sample_omega_s(key, cfg: EnvConfig):
     return omega * (1 + jax.random.uniform(key, omega.shape, fdtype(), -cfg.max_drift, cfg.max_drift))
 
 
-def reset_to(omega_s, cfg: EnvConfig):
-    """Reset with given qubit frequencies (used for sweeps and fixed-per-env randomisation)."""
-    ham = physics.sector_hamiltonian(cfg.model._replace(omega_s=omega_s))
-    state = EnvState(sector=physics.initial_state(), ham=ham,
+def sample_model(key, cfg: EnvConfig):
+    """Draw the episode's physical parameters: qubit frequencies, and optionally coupler frequency and couplings."""
+    model = cfg.model._replace(omega_s=sample_omega_s(key, cfg))      # same key as before: runs stay reproducible
+    if cfg.coupler_drift_mhz:
+        d = jax.random.uniform(jax.random.fold_in(key, 1), (), fdtype(), -1, 1) * cfg.coupler_drift_mhz * 1e-3
+        model = model._replace(omega_c_0=cfg.model.omega_c_0 + d)
+    if cfg.g_drift_mhz:
+        d = jax.random.uniform(jax.random.fold_in(key, 2), (2,), fdtype(), -1, 1) * cfg.g_drift_mhz * 1e-3
+        model = model._replace(g=jnp.asarray(cfg.model.g, fdtype()) + d)
+    return model
+
+
+def reset_params(model: physics.ModelParams, cfg: EnvConfig):
+    """Reset with fully specified physical parameters."""
+    omega_s = jnp.asarray(model.omega_s, fdtype())
+    state = EnvState(sector=physics.initial_state(), ham=physics.sector_hamiltonian(model),
                      amps_cur=jnp.zeros(cfg.n_time_steps, fdtype()),
                      cur_idx=jnp.zeros((), jnp.int32), omega_s=omega_s)
     return observation(state, state.cur_idx, cfg), state
 
 
+def reset_to(omega_s, cfg: EnvConfig):
+    """Reset with given qubit frequencies, other parameters nominal (sweeps, fixed-per-env randomisation)."""
+    return reset_params(cfg.model._replace(omega_s=omega_s), cfg)
+
+
 def reset(key, cfg: EnvConfig):
-    return reset_to(sample_omega_s(key, cfg), cfg)
+    return reset_params(sample_model(key, cfg), cfg)
 
 
 # --8<-- [start:observation]
@@ -145,8 +165,7 @@ def step_autoreset(key, state: EnvState, action, cfg: EnvConfig, resample=True):
     """
     obs, new_state, reward, terminated, truncated, info = step(state, action, cfg)
     done = terminated | truncated
-    omega = jnp.where(resample, sample_omega_s(key, cfg), state.omega_s)
-    obs_reset, state_reset = reset_to(omega, cfg)
+    obs_reset, state_reset = reset(key, cfg) if resample else reset_to(state.omega_s, cfg)
     state_out = jax.tree_util.tree_map(lambda r, s: jnp.where(done, r, s), state_reset, new_state)
     obs_out = jnp.where(done, obs_reset, obs)
     info = dict(info, final_obs=obs)

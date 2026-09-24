@@ -3,6 +3,16 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.13.0: the hypothesis page, drift literature tied to experiments (2026-09-24)
+
+New research-question page testing the hypothesis that drift favours learned policies: three
+testable claims, literature for and against (including the n-fold penalty of value-only methods),
+a scaling argument and five tests. First evidence: pulse coverage falls multiplicatively with the
+number of *sensitive* drifting parameters (`scripts/drift_dimension.py`). The robustness page now
+maps each measured drift figure to the operational question it answers. The environment can
+randomise the coupler frequency and the couplings (`--coupler-drift-mhz`, `--g-drift-mhz`). Running:
+fabrication-range comparison, and policies trained with 3 and 5 drifting parameters (test T1).
+
 ## 2.12.0: PPO seeds, losses, drift-range robustness, RL vs GRAPE cost, redesign (2026-09-24)
 
 Four PPO seeds and TRPO compared (best seed J_T 1.1e-4, matching the paper); loss curves for RL

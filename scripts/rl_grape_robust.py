@@ -90,6 +90,7 @@ def main():
     p.add_argument("--ens-n", type=int, default=5, help="ensemble grid points per axis")
     p.add_argument("--map-step", type=float, default=1.0, help="MHz")
     p.add_argument("--out", default=os.path.join(ROOT, "docs", "figures"))
+    p.add_argument("--tag", default="", help="suffix for the output files, e.g. _fab")
     args = p.parse_args()
 
     model = physics.ModelParams()
@@ -145,10 +146,10 @@ def main():
                          optimisation_seconds=dt, simulator_pulse_evals=2 * args.iters))
 
     os.makedirs(args.out, exist_ok=True)
-    with open(os.path.join(args.out, "rl_grape_robust.json"), "w") as f:
-        settings = {k: v for k, v in vars(args).items() if k != "out"} | dict(n_samples=N_SAMPLES, dt=DT, u_max=U_MAX)
+    with open(os.path.join(args.out, f"rl_grape_robust{args.tag}.json"), "w") as f:
+        settings = {k: v for k, v in vars(args).items() if k not in ("out", "tag")} | dict(n_samples=N_SAMPLES, dt=DT, u_max=U_MAX)
         json.dump(dict(settings=settings, results=rows), f, indent=2)
-    np.savez_compressed(os.path.join(args.out, "rl_grape_robust.npz"), d_mhz=d_map,
+    np.savez_compressed(os.path.join(args.out, f"rl_grape_robust{args.tag}.npz"), d_mhz=d_map,
                         **{f"map_{k}": v for k, v in maps.items()}, **{f"pulse_{k}": np.asarray(v) for k, v in pulses.items()},
                         **{f"hist_{k}": v for k, v in hist.items()})
 
@@ -175,7 +176,7 @@ def main():
         if j == 0:
             ax.set_ylabel("Δω qubit 1 [MHz]")
     fig.colorbar(im, ax=fig.axes[1::2], shrink=0.8, label="$-\\log_{10} J_T$ (red: $J_T = 10^{-3}$)")
-    path = os.path.join(args.out, "rl_grape_robust.png")
+    path = os.path.join(args.out, f"rl_grape_robust{args.tag}.png")
     fig.savefig(path, dpi=110)
     print("wrote", path)
 

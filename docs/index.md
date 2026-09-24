@@ -148,11 +148,11 @@ Each of these is discussed, with what it would take to remove it, in
 ## What changed recently
 
 !!! abstract "Latest"
-    - Four PPO seeds: the best matches the paper's agent (J_T 1.1e-4); PPO is ~2× faster than TRPO
-      ([Training RL agents](results/training.md)).
-    - Robustness against measured hardware drift: robust GRAPE keeps J_T ≤ 1.4e-4 over a full recool
-      range ([Robustness](results/robustness.md)).
-    - Where RL pays off: cost per device of RL and GRAPE under drift
-      ([Robustness](results/robustness.md#rl-vs-grape-cost-per-device)).
+    - New: the project's central hypothesis, split into testable claims with the evidence for and
+      against ([Drift, dimension and learned policies](hypothesis/drift-and-dimension.md)).
+    - Every robustness result is now tied to the hardware measurement it is calibrated on
+      ([Robustness](results/robustness.md#how-the-experiments-are-calibrated)).
+    - Running: the comparison over the fabrication range (±18.5 MHz) and policies trained with 3 and
+      5 drifting parameters.
 
 The full history is in the [changelog](changelog.md).
