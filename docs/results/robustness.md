@@ -16,12 +16,11 @@ for an operational question, and the results answer it in those terms:
 | --- | --- | --- | --- |
 | Frequency wander within one cooldown: 1-3 kHz typical, up to 20 kHz [[burnett2019]](../bibliography.md#burnett2019); single-TLS shifts 5-140 kHz [[schlor2019]](../bibliography.md#schlor2019); within 100 kHz over 95 h [[dhieb2025]](../bibliography.md#dhieb2025) | ±0.1 MHz | Does a calibrated pulse need re-calibrating during a cooldown? | **No.** Every pulse keeps its nominal J_T within a factor of ~4, in line with Burnett et al.'s conclusion that kHz shifts need no re-calibration. |
 | "Recool stability of 5.7 MHz" after thermal cycling, IBM multi-qubit processors [[zhang2022]](../bibliography.md#zhang2022) | ±5.7 MHz | Does a pulse survive a warm-up and cool-down of the fridge? | **Only a robust one.** RL and plain GRAPE pulses come back at J_T ≈ 1.5e-3 on average (from 1e-4-1e-6) and need re-calibration; robust GRAPE stays ≤ 1.4e-4. |
-| "Frequency assignment precision of 18.5 MHz" for new devices after laser annealing [[zhang2022]](../bibliography.md#zhang2022) | ±18.5 MHz | Can a pulse (or policy) designed on the model transfer to a newly fabricated chip? | **No single pulse does.** Even robust GRAPE averages 8.6e-4 and reaches 6.5e-3 in the worst case; a per-device or adaptive method is needed ([fabrication-range experiment](#fabrication-range-experiment)). |
+| "Frequency assignment precision of 18.5 MHz" for new devices after laser annealing [[zhang2022]](../bibliography.md#zhang2022) | ±18.5 MHz | Can a pulse (or policy) designed on the model transfer to a newly fabricated chip? | **Only a pulse optimised for that range.** The recool-trained robust pulse reaches 6.5e-3 in the worst case, but robust GRAPE trained over ±18.5 MHz keeps J_T ≤ 7.6e-4 everywhere ([fabrication-range experiment](#fabrication-range-experiment)). |
+| Flux-offset drift of 20 mΦ0 for the worst loop after 17 days [[dai2021]](../bibliography.md#dai2021), ≈ ±140 MHz of coupler frequency (assumed flux map) | coupler ±140 MHz, qubits ±5.7 MHz | Does anything survive the worst flux drift without re-calibration? | See [Large coupler drift](#large-coupler-drift) |
 
-Two hardware limits sit outside these numbers. The control can move the coupler by up to ±3.2 GHz,
-more than a real flux-tunable coupler allows, and only the two qubit frequencies drift; the coupler,
-being flux-tunable, is expected to drift more (~500 kHz, [[burnett2019]](../bibliography.md#burnett2019)).
-Both are listed in [Named gates and a richer model](../next/named-gates.md#limits-of-the-current-hamiltonian).
+One hardware limit sits outside these numbers: the control can move the coupler by up to ±3.2 GHz,
+more than a real flux-tunable coupler allows; see [Named gates and a richer model](../next/named-gates.md#limits-of-the-current-hamiltonian).
 
 ## Pulses under the three drift ranges
 
@@ -200,3 +199,11 @@ from ~130 devices (full training) to about 13.
 3. **Where RL can win is therefore not "one pulse per range" but "fast per-device refinement"**, and
    that advantage matters only when no single robust pulse covers the range, i.e. with more sensitive
    drifting parameters; see [test T1](../hypothesis/drift-and-dimension.md#t1-policies-trained-with-more-drifting-parameters).
+
+## Large coupler drift
+
+!!! info "Running"
+    Qubits drifting over the recool range (±5.7 MHz) and the coupler over ±140 MHz, the worst-loop
+    flux drift after 17 days ([Hardware drift ranges](../system/drift.md#the-coupler-drifts-too-and-more)).
+    Robust GRAPE over a 35-member ensemble spanning both, a PPO policy trained over the same drift, and
+    per-device GRAPE with and without the policy's warm start at matched gate time.

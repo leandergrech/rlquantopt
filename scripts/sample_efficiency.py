@@ -221,63 +221,97 @@ def main():
 
 
 def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
-    """Bars: total cost to reach the threshold in three scenarios; dots: gate quality per device."""
+    """(a) Cost to reach the threshold, split into one-off (RL pretraining, robust optimisation) and per-device
+    GRAPE; (b) total cost against the number of devices; (c) gate quality per device."""
     names = ["grape", "robust grape", "rl", "rl-dr", "rl-dr+grape"]
     labels = {"grape": "GRAPE per device", "robust grape": "robust GRAPE (one pulse)", "rl": "RL, trained without drift",
               "rl-dr": "RL, trained with drift", "rl-dr+grape": "RL with drift → short GRAPE"}
     colours = dict(zip(names, ["#4c72b0", "#8172b2", "#c44e52", "#dd8452", "#55a868"]))
-    fig, axs = plt.subplots(1, 2, figsize=(14, 5), constrained_layout=True, gridspec_kw=dict(width_ratios=[1.35, 1]))
-
-    def nominal_cost(n):
-        s = summary[n]
-        ok = s["JT_nominal"] <= threshold
-        if n == "grape":                 # typical per-device cost (a single random restart is noisy)
-            return s["per_device_cost_samples"]
-        if n in ("rl", "rl-dr"):
-            return s["one_off_cost_samples"] + 999 if ok else np.inf
-        if n == "robust grape":
-            return s["one_off_cost_samples"] if ok else np.inf
-        return s["one_off_cost_samples"] + (s["per_device_cost_samples"] if np.isfinite(s["per_device_cost_samples"]) else 0)
-
     what = {"recool": "recool", "fab_targeting": "fabrication"}.get(rng.name, rng.name)
-    scen = ["no drift\n(nominal device)", f"1 new device\n({what} drift)", f"{fleet} devices\n({what} drift)"]
-    vals = {n: [nominal_cost(n), summary[n]["cost_1_device"], summary[n]["cost_fleet"]] for n in names}
-    finite = [v for n in names for v in vals[n] if np.isfinite(v) and v > 0]
-    top = max(finite) * 4
+    fig, axs = plt.subplots(1, 3, figsize=(18, 5.2), constrained_layout=True, gridspec_kw=dict(width_ratios=[1.2, 1, 1]))
+
+    def parts(n):
+        s = summary[n]
+        per = s["per_device_cost_samples"]
+        return s["one_off_cost_samples"], per
+
     ax = axs[0]
+    scen = [1, fleet]
     x = np.arange(len(scen))
     wb = 0.15
+    finite = []
     for j, n in enumerate(names):
-        for xi, v in zip(x, vals[n]):
+        one, per = parts(n)
+        for xi, N in zip(x, scen):
             xb = xi + (j - 2) * wb
-            if np.isfinite(v):
-                ax.bar(xb, v, wb, color=colours[n], label=labels[n] if xi == 0 else None)
-            else:
-                ax.bar(xb, top, wb, color="none", edgecolor=colours[n], hatch="///", lw=0.8,
+            if not np.isfinite(per):
+                continue
+            total = one + N * per
+            finite += [v for v in (one, total) if v > 0]
+    top = max(finite) * 4
+    bottom = min(finite) / 3
+    for j, n in enumerate(names):
+        one, per = parts(n)
+        for xi, N in zip(x, scen):
+            xb = xi + (j - 2) * wb
+            if not np.isfinite(per):
+                ax.bar(xb, top - bottom, wb, bottom=bottom, color="none", edgecolor=colours[n], hatch="///", lw=0.8,
                        label=labels[n] if xi == 0 else None)
-                ax.text(xb, top * 1.15, "✗", ha="center", va="bottom", fontsize=11, color=colours[n])
+                ax.text(xb, top * 1.1, "✗", ha="center", va="bottom", fontsize=11, color=colours[n])
+                continue
+            if one > 0:
+                ax.bar(xb, one - bottom, wb, bottom=bottom, color=colours[n], label=labels[n] if xi == 0 else None)
+            if N * per > 0:
+                ax.bar(xb, N * per, wb, bottom=max(one, bottom), color=colours[n], alpha=0.35, hatch="..",
+                       edgecolor=colours[n], lw=0.5, label=None if one > 0 or xi else labels[n])
+    from matplotlib.patches import Patch
+    handles, labs = ax.get_legend_handles_labels()
+    handles += [Patch(facecolor="0.35", label="one-off: RL pretraining / robust optimisation"),
+                Patch(facecolor="0.8", hatch="..", edgecolor="0.35", label="per device: GRAPE (or one rollout)")]
     ax.set_yscale("log")
-    ax.set_ylim(min(finite) / 3, top * 3)
-    ax.set_xticks(x, scen)
-    ax.set_ylabel("simulator cost, 50 ps samples (training + per device)")
-    ax.set_title(f"Cost to get $J_T \\leq 10^{{-3}}$ (✗ hatched: does not reach it)", fontsize=10)
-    ax.legend(fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=3, frameon=False)
+    ax.set_ylim(bottom, top * 3)
+    ax.set_xticks(x, [f"1 new device\n({what} drift)", f"{fleet} devices\n({what} drift)"])
+    ax.set_ylabel("simulator cost, 50 ps samples")
+    ax.set_title("(a) Cost to reach $J_T \\leq 10^{-3}$, one-off vs per device (✗: never reaches it)", fontsize=10)
+    ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=2, frameon=False)
+    one, per = parts("rl-dr+grape")
+    ax.text(x[1] + 2 * wb, (one + fleet * per) * 1.3, f"pretrain {one:.1e}\n+ {fleet} × GRAPE {per:.1e}",
+            ha="center", fontsize=7, color=colours["rl-dr+grape"])
 
     ax = axs[1]
+    N = np.logspace(0, 4, 200)
+    for n in ("grape", "robust grape", "rl-dr+grape"):
+        one, per = parts(n)
+        if np.isfinite(per):
+            ax.loglog(N, one + N * per, c=colours[n], lw=2, label=labels[n])
+    one, per = parts("rl-dr+grape")
+    ax.loglog(N, np.full_like(N, one), c=colours["rl-dr+grape"], ls=":", lw=1.2, label="…of which RL pretraining")
+    ax.loglog(N, N * per, c=colours["rl-dr+grape"], ls="--", lw=1.2, label="…of which per-device GRAPE")
+    g1, gper = parts("grape")
+    if np.isfinite(per) and gper > per:
+        nstar = one / (gper - per)
+        ax.axvline(nstar, c="k", lw=0.8, ls="--")
+        ax.text(nstar * 1.1, ax.get_ylim()[0] * 3 if ax.get_ylim()[0] > 0 else 1e6, f"break-even\n≈ {nstar:.0f} devices",
+                fontsize=8)
+    ax.set_xlabel("number of devices or re-calibrations")
+    ax.set_ylabel("total simulator cost, 50 ps samples")
+    ax.set_title("(b) Total cost against number of devices", fontsize=10)
+    ax.legend(fontsize=7)
+
+    ax = axs[2]
     for j, n in enumerate(names):
         v = np.asarray(rec[n][1:])
         ax.scatter(np.full(len(v), j) + np.random.default_rng(j).uniform(-0.15, 0.15, len(v)), v, s=12,
                    color=colours[n], alpha=0.75)
         ax.scatter([j], [rec[n][0]], marker="*", s=150, color="k", zorder=3)
     ax.set_yscale("log")
-    ax.set_xticks(range(len(names)), ["GRAPE\nper device", "robust GRAPE\n(one pulse)", "RL\nno drift", "RL\nwith drift",
+    ax.set_xticks(range(len(names)), ["GRAPE\nper device", "robust\nGRAPE", "RL\nno drift", "RL\nwith drift",
                                       "RL with drift\n→ GRAPE"], fontsize=8)
     ax.axhline(threshold, c="k", ls="--", lw=0.8)
     ax.set_ylabel("$J_T$")
-    ax.set_title(f"Gate quality: nominal device (★) and {len(rec['rl']) - 1} devices, ±{rng.half_width_mhz} MHz (dots)",
-                 fontsize=10)
+    ax.set_title(f"(c) Quality: nominal (★), {len(rec['rl']) - 1} devices ±{rng.half_width_mhz} MHz (dots)", fontsize=10)
     for a in axs:
-        a.grid(alpha=0.3, axis="y")
+        a.grid(alpha=0.3, which="both" if a is axs[1] else "major", axis="y" if a is not axs[1] else "both")
     fig.savefig(path, dpi=120)
     print("wrote", path)
 

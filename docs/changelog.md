@@ -3,6 +3,13 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.14.1: cost split, RL-initialised control, platforms (2026-09-24)
+
+Cost figures split RL routes into one-off pretraining and per-device GRAPE, with total cost against the
+number of devices. New pages: the case for RL-initialised optimal control (semi-amortised control)
+with the literature gap, and a platform and pre-hardware plan (pulse access, Rydberg vs transmons vs
+ions). Coupler-drift literature (Dai et al. 2021) and scan; large coupler drift experiment running.
+
 ## 2.14.0: fabrication-range study, test T1, the gate-time control (2026-09-24)
 
 Robust GRAPE over the fabrication range (±18.5 MHz) keeps J_T ≤ 7.6e-4 everywhere: one pulse still

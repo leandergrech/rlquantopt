@@ -37,16 +37,49 @@ box is therefore a typical bad case, not an extreme one.
 | --- | --- | --- |
 | In-cooldown ±0.1 MHz | Scoring pulses | No re-calibration needed within a cooldown ([Robustness](../results/robustness.md#how-the-experiments-are-calibrated)) |
 | Recool ±5.7 MHz | Robust-GRAPE ensemble; domain randomisation of the RL agent (`--max-drift 1.1e-3`); the 24 test devices of the cost-per-device experiment | Robust GRAPE survives a recool; single pulses do not ([Robustness](../results/robustness.md)) |
-| Fabrication ±18.5 MHz | Scoring transfer to a new device; the fabrication-range experiment | No single pulse transfers ([Robustness](../results/robustness.md#fabrication-range-experiment)) |
+| Fabrication ±18.5 MHz | Scoring transfer to a new device; the fabrication-range experiment | A robust pulse trained on this range covers it ([Robustness](../results/robustness.md#fabrication-range-experiment)) |
+| Coupler ±140 MHz (worst-loop flux drift) | Large coupler drift experiment | [Robustness](../results/robustness.md#large-coupler-drift) |
 
 ## What is not covered yet
 
-!!! note "The coupler drifts too"
-    Our randomisation only moves the two qubit frequencies. The coupler is flux-tunable, and
-    flux-tunable transmons are much less stable: [Burnett et al. (2019)](https://doi.org/10.1038/s41534-019-0168-5)
-    contrast their kHz-level fixed-frequency drift with "the approximately 500 kHz frequency
-    instability found in flux-tuneable qubits". In our model a coupler offset is a constant shift
-    of \(u(t)\) plus a change of \(\omega_{c,0}\). Adding it is the next step for the drift model.
+### The coupler drifts too, and more
+
+The coupler is flux-tunable, and flux-tunable elements are much less stable than fixed-frequency
+qubits: [Burnett et al. (2019)](https://doi.org/10.1038/s41534-019-0168-5) contrast their kHz-level
+drift with "the approximately 500 kHz frequency instability found in flux-tuneable qubits". Over
+days and weeks the flux offset itself wanders. [Dai et al. (2021)](https://doi.org/10.1103/PRXQuantum.2.040313)
+measured, on a device kept cold: "After two days, the root mean square (RMS) change in flux offsets
+[…] is 1.3 mΦ0. After 17 days, one of the resonator SQUID fluxes changed by 20.0 mΦ0. The others have
+an RMS change of 2.0 mΦ0."
+
+Turning flux into coupler frequency needs the coupler's flux map, which the paper's model does not
+have. Assuming a symmetric-SQUID coupler with a maximum frequency of 8 GHz, parked at our 7.445 GHz
+(about 6.8 MHz per mΦ0 there):
+
+| Flux drift [Dai et al. 2021] | Coupler frequency drift (assumed f_max = 8 GHz) |
+| --- | --- |
+| 1.3 mΦ0 RMS, after 2 days | ±9 MHz |
+| 2.0 mΦ0 RMS, after 17 days | ±14 MHz |
+| 20 mΦ0, worst loop after 17 days | −144 / +127 MHz, used as **±140 MHz** |
+
+A higher f_max, or parking further from the sweet spot, makes the slope and the drift larger.
+
+In the paper's model the coupler term is \(2\pi(\omega_c - \omega_r) b^\dagger b + u(t)\, b^\dagger b\), so a
+coupler drift \(\delta\) is exactly a static offset \(2\pi\delta\) on the control line. How far each
+pulse tolerates it (`scripts/coupler_drift_scan.py`):
+
+![Coupler drift scan](../figures/coupler_drift_scan.png)
+
+| Pulse | Coupler window with J_T ≤ 1e-3 |
+| --- | --- |
+| RL (paper) | 5 MHz wide |
+| GRAPE | 6 MHz wide |
+| Robust GRAPE, recool ensemble (qubits only) | 44 MHz wide |
+| Robust GRAPE, fabrication ensemble (qubits only) | 64 MHz wide |
+
+Typical weeks-scale coupler drift (±14 MHz) is covered by the robust pulses although they never saw
+coupler drift. The worst-loop drift (±140 MHz) breaks every existing pulse, and is used for the
+[large coupler drift experiment](../results/robustness.md#large-coupler-drift).
 
 Further sources of slow drift, not modelled: aging of junctions across many cooldowns (a
 cumulative ~61 MHz downward shift over more than a year and 10 thermal cycles in

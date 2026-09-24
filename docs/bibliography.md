@@ -63,3 +63,21 @@ Keys in brackets are the BibTeX keys.
 <span id="nesterov2017"></span>**[nesterov2017]** Nesterov, Y., & Spokoiny, V. (2015). Random Gradient-Free Minimization of Convex Functions. Foundations of Computational Mathematics, 17(2), 527–566. https://doi.org/10.1007/s10208-015-9296-2
 
 <span id="amos2023"></span>**[amos2023]** Amos, B. (2023). Tutorial on Amortized Optimization. Foundations and Trends® in Machine Learning, 16(5), 592–732. https://doi.org/10.1561/2200000102
+
+<span id="dai2021"></span>**[dai2021]** Dai, X., Tennant, D. M., Trappen, R., Martinez, A. J., Melanson, D., Yurtalan, M. A., Tang, Y., Novikov, S., Grover, J. A., Disseler, S. M., Basham, J. I., Das, R., Kim, D. K., Melville, A. J., Niedzielski, B. M., Weber, S. J., Yoder, J. L., Lidar, D. A., & Lupascu, A. (2021). Calibration of Flux Crosstalk in Large-Scale Flux-Tunable Superconducting Quantum Circuits. PRX Quantum, 2(4). https://doi.org/10.1103/prxquantum.2.040313
+
+<span id="lembono2020"></span>**[lembono2020]** Lembono, T. S., Paolillo, A., Pignat, E., & Calinon, S. (2020). Memory of Motion for Warm-Starting Trajectory Optimization. IEEE Robotics and Automation Letters, 5(2), 2594–2601. https://doi.org/10.1109/lra.2020.2972893
+
+<span id="cheng2020"></span>**[cheng2020]** Cheng, J., Deng, H., &amp; Qian, X. (2020). <i>AccQOC: Accelerating Quantum Optimal Control Based Pulse Generation</i> (Version 1). arXiv. https://doi.org/10.48550/ARXIV.2003.00376
+
+<span id="kiermeyer2026"></span>**[kiermeyer2026]** Kiermeyer, T., Heydenreich, T., Van Damme, L., Hohenemser, S., Marquardt, F., &amp; Glaser, S. J. (2026). <i>Uncovering Latent Structures in Robust Pulse Sequences: A Model-Based Reinforcement Learning Approach for Adaptable Quantum Control</i> (Version 1). arXiv. https://doi.org/10.48550/ARXIV.2606.24507
+
+<span id="luchi2026"></span>**[luchi2026]** Luchi, P., &amp; Pederiva, F. (2026). <i>Lie Algebra-Based Quantum Optimal Controls Interpolation</i> (Version 1). arXiv. https://doi.org/10.48550/ARXIV.2606.02014
+
+<span id="malarchick2026"></span>**[malarchick2026]** Malarchick, R. (2026). <i>Measuring Control-Plane Openness in Near-Term Quantum Computing: A Rubric, Its Validation, and an Application to Thirteen Vendor Stacks</i> (Version 3). arXiv. https://doi.org/10.48550/ARXIV.2605.15233
+
+<span id="jandura2022"></span>**[jandura2022]** Jandura, S., & Pupillo, G. (2022). Time-Optimal Two- and Three-Qubit Gates for Rydberg Atoms. Quantum, 6, 712. CLOCKSS. https://doi.org/10.22331/q-2022-05-13-712
+
+<span id="evered2023"></span>**[evered2023]** Evered, S. J., Bluvstein, D., Kalinowski, M., Ebadi, S., Manovitz, T., Zhou, H., Li, S. H., Geim, A. A., Wang, T. T., Maskara, N., Levine, H., Semeghini, G., Greiner, M., Vuletić, V., & Lukin, M. D. (2023). High-fidelity parallel entangling gates on a neutral-atom quantum computer. Nature, 622(7982), 268–272. https://doi.org/10.1038/s41586-023-06481-y
+
+<span id="leung2018"></span>**[leung2018]** Leung, P. H., Landsman, K. A., Figgatt, C., Linke, N. M., Monroe, C., & Brown, K. R. (2018). Robust 2-Qubit Gates in a Linear Ion Crystal Using a Frequency-Modulated Driving Force. Physical Review Letters, 120(2). https://doi.org/10.1103/physrevlett.120.020501

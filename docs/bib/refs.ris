@@ -518,3 +518,180 @@ VL  - 16
 SN  - 1935-8237
 SN  - 1935-8245
 ER  -
+
+TY  - JOUR
+DO  - 10.1103/prxquantum.2.040313
+UR  - http://dx.doi.org/10.1103/PRXQuantum.2.040313
+TI  - Calibration of Flux Crosstalk in Large-Scale Flux-Tunable Superconducting Quantum Circuits
+T2  - PRX Quantum
+AU  - Dai, X.
+AU  - Tennant, D.M.
+AU  - Trappen, R.
+AU  - Martinez, A.J.
+AU  - Melanson, D.
+AU  - Yurtalan, M.A.
+AU  - Tang, Y.
+AU  - Novikov, S.
+AU  - Grover, J.A.
+AU  - Disseler, S.M.
+AU  - Basham, J.I.
+AU  - Das, R.
+AU  - Kim, D.K.
+AU  - Melville, A.J.
+AU  - Niedzielski, B.M.
+AU  - Weber, S.J.
+AU  - Yoder, J.L.
+AU  - Lidar, D.A.
+AU  - Lupascu, A.
+PY  - 2021
+DA  - 2021/10/20
+PB  - American Physical Society (APS)
+IS  - 4
+VL  - 2
+SN  - 2691-3399
+ER  -
+
+TY  - JOUR
+DO  - 10.1109/lra.2020.2972893
+UR  - http://dx.doi.org/10.1109/LRA.2020.2972893
+TI  - Memory of Motion for Warm-Starting Trajectory Optimization
+T2  - IEEE Robotics and Automation Letters
+AU  - Lembono, Teguh Santoso
+AU  - Paolillo, Antonio
+AU  - Pignat, Emmanuel
+AU  - Calinon, Sylvain
+PY  - 2020
+DA  - 2020/04
+PB  - Institute of Electrical and Electronics Engineers (IEEE)
+SP  - 2594-2601
+IS  - 2
+VL  - 5
+SN  - 2377-3766
+SN  - 2377-3774
+ER  -
+
+TY  - GEN
+T1  - AccQOC: Accelerating Quantum Optimal Control Based Pulse Generation
+AU  - Cheng, Jinglei
+AU  - Deng, Haoqing
+AU  - Qian, Xuehai
+DO  - 10.48550/ARXIV.2003.00376
+UR  - https://arxiv.org/abs/2003.00376
+AB  - In the last decades, we have witnessed the rapid growth of Quantum Computing. In the current Noisy Intermediate-Scale Quantum (NISQ) era, the capability of a quantum machine is limited by the decoherence time, gate fidelity and the number of Qubits. Current quantum computing applications are far from the real "quantum supremacy" due to the fragile physical Qubits, which can only be entangled for a few microseconds. Recent works use quantum optimal control to reduce the latency of quantum circuits, thereby effectively increasing quantum volume. However, the key challenge of this technique is the large overhead due to long compilation time. In this paper, we propose AccQOC, a comprehensive static/dynamic hybrid workflow to transform gate groups (equivalent to matrices) to pulses using QOC (Quantum Optimal Control) with a reasonable compilation time budget. AccQOC is composed of static pre-compilation and accelerated dynamic compilation. With the methodology of AccQOC, we reached a balanced point of compilation time and overall latency. The results show that accelerated compilation based on MST achieves 9.88x compilation speedup compared to the standard compilation of each group while maintaining an average 2.43x latency reduction compared with gate-based compilation.
+KW  - Quantum Physics (quant-ph)
+KW  - FOS: Physical sciences
+KW  - FOS: Physical sciences
+PY  - 2020
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - Uncovering Latent Structures in Robust Pulse Sequences: A Model-Based Reinforcement Learning Approach for Adaptable Quantum Control
+AU  - Kiermeyer, Tobias
+AU  - Heydenreich, Thomas
+AU  - Van Damme, Léo
+AU  - Hohenemser, Sebastian
+AU  - Marquardt, Florian
+AU  - Glaser, Steffen J.
+DO  - 10.48550/ARXIV.2606.24507
+UR  - https://arxiv.org/abs/2606.24507
+AB  - Real-time adaptive control of quantum systems requires rapid generation of robust, high-fidelity pulses across a continuous range of operating conditions. Standard optimization algorithms such as gradient-ascent pulse engineering (GRAPE) solve each instance independently, discarding information between runs and requiring costly reinitialization when parameters change. We present an approach to robust optimal quantum control based on model-based reinforcement learning, in which a single neural network -- embedding the Hamiltonian directly into the training pipeline -- generates robust gates across an entire family of gate configurations, without pre-computed training data. Demonstrated on a single-spin (two-level) system, the trained networks produce pulses for arbitrary rotation angles over a range of pulse durations, detunings, and field inhomogeneities in milliseconds, at fidelities comparable to multi-seed GRAPE. The framework is inherently adaptable: any parameter entering the Hamiltonian can serve as a network input, extending the approach to different systems and control settings. Beyond speed, the network reveals structure in the control landscape: it discovers the same structured phase profiles that appear in GRAPE solutions -- made identifiable through fidelity-invariant symmetry transformations -- but more consistently than independent optimization. This consistency enables smooth interpolation across the entire trained parameter space.
+KW  - Quantum Physics (quant-ph)
+KW  - FOS: Physical sciences
+KW  - FOS: Physical sciences
+PY  - 2026
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - Lie Algebra-Based Quantum Optimal Controls Interpolation
+AU  - Luchi, Piero
+AU  - Pederiva, Francesco
+DO  - 10.48550/ARXIV.2606.02014
+UR  - https://arxiv.org/abs/2606.02014
+AB  - We present a framework combining Lie group theory and feed-forward neural networks to efficiently generate quantum optimal control pulses for arbitrary unitary operations in superconducting qubit systems, bypassing the need for explicit optimization at inference time. The exponential scaling of the Hilbert space dimension with qubit number makes standard optimization approaches computationally prohibitive when large ensembles of distinct propagators must be processed, a bottleneck that is particularly acute in Trotterized quantum simulation. Our method addresses this limitation by pre-computing a representative set of control pulses via Lie group theory and training neural networks to map target propagators to their corresponding pulses. We demonstrate the approach on superconducting qubit systems of 2, 3, and 4 qubits, finding high reconstruction fidelity for specific combinations of Lie algebra parameters. As a physically motivated benchmark, we apply the methodology to reconstruct control pulses for the Trotter propagators of a neutrino system undergoing collective flavor oscillations. The successful generalization across system types demonstrates that a single model -- trained once on hardware-specific random propagators -- can serve as a universal control-pulse generator for any target quantum system of compatible Hilbert space dimension, offering a promising route toward scalable quantum simulation.
+KW  - Quantum Physics (quant-ph)
+KW  - FOS: Physical sciences
+KW  - FOS: Physical sciences
+PY  - 2026
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - Measuring Control-Plane Openness in Near-Term Quantum Computing: A Rubric, Its Validation, and an Application to Thirteen Vendor Stacks
+AU  - Malarchick, Rylan
+DO  - 10.48550/ARXIV.2605.15233
+UR  - https://arxiv.org/abs/2605.15233
+AB  - Public access to pulse-level and control-electronics interfaces in commercial quantum computing has bifurcated. This paper proposes a six-axis rubric for measuring control-plane openness, the layer between gate-level circuit specification and physical control electronics, defined operationally so that the same evidence produces the same grade across vendors. The rubric is validated three ways: a blinded re-grading pass that tests whether the cited evidence and the level definitions alone reproduce the recorded grades, a boundary-case methodology that fixes where each level begins and ends, and a published grading protocol that lets others reproduce and contest any cell. A time-point comparison anchored on the February 2025 removal of pulse-level access from IBM hardware establishes that the rubric measures change rather than describing a snapshot. The rubric is applied to thirteen commercial vendors across superconducting, trapped-ion, neutral-atom, and photonic modalities as of May 1, 2026, and one of the three harms it detects is demonstrated through a reproduction-access audit of five pre-2025 IBM Qiskit Pulse experiments, carried through to a structural port to Rigetti Quil-T. The catalog ships as a machine-readable artifact under CC-BY-4.0 with per-cell source URLs (https://doi.org/10.5281/zenodo.20163276). The readings will go stale; the rubric is the contribution that survives them.
+KW  - Quantum Physics (quant-ph)
+KW  - Emerging Technologies (cs.ET)
+KW  - FOS: Physical sciences
+KW  - FOS: Computer and information sciences
+PY  - 2026
+PB  - arXiv
+ER  -
+
+TY  - JOUR
+DO  - 10.22331/q-2022-05-13-712
+UR  - http://dx.doi.org/10.22331/q-2022-05-13-712
+TI  - Time-Optimal Two- and Three-Qubit Gates for Rydberg Atoms
+T2  - Quantum
+AU  - Jandura, Sven
+AU  - Pupillo, Guido
+PY  - 2022
+DA  - 2022/05/13
+PB  - Verein zur Forderung des Open Access Publizierens in den Quantenwissenschaften
+SP  - 712
+VL  - 6
+SN  - 2521-327X
+ER  -
+
+TY  - JOUR
+DO  - 10.1038/s41586-023-06481-y
+UR  - http://dx.doi.org/10.1038/s41586-023-06481-y
+TI  - High-fidelity parallel entangling gates on a neutral-atom quantum computer
+T2  - Nature
+AU  - Evered, Simon J.
+AU  - Bluvstein, Dolev
+AU  - Kalinowski, Marcin
+AU  - Ebadi, Sepehr
+AU  - Manovitz, Tom
+AU  - Zhou, Hengyun
+AU  - Li, Sophie H.
+AU  - Geim, Alexandra A.
+AU  - Wang, Tout T.
+AU  - Maskara, Nishad
+AU  - Levine, Harry
+AU  - Semeghini, Giulia
+AU  - Greiner, Markus
+AU  - Vuletić, Vladan
+AU  - Lukin, Mikhail D.
+PY  - 2023
+DA  - 2023/10/11
+PB  - Springer Science and Business Media LLC
+SP  - 268-272
+IS  - 7982
+VL  - 622
+SN  - 0028-0836
+SN  - 1476-4687
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevlett.120.020501
+UR  - http://dx.doi.org/10.1103/PhysRevLett.120.020501
+TI  - Robust 2-Qubit Gates in a Linear Ion Crystal Using a Frequency-Modulated Driving Force
+T2  - Physical Review Letters
+AU  - Leung, Pak Hong
+AU  - Landsman, Kevin A.
+AU  - Figgatt, Caroline
+AU  - Linke, Norbert M.
+AU  - Monroe, Christopher
+AU  - Brown, Kenneth R.
+PY  - 2018
+DA  - 2018/01/09
+PB  - American Physical Society (APS)
+IS  - 2
+VL  - 120
+SN  - 0031-9007
+SN  - 1079-7114
+ER  -

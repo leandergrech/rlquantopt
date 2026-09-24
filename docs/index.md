@@ -148,11 +148,12 @@ Each of these is discussed, with what it would take to remove it, in
 ## What changed recently
 
 !!! abstract "Latest"
-    - One robust GRAPE pulse covers the whole fabrication-targeting range (±18.5 MHz), and an RL policy
-      trained over it is a GRAPE warm start 1-3 orders of magnitude better than a random start at equal
-      gate time ([Robustness](results/robustness.md#fabrication-range-experiment)).
-    - Test T1 of the hypothesis: policies trained with 3 and 5 drifting parameters
-      ([Drift, dimension and learned policies](hypothesis/drift-and-dimension.md#t1-policies-trained-with-more-drifting-parameters)).
-    - A confound found and controlled: policy pulses are ~2.5× longer than the GRAPE baseline's.
+    - The case for **RL-initialised optimal control**: a policy trained once as the warm start for
+      per-device gradient refinement, and where the literature leaves a gap
+      ([RL-initialised optimal control](hypothesis/rl-initialised-qoc.md)).
+    - Where next: pulse-level hardware access today, Rydberg atoms vs transmons vs ions, and what to do
+      before hardware ([Beyond two transmons](next/platforms.md)).
+    - Coupler drift from measured flux drift; a ±140 MHz experiment is running
+      ([Hardware drift ranges](system/drift.md#the-coupler-drifts-too-and-more)).
 
 The full history is in the [changelog](changelog.md).

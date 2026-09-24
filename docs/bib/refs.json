@@ -831,8 +831,8 @@
      24
     ]
    ],
-   "date-time": "2026-09-24T06:58:43Z",
-   "timestamp": 1790233123295,
+   "date-time": "2026-09-24T15:42:50Z",
+   "timestamp": 1790264570773,
    "version": "4.1.0"
   },
   "reference-count": 42,
@@ -914,7 +914,7 @@
    "timestamp": 1481564504000
   },
   "source": "Crossref",
-  "is-referenced-by-count": 279,
+  "is-referenced-by-count": 280,
   "title": "Universal Gate for Fixed-Frequency Qubits via a Tunable Bus",
   "prefix": "10.1103",
   "volume": "6",
@@ -2956,12 +2956,12 @@
     [
      2026,
      9,
-     19
+     24
     ]
    ],
-   "date-time": "2026-09-19T01:53:34Z",
-   "timestamp": 1789782814610,
-   "version": "4.0.1"
+   "date-time": "2026-09-24T15:43:00Z",
+   "timestamp": 1790264580244,
+   "version": "4.1.0"
   },
   "reference-count": 34,
   "publisher": "American Physical Society (APS)",
@@ -3069,7 +3069,7 @@
   },
   "update-policy": "https://doi.org/10.1103/crossmark-policy",
   "source": "Crossref",
-  "is-referenced-by-count": 382,
+  "is-referenced-by-count": 383,
   "title": "Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates",
   "prefix": "10.1103",
   "volume": "10",
@@ -10415,13 +10415,13 @@
    "date-parts": [
     [
      2026,
-     8,
+     9,
      24
     ]
    ],
-   "date-time": "2026-08-24T16:18:31Z",
-   "timestamp": 1787588311151,
-   "version": "build-2736575974"
+   "date-time": "2026-09-24T16:18:41Z",
+   "timestamp": 1790266721829,
+   "version": "4.1.0"
   },
   "reference-count": 56,
   "publisher": "Springer Science and Business Media LLC",
@@ -10520,7 +10520,7 @@
   },
   "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
   "source": "Crossref",
-  "is-referenced-by-count": 82,
+  "is-referenced-by-count": 83,
   "title": "Detecting and tracking drift in quantum information processors",
   "prefix": "10.1038",
   "volume": "11",
@@ -15728,5 +15728,3758 @@
    ]
   },
   "id": "amos2023"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     10
+    ]
+   ],
+   "date-time": "2026-09-10T03:00:05Z",
+   "timestamp": 1789009205765,
+   "version": "build-2803163510"
+  },
+  "update-to": [
+   {
+    "DOI": "10.1103/prxquantum.2.040313",
+    "type": "correction",
+    "label": "Correction",
+    "source": "publisher",
+    "updated": {
+     "date-parts": [
+      [
+       2021,
+       11,
+       10
+      ]
+     ],
+     "date-time": "2021-11-10T00:00:00Z",
+     "timestamp": 1636502400000
+    }
+   }
+  ],
+  "reference-count": 47,
+  "publisher": "American Physical Society (APS)",
+  "issue": "4",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2021,
+       10,
+       20
+      ]
+     ],
+     "date-time": "2021-10-20T00:00:00Z",
+     "timestamp": 1634688000000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  ],
+  "funder": [
+   {
+    "DOI": "10.13039/100011038",
+    "name": "Office of the Director of National Intelligence",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100011038",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100011039",
+    "name": "Intelligence Advanced Research Projects Activity",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100011039",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100000185",
+    "name": "Defense Advanced Research Projects Agency",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100000185",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100006751",
+    "name": "U.S. Army Research Office",
+    "doi-asserted-by": "publisher",
+    "award": [
+     "W911NF-17-C-0050"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "W911NF-17-C-0050"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/100006751",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100006831",
+    "name": "Air Force",
+    "doi-asserted-by": "crossref",
+    "award": [
+     "FA8702-15-D-0001"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "FA8702-15-D-0001"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/100006831",
+      "id-type": "DOI",
+      "asserted-by": "crossref"
+     }
+    ]
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "journals.aps.org"
+   ],
+   "crossmark-restriction": true
+  },
+  "DOI": "10.1103/prxquantum.2.040313",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2021,
+     10,
+     20
+    ]
+   ],
+   "date-time": "2021-10-20T14:12:52Z",
+   "timestamp": 1634739172000
+  },
+  "update-policy": "https://doi.org/10.1103/crossmark-policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 40,
+  "title": "Calibration of Flux Crosstalk in Large-Scale Flux-Tunable Superconducting Quantum Circuits",
+  "prefix": "10.1103",
+  "volume": "2",
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-1610-3392",
+    "authenticated-orcid": true,
+    "given": "X.",
+    "family": "Dai",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-3688-9211",
+    "authenticated-orcid": true,
+    "given": "D.M.",
+    "family": "Tennant",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "R.",
+    "family": "Trappen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "A.J.",
+    "family": "Martinez",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "D.",
+    "family": "Melanson",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "M.A.",
+    "family": "Yurtalan",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Y.",
+    "family": "Tang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0709-0366",
+    "authenticated-orcid": true,
+    "given": "S.",
+    "family": "Novikov",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-6835-8517",
+    "authenticated-orcid": true,
+    "given": "J.A.",
+    "family": "Grover",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "S.M.",
+    "family": "Disseler",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-6786-0211",
+    "authenticated-orcid": true,
+    "given": "J.I.",
+    "family": "Basham",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "R.",
+    "family": "Das",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "D.K.",
+    "family": "Kim",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "A.J.",
+    "family": "Melville",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "B.M.",
+    "family": "Niedzielski",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "S.J.",
+    "family": "Weber",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "J.L.",
+    "family": "Yoder",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "D.A.",
+    "family": "Lidar",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "A.",
+    "family": "Lupascu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "16",
+  "published-online": {
+   "date-parts": [
+    [
+     2021,
+     10,
+     20
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "PRXQuantum.2.040313Cc1R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1146/annurev-conmatphys-031119-050605"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc2R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-016-0002-2"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc3R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s42254-020-0182-8"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc4R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1557/mrs.2013.20"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc6R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1063/1.5121444"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc7R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.1209524"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc8R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevApplied.12.064022"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc9R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevB.81.134507"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc11R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.107.080502"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc12R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.91.042314"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc13R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevX.11.011010"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc14R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.111.080502"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc15R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/sciadv.aao3603"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc16R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.1141324"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc17R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.106.060501"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc18R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/0953-2048/23/6/065004"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc20R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-021-00371-9"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc21R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.96.042322"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc22R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/2058-9565/ab935a"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc23R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.98.042326"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc24R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.98.022314"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc26R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.109.240504"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc27R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevApplied.10.054062"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc28R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.125.200503"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc29R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.93.060302"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc30R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevApplied.12.064013"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc31R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevApplied.12.054023"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc33R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevB.72.060506"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc34R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.96.047006"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc35R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-018-0088-9"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc36R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature14270"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc37R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.aao4309"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc38R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/TASC.2014.2318294"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc40R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevApplied.8.014004"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc42R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevB.80.052506"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc43R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PRXQuantum.01.020314"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc44R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/0953-2048/23/10/105014"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc47R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-017-0044-0"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc48R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41534-019-0235-y"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc49R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.92.097003"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc50R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevB.79.060509"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc51R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/j.physrep.2006.11.001"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc53R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.7717/peerj.453"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc54R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1364/OL.33.000156"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc56R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.aaa8525"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc57R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1126/science.285.5430.1036"
+   },
+   {
+    "key": "PRXQuantum.2.040313Cc58R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/TSMC.1979.4310076"
+   }
+  ],
+  "updated-by": [
+   {
+    "DOI": "10.1103/prxquantum.2.040313",
+    "type": "correction",
+    "label": "Correction",
+    "source": "publisher",
+    "updated": {
+     "date-parts": [
+      [
+       2021,
+       11,
+       10
+      ]
+     ],
+     "date-time": "2021-11-10T00:00:00Z",
+     "timestamp": 1636502400000
+    }
+   }
+  ],
+  "container-title": "PRX Quantum",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://link.aps.org/article/10.1103/PRXQuantum.2.040313",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "syndication"
+   },
+   {
+    "URL": "http://harvest.aps.org/v2/journals/articles/10.1103/PRXQuantum.2.040313/fulltext",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2021,
+     11,
+     10
+    ]
+   ],
+   "date-time": "2021-11-10T15:48:26Z",
+   "timestamp": 1636559306000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://link.aps.org/doi/10.1103/PRXQuantum.2.040313"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     10,
+     20
+    ]
+   ]
+  },
+  "references-count": 47,
+  "journal-issue": {
+   "issue": "4",
+   "published-print": {
+    "date-parts": [
+     [
+      2021,
+      10
+     ]
+    ]
+   }
+  },
+  "URL": "http://dx.doi.org/10.1103/PRXQuantum.2.040313",
+  "relation": {},
+  "ISSN": [
+   "2691-3399"
+  ],
+  "subject": [],
+  "container-title-short": "PRX Quantum",
+  "published": {
+   "date-parts": [
+    [
+     2021,
+     10,
+     20
+    ]
+   ]
+  },
+  "article-number": "040313",
+  "id": "dai2021"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     8,
+     15
+    ]
+   ],
+   "date-time": "2026-08-15T16:35:31Z",
+   "timestamp": 1786811731544,
+   "version": "build-2736575974"
+  },
+  "reference-count": 29,
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "issue": "2",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2020,
+       4,
+       1
+      ]
+     ],
+     "date-time": "2020-04-01T00:00:00Z",
+     "timestamp": 1585699200000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2020,
+       4,
+       1
+      ]
+     ],
+     "date-time": "2020-04-01T00:00:00Z",
+     "timestamp": 1585699200000
+    },
+    "content-version": "stm-asf",
+    "delay-in-days": 0,
+    "URL": "https://doi.org/10.15223/policy-029"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2020,
+       4,
+       1
+      ]
+     ],
+     "date-time": "2020-04-01T00:00:00Z",
+     "timestamp": 1585699200000
+    },
+    "content-version": "stm-asf",
+    "delay-in-days": 0,
+    "URL": "https://doi.org/10.15223/policy-037"
+   }
+  ],
+  "content-domain": {
+   "domain": [],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     2020,
+     4
+    ]
+   ]
+  },
+  "DOI": "10.1109/lra.2020.2972893",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2020,
+     2,
+     10
+    ]
+   ],
+   "date-time": "2020-02-10T20:21:32Z",
+   "timestamp": 1581366092000
+  },
+  "page": "2594-2601",
+  "source": "Crossref",
+  "is-referenced-by-count": 39,
+  "title": "Memory of Motion for Warm-Starting Trajectory Optimization",
+  "prefix": "10.1109",
+  "volume": "5",
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-2210-6220",
+    "authenticated-orcid": false,
+    "given": "Teguh Santoso",
+    "family": "Lembono",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-5483-1254",
+    "authenticated-orcid": false,
+    "given": "Antonio",
+    "family": "Paolillo",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-6612-5322",
+    "authenticated-orcid": false,
+    "given": "Emmanuel",
+    "family": "Pignat",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9036-6799",
+    "authenticated-orcid": false,
+    "given": "Sylvain",
+    "family": "Calinon",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "263",
+  "reference": [
+   {
+    "key": "ref10",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/70.508439"
+   },
+   {
+    "key": "ref11",
+    "article-title": "Rapidly-exploring random trees: A new tool for path planning",
+    "author": "lavalle",
+    "year": "1998"
+   },
+   {
+    "key": "ref12",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/COASE.2007.4341761"
+   },
+   {
+    "key": "ref13",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.15607/RSS.2012.VIII.043"
+   },
+   {
+    "key": "ref14",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ICRA.2012.6224742"
+   },
+   {
+    "key": "ref15",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1145/1553374.1553433"
+   },
+   {
+    "key": "ref16",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/IROS.2015.7353577"
+   },
+   {
+    "key": "ref17",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ICRA.2011.5980114"
+   },
+   {
+    "key": "ref18",
+    "author": "rasmussen",
+    "year": "2006",
+    "journal-title": "Gaussian Processes for Machine Learning"
+   },
+   {
+    "key": "ref19",
+    "first-page": "1939",
+    "article-title": "A unifying view of sparse approximate Gaussian process regression",
+    "volume": "6",
+    "author": "quiñonero-candela",
+    "year": "2005",
+    "journal-title": "J Mach Learn Res"
+   },
+   {
+    "key": "ref28",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ICRA.2015.7139517"
+   },
+   {
+    "key": "ref4",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/IROS.2018.8593977"
+   },
+   {
+    "key": "ref27",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1023/A:1010933404324"
+   },
+   {
+    "key": "ref3",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ICRA.2011.5980280"
+   },
+   {
+    "key": "ref6",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/IROS.2009.5354018"
+   },
+   {
+    "key": "ref29",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/LRA.2017.2773669"
+   },
+   {
+    "key": "ref5",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ROBOT.2006.1642212"
+   },
+   {
+    "key": "ref8",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/j.robot.2012.05.004"
+   },
+   {
+    "key": "ref7",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ICRA.2018.8463154"
+   },
+   {
+    "key": "ref2",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1177/0278364913488805"
+   },
+   {
+    "key": "ref9",
+    "first-page": "958",
+    "article-title": "Learning rhythmic movements by demonstration using nonlinear oscillators",
+    "author": "ijspeert",
+    "year": "0",
+    "journal-title": "Proc IEEE/RSJ Int Conf Intell Robots Syst"
+   },
+   {
+    "key": "ref1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.15607/RSS.2013.IX.031"
+   },
+   {
+    "key": "ref20",
+    "first-page": "282",
+    "article-title": "Gaussian processes for big data",
+    "author": "hensman",
+    "year": "0",
+    "journal-title": "Proc Conf Uncertainty of Artificial Intelligence"
+   },
+   {
+    "key": "ref22",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1007/s11370-015-0187-9"
+   },
+   {
+    "key": "ref21",
+    "author": "bishop",
+    "year": "2006",
+    "journal-title": "Pattern Recognition and Machine Learning"
+   },
+   {
+    "key": "ref24",
+    "article-title": "Tutorial on variational autoencoders",
+    "author": "doersch",
+    "year": "2016",
+    "journal-title": "arXiv 1606 05908"
+   },
+   {
+    "key": "ref23",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/LRA.2019.2932610"
+   },
+   {
+    "key": "ref26",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1006/jcss.1997.1504"
+   },
+   {
+    "key": "ref25",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/ICRA.2018.8460581"
+   }
+  ],
+  "container-title": "IEEE Robotics and Automation Letters",
+  "original-title": [],
+  "link": [
+   {
+    "URL": "http://xplorestaging.ieee.org/ielx7/7083369/8932682/08990042.pdf?arnumber=8990042",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2022,
+     4,
+     27
+    ]
+   ],
+   "date-time": "2022-04-27T17:32:49Z",
+   "timestamp": 1651080769000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://ieeexplore.ieee.org/document/8990042/"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2020,
+     4
+    ]
+   ]
+  },
+  "references-count": 29,
+  "journal-issue": {
+   "issue": "2"
+  },
+  "URL": "http://dx.doi.org/10.1109/LRA.2020.2972893",
+  "relation": {},
+  "ISSN": [
+   "2377-3766",
+   "2377-3774"
+  ],
+  "subject": [],
+  "container-title-short": "IEEE Robot. Autom. Lett.",
+  "published": {
+   "date-parts": [
+    [
+     2020,
+     4
+    ]
+   ]
+  },
+  "id": "lembono2020"
+ },
+ {
+  "type": "article",
+  "id": "cheng2020",
+  "categories": [
+   "Quantum Physics (quant-ph)",
+   "FOS: Physical sciences",
+   "FOS: Physical sciences"
+  ],
+  "author": [
+   {
+    "family": "Cheng",
+    "given": "Jinglei"
+   },
+   {
+    "family": "Deng",
+    "given": "Haoqing"
+   },
+   {
+    "family": "Qian",
+    "given": "Xuehai"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2020
+    ]
+   ]
+  },
+  "abstract": "In the last decades, we have witnessed the rapid growth of Quantum Computing. In the current Noisy Intermediate-Scale Quantum (NISQ) era, the capability of a quantum machine is limited by the decoherence time, gate fidelity and the number of Qubits. Current quantum computing applications are far from the real \"quantum supremacy\" due to the fragile physical Qubits, which can only be entangled for a few microseconds. Recent works use quantum optimal control to reduce the latency of quantum circuits, thereby effectively increasing quantum volume. However, the key challenge of this technique is the large overhead due to long compilation time. In this paper, we propose AccQOC, a comprehensive static/dynamic hybrid workflow to transform gate groups (equivalent to matrices) to pulses using QOC (Quantum Optimal Control) with a reasonable compilation time budget. AccQOC is composed of static pre-compilation and accelerated dynamic compilation. With the methodology of AccQOC, we reached a balanced point of compilation time and overall latency. The results show that accelerated compilation based on MST achieves 9.88x compilation speedup compared to the standard compilation of each group while maintaining an average 2.43x latency reduction compared with gate-based compilation.",
+  "DOI": "10.48550/ARXIV.2003.00376",
+  "publisher": "arXiv",
+  "title": "AccQOC: Accelerating Quantum Optimal Control Based Pulse Generation",
+  "URL": "https://arxiv.org/abs/2003.00376",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "1"
+ },
+ {
+  "type": "article",
+  "id": "kiermeyer2026",
+  "categories": [
+   "Quantum Physics (quant-ph)",
+   "FOS: Physical sciences",
+   "FOS: Physical sciences"
+  ],
+  "author": [
+   {
+    "family": "Kiermeyer",
+    "given": "Tobias"
+   },
+   {
+    "family": "Heydenreich",
+    "given": "Thomas"
+   },
+   {
+    "family": "Van Damme",
+    "given": "Léo"
+   },
+   {
+    "family": "Hohenemser",
+    "given": "Sebastian"
+   },
+   {
+    "family": "Marquardt",
+    "given": "Florian"
+   },
+   {
+    "family": "Glaser",
+    "given": "Steffen J."
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2026
+    ]
+   ]
+  },
+  "abstract": "Real-time adaptive control of quantum systems requires rapid generation of robust, high-fidelity pulses across a continuous range of operating conditions. Standard optimization algorithms such as gradient-ascent pulse engineering (GRAPE) solve each instance independently, discarding information between runs and requiring costly reinitialization when parameters change. We present an approach to robust optimal quantum control based on model-based reinforcement learning, in which a single neural network -- embedding the Hamiltonian directly into the training pipeline -- generates robust gates across an entire family of gate configurations, without pre-computed training data. Demonstrated on a single-spin (two-level) system, the trained networks produce pulses for arbitrary rotation angles over a range of pulse durations, detunings, and field inhomogeneities in milliseconds, at fidelities comparable to multi-seed GRAPE. The framework is inherently adaptable: any parameter entering the Hamiltonian can serve as a network input, extending the approach to different systems and control settings. Beyond speed, the network reveals structure in the control landscape: it discovers the same structured phase profiles that appear in GRAPE solutions -- made identifiable through fidelity-invariant symmetry transformations -- but more consistently than independent optimization. This consistency enables smooth interpolation across the entire trained parameter space.",
+  "DOI": "10.48550/ARXIV.2606.24507",
+  "publisher": "arXiv",
+  "title": "Uncovering Latent Structures in Robust Pulse Sequences: A Model-Based Reinforcement Learning Approach for Adaptable Quantum Control",
+  "URL": "https://arxiv.org/abs/2606.24507",
+  "copyright": "Creative Commons Attribution 4.0 International",
+  "version": "1"
+ },
+ {
+  "type": "article",
+  "id": "luchi2026",
+  "categories": [
+   "Quantum Physics (quant-ph)",
+   "FOS: Physical sciences",
+   "FOS: Physical sciences"
+  ],
+  "author": [
+   {
+    "family": "Luchi",
+    "given": "Piero"
+   },
+   {
+    "family": "Pederiva",
+    "given": "Francesco"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2026
+    ]
+   ]
+  },
+  "abstract": "We present a framework combining Lie group theory and feed-forward neural networks to efficiently generate quantum optimal control pulses for arbitrary unitary operations in superconducting qubit systems, bypassing the need for explicit optimization at inference time. The exponential scaling of the Hilbert space dimension with qubit number makes standard optimization approaches computationally prohibitive when large ensembles of distinct propagators must be processed, a bottleneck that is particularly acute in Trotterized quantum simulation. Our method addresses this limitation by pre-computing a representative set of control pulses via Lie group theory and training neural networks to map target propagators to their corresponding pulses. We demonstrate the approach on superconducting qubit systems of 2, 3, and 4 qubits, finding high reconstruction fidelity for specific combinations of Lie algebra parameters. As a physically motivated benchmark, we apply the methodology to reconstruct control pulses for the Trotter propagators of a neutrino system undergoing collective flavor oscillations. The successful generalization across system types demonstrates that a single model -- trained once on hardware-specific random propagators -- can serve as a universal control-pulse generator for any target quantum system of compatible Hilbert space dimension, offering a promising route toward scalable quantum simulation.",
+  "DOI": "10.48550/ARXIV.2606.02014",
+  "publisher": "arXiv",
+  "title": "Lie Algebra-Based Quantum Optimal Controls Interpolation",
+  "URL": "https://arxiv.org/abs/2606.02014",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "1"
+ },
+ {
+  "type": "article",
+  "id": "malarchick2026",
+  "categories": [
+   "Quantum Physics (quant-ph)",
+   "Emerging Technologies (cs.ET)",
+   "FOS: Physical sciences",
+   "FOS: Computer and information sciences"
+  ],
+  "author": [
+   {
+    "family": "Malarchick",
+    "given": "Rylan"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2026
+    ]
+   ]
+  },
+  "abstract": "Public access to pulse-level and control-electronics interfaces in commercial quantum computing has bifurcated. This paper proposes a six-axis rubric for measuring control-plane openness, the layer between gate-level circuit specification and physical control electronics, defined operationally so that the same evidence produces the same grade across vendors. The rubric is validated three ways: a blinded re-grading pass that tests whether the cited evidence and the level definitions alone reproduce the recorded grades, a boundary-case methodology that fixes where each level begins and ends, and a published grading protocol that lets others reproduce and contest any cell. A time-point comparison anchored on the February 2025 removal of pulse-level access from IBM hardware establishes that the rubric measures change rather than describing a snapshot. The rubric is applied to thirteen commercial vendors across superconducting, trapped-ion, neutral-atom, and photonic modalities as of May 1, 2026, and one of the three harms it detects is demonstrated through a reproduction-access audit of five pre-2025 IBM Qiskit Pulse experiments, carried through to a structural port to Rigetti Quil-T. The catalog ships as a machine-readable artifact under CC-BY-4.0 with per-cell source URLs (https://doi.org/10.5281/zenodo.20163276). The readings will go stale; the rubric is the contribution that survives them.",
+  "DOI": "10.48550/ARXIV.2605.15233",
+  "publisher": "arXiv",
+  "title": "Measuring Control-Plane Openness in Near-Term Quantum Computing: A Rubric, Its Validation, and an Application to Thirteen Vendor Stacks",
+  "URL": "https://arxiv.org/abs/2605.15233",
+  "copyright": "Creative Commons Attribution 4.0 International",
+  "version": "3"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     22
+    ]
+   ],
+   "date-time": "2026-09-22T23:57:38Z",
+   "timestamp": 1790121458840,
+   "version": "4.0.1"
+  },
+  "reference-count": 81,
+  "publisher": "Verein zur Forderung des Open Access Publizierens in den Quantenwissenschaften",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2022,
+       5,
+       13
+      ]
+     ],
+     "date-time": "2022-05-13T00:00:00Z",
+     "timestamp": 1652400000000
+    },
+    "content-version": "unspecified",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  ],
+  "funder": [
+   {
+    "name": "European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie program",
+    "award": [
+     "955479"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "955479"
+      ]
+     }
+    ]
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "quantum-journal.org"
+   ],
+   "crossmark-restriction": false
+  },
+  "abstract": "<jats:p>\n                    We identify time-optimal laser pulses to implement the controlled-Z gate and its three qubit generalization, the C\n                    <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\">\n                      <mml:msub>\n                        <mml:mi/>\n                        <mml:mn>2</mml:mn>\n                      </mml:msub>\n                    </mml:math>\n                    Z gate, for Rydberg atoms in the blockade regime. Pulses are optimized using a combination of numerical and semi-analytical quantum optimal control techniques that result in smooth Ansätze with just a few variational parameters. For the CZ gate, the time-optimal implementation corresponds to a global laser pulse that does not require single site addressability of the atoms, simplifying experimental implementation of the gate. We employ quantum optimal control techniques to mitigate errors arising due to the finite lifetime of Rydberg states and finite blockade strengths, while several other types of errors affecting the gates are directly mitigated by the short gate duration. For the considered error sources, we achieve theoretical gate fidelities compatible with error correction using reasonable experimental parameters for CZ and C\n                    <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\">\n                      <mml:msub>\n                        <mml:mi/>\n                        <mml:mn>2</mml:mn>\n                      </mml:msub>\n                    </mml:math>\n                    Z gates.\n                  </jats:p>",
+  "DOI": "10.22331/q-2022-05-13-712",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2022,
+     5,
+     13
+    ]
+   ],
+   "date-time": "2022-05-13T08:55:24Z",
+   "timestamp": 1652432124000
+  },
+  "page": "712",
+  "update-policy": "https://doi.org/10.22331/q-crossmark-policy-page",
+  "source": "Crossref",
+  "is-referenced-by-count": 151,
+  "title": "Time-Optimal Two- and Three-Qubit Gates for Rydberg Atoms",
+  "prefix": "10.22331",
+  "volume": "6",
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-0282-7637",
+    "authenticated-orcid": false,
+    "given": "Sven",
+    "family": "Jandura",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "University of Strasbourg and CNRS, CESQ and ISIS (UMR 7006), aQCess, 67000 Strasbourg, France"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Guido",
+    "family": "Pupillo",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "University of Strasbourg and CNRS, CESQ and ISIS (UMR 7006), aQCess, 67000 Strasbourg, France"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "9598",
+  "published-online": {
+   "date-parts": [
+    [
+     2022,
+     5,
+     13
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "0",
+    "doi-asserted-by": "publisher",
+    "unstructured": "John Preskill. Quantum Computing in the NISQ era and beyond. Quantum, 2: 79, 2018. 10.22331/q-2018-08-06-79.",
+    "DOI": "10.22331/q-2018-08-06-79"
+   },
+   {
+    "key": "1",
+    "doi-asserted-by": "publisher",
+    "unstructured": "K.M. Svore, D.P. DiVincenzo, and B.M. Terhal. Noise threshold for a fault-tolerant two-dimensional lattice architecture. QIC, 7: 297–318, 2007. 10.26421/QIC7.4-2.",
+    "DOI": "10.26421/QIC7.4-2"
+   },
+   {
+    "key": "2",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Austin G. Fowler, Matteo Mariantoni, John M. Martinis, and Andrew N. Cleland. Surface codes: Towards practical large-scale quantum computation. Phys. Rev. A, 86: 032324, 2012. 10.1103/PhysRevA.86.032324.",
+    "DOI": "10.1103/PhysRevA.86.032324"
+   },
+   {
+    "key": "3",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Federico M. Spedalieri and Vwani P. Roychowdhury. Latency in local, two-dimensional, fault-tolerant quantum computing. QIC, 9: 666–682, 2009. 10.26421/QIC9.7-8-9.",
+    "DOI": "10.26421/QIC9.7-8-9"
+   },
+   {
+    "key": "4",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Ching-Yi Lai, Gerardo Paz, Martin Suchara, and Todd A. Brun. Performance and error analysis of Knill&apos;s postselection scheme in a two-dimensional architecture. QIC, 14: 807–822, 2014. 10.26421/QIC14.9-10-7.",
+    "DOI": "10.26421/QIC14.9-10-7"
+   },
+   {
+    "key": "5",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Jonathan M. Baker, Andrew Litteken, Casey Duckering, Henry Hoffmann, Hannes Bernien, and Frederic T. Chong. Exploiting Long-Distance Interactions and Tolerating Atom Loss in Neutral Atom Quantum Architectures. In 2021 ACM/IEEE 48th Annual International Symposium on Computer Architecture (ISCA), pages 818–831, Valencia, Spain, 2021. IEEE. ISBN 978-1-66543-333-4. 10.1109/ISCA52012.2021.00069.",
+    "DOI": "10.1109/ISCA52012.2021.00069"
+   },
+   {
+    "key": "6",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Iris Cong, Sheng-Tao Wang, Harry Levine, Alexander Keesling, and Mikhail D. Lukin. Hardware-Efficient, Fault-Tolerant Quantum Computation with Rydberg Atoms. arXiv:2105.13501, 2021. 10.48550/arXiv.2105.13501.",
+    "DOI": "10.48550/arXiv.2105.13501"
+   },
+   {
+    "key": "7",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Immanuel Bloch, Jean Dalibard, and Wilhelm Zwerger. Many-body physics with ultracold gases. Rev. Mod. Phys., 80: 885–964, 2008. 10.1103/RevModPhys.80.885.",
+    "DOI": "10.1103/RevModPhys.80.885"
+   },
+   {
+    "key": "8",
+    "doi-asserted-by": "publisher",
+    "unstructured": "M. Saffman, T. G. Walker, and K. Mølmer. Quantum information with Rydberg atoms. Rev. Mod. Phys., 82: 2313–2363, 2010. 10.1103/RevModPhys.82.2313.",
+    "DOI": "10.1103/RevModPhys.82.2313"
+   },
+   {
+    "key": "9",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Antoine Browaeys and Thierry Lahaye. Many-body physics with individually controlled Rydberg atoms. Nat. Phys., 16: 132–142, 2020. 10.1038/s41567-019-0733-z.",
+    "DOI": "10.1038/s41567-019-0733-z"
+   },
+   {
+    "key": "10",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Loïc Henriet, Lucas Beguin, Adrien Signoles, Thierry Lahaye, Antoine Browaeys, Georges-Olivier Reymond, and Christophe Jurczak. Quantum computing with neutral atoms. Quantum, 4: 327, 2020. 10.22331/q-2020-09-21-327.",
+    "DOI": "10.22331/q-2020-09-21-327"
+   },
+   {
+    "key": "11",
+    "doi-asserted-by": "publisher",
+    "unstructured": "M. Morgado and S. Whitlock. Quantum simulation and computing with Rydberg-interacting qubits. AVS Quantum Sci., 3: 023501, 2021. 10.1116/5.0036562.",
+    "DOI": "10.1116/5.0036562"
+   },
+   {
+    "key": "12",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Manuel Endres, Hannes Bernien, Alexander Keesling, Harry Levine, Eric R. Anschuetz, Alexandre Krajenbrink, Crystal Senko, Vladan Vuletic, Markus Greiner, and Mikhail D. Lukin. Atom-by-atom assembly of defect-free one-dimensional cold atom arrays. Science, 354: 1024–1027, 2016. 10.1126/science.aah3752.",
+    "DOI": "10.1126/science.aah3752"
+   },
+   {
+    "key": "13",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Daniel Barredo, Sylvain de Léséleuc, Vincent Lienhard, Thierry Lahaye, and Antoine Browaeys. An atom-by-atom assembler of defect-free arbitrary two-dimensional atomic arrays. Science, 354: 1021–1023, 2016. 10.1126/science.aah3778.",
+    "DOI": "10.1126/science.aah3778"
+   },
+   {
+    "key": "14",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Daniel Ohl de Mello, Dominik Schäffner, Jan Werkmann, Tilman Preuschoff, Lars Kohfahl, Malte Schlosser, and Gerhard Birkl. Defect-Free Assembly of 2D Clusters of More Than 100 Single-Atom Quantum Systems. Phys. Rev. Lett., 122: 203601, 2019. 10.1103/PhysRevLett.122.203601.",
+    "DOI": "10.1103/PhysRevLett.122.203601"
+   },
+   {
+    "key": "15",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Daniel Barredo, Vincent Lienhard, Sylvain de Léséleuc, Thierry Lahaye, and Antoine Browaeys. Synthetic three-dimensional atomic structures assembled atom by atom. Nature, 561: 79–82, 2018. 10.1038/s41586-018-0450-2.",
+    "DOI": "10.1038/s41586-018-0450-2"
+   },
+   {
+    "key": "16",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Malte Schlosser, Sascha Tichelmann, Dominik Schäffner, Daniel Ohl de Mello, Moritz Hambach, and Gerhard Birkl. Large-scale multilayer architecture of single-atom arrays with individual addressability. arXiv:1902.05424, 2019. 10.48550/arXiv.1902.05424.",
+    "DOI": "10.48550/arXiv.1902.05424"
+   },
+   {
+    "key": "17",
+    "doi-asserted-by": "publisher",
+    "unstructured": "D. Jaksch, J. I. Cirac, P. Zoller, S. L. Rolston, R. Côté, and M. D. Lukin. Fast Quantum Gates for Neutral Atoms. Phys. Rev. Lett., 85: 2208–2211, 2000. 10.1103/PhysRevLett.85.2208.",
+    "DOI": "10.1103/PhysRevLett.85.2208"
+   },
+   {
+    "key": "18",
+    "doi-asserted-by": "publisher",
+    "unstructured": "M. Müller, I. Lesanovsky, H. Weimer, H. P. Büchler, and P. Zoller. Mesoscopic Rydberg Gate Based on Electromagnetically Induced Transparency. Phys. Rev. Lett., 102: 170502, 2009. 10.1103/PhysRevLett.102.170502.",
+    "DOI": "10.1103/PhysRevLett.102.170502"
+   },
+   {
+    "key": "19",
+    "doi-asserted-by": "publisher",
+    "unstructured": "L. Isenhower, M. Saffman, and K. Mølmer. Multibit C k NOT quantum gates via Rydberg blockade. Quantum Inf Process, 10: 755–770, 2011. 10.1007/s11128-011-0292-4.",
+    "DOI": "10.1007/s11128-011-0292-4"
+   },
+   {
+    "key": "20",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Harry Levine, Alexander Keesling, Giulia Semeghini, Ahmed Omran, Tout T. Wang, Sepehr Ebadi, Hannes Bernien, Markus Greiner, Vladan Vuletić, Hannes Pichler, and Mikhail D. Lukin. Parallel Implementation of High-Fidelity Multiqubit Gates with Neutral Atoms. Phys. Rev. Lett., 123: 170503, 2019. 10.1103/PhysRevLett.123.170503.",
+    "DOI": "10.1103/PhysRevLett.123.170503"
+   },
+   {
+    "key": "21",
+    "doi-asserted-by": "publisher",
+    "unstructured": "T. M. Graham, M. Kwon, B. Grinkemeyer, Z. Marra, X. Jiang, M. T. Lichtman, Y. Sun, M. Ebert, and M. Saffman. Rydberg-Mediated Entanglement in a Two-Dimensional Neutral Atom Qubit Array. Phys. Rev. Lett., 123: 230501, 2019. 10.1103/PhysRevLett.123.230501.",
+    "DOI": "10.1103/PhysRevLett.123.230501"
+   },
+   {
+    "key": "22",
+    "doi-asserted-by": "publisher",
+    "unstructured": "C J Picken, R Legaie, K McDonnell, and J D Pritchard. Entanglement of neutral-atom qubits with long ground-Rydberg coherence times. Quantum Sci. Technol., 4: 015011, 2018. 10.1088/2058-9565/aaf019.",
+    "DOI": "10.1088/2058-9565/aaf019"
+   },
+   {
+    "key": "23",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Zhuo Fu, Peng Xu, Yuan Sun, Yang-Yang Liu, Xiao-Dong He, Xiao Li, Min Liu, Run-Bing Li, Jin Wang, Liang Liu, and Ming-Sheng Zhan. High-fidelity entanglement of neutral atoms via a Rydberg-mediated single-modulated-pulse controlled-phase gate. Phys. Rev. A, 105: 042430, 2022. 10.1103/PhysRevA.105.042430.",
+    "DOI": "10.1103/PhysRevA.105.042430"
+   },
+   {
+    "key": "24",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Michael J. Martin, Yuan-Yu Jau, Jongmin Lee, Anupam Mitra, Ivan H. Deutsch, and Grant W. Biedermann. A Mølmer-Sørensen Gate with Rydberg-Dressed Atoms. arXiv:2111.14677, 2021. 10.48550/arXiv.2111.14677.",
+    "DOI": "10.48550/arXiv.2111.14677"
+   },
+   {
+    "key": "25",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Ivaylo S. Madjarov, Jacob P. Covey, Adam L. Shaw, Joonhee Choi, Anant Kale, Alexandre Cooper, Hannes Pichler, Vladimir Schkolnik, Jason R. Williams, and Manuel Endres. High-Fidelity Entanglement and Detection of Alkaline-Earth Rydberg Atoms. Nat. Phys., 16: 857–861, 2020. 10.1038/s41567-020-0903-z.",
+    "DOI": "10.1038/s41567-020-0903-z"
+   },
+   {
+    "key": "26",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Sylvain de Léséleuc, Daniel Barredo, Vincent Lienhard, Antoine Browaeys, and Thierry Lahaye. Analysis of imperfections in the coherent optical excitation of single atoms to Rydberg states. Phys. Rev. A, 97: 053803, 2018. 10.1103/PhysRevA.97.053803.",
+    "DOI": "10.1103/PhysRevA.97.053803"
+   },
+   {
+    "key": "27",
+    "doi-asserted-by": "publisher",
+    "unstructured": "X. L. Zhang, A. T. Gill, L. Isenhower, T. G. Walker, and M. Saffman. Fidelity of a Rydberg-blockade quantum gate from simulated quantum process tomography. Phys. Rev. A, 85: 042310, 2012. 10.1103/PhysRevA.85.042310.",
+    "DOI": "10.1103/PhysRevA.85.042310"
+   },
+   {
+    "key": "28",
+    "doi-asserted-by": "publisher",
+    "unstructured": "D. D. Bhaktavatsala Rao and Klaus Mølmer. Robust Rydberg-interaction gates with adiabatic passage. Phys. Rev. A, 89: 030301, 2014. 10.1103/PhysRevA.89.030301.",
+    "DOI": "10.1103/PhysRevA.89.030301"
+   },
+   {
+    "key": "29",
+    "doi-asserted-by": "publisher",
+    "unstructured": "I. I. Beterov, M. Saffman, E. A. Yakshina, D. B. Tretyakov, V. M. Entin, S. Bergamini, E. A. Kuznetsova, and I. I. Ryabtsev. Two-qubit gates using adiabatic passage of the Stark-tuned Förster resonances in Rydberg atoms. Phys. Rev. A, 94: 062307, 2016. 10.1103/PhysRevA.94.062307.",
+    "DOI": "10.1103/PhysRevA.94.062307"
+   },
+   {
+    "key": "30",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Anupam Mitra, Michael J. Martin, Grant W. Biedermann, Alberto M. Marino, Pablo M. Poggi, and Ivan H. Deutsch. Robust Mølmer-Sørensen gate for neutral atoms using rapid adiabatic Rydberg dressing. Phys. Rev. A, 101: 030301, 2020. 10.1103/PhysRevA.101.030301.",
+    "DOI": "10.1103/PhysRevA.101.030301"
+   },
+   {
+    "key": "31",
+    "doi-asserted-by": "publisher",
+    "unstructured": "M. Saffman, I. I. Beterov, A. Dalal, E. J. Paez, and B. C. Sanders. Symmetric Rydberg controlled-Z gates with adiabatic pulses. Phys. Rev. A, 101: 062309, 2020. 10.1103/PhysRevA.101.062309.",
+    "DOI": "10.1103/PhysRevA.101.062309"
+   },
+   {
+    "key": "32",
+    "doi-asserted-by": "publisher",
+    "unstructured": "I. I. Beterov, D. B. Tretyakov, V. M. Entin, E. A. Yakshina, I. I. Ryabtsev, M. Saffman, and S. Bergamini. Application of adiabatic passage in Rydberg atomic ensembles for quantum information processing. J. Phys. B: At. Mol. Opt. Phys., 53: 182001, 2020. 10.1088/1361-6455/ab8719.",
+    "DOI": "10.1088/1361-6455/ab8719"
+   },
+   {
+    "key": "33",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Yucheng He, Jing-Xin Liu, F.-Q. Guo, Lei-Lei Yan, Ronghui Luo, Erjun Liang, Shi-Lei Su, and M. Feng. Multiple-qubit Rydberg quantum logic gate via dressed-states scheme. arXiv:2010.14704, 2021. 10.48550/arXiv.2010.14704.",
+    "DOI": "10.48550/arXiv.2010.14704"
+   },
+   {
+    "key": "34",
+    "doi-asserted-by": "publisher",
+    "unstructured": "David Petrosyan, Felix Motzoi, Mark Saffman, and Klaus Mølmer. High-fidelity Rydberg quantum gate via a two-atom dark state. Phys. Rev. A, 96: 042306, 2017. 10.1103/PhysRevA.96.042306.",
+    "DOI": "10.1103/PhysRevA.96.042306"
+   },
+   {
+    "key": "35",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Jin-Lei Wu, Yan Wang, Jin-Xuan Han, Shi-Lei Su, Yan Xia, Yongyuan Jiang, and Jie Song. Unselective ground-state blockade of Rydberg atoms for implementing quantum gates. arXiv:2107.09975, 2021a. 10.1007/s11467-021-1104-7.",
+    "DOI": "10.1007/s11467-021-1104-7"
+   },
+   {
+    "key": "36",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Jin-Lei Wu, Yan Wang, Jin-Xuan Han, Shi-Lei Su, Yan Xia, Yongyuan Jiang, and Jie Song. Resilient quantum gates on periodically driven Rydberg atoms. Phys. Rev. A, 103: 012601, 2021b. 10.1103/PhysRevA.103.012601.",
+    "DOI": "10.1103/PhysRevA.103.012601"
+   },
+   {
+    "key": "37",
+    "doi-asserted-by": "publisher",
+    "unstructured": "L. S. Theis, F. Motzoi, F. K. Wilhelm, and M. Saffman. High-fidelity Rydberg-blockade entangling gate using shaped, analytic pulses. Phys. Rev. A, 94: 032306, 2016. 10.1103/PhysRevA.94.032306.",
+    "DOI": "10.1103/PhysRevA.94.032306"
+   },
+   {
+    "key": "38",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Shuai Liu, Jun-Hui Shen, Ri-Hua Zheng, Yi-Hao Kang, Zhi-Cheng Shi, Jie Song, and Yan Xia. Optimized nonadiabatic holonomic quantum computation based on Förster resonance in Rydberg atoms. Front. Phys., 17: 21502, 2022. 10.1007/s11467-021-1108-3.",
+    "DOI": "10.1007/s11467-021-1108-3"
+   },
+   {
+    "key": "39",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Cai-Peng Shen, Jin-Lei Wu, Shi-Lei Su, and Erjun Liang. Construction of robust Rydberg controlled-phase gates. Opt. Lett., 44: 2036, 2019. 10.1364/OL.44.002036.",
+    "DOI": "10.1364/OL.44.002036"
+   },
+   {
+    "key": "40",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Chen-Yue Guo, L.-L. Yan, Shou Zhang, Shi-Lei Su, and Weibin Li. Optimized geometric quantum computation with a mesoscopic ensemble of Rydberg atoms. Phys. Rev. A, 102: 042607, 2020. 10.1103/PhysRevA.102.042607.",
+    "DOI": "10.1103/PhysRevA.102.042607"
+   },
+   {
+    "key": "41",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Steffen J. Glaser, Ugo Boscain, Tommaso Calarco, Christiane P. Koch, Walter Köckenberger, Ronnie Kosloff, Ilya Kuprov, Burkhard Luy, Sophie Schirmer, Thomas Schulte-Herbrüggen, Dominique Sugny, and Frank K. Wilhelm. Training Schrödinger&apos;s cat: Quantum optimal control: Strategic report on current status, visions and goals for research in Europe. Eur. Phys. J. D, 69: 279, 2015. 10.1140/epjd/e2015-60464-1.",
+    "DOI": "10.1140/epjd/e2015-60464-1"
+   },
+   {
+    "key": "42",
+    "doi-asserted-by": "publisher",
+    "unstructured": "D. J. Egger and F. K. Wilhelm. Optimized controlled Z gates for two superconducting qubits coupled through a resonator. Supercond. Sci. Technol., 27: 014001, 2014. 10.1088/0953-2048/27/1/014001.",
+    "DOI": "10.1088/0953-2048/27/1/014001"
+   },
+   {
+    "key": "43",
+    "doi-asserted-by": "publisher",
+    "unstructured": "J. Kelly, R. Barends, B. Campbell, Y. Chen, Z. Chen, B. Chiaro, A. Dunsworth, A. G. Fowler, I.-C. Hoi, E. Jeffrey, A. Megrant, J. Mutus, C. Neill, P. J. J. O&apos;Malley, C. Quintana, P. Roushan, D. Sank, A. Vainsencher, J. Wenner, T. C. White, A. N. Cleland, and John M. Martinis. Optimal Quantum Control Using Randomized Benchmarking. Phys. Rev. Lett., 112: 240504, 2014. 10.1103/PhysRevLett.112.240504.",
+    "DOI": "10.1103/PhysRevLett.112.240504"
+   },
+   {
+    "key": "44",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Shang-Yu Huang and Hsi-Sheng Goan. Optimal control for fast and high-fidelity quantum gates in coupled superconducting flux qubits. Phys. Rev. A, 90: 012318, 2014. 10.1103/PhysRevA.90.012318.",
+    "DOI": "10.1103/PhysRevA.90.012318"
+   },
+   {
+    "key": "45",
+    "doi-asserted-by": "publisher",
+    "unstructured": "M. Werninghaus, D. J. Egger, F. Roy, S. Machnes, F. K. Wilhelm, and S. Filipp. Leakage reduction in fast superconducting qubit gates via optimal control. npj Quantum Inf, 7: 14, 2021. 10.1038/s41534-020-00346-2.",
+    "DOI": "10.1038/s41534-020-00346-2"
+   },
+   {
+    "key": "46",
+    "doi-asserted-by": "publisher",
+    "unstructured": "V. Nebendahl, H. Haffner, and C. F. Roos. Optimal control of entangling operations for trapped ion quantum computing. Phys. Rev. A, 79: 012312, 2009. 10.1103/PhysRevA.79.012312.",
+    "DOI": "10.1103/PhysRevA.79.012312"
+   },
+   {
+    "key": "47",
+    "doi-asserted-by": "publisher",
+    "unstructured": "T. Choi, S. Debnath, T. A. Manning, C. Figgatt, Z.-X. Gong, L.-M. Duan, and C. Monroe. Optimal Quantum Control of Multimode Couplings between Trapped Ion Qubits for Scalable Entanglement. Phys. Rev. Lett., 112: 190502, 2014. 10.1103/PhysRevLett.112.190502.",
+    "DOI": "10.1103/PhysRevLett.112.190502"
+   },
+   {
+    "key": "48",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Michael H Goerz, Tommaso Calarco, and Christiane P Koch. The quantum speed limit of optimal controlled phasegates for trapped neutral atoms. J. Phys. B: At. Mol. Opt. Phys., 44: 154011, 2011. 10.1088/0953-4075/44/15/154011.",
+    "DOI": "10.1088/0953-4075/44/15/154011"
+   },
+   {
+    "key": "49",
+    "doi-asserted-by": "publisher",
+    "unstructured": "M. M. Müller, D. M. Reich, M. Murphy, H. Yuan, J. Vala, K. B. Whaley, T. Calarco, and C. P. Koch. Optimizing entangling quantum gates for physical systems. Phys. Rev. A, 84: 042315, 2011. 10.1103/PhysRevA.84.042315.",
+    "DOI": "10.1103/PhysRevA.84.042315"
+   },
+   {
+    "key": "50",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Michael H. Goerz, Eli J. Halperin, Jon M. Aytac, Christiane P. Koch, and K. Birgitta Whaley. Robustness of high-fidelity Rydberg gates with single-site addressability. Phys. Rev. A, 90: 032329, 2014. 10.1103/PhysRevA.90.032329.",
+    "DOI": "10.1103/PhysRevA.90.032329"
+   },
+   {
+    "key": "51",
+    "doi-asserted-by": "publisher",
+    "unstructured": "A. Omran, H. Levine, A. Keesling, G. Semeghini, T. T. Wang, S. Ebadi, H. Bernien, A. S. Zibrov, H. Pichler, S. Choi, J. Cui, M. Rossignolo, P. Rembold, S. Montangero, T. Calarco, M. Endres, M. Greiner, V. Vuletić, and M. D. Lukin. Generation and manipulation of Schrödinger cat states in Rydberg atom arrays. Science, 365: 570–574, 2019. 10.1126/science.aax9743.",
+    "DOI": "10.1126/science.aax9743"
+   },
+   {
+    "key": "52",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Jian Cui, Rick van Bijnen, Thomas Pohl, Simone Montangero, and Tommaso Calarco. Optimal control of Rydberg lattice gases. Quantum Sci. Technol., 2: 035006, 2017. 10.1088/2058-9565/aa7daf.",
+    "DOI": "10.1088/2058-9565/aa7daf"
+   },
+   {
+    "key": "53",
+    "doi-asserted-by": "publisher",
+    "unstructured": "A. Smith, B. E. Anderson, H. Sosa-Martinez, C. A. Riofrío, Ivan H. Deutsch, and Poul S. Jessen. Quantum Control in the Cs 6 S 1 / 2 Ground Manifold Using Radio-Frequency and Microwave Magnetic Fields. Phys. Rev. Lett., 111: 170502, 2013. 10.1103/PhysRevLett.111.170502.",
+    "DOI": "10.1103/PhysRevLett.111.170502"
+   },
+   {
+    "key": "54",
+    "doi-asserted-by": "publisher",
+    "unstructured": "B. E. Anderson, H. Sosa-Martinez, C. A. Riofrío, Ivan H. Deutsch, and Poul S. Jessen. Accurate and Robust Unitary Transformations of a High-Dimensional Quantum System. Phys. Rev. Lett., 114: 240401, 2015. 10.1103/PhysRevLett.114.240401.",
+    "DOI": "10.1103/PhysRevLett.114.240401"
+   },
+   {
+    "key": "55",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Nathan K. Lysne, Kevin W. Kuper, Pablo M. Poggi, Ivan H. Deutsch, and Poul S. Jessen. Small, Highly Accurate Quantum Processor for Intermediate-Depth Quantum Simulations. Phys. Rev. Lett., 124: 230501, 2020. 10.1103/PhysRevLett.124.230501.",
+    "DOI": "10.1103/PhysRevLett.124.230501"
+   },
+   {
+    "key": "56",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Sven Jandura and Guido Pupillo. Figshare data repository, 2022. URL https://doi.org/10.6084/m9.figshare.19658427.",
+    "DOI": "10.6084/m9.figshare.19658427"
+   },
+   {
+    "key": "57",
+    "doi-asserted-by": "publisher",
+    "unstructured": "F. Robicheaux, T. M. Graham, and M. Saffman. Photon-recoil and laser-focusing limits to Rydberg gate fidelity. Phys. Rev. A, 103: 022424, 2021. 10.1103/PhysRevA.103.022424.",
+    "DOI": "10.1103/PhysRevA.103.022424"
+   },
+   {
+    "key": "58",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Line Hjortshøj Pedersen, Niels Martin Møller, and Klaus Mølmer. Fidelity of quantum operations. Physics Letters A, 367: 47–51, 2007. 10.1016/j.physleta.2007.02.069.",
+    "DOI": "10.1016/j.physleta.2007.02.069"
+   },
+   {
+    "key": "59",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Navin Khaneja, Timo Reiss, Cindie Kehlet, Thomas Schulte-Herbrüggen, and Steffen J. Glaser. Optimal control of coupled spin dynamics: Design of NMR pulse sequences by gradient ascent algorithms. Journal of Magnetic Resonance, 172: 296–305, 2005. 10.1016/j.jmr.2004.11.004.",
+    "DOI": "10.1016/j.jmr.2004.11.004"
+   },
+   {
+    "key": "60",
+    "doi-asserted-by": "publisher",
+    "unstructured": "A. Garon, S. J. Glaser, and D. Sugny. Time-optimal control of SU(2) quantum operations. Phys. Rev. A, 88: 043422, 2013. 10.1103/PhysRevA.88.043422.",
+    "DOI": "10.1103/PhysRevA.88.043422"
+   },
+   {
+    "key": "61",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Bilal Riaz, Cong Shuang, and Shahid Qamar. Optimal control methods for quantum gate preparation: A comparative study. Quantum Inf Process, 18: 100, 2019. 10.1007/s11128-019-2190-0.",
+    "DOI": "10.1007/s11128-019-2190-0"
+   },
+   {
+    "key": "62",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Frank K. Wilhelm, Susanna Kirchhoff, Shai Machnes, Nicolas Wittler, and Dominique Sugny. An introduction into optimal control for quantum technologies. arXiv:2003.10132, 2020. 10.48550/arXiv.2003.10132.",
+    "DOI": "10.48550/arXiv.2003.10132"
+   },
+   {
+    "key": "63",
+    "unstructured": "Jorge Nocedal and Stephen J. Wright. Numerical Optimization. Springer Series in Operation Research and Financial Engineering. Springer, New York, NY, 2. ed edition, 2006. ISBN 978-1-4939-3711-0 978-0-387-30303-1."
+   },
+   {
+    "key": "64",
+    "unstructured": "Eric Jones, Travis Oliphant, Pearu Peterson, and others. SciPy: Open source scientific tools for Python, 2001."
+   },
+   {
+    "key": "65",
+    "unstructured": "L. S. Pontryagin and Lucien W. Neustadt. The Mathematical Theory of Optimal Processes. Classics of Soviet Mathematics. Gordon and Breach Science Publishers, New York, english ed edition, 1986. ISBN 978-2-88124-077-5."
+   },
+   {
+    "key": "66",
+    "unstructured": "E. B. Lee and L. Markus. Foundations of Optimal Control Theory. R.E. Krieger Pub. Co, Malabar, Fla, 1986. ISBN 978-0-89874-807-9."
+   },
+   {
+    "key": "67",
+    "doi-asserted-by": "publisher",
+    "unstructured": "U. Boscain, M. Sigalotti, and D. Sugny. Introduction to the Pontryagin Maximum Principle for Quantum Optimal Control. PRX Quantum, 2: 030203, 2021. 10.1103/PRXQuantum.2.030203.",
+    "DOI": "10.1103/PRXQuantum.2.030203"
+   },
+   {
+    "key": "68",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Seraph Bao, Silken Kleer, Ruoyu Wang, and Armin Rahmani. Optimal control of superconducting gmon qubits using Pontryagin&apos;s minimum principle: Preparing a maximally entangled state with singular bang-bang protocols. Phys. Rev. A, 97: 062343, 2018. 10.1103/PhysRevA.97.062343.",
+    "DOI": "10.1103/PhysRevA.97.062343"
+   },
+   {
+    "key": "69",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Chungwei Lin, Yebin Wang, Grigory Kolesov, and Uroš Kalabić. Application of Pontryagin&apos;s minimum principle to Grover&apos;s quantum search problem. Phys. Rev. A, 100: 022327, 2019. 10.1103/PhysRevA.100.022327.",
+    "DOI": "10.1103/PhysRevA.100.022327"
+   },
+   {
+    "key": "70",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Chungwei Lin, Dries Sels, and Yebin Wang. Time-optimal control of a dissipative qubit. Phys. Rev. A, 101: 022320, 2020. 10.1103/PhysRevA.101.022320.",
+    "DOI": "10.1103/PhysRevA.101.022320"
+   },
+   {
+    "key": "71",
+    "doi-asserted-by": "publisher",
+    "unstructured": "L. Van Damme, Q. Ansel, S. J. Glaser, and D. Sugny. Robust optimal control of two-level quantum systems. Phys. Rev. A, 95: 063403, 2017. 10.1103/PhysRevA.95.063403.",
+    "DOI": "10.1103/PhysRevA.95.063403"
+   },
+   {
+    "key": "72",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Zhi-Cheng Yang, Armin Rahmani, Alireza Shabani, Hartmut Neven, and Claudio Chamon. Optimizing Variational Quantum Algorithms Using Pontryagin&apos;s Minimum Principle. Phys. Rev. X, 7: 021027, 2017. 10.1103/PhysRevX.7.021027.",
+    "DOI": "10.1103/PhysRevX.7.021027"
+   },
+   {
+    "key": "73",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Dong Eui Chang. A simple proof of the Pontryagin maximum principle on manifolds. Automatica, 47: 630–633, 2011. 10.1016/j.automatica.2011.01.037.",
+    "DOI": "10.1016/j.automatica.2011.01.037"
+   },
+   {
+    "key": "74",
+    "doi-asserted-by": "publisher",
+    "unstructured": "D. Barredo, S. Ravets, H. Labuhn, L. Béguin, A. Vernier, F. Nogrette, T. Lahaye, and A. Browaeys. Demonstration of a Strong Rydberg Blockade in Three-Atom Systems with Anisotropic Interactions. Phys. Rev. Lett., 112: 183002, 2014. 10.1103/PhysRevLett.112.183002.",
+    "DOI": "10.1103/PhysRevLett.112.183002"
+   },
+   {
+    "key": "75",
+    "doi-asserted-by": "publisher",
+    "unstructured": "C. Ates, T. Pohl, T. Pattard, and J. M. Rost. Antiblockade in Rydberg Excitation of an Ultracold Lattice Gas. Phys. Rev. Lett., 98: 023002, 2007. 10.1103/PhysRevLett.98.023002.",
+    "DOI": "10.1103/PhysRevLett.98.023002"
+   },
+   {
+    "key": "76",
+    "doi-asserted-by": "publisher",
+    "unstructured": "L. S. Theis and F. K. Wilhelm. Nonadiabatic corrections to fast dispersive multiqubit gates involving Z control. Phys. Rev. A, 95: 022314, 2017. 10.1103/PhysRevA.95.022314.",
+    "DOI": "10.1103/PhysRevA.95.022314"
+   },
+   {
+    "key": "77",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Mohammadsadegh Khazali and Klaus Mølmer. Fast Multiqubit Gates by Adiabatic Evolution in Interacting Excited-State Manifolds of Rydberg Atoms and Superconducting Circuits. Phys. Rev. X, 10: 021054, 2020. 10.1103/PhysRevX.10.021054.",
+    "DOI": "10.1103/PhysRevX.10.021054"
+   },
+   {
+    "key": "78",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Yeelai Chew, Takafumi Tomita, Tirumalasetty Panduranga Mahesh, Seiji Sugawa, Sylvain de Léséleuc, and Kenji Ohmori. Ultrafast energy exchange between two single Rydberg atoms on the nanosecond timescale. arXiv:2111.12314, 2021. 10.48550/arXiv.2111.12314.",
+    "DOI": "10.48550/arXiv.2111.12314"
+   },
+   {
+    "key": "79",
+    "doi-asserted-by": "publisher",
+    "unstructured": "N. Šibalić, J.D. Pritchard, C.S. Adams, and K.J. Weatherill. ARC: An open-source library for calculating properties of alkali Rydberg atoms. Computer Physics Communications, 220: 319–331, 2017. 10.1016/j.cpc.2017.06.015.",
+    "DOI": "10.1016/j.cpc.2017.06.015"
+   },
+   {
+    "key": "80",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Thad G. Walker and M. Saffman. Consequences of Zeeman degeneracy for the van der Waals blockade between Rydberg atoms. Phys. Rev. A, 77: 032723, 2008. 10.1103/PhysRevA.77.032723.",
+    "DOI": "10.1103/PhysRevA.77.032723"
+   }
+  ],
+  "container-title": "Quantum",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://quantum-journal.org/papers/q-2022-05-13-712/pdf/",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2022,
+     5,
+     13
+    ]
+   ],
+   "date-time": "2022-05-13T08:55:34Z",
+   "timestamp": 1652432134000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://quantum-journal.org/papers/q-2022-05-13-712/"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2022,
+     5,
+     13
+    ]
+   ]
+  },
+  "references-count": 81,
+  "URL": "http://dx.doi.org/10.22331/q-2022-05-13-712",
+  "relation": {},
+  "ISSN": [
+   "2521-327X"
+  ],
+  "subject": [],
+  "container-title-short": "Quantum",
+  "published": {
+   "date-parts": [
+    [
+     2022,
+     5,
+     13
+    ]
+   ]
+  },
+  "article-number": "712",
+  "id": "jandura2022"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     23
+    ]
+   ],
+   "date-time": "2026-09-23T22:37:55Z",
+   "timestamp": 1790203075401,
+   "version": "4.1.0"
+  },
+  "reference-count": 100,
+  "publisher": "Springer Science and Business Media LLC",
+  "issue": "7982",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2023,
+       10,
+       11
+      ]
+     ],
+     "date-time": "2023-10-11T00:00:00Z",
+     "timestamp": 1696982400000
+    },
+    "content-version": "tdm",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2023,
+       10,
+       11
+      ]
+     ],
+     "date-time": "2023-10-11T00:00:00Z",
+     "timestamp": 1696982400000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://creativecommons.org/licenses/by/4.0"
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "link.springer.com"
+   ],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     2023,
+     10,
+     12
+    ]
+   ]
+  },
+  "abstract": "<jats:title>Abstract</jats:title>\n                  <jats:p>\n                    The ability to perform entangling quantum operations with low error rates in a scalable fashion is a central element of useful quantum information processing\n                    <jats:sup>1</jats:sup>\n                    . Neutral-atom arrays have recently emerged as a promising quantum computing platform, featuring coherent control over hundreds of qubits\n                    <jats:sup>2,3</jats:sup>\n                    and any-to-any gate connectivity in a flexible, dynamically reconfigurable architecture\n                    <jats:sup>4</jats:sup>\n                    . The main outstanding challenge has been to reduce errors in entangling operations mediated through Rydberg interactions\n                    <jats:sup>5</jats:sup>\n                    . Here we report the realization of two-qubit entangling gates with 99.5% fidelity on up to 60 atoms in parallel, surpassing the surface-code threshold for error correction\n                    <jats:sup>6,7</jats:sup>\n                    . Our method uses fast, single-pulse gates based on optimal control\n                    <jats:sup>8</jats:sup>\n                    , atomic dark states to reduce scattering\n                    <jats:sup>9</jats:sup>\n                    and improvements to Rydberg excitation and atom cooling. We benchmark fidelity using several methods based on repeated gate applications\n                    <jats:sup>10,11</jats:sup>\n                    , characterize the physical error sources and outline future improvements. Finally, we generalize our method to design entangling gates involving a higher number of qubits, which we demonstrate by realizing low-error three-qubit gates\n                    <jats:sup>12,13</jats:sup>\n                    . By enabling high-fidelity operation in a scalable, highly connected system, these advances lay the groundwork for large-scale implementation of quantum algorithms\n                    <jats:sup>14</jats:sup>\n                    , error-corrected circuits\n                    <jats:sup>7</jats:sup>\n                    and digital simulations\n                    <jats:sup>15</jats:sup>\n                    .\n                  </jats:p>",
+  "DOI": "10.1038/s41586-023-06481-y",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2023,
+     10,
+     11
+    ]
+   ],
+   "date-time": "2023-10-11T12:02:04Z",
+   "timestamp": 1697025724000
+  },
+  "page": "268-272",
+  "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 538,
+  "title": "High-fidelity parallel entangling gates on a neutral-atom quantum computer",
+  "prefix": "10.1038",
+  "volume": "622",
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0001-8986-1103",
+    "authenticated-orcid": false,
+    "given": "Simon J.",
+    "family": "Evered",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9934-9530",
+    "authenticated-orcid": false,
+    "given": "Dolev",
+    "family": "Bluvstein",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-0605-8791",
+    "authenticated-orcid": false,
+    "given": "Marcin",
+    "family": "Kalinowski",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sepehr",
+    "family": "Ebadi",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-3470-1369",
+    "authenticated-orcid": false,
+    "given": "Tom",
+    "family": "Manovitz",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Hengyun",
+    "family": "Zhou",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sophie H.",
+    "family": "Li",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-5294-4941",
+    "authenticated-orcid": false,
+    "given": "Alexandra A.",
+    "family": "Geim",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-3107-2579",
+    "authenticated-orcid": false,
+    "given": "Tout T.",
+    "family": "Wang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Nishad",
+    "family": "Maskara",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Harry",
+    "family": "Levine",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Giulia",
+    "family": "Semeghini",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-2935-2363",
+    "authenticated-orcid": false,
+    "given": "Markus",
+    "family": "Greiner",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9786-0538",
+    "authenticated-orcid": false,
+    "given": "Vladan",
+    "family": "Vuletić",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8658-1007",
+    "authenticated-orcid": false,
+    "given": "Mikhail D.",
+    "family": "Lukin",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "297",
+  "published-online": {
+   "date-parts": [
+    [
+     2023,
+     10,
+     11
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "6481_CR1",
+    "doi-asserted-by": "publisher",
+    "first-page": "79",
+    "DOI": "10.22331/q-2018-08-06-79",
+    "volume": "2",
+    "author": "J Preskill",
+    "year": "2018",
+    "unstructured": "Preskill, J. Quantum computing in the NISQ era and beyond. Quantum 2, 79 (2018).",
+    "journal-title": "Quantum"
+   },
+   {
+    "key": "6481_CR2",
+    "doi-asserted-by": "publisher",
+    "first-page": "227",
+    "DOI": "10.1038/s41586-021-03582-4",
+    "volume": "595",
+    "author": "S Ebadi",
+    "year": "2021",
+    "unstructured": "Ebadi, S. et al. Quantum phases of matter on a 256-atom programmable quantum simulator. Nature 595, 227–232 (2021).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR3",
+    "doi-asserted-by": "publisher",
+    "first-page": "233",
+    "DOI": "10.1038/s41586-021-03585-1",
+    "volume": "595",
+    "author": "P Scholl",
+    "year": "2021",
+    "unstructured": "Scholl, P. et al. Quantum simulation of 2D antiferromagnets with hundreds of Rydberg atoms. Nature 595, 233–238 (2021).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR4",
+    "doi-asserted-by": "publisher",
+    "first-page": "451",
+    "DOI": "10.1038/s41586-022-04592-6",
+    "volume": "604",
+    "author": "D Bluvstein",
+    "year": "2022",
+    "unstructured": "Bluvstein, D. et al. A quantum processor based on coherent transport of entangled atom arrays. Nature 604, 451–456 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR5",
+    "doi-asserted-by": "publisher",
+    "first-page": "170503",
+    "DOI": "10.1103/PhysRevLett.123.170503",
+    "volume": "123",
+    "author": "H Levine",
+    "year": "2019",
+    "unstructured": "Levine, H. et al. Parallel implementation of high-fidelity multiqubit gates with neutral atoms. Phys. Rev. Lett. 123, 170503 (2019).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR6",
+    "doi-asserted-by": "publisher",
+    "first-page": "2",
+    "DOI": "10.1016/S0003-4916(02)00018-0",
+    "volume": "303",
+    "author": "AY Kitaev",
+    "year": "2003",
+    "unstructured": "Kitaev, A. Y. Fault-tolerant quantum computation by anyons. Ann. Phys. 303, 2–30 (2003).",
+    "journal-title": "Ann. Phys."
+   },
+   {
+    "key": "6481_CR7",
+    "doi-asserted-by": "publisher",
+    "first-page": "032324",
+    "DOI": "10.1103/PhysRevA.86.032324",
+    "volume": "86",
+    "author": "AG Fowler",
+    "year": "2012",
+    "unstructured": "Fowler, A. G., Mariantoni, M., Martinis, J. M. & Cleland, A. N. Surface codes: towards practical large-scale quantum computation. Phys. Rev. A 86, 032324 (2012).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR8",
+    "doi-asserted-by": "publisher",
+    "first-page": "712",
+    "DOI": "10.22331/q-2022-05-13-712",
+    "volume": "6",
+    "author": "S Jandura",
+    "year": "2022",
+    "unstructured": "Jandura, S. & Pupillo, G. Time-optimal two- and three-qubit gates for Rydberg atoms. Quantum 6, 712 (2022).",
+    "journal-title": "Quantum"
+   },
+   {
+    "key": "6481_CR9",
+    "doi-asserted-by": "publisher",
+    "first-page": "2593",
+    "DOI": "10.1103/PhysRevLett.66.2593",
+    "volume": "66",
+    "author": "K-J Boller",
+    "year": "1991",
+    "unstructured": "Boller, K.-J., Imamoğlu, A. & Harris, S. E. Observation of electromagnetically induced transparency. Phys. Rev. Lett. 66, 2593–2596 (1991).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR10",
+    "doi-asserted-by": "publisher",
+    "first-page": "080505",
+    "DOI": "10.1103/PhysRevLett.109.080505",
+    "volume": "109",
+    "author": "E Magesan",
+    "year": "2012",
+    "unstructured": "Magesan, E. et al. Efficient measurement of quantum gate error by interleaved randomized benchmarking. Phys. Rev. Lett. 109, 080505 (2012).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR11",
+    "doi-asserted-by": "publisher",
+    "first-page": "260503",
+    "DOI": "10.1103/PhysRevLett.108.260503",
+    "volume": "108",
+    "author": "JP Gaebler",
+    "year": "2012",
+    "unstructured": "Gaebler, J. P. et al. Randomized benchmarking of multiqubit gates. Phys. Rev. Lett. 108, 260503 (2012).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR12",
+    "doi-asserted-by": "publisher",
+    "first-page": "040501",
+    "DOI": "10.1103/PhysRevLett.102.040501",
+    "volume": "102",
+    "author": "T Monz",
+    "year": "2009",
+    "unstructured": "Monz, T. et al. Realization of the quantum Toffoli gate with trapped ions. Phys. Rev. Lett. 102, 040501 (2009).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR13",
+    "doi-asserted-by": "publisher",
+    "first-page": "783",
+    "DOI": "10.1038/s41567-022-01590-3",
+    "volume": "18",
+    "author": "Y Kim",
+    "year": "2022",
+    "unstructured": "Kim, Y. et al. High-fidelity three-qubit iToffoli gate for fixed-frequency superconducting qubits. Nat. Phys. 18, 783–788 (2022).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR14",
+    "doi-asserted-by": "publisher",
+    "first-page": "040318",
+    "DOI": "10.1103/PRXQuantum.3.040318",
+    "volume": "3",
+    "author": "RN Tazhigulov",
+    "year": "2022",
+    "unstructured": "Tazhigulov, R. N. et al. Simulating models of challenging correlated molecules and materials on the Sycamore quantum processor. PRX Quantum 3, 040318 (2022).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "6481_CR15",
+    "first-page": "031008",
+    "volume": "13",
+    "author": "M Kalinowski",
+    "year": "2023",
+    "unstructured": "Kalinowski, M., Maskara, N. & Lukin, M. D. Non-Abelian Floquet spin liquids in a digital Rydberg simulator. Phys. Rev. X 13, 031008 (2023).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR16",
+    "doi-asserted-by": "publisher",
+    "first-page": "463",
+    "DOI": "10.1038/nphys961",
+    "volume": "4",
+    "author": "J Benhelm",
+    "year": "2008",
+    "unstructured": "Benhelm, J., Kirchmair, G., Roos, C. F. & Blatt, R. Towards fault-tolerant quantum computing with trapped ions. Nat. Phys. 4, 463–466 (2008).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR17",
+    "doi-asserted-by": "publisher",
+    "first-page": "500",
+    "DOI": "10.1038/nature13171",
+    "volume": "508",
+    "author": "R Barends",
+    "year": "2014",
+    "unstructured": "Barends, R. et al. Superconducting quantum circuits at the surface code threshold for fault tolerance. Nature 508, 500–503 (2014).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR18",
+    "doi-asserted-by": "publisher",
+    "first-page": "060504",
+    "DOI": "10.1103/PhysRevLett.117.060504",
+    "volume": "117",
+    "author": "CJ Ballance",
+    "year": "2016",
+    "unstructured": "Ballance, C. J., Harty, T. P., Linke, N. M., Sepiol, M. A. & Lucas, D. M. High-fidelity quantum logic gates using trapped-ion hyperfine qubits. Phys. Rev. Lett. 117, 060504 (2016).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR19",
+    "doi-asserted-by": "publisher",
+    "first-page": "338",
+    "DOI": "10.1038/s41586-021-04182-y",
+    "volume": "601",
+    "author": "A Noiri",
+    "year": "2022",
+    "unstructured": "Noiri, A. et al. Fast universal quantum gate above the fault-tolerance threshold in silicon. Nature 601, 338–342 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR20",
+    "doi-asserted-by": "publisher",
+    "first-page": "676",
+    "DOI": "10.1038/s41586-022-05434-1",
+    "volume": "614",
+    "author": "R Acharya",
+    "year": "2023",
+    "unstructured": "Acharya, R. et al. Suppressing quantum errors by scaling a surface code logical qubit. Nature 614, 676–681 (2023).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR21",
+    "unstructured": "IonQ. Introducing IonQ Forte. IonQ https://ionq.com/resources/ionq-forte-first-configurable-quantum-computer (2023)."
+   },
+   {
+    "key": "6481_CR22",
+    "doi-asserted-by": "publisher",
+    "first-page": "025020",
+    "DOI": "10.1088/2058-9565/abe519",
+    "volume": "6",
+    "author": "P Jurcevic",
+    "year": "2021",
+    "unstructured": "Jurcevic, P. et al. Demonstration of quantum volume 64 on a superconducting quantum computing system. Quantum Sci. Technol. 6, 025020 (2021).",
+    "journal-title": "Quantum Sci. Technol."
+   },
+   {
+    "key": "6481_CR23",
+    "unstructured": "Ryan-Anderson, C. et al. Implementing fault-tolerant entangling gates on the five-qubit code and the color code. Preprint at https://arxiv.org/abs/2208.01863 (2022)."
+   },
+   {
+    "key": "6481_CR24",
+    "doi-asserted-by": "publisher",
+    "first-page": "042430",
+    "DOI": "10.1103/PhysRevA.105.042430",
+    "volume": "105",
+    "author": "Z Fu",
+    "year": "2022",
+    "unstructured": "Fu, Z. et al. High-fidelity entanglement of neutral atoms via a Rydberg-mediated single-modulated-pulse controlled-PHASE gate. Phys. Rev. A 105, 042430 (2022).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR25",
+    "doi-asserted-by": "publisher",
+    "first-page": "020343",
+    "DOI": "10.1103/PRXQuantum.2.020343",
+    "volume": "2",
+    "author": "I Pogorelov",
+    "year": "2021",
+    "unstructured": "Pogorelov, I. et al. Compact ion-trap quantum computing demonstrator. PRX Quantum 2, 020343 (2021).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "6481_CR26",
+    "doi-asserted-by": "publisher",
+    "first-page": "033019",
+    "DOI": "10.1103/PhysRevResearch.4.033019",
+    "volume": "4",
+    "author": "A Pagano",
+    "year": "2022",
+    "unstructured": "Pagano, A. et al. Error budgeting for a controlled-phase gate with strontium-88 Rydberg atoms. Phys. Rev. Res. 4, 033019 (2022).",
+    "journal-title": "Phys. Rev. Res."
+   },
+   {
+    "key": "6481_CR27",
+    "doi-asserted-by": "publisher",
+    "first-page": "457",
+    "DOI": "10.1038/s41586-022-04603-6",
+    "volume": "604",
+    "author": "TM Graham",
+    "year": "2022",
+    "unstructured": "Graham, T. M. et al. Multi-qubit entanglement and algorithms on a neutral-atom quantum computer. Nature 604, 457–462 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR28",
+    "doi-asserted-by": "publisher",
+    "first-page": "032306",
+    "DOI": "10.1103/PhysRevA.94.032306",
+    "volume": "94",
+    "author": "LS Theis",
+    "year": "2016",
+    "unstructured": "Theis, L. S., Motzoi, F., Wilhelm, F. K. & Saffman, M. High-fidelity Rydberg-blockade entangling gate using shaped, analytic pulses. Phys. Rev. A 94, 032306 (2016).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR29",
+    "doi-asserted-by": "publisher",
+    "first-page": "170504",
+    "DOI": "10.1103/PhysRevLett.100.170504",
+    "volume": "100",
+    "author": "D Møller",
+    "year": "2008",
+    "unstructured": "Møller, D., Madsen, L. B. & Mølmer, K. Quantum gates and multiparticle entanglement by Rydberg excitation blockade and adiabatic passage. Phys. Rev. Lett. 100, 170504 (2008).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR30",
+    "doi-asserted-by": "publisher",
+    "first-page": "281",
+    "DOI": "10.1038/s41586-021-03928-y",
+    "volume": "598",
+    "author": "L Egan",
+    "year": "2021",
+    "unstructured": "Egan, L. et al. Fault-tolerant control of an error-corrected qubit. Nature 598, 281–286 (2021).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR31",
+    "doi-asserted-by": "publisher",
+    "first-page": "100503",
+    "DOI": "10.1103/PhysRevLett.114.100503",
+    "volume": "114",
+    "author": "T Xia",
+    "year": "2015",
+    "unstructured": "Xia, T. et al. Randomized benchmarking of single-qubit gates in a 2D array of neutral-atom qubits. Phys. Rev. Lett. 114, 100503 (2015).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR32",
+    "doi-asserted-by": "publisher",
+    "first-page": "013317",
+    "DOI": "10.1103/PhysRevResearch.2.013317",
+    "volume": "2",
+    "author": "CH Baldwin",
+    "year": "2020",
+    "unstructured": "Baldwin, C. H., Bjork, B. J., Gaebler, J. P., Hayes, D. & Stack, D. Subspace benchmarking high-fidelity entangling operations with trapped ions. Phys. Rev. Res. 2, 013317 (2020).",
+    "journal-title": "Phys. Rev. Res."
+   },
+   {
+    "key": "6481_CR33",
+    "doi-asserted-by": "publisher",
+    "first-page": "696",
+    "DOI": "10.1038/nphys698",
+    "volume": "3",
+    "author": "J Beugnon",
+    "year": "2007",
+    "unstructured": "Beugnon, J. et al. Two-dimensional transport and transfer of a single atomic qubit in optical tweezers. Nat. Phys. 3, 696–699 (2007).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR34",
+    "first-page": "461",
+    "volume": "9",
+    "author": "VV Shende",
+    "year": "2009",
+    "unstructured": "Shende, V. V. & Markov, I. L. On the CNOT-cost of TOFFOLI gates. Quantum Inf. Comput. 9, 461–486 (2009).",
+    "journal-title": "Quantum Inf. Comput."
+   },
+   {
+    "key": "6481_CR35",
+    "doi-asserted-by": "publisher",
+    "first-page": "724",
+    "DOI": "10.1038/s41566-022-01047-2",
+    "volume": "16",
+    "author": "Y Chew",
+    "year": "2022",
+    "unstructured": "Chew, Y. et al. Ultrafast energy exchange between two single Rydberg atoms on a nanosecond timescale. Nat. Photonics 16, 724–729 (2022).",
+    "journal-title": "Nat. Photonics"
+   },
+   {
+    "key": "6481_CR36",
+    "first-page": "021049",
+    "volume": "12",
+    "author": "I Cong",
+    "year": "2022",
+    "unstructured": "Cong, I. et al. Hardware-efficient, fault-tolerant quantum computation with Rydberg atoms. Phys. Rev. X 12, 021049 (2022).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR37",
+    "doi-asserted-by": "publisher",
+    "first-page": "1265",
+    "DOI": "10.1126/science.ade5337",
+    "volume": "380",
+    "author": "K Singh",
+    "year": "2023",
+    "unstructured": "Singh, K. et al. Mid-circuit correction of correlated phase errors using an array of spectator qubits. Science 380, 1265–1269 (2023).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "6481_CR38",
+    "unstructured": "Graham, T. M. et al. Mid-circuit measurements on a neutral atom quantum processor. Preprint at https://arxiv.org/abs/2303.10051 (2023)."
+   },
+   {
+    "key": "6481_CR39",
+    "doi-asserted-by": "publisher",
+    "first-page": "1511",
+    "DOI": "10.1126/science.abi9917",
+    "volume": "373",
+    "author": "T Dordević",
+    "year": "2021",
+    "unstructured": "Dordević, T. et al. Entanglement transport and a nanophotonic interface for atoms in optical tweezers. Science 373, 1511–1514 (2021).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "6481_CR40",
+    "doi-asserted-by": "publisher",
+    "first-page": "203602",
+    "DOI": "10.1103/PhysRevLett.129.203602",
+    "volume": "129",
+    "author": "E Deist",
+    "year": "2022",
+    "unstructured": "Deist, E. et al. Mid-circuit cavity measurement in a neutral atom array. Phys. Rev. Lett. 129, 203602 (2022).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR41",
+    "doi-asserted-by": "publisher",
+    "first-page": "050501",
+    "DOI": "10.1103/PhysRevLett.127.050501",
+    "volume": "127",
+    "author": "W Xu",
+    "year": "2021",
+    "unstructured": "Xu, W. et al. Fast preparation and detection of a Rydberg qubit using atomic ensembles. Phys. Rev. Lett. 127, 050501 (2021).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR42",
+    "doi-asserted-by": "publisher",
+    "first-page": "857",
+    "DOI": "10.1038/s41567-020-0903-z",
+    "volume": "16",
+    "author": "IS Madjarov",
+    "year": "2020",
+    "unstructured": "Madjarov, I. S. et al. High-fidelity entanglement and detection of alkaline-earth Rydberg atoms. Nat. Phys. 16, 857–861 (2020).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR43",
+    "first-page": "021028",
+    "volume": "12",
+    "author": "S Ma",
+    "year": "2022",
+    "unstructured": "Ma, S. et al. Universal gate operations on nuclear spin qubits in an optical tweezer array of 171Yb atoms. Phys. Rev. X 12, 021028 (2022).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR44",
+    "first-page": "021027",
+    "volume": "12",
+    "author": "A Jenkins",
+    "year": "2022",
+    "unstructured": "Jenkins, A., Lis, J. W., Senoo, A., McGrew, W. F. & Kaufman, A. M. Ytterbium nuclear-spin qubits in an optical tweezer array. Phys. Rev. X 12, 021027 (2022).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR45",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41467-022-32094-6",
+    "volume": "13",
+    "author": "Y Wu",
+    "year": "2022",
+    "unstructured": "Wu, Y., Kolkowitz, S., Puri, S. & Thompson, J. D. Erasure conversion for fault-tolerant quantum computing in alkaline earth Rydberg atom arrays. Nat. Commun. 13, 4657 (2022).",
+    "journal-title": "Nat. Commun."
+   },
+   {
+    "key": "6481_CR46",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Scholl, P. et al. Erasure conversion in a high-fidelity Rydberg quantum simulator. Nature https://doi.org/10.1038/s41586-023-06516-4 (2023).",
+    "DOI": "10.1038/s41586-023-06516-4"
+   },
+   {
+    "key": "6481_CR47",
+    "doi-asserted-by": "publisher",
+    "unstructured": "Ma, S. et al. High-fidelity gates and mid-circuit erasure conversion in an atomic qubit. Nature https://doi.org/10.1038/s41586-023-06438-1 (2023).",
+    "DOI": "10.1038/s41586-023-06438-1"
+   },
+   {
+    "key": "6481_CR48",
+    "unstructured": "Brown, A. R. et al. Quantum gravity in the lab: teleportation by size and traversable wormholes. Preprint at https://arxiv.org/abs/1911.06314 (2019)."
+   },
+   {
+    "key": "6481_CR49",
+    "doi-asserted-by": "publisher",
+    "first-page": "630",
+    "DOI": "10.1038/s41586-021-04156-0",
+    "volume": "600",
+    "author": "A Periwal",
+    "year": "2021",
+    "unstructured": "Periwal, A. et al. Programmable interactions and emergent geometry in an array of atom clouds. Nature 600, 630–635 (2021).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR50",
+    "doi-asserted-by": "publisher",
+    "first-page": "1050",
+    "DOI": "10.1038/s41567-020-0932-7",
+    "volume": "16",
+    "author": "HY Huang",
+    "year": "2020",
+    "unstructured": "Huang, H. Y. et al. Predicting many properties of a quantum system from very few measurements. Nat. Phys. 16, 1050–1057 (2020).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR51",
+    "unstructured": "Eckner, W. J. et al. Realizing spin squeezing with Rydberg interactions in a programmable optical clock. Preprint at https://arxiv.org/abs/2303.08078 (2023)."
+   },
+   {
+    "key": "6481_CR52",
+    "unstructured": "Bornet, G. et al. Scalable spin squeezing in a dipolar Rydberg atom array. Preprint at https://arxiv.org/abs/2303.08053 (2023)."
+   },
+   {
+    "key": "6481_CR53",
+    "doi-asserted-by": "publisher",
+    "first-page": "550",
+    "DOI": "10.1126/science.aaz6801",
+    "volume": "369",
+    "author": "B Yang",
+    "year": "2020",
+    "unstructured": "Yang, B. et al. Cooling and entangling ultracold atoms in optical lattices. Science 369, 550–553 (2020).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "6481_CR54",
+    "doi-asserted-by": "publisher",
+    "first-page": "537",
+    "DOI": "10.1038/s41586-021-04205-8",
+    "volume": "601",
+    "author": "T Hartke",
+    "year": "2022",
+    "unstructured": "Hartke, T. et al. Quantum register of fermion pairs. Nature 601, 537–541 (2022).",
+    "journal-title": "Nature"
+   },
+   {
+    "key": "6481_CR55",
+    "doi-asserted-by": "publisher",
+    "first-page": "885",
+    "DOI": "10.1126/science.abo0608",
+    "volume": "377",
+    "author": "AW Young",
+    "year": "2022",
+    "unstructured": "Young, A. W., Eckner, W. J., Schine, N., Childs, A. M. & Kaufman, A. M. Tweezer-programmable 2D quantum walks in a Hubbard-regime lattice. Science 377, 885–889 (2022).",
+    "journal-title": "Science"
+   },
+   {
+    "key": "6481_CR56",
+    "doi-asserted-by": "crossref",
+    "unstructured": "González-Cuadra, D. et al. Fermionic quantum processing with programmable neutral atom arrays. Preprint at https://arxiv.org/abs/2303.06985 (2023).",
+    "DOI": "10.1073/pnas.2304294120"
+   },
+   {
+    "key": "6481_CR57",
+    "doi-asserted-by": "publisher",
+    "first-page": "063411",
+    "DOI": "10.1103/PhysRevA.87.063411",
+    "volume": "87",
+    "author": "AT Grier",
+    "year": "2013",
+    "unstructured": "Grier, A. T. et al. Λ-enhanced sub-Doppler cooling of lithium atoms in D1 gray molasses. Phys. Rev. A 87, 063411 (2013).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR58",
+    "first-page": "011057",
+    "volume": "9",
+    "author": "MO Brown",
+    "year": "2019",
+    "unstructured": "Brown, M. O., Thiele, T., Kiehl, C., Hsu, T.-W. & Regal, C. A. Gray-molasses optical-tweezer loading: controlling collisions for scaling atom-array assembly. Phys. Rev. X 9, 011057 (2019).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR59",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/s41598-018-19814-z",
+    "volume": "8",
+    "author": "S Rosi",
+    "year": "2018",
+    "unstructured": "Rosi, S. et al. Λ-enhanced grey molasses on the D2 transition of Rubidium-87 atoms. Sci. Rep. 8, 1301 (2018).",
+    "journal-title": "Sci. Rep."
+   },
+   {
+    "key": "6481_CR60",
+    "doi-asserted-by": "publisher",
+    "first-page": "013240",
+    "DOI": "10.1103/PhysRevResearch.4.013240",
+    "volume": "4",
+    "author": "J Ang’ong’a",
+    "year": "2022",
+    "unstructured": "Ang’ong’a, J., Huang, C., Covey, J. P. & Gadway, B. Gray molasses cooling of 39K atoms in optical tweezers. Phys. Rev. Res. 4, 013240 (2022).",
+    "journal-title": "Phys. Rev. Res."
+   },
+   {
+    "key": "6481_CR61",
+    "doi-asserted-by": "publisher",
+    "first-page": "033425",
+    "DOI": "10.1103/PhysRevA.78.033425",
+    "volume": "78",
+    "author": "C Tuchendler",
+    "year": "2008",
+    "unstructured": "Tuchendler, C., Lance, A. M., Browaeys, A., Sortais, Y. R. P. & Grangier, P. Energy distribution and cooling of a single atom in an optical tweezer. Phys. Rev. A 78, 033425 (2008).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR62",
+    "doi-asserted-by": "publisher",
+    "first-page": "538",
+    "DOI": "10.1038/s41567-019-0478-8",
+    "volume": "15",
+    "author": "T-Y Wu",
+    "year": "2019",
+    "unstructured": "Wu, T.-Y., Kumar, A., Giraldo, F. & Weiss, D. S. Stern–Gerlach detection of neutral-atom qubits in a state-dependent optical lattice. Nat. Phys. 15, 538–542 (2019).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR63",
+    "doi-asserted-by": "publisher",
+    "first-page": "032618",
+    "DOI": "10.1103/PhysRevA.105.032618",
+    "volume": "105",
+    "author": "H Levine",
+    "year": "2022",
+    "unstructured": "Levine, H. et al. Dispersive optical systems for scalable Raman driving of hyperfine qubits. Phys. Rev. A 105, 032618 (2022).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR64",
+    "doi-asserted-by": "publisher",
+    "first-page": "1037",
+    "DOI": "10.1103/RevModPhys.76.1037",
+    "volume": "76",
+    "author": "LMK Vandersypen",
+    "year": "2005",
+    "unstructured": "Vandersypen, L. M. K. & Chuang, I. L. NMR techniques for quantum control and computation. Rev. Mod. Phys. 76, 1037–1069 (2005).",
+    "journal-title": "Rev. Mod. Phys."
+   },
+   {
+    "key": "6481_CR65",
+    "doi-asserted-by": "publisher",
+    "first-page": "133001",
+    "DOI": "10.1103/PhysRevLett.110.133001",
+    "volume": "110",
+    "author": "JD Thompson",
+    "year": "2013",
+    "unstructured": "Thompson, J. D., Tiecke, T. G., Zibrov, A. S., Vuletić, V. & Lukin, M. D. Coherence and Raman sideband cooling of a single atom in an optical tweezer. Phys. Rev. Lett. 110, 133001 (2013).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR66",
+    "doi-asserted-by": "publisher",
+    "first-page": "221",
+    "DOI": "10.1006/jmra.1994.1159",
+    "volume": "109",
+    "author": "S Wimperis",
+    "year": "1994",
+    "unstructured": "Wimperis, S. Broadband, narrowband, and passband composite pulses for use in advanced NMR experiments. J. Magn. Reson. Ser. A 109, 221–231 (1994).",
+    "journal-title": "J. Magn. Reson. Ser. A"
+   },
+   {
+    "key": "6481_CR67",
+    "doi-asserted-by": "publisher",
+    "first-page": "2208",
+    "DOI": "10.1103/PhysRevLett.85.2208",
+    "volume": "85",
+    "author": "D Jaksch",
+    "year": "2000",
+    "unstructured": "Jaksch, D. et al. Fast quantum gates for neutral atoms. Phys. Rev. Lett. 85, 2208–2211 (2000).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR68",
+    "doi-asserted-by": "publisher",
+    "first-page": "S159",
+    "DOI": "10.1088/0953-4075/40/9/S09",
+    "volume": "40",
+    "author": "E Brion",
+    "year": "2007",
+    "unstructured": "Brion, E., Pedersen, L. H. & Mølmer, K. Implementing a neutral atom Rydberg gate without populating the Rydberg state. J. Phys. B At. Mol. Opt. Phys. 40, S159 (2007).",
+    "journal-title": "J. Phys. B At. Mol. Opt. Phys."
+   },
+   {
+    "key": "6481_CR69",
+    "doi-asserted-by": "publisher",
+    "first-page": "042315",
+    "DOI": "10.1103/PhysRevA.84.042315",
+    "volume": "84",
+    "author": "MM Müller",
+    "year": "2011",
+    "unstructured": "Müller, M. M. et al. Optimizing entangling quantum gates for physical systems. Phys. Rev. A 84, 042315 (2011).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR70",
+    "doi-asserted-by": "publisher",
+    "first-page": "062327",
+    "DOI": "10.1103/PhysRevA.90.062327",
+    "volume": "90",
+    "author": "X-F Shi",
+    "year": "2014",
+    "unstructured": "Shi, X.-F., Bariani, F. & Kennedy, T. A. B. Entanglement of neutral-atom chains by spin-exchange Rydberg interaction. Phys. Rev. A 90, 062327 (2014).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR71",
+    "doi-asserted-by": "publisher",
+    "first-page": "062307",
+    "DOI": "10.1103/PhysRevA.94.062307",
+    "volume": "94",
+    "author": "II Beterov",
+    "year": "2016",
+    "unstructured": "Beterov, I. I. et al. Two-qubit gates using adiabatic passage of the Stark-tuned Förster resonances in Rydberg atoms. Phys. Rev. A 94, 062307 (2016).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR72",
+    "doi-asserted-by": "publisher",
+    "first-page": "042306",
+    "DOI": "10.1103/PhysRevA.96.042306",
+    "volume": "96",
+    "author": "D Petrosyan",
+    "year": "2017",
+    "unstructured": "Petrosyan, D., Motzoi, F., Saffman, M. & Mølmer, K. High-fidelity Rydberg quantum gate via a two-atom dark state. Phys. Rev. A 96, 042306 (2017).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR73",
+    "doi-asserted-by": "publisher",
+    "first-page": "23080",
+    "DOI": "10.1364/OE.27.023080",
+    "volume": "27",
+    "author": "D Yu",
+    "year": "2019",
+    "unstructured": "Yu, D., Wang, H., Ma, D., Zhao, X. & Qian, J. Adiabatic and high-fidelity quantum gates with hybrid Rydberg-Rydberg interactions. Opt. Express 27, 23080–23094 (2019).",
+    "journal-title": "Opt. Express"
+   },
+   {
+    "key": "6481_CR74",
+    "doi-asserted-by": "publisher",
+    "first-page": "062309",
+    "DOI": "10.1103/PhysRevA.101.062309",
+    "volume": "101",
+    "author": "M Saffman",
+    "year": "2020",
+    "unstructured": "Saffman, M., Beterov, I. I., Dalal, A., Páez, E. J. & Sanders, B. C. Symmetric Rydberg controlled-Z gates with adiabatic pulses. Phys. Rev. A 101, 062309 (2020).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR75",
+    "doi-asserted-by": "publisher",
+    "first-page": "024059",
+    "DOI": "10.1103/PhysRevApplied.13.024059",
+    "volume": "13",
+    "author": "Y Sun",
+    "year": "2020",
+    "unstructured": "Sun, Y., Xu, P., Chen, P.-X. & Liu, L. Controlled phase gate protocol for neutral atoms via off-resonant modulated driving. Phys. Rev. Appl. 13, 024059 (2020).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "6481_CR76",
+    "doi-asserted-by": "publisher",
+    "first-page": "030301",
+    "DOI": "10.1103/PhysRevA.89.030301",
+    "volume": "89",
+    "author": "DDB Rao",
+    "year": "2014",
+    "unstructured": "Rao, D. D. B. & Mølmer, K. Robust Rydberg-interaction gates with adiabatic passage. Phys. Rev. A 89, 030301 (2014).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR77",
+    "doi-asserted-by": "publisher",
+    "first-page": "064017",
+    "DOI": "10.1103/PhysRevApplied.7.064017",
+    "volume": "7",
+    "author": "X-F Shi",
+    "year": "2017",
+    "unstructured": "Shi, X.-F. Rydberg quantum gates free from blockade error. Phys. Rev. Appl. 7, 064017 (2017).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "6481_CR78",
+    "doi-asserted-by": "publisher",
+    "first-page": "2036",
+    "DOI": "10.1364/OL.44.002036",
+    "volume": "44",
+    "author": "C-P Shen",
+    "year": "2019",
+    "unstructured": "Shen, C.-P., Wu, J.-L., Su, S.-L. & Liang, E. Construction of robust Rydberg controlled-phase gates. Opt. Lett. 44, 2036–2039 (2019).",
+    "journal-title": "Opt. Lett."
+   },
+   {
+    "key": "6481_CR79",
+    "doi-asserted-by": "publisher",
+    "first-page": "020335",
+    "DOI": "10.1103/PRXQuantum.4.020335",
+    "volume": "4",
+    "author": "C Fromonteil",
+    "year": "2023",
+    "unstructured": "Fromonteil, C., Bluvstein, D. & Pichler, H. Protocols for Rydberg entangling gates featuring robustness against quasi-static errors. PRX Quantum 4, 020335 (2023).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "6481_CR80",
+    "doi-asserted-by": "publisher",
+    "first-page": "033052",
+    "DOI": "10.1103/PhysRevResearch.5.033052",
+    "volume": "5",
+    "author": "M Mohan",
+    "year": "2023",
+    "unstructured": "Mohan, M., de Keijzer, R. & Kokkelmans, S. Robust control and optimal Rydberg states for neutral atom two-qubit gates. Phys. Rev. Res. 5, 033052 (2023).",
+    "journal-title": "Phys. Rev. Res."
+   },
+   {
+    "key": "6481_CR81",
+    "unstructured": "Chang, T. H., Wang, T. N., Jen, H. H. & Chen, Y. C. High-fidelity Rydberg control-Z gates with time-optimal pulses. Preprint at https://arxiv.org/abs/2303.16395 (2023)."
+   },
+   {
+    "key": "6481_CR82",
+    "doi-asserted-by": "publisher",
+    "first-page": "020336",
+    "DOI": "10.1103/PRXQuantum.4.020336",
+    "volume": "4",
+    "author": "S Jandura",
+    "year": "2023",
+    "unstructured": "Jandura, S., Thompson, J. D. & Pupillo, G. Optimizing Rydberg gates for logical-qubit performance. PRX Quantum 4, 020336 (2023).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "6481_CR83",
+    "doi-asserted-by": "publisher",
+    "first-page": "035032",
+    "DOI": "10.1088/2058-9565/ace0d5",
+    "volume": "8",
+    "author": "R Li",
+    "year": "2023",
+    "unstructured": "Li, R., Qian, J. & Zhang, W. Proposal for practical Rydberg quantum gates using a native two-photon excitation. Quantum Sci. Technol. 8, 035032 (2023).",
+    "journal-title": "Quantum Sci. Technol."
+   },
+   {
+    "key": "6481_CR84",
+    "doi-asserted-by": "publisher",
+    "first-page": "044007",
+    "DOI": "10.1103/PhysRevApplied.19.044007",
+    "volume": "19",
+    "author": "S-L Su",
+    "year": "2023",
+    "unstructured": "Su, S.-L. et al. Rabi- and blockade-error-resilient all-geometric Rydberg quantum gates. Phys. Rev. Appl. 19, 044007 (2023).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "6481_CR85",
+    "doi-asserted-by": "publisher",
+    "first-page": "034307",
+    "DOI": "10.1103/PhysRevA.82.034307",
+    "volume": "82",
+    "author": "H-Z Wu",
+    "year": "2010",
+    "unstructured": "Wu, H.-Z., Yang, Z.-B. & Zheng, S.-B. Implementation of a multiqubit quantum phase gate in a neutral atomic ensemble via the asymmetric Rydberg blockade. Phys. Rev. A 82, 034307 (2010).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR86",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1007/s11128-011-0292-4",
+    "volume": "10",
+    "author": "L Isenhower",
+    "year": "2011",
+    "unstructured": "Isenhower, L., Saffman, M. & Mølmer, K. Multibit Ck NOT quantum gates via Rydberg blockade. Quantum Inf. Process. 10, 755 (2011).",
+    "journal-title": "Quantum Inf. Process."
+   },
+   {
+    "key": "6481_CR87",
+    "doi-asserted-by": "publisher",
+    "first-page": "827",
+    "DOI": "10.1364/JOSAB.31.000827",
+    "volume": "31",
+    "author": "X-Q Shao",
+    "year": "2014",
+    "unstructured": "Shao, X.-Q., Zheng, T.-Y., Oh, C. H. & Zhang, S. One-step achievement of robust multipartite Greenberger–Horne–Zeilinger state and controlled-phase gate via Rydberg interaction. J. Opt. Soc. Am. B 31, 827–832 (2014).",
+    "journal-title": "J. Opt. Soc. Am. B"
+   },
+   {
+    "key": "6481_CR88",
+    "first-page": "021054",
+    "volume": "10",
+    "author": "M Khazali",
+    "year": "2020",
+    "unstructured": "Khazali, M. & Mølmer, K. Fast multiqubit gates by adiabatic evolution in interacting excited-state manifolds of Rydberg atoms and superconducting circuits. Phys. Rev. X 10, 021054 (2020).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR89",
+    "doi-asserted-by": "publisher",
+    "first-page": "120501",
+    "DOI": "10.1103/PhysRevLett.127.120501",
+    "volume": "127",
+    "author": "JT Young",
+    "year": "2021",
+    "unstructured": "Young, J. T., Bienias, P., Belyansky, R., Kaufman, A. M. & Gorshkov, A. V. Asymmetric blockade and multiqubit gates via dipole-dipole interactions. Phys. Rev. Lett. 127, 120501 (2021).",
+    "journal-title": "Phys. Rev. Lett."
+   },
+   {
+    "key": "6481_CR90",
+    "doi-asserted-by": "publisher",
+    "first-page": "024014",
+    "DOI": "10.1103/PhysRevApplied.17.024014",
+    "volume": "17",
+    "author": "R Li",
+    "year": "2022",
+    "unstructured": "Li, R., Li, S., Yu, D., Qian, J. & Zhang, W. Optimal model for fewer-qubit CNOT gates with Rydberg atoms. Phys. Rev. Appl. 17, 024014 (2022).",
+    "journal-title": "Phys. Rev. Appl."
+   },
+   {
+    "key": "6481_CR91",
+    "doi-asserted-by": "publisher",
+    "first-page": "045020",
+    "DOI": "10.1088/2058-9565/ac823a",
+    "volume": "7",
+    "author": "G Pelegrí",
+    "year": "2022",
+    "unstructured": "Pelegrí, G., Daley, A. J. & Pritchard, J. D. High-fidelity multiqubit Rydberg gates via two-photon adiabatic rapid passage. Quantum Sci. Technol. 7, 045020 (2022).",
+    "journal-title": "Quantum Sci. Technol."
+   },
+   {
+    "key": "6481_CR92",
+    "doi-asserted-by": "publisher",
+    "first-page": "022424",
+    "DOI": "10.1103/PhysRevA.103.022424",
+    "volume": "103",
+    "author": "F Robicheaux",
+    "year": "2021",
+    "unstructured": "Robicheaux, F., Graham, T. M. & Saffman, M. Photon-recoil and laser-focusing limits to Rydberg gate fidelity. Phys. Rev. A 103, 022424 (2021).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR93",
+    "unstructured": "Martin, M. J. et al. A Mølmer-Sørensen gate with Rydberg-dressed atoms. Preprint at https://arxiv.org/abs/2111.14677 (2021)."
+   },
+   {
+    "key": "6481_CR94",
+    "doi-asserted-by": "publisher",
+    "first-page": "714",
+    "DOI": "10.1038/s41567-023-01959-y",
+    "volume": "19",
+    "author": "K Srakaew",
+    "year": "2023",
+    "unstructured": "Srakaew, K. et al. A subwavelength atomic array switched by a single Rydberg atom. Nat. Phys. 19, 714–719 (2023).",
+    "journal-title": "Nat. Phys."
+   },
+   {
+    "key": "6481_CR95",
+    "first-page": "011040",
+    "volume": "12",
+    "author": "K Singh",
+    "year": "2022",
+    "unstructured": "Singh, K., Anand, S., Pocklington, A., Kemp, J. T. & Bernien, H. Dual-element, two-dimensional atom array with continuous-mode operation. Phys. Rev. X 12, 011040 (2022).",
+    "journal-title": "Phys. Rev. X"
+   },
+   {
+    "key": "6481_CR96",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Sahay, K., Jin, J., Claes, J., Thompson, J. D. & Puri, S. High threshold codes for neutral atom qubits with biased erasure errors. Preprint at https://arxiv.org/abs/2302.03063 (2023).",
+    "DOI": "10.1103/PhysRevX.13.041013"
+   },
+   {
+    "key": "6481_CR97",
+    "doi-asserted-by": "publisher",
+    "first-page": "010351",
+    "DOI": "10.1103/PRXQuantum.2.010351",
+    "volume": "2",
+    "author": "J Claes",
+    "year": "2021",
+    "unstructured": "Claes, J., Rieffel, E. & Wang, Z. Character randomized benchmarking for non-multiplicity-free groups with applications to subspace, leakage, and matchgate randomized benchmarking. PRX Quantum 2, 010351 (2021).",
+    "journal-title": "PRX Quantum"
+   },
+   {
+    "key": "6481_CR98",
+    "doi-asserted-by": "publisher",
+    "first-page": "33411",
+    "DOI": "10.1103/PhysRevA.98.033411",
+    "volume": "98",
+    "author": "J Lampen",
+    "year": "2018",
+    "unstructured": "Lampen, J., Nguyen, H., Li, L., Berman, P. R. & Kuzmich, A. Long-lived coherence between ground and Rydberg levels in a magic-wavelength lattice. Phys. Rev. A 98, 33411 (2018).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR99",
+    "doi-asserted-by": "publisher",
+    "first-page": "033817",
+    "DOI": "10.1103/PhysRevA.85.033817",
+    "volume": "85",
+    "author": "H-R Noh",
+    "year": "2012",
+    "unstructured": "Noh, H.-R. & Moon, H. S. Transmittance signal in real ladder-type atoms. Phys. Rev. A 85, 033817 (2012).",
+    "journal-title": "Phys. Rev. A"
+   },
+   {
+    "key": "6481_CR100",
+    "doi-asserted-by": "publisher",
+    "first-page": "123603",
+    "DOI": "10.1103/PhysRevLett.121.123603",
+    "volume": "121",
+    "author": "H Levine",
+    "year": "2018",
+    "unstructured": "Levine, H. et al. High-fidelity control and entanglement of Rydberg-atom qubits. Phys. Rev. Lett. 121, 123603 (2018).",
+    "journal-title": "Phys. Rev. Lett."
+   }
+  ],
+  "container-title": "Nature",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://www.nature.com/articles/s41586-023-06481-y.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://www.nature.com/articles/s41586-023-06481-y",
+    "content-type": "text/html",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://www.nature.com/articles/s41586-023-06481-y.pdf",
+    "content-type": "application/pdf",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2023,
+     12,
+     23
+    ]
+   ],
+   "date-time": "2023-12-23T13:21:34Z",
+   "timestamp": 1703337694000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://www.nature.com/articles/s41586-023-06481-y"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2023,
+     10,
+     11
+    ]
+   ]
+  },
+  "references-count": 100,
+  "journal-issue": {
+   "issue": "7982",
+   "published-print": {
+    "date-parts": [
+     [
+      2023,
+      10,
+      12
+     ]
+    ]
+   }
+  },
+  "alternative-id": [
+   "6481"
+  ],
+  "URL": "http://dx.doi.org/10.1038/s41586-023-06481-y",
+  "relation": {},
+  "ISSN": [
+   "0028-0836",
+   "1476-4687"
+  ],
+  "subject": [],
+  "container-title-short": "Nature",
+  "published": {
+   "date-parts": [
+    [
+     2023,
+     10,
+     11
+    ]
+   ]
+  },
+  "assertion": [
+   {
+    "value": "11 April 2023",
+    "order": 1,
+    "name": "received",
+    "label": "Received",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "25 July 2023",
+    "order": 2,
+    "name": "accepted",
+    "label": "Accepted",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "11 October 2023",
+    "order": 3,
+    "name": "first_online",
+    "label": "First Online",
+    "group": {
+     "name": "ArticleHistory",
+     "label": "Article History"
+    }
+   },
+   {
+    "value": "M.G., V.V. and M.D.L. are co-founders and shareholders and H.Z. is an employee of QuEra Computing.",
+    "order": 1,
+    "name": "Ethics",
+    "group": {
+     "name": "EthicsHeading",
+     "label": "Competing interests"
+    }
+   }
+  ],
+  "id": "evered2023"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     8,
+     25
+    ]
+   ],
+   "date-time": "2026-08-25T02:56:57Z",
+   "timestamp": 1787626617269,
+   "version": "build-2736575974"
+  },
+  "reference-count": 23,
+  "publisher": "American Physical Society (APS)",
+  "issue": "2",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       2018,
+       1,
+       9
+      ]
+     ],
+     "date-time": "2018-01-09T00:00:00Z",
+     "timestamp": 1515456000000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://link.aps.org/licenses/aps-default-license"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       2019,
+       1,
+       9
+      ]
+     ],
+     "date-time": "2019-01-09T00:00:00Z",
+     "timestamp": 1546992000000
+    },
+    "content-version": "am",
+    "delay-in-days": 365,
+    "URL": "https://link.aps.org/licenses/aps-default-accepted-manuscript-license"
+   }
+  ],
+  "funder": [
+   {
+    "DOI": "10.13039/100011038",
+    "name": "Office of the Director of National Intelligence",
+    "doi-asserted-by": "publisher",
+    "id": [
+     {
+      "id": "10.13039/100011038",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   },
+   {
+    "DOI": "10.13039/100000183",
+    "name": "Army Research Office",
+    "doi-asserted-by": "publisher",
+    "award": [
+     "W911NF-10-1-0231"
+    ],
+    "award-info": [
+     {
+      "award-number": [
+       "W911NF-10-1-0231"
+      ]
+     }
+    ],
+    "id": [
+     {
+      "id": "10.13039/100000183",
+      "id-type": "DOI",
+      "asserted-by": "publisher"
+     }
+    ]
+   }
+  ],
+  "content-domain": {
+   "domain": [
+    "journals.aps.org"
+   ],
+   "crossmark-restriction": true
+  },
+  "DOI": "10.1103/physrevlett.120.020501",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2018,
+     1,
+     9
+    ]
+   ],
+   "date-time": "2018-01-09T11:17:27Z",
+   "timestamp": 1515496647000
+  },
+  "update-policy": "https://doi.org/10.1103/crossmark-policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 125,
+  "title": "Robust 2-Qubit Gates in a Linear Ion Crystal Using a Frequency-Modulated Driving Force",
+  "prefix": "10.1103",
+  "volume": "120",
+  "author": [
+   {
+    "given": "Pak Hong",
+    "family": "Leung",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Kevin A.",
+    "family": "Landsman",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Caroline",
+    "family": "Figgatt",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Norbert M.",
+    "family": "Linke",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Christopher",
+    "family": "Monroe",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Kenneth R.",
+    "family": "Brown",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "16",
+  "published-online": {
+   "date-parts": [
+    [
+     2018,
+     1,
+     9
+    ]
+   ]
+  },
+  "reference": [
+   {
+    "key": "PhysRevLett.120.020501Cc1R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.76.052314"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc2R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1364/OL.38.004735"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc3R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.84.030303"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc4R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.113.220501"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc5R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.95.022337"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc6R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.82.1835"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc7R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.82.1971"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc8R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1002/1521-3978(200009)48:9/11&lt;801::AID-PROP801&gt;3.0.CO;2-1"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc9R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.59.R2539"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc11R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.117.060504"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc12R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.117.060505"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc13R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature10290"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc14R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.117.140501"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc15R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.106.130506"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc16R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1209/epl/i2005-10424-4"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc17R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1367-2630/10/1/013002"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc18R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1038/nature18648"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc19R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.103.120502"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc20R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.112.190502"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc21R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevLett.114.120502"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc24R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.90.062320"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc25R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1088/1367-2630/14/12/123011"
+   },
+   {
+    "key": "PhysRevLett.120.020501Cc26R1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1103/PhysRevA.89.022321"
+   }
+  ],
+  "container-title": "Physical Review Letters",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://link.aps.org/accepted/10.1103/PhysRevLett.120.020501",
+    "content-type": "application/pdf",
+    "content-version": "am",
+    "intended-application": "unspecified"
+   },
+   {
+    "URL": "https://link.aps.org/article/10.1103/PhysRevLett.120.020501",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "syndication"
+   },
+   {
+    "URL": "http://harvest.aps.org/v2/journals/articles/10.1103/PhysRevLett.120.020501/fulltext",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2025,
+     1,
+     2
+    ]
+   ],
+   "date-time": "2025-01-02T16:44:55Z",
+   "timestamp": 1735836295000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://link.aps.org/doi/10.1103/PhysRevLett.120.020501"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     2018,
+     1,
+     9
+    ]
+   ]
+  },
+  "references-count": 23,
+  "journal-issue": {
+   "issue": "2",
+   "published-print": {
+    "date-parts": [
+     [
+      2018,
+      1
+     ]
+    ]
+   }
+  },
+  "URL": "http://dx.doi.org/10.1103/PhysRevLett.120.020501",
+  "relation": {},
+  "ISSN": [
+   "0031-9007",
+   "1079-7114"
+  ],
+  "subject": [],
+  "container-title-short": "Phys. Rev. Lett.",
+  "published": {
+   "date-parts": [
+    [
+     2018,
+     1,
+     9
+    ]
+   ]
+  },
+  "article-number": "020501",
+  "id": "leung2018"
  }
 ]

@@ -65,9 +65,11 @@ nav:
       - Robustness to hardware drift: results/robustness.md
   - Research question:
       - Drift, dimension and learned policies: hypothesis/drift-and-dimension.md
+      - RL-initialised optimal control: hypothesis/rl-initialised-qoc.md
   - Next steps:
       - Open decisions: next/decisions.md
       - Named gates and a richer model: next/named-gates.md
+      - Beyond two transmons: next/platforms.md
       - Roadmap: next/roadmap.md
   - Bibliography: bibliography.md
   - Changelog: changelog.md
