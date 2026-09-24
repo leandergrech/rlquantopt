@@ -42,23 +42,30 @@ theme:
 
 nav:
   - Home: index.md
-  - Working together: working-together.md
-  - Getting started: getting-started.md
-  - Code walkthrough:
-      - Architecture: architecture.md
-      - Physics: code/physics.md
-      - Gate metrics: code/metrics.md
+  - Collaborate: contact.md
+  - Guide:
+      - Working together: working-together.md
+      - Getting started: getting-started.md
+  - The system:
+      - Model and simulator: system/model.md
+      - Gate metrics: system/metrics.md
+      - Hardware drift ranges: system/drift.md
+  - The code:
+      - Architecture: code/architecture.md
       - Environment: code/environment.md
       - Agents and training: code/agents.md
       - GRAPE: code/grape.md
-  - Experiments:
-      - Replication of the paper: replication.md
-      - RL vs GRAPE vs robust GRAPE: experiments/rl-grape-robust.md
-  - Roadmap: v2_jax_plan.md
-  - Reference:
-      - Scripts and CLI: reference/scripts.md
-      - Changelog: changelog.md
-  - Collaborate: contact.md
+      - Scripts and CLI: code/scripts.md
+  - Results:
+      - Replication of the paper: results/replication.md
+      - Training RL agents: results/training.md
+      - Robustness to hardware drift: results/robustness.md
+  - Next steps:
+      - Open decisions: next/decisions.md
+      - Named gates and a richer model: next/named-gates.md
+      - Roadmap: next/roadmap.md
+  - Bibliography: bibliography.md
+  - Changelog: changelog.md
 
 markdown_extensions:
   - admonition
@@ -81,6 +88,9 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.snippets:

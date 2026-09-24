@@ -50,7 +50,7 @@ u, JT, *_ = grape.optimise(rl[None], physics.sector_hamiltonian(model), 20.0, cf
 
 On the paper's RL pulse (J_T = 9.5e-5 at 17.25 ns), 200 iterations take 2 s on the CPU and reach
 J_T = 7.3e-6. Results of the full comparison are in
-[RL vs GRAPE vs robust GRAPE](../experiments/rl-grape-robust.md).
+[RL vs GRAPE vs robust GRAPE](../results/robustness.md).
 
 ## Cost
 
@@ -63,6 +63,6 @@ iterations of a 25-member ensemble with 4 restarts take ~25 minutes.
 - GRAPE sees the whole Hamiltonian and its gradients; RL sees only rewards. Comparisons of
   robustness are fair only at the same gate time, amplitude bound and model, which is how the
   experiment is set up. Comparisons of sample cost between the two are not like for like.
-- Gradients near \(abcd = 0\) are replaced with 0 (see [Gate metrics](metrics.md)); starting from
+- Gradients near \(abcd = 0\) are replaced with 0 (see [Gate metrics](../system/metrics.md)); starting from
   \(u = 0\) therefore does not move. Random guesses always include a component at the qubit-qubit
   detuning (0.86 GHz) to start inside the useful region.

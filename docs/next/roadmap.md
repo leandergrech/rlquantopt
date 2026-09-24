@@ -42,8 +42,9 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.6.0 | TRPO training replication from scratch (Figs. 5-8) | done, 1 seed |
 | 2.7.0 | Differentiable GRAPE baseline and QSL curve (Fig. 3) | done |
 | 2.8.0 | Replication report, `docs/replication.md` | done |
-| 2.9.0 | RL → GRAPE refinement and robust (ensemble) GRAPE ([results](experiments/rl-grape-robust.md)) | done |
+| 2.9.0 | RL → GRAPE refinement and robust (ensemble) GRAPE ([results](../results/robustness.md)) | done |
 | 2.10.0 | Documentation site (MkDocs, GitHub Pages) | done |
+| 2.11.0 | Docs by topic, landing page, bibliography, hardware drift ranges, PPO vs TRPO | done |
 
 ## Beyond replication (next minor versions, not in this pass)
 

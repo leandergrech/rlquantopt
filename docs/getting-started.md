@@ -77,4 +77,4 @@ JAX_PLATFORMS=cpu python -m rlquantopt.jx.train --algo trpo --seed 123 --total-s
 A 2M-step run takes about 12 minutes. In the replication run, J_T was ≈ 6e-2 at 2M steps, just
 before the breakthrough to perfect entanglers at 2-4M steps (the paper's agent broke through at the
 same point). The full 20M-step replication takes
-about 2 hours. All scripts are listed in [Scripts and CLI](reference/scripts.md).
+about 2 hours. All scripts are listed in [Scripts and CLI](code/scripts.md).

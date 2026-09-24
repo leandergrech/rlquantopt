@@ -1,0 +1,359 @@
+TY  - JOUR
+DO  - 10.1088/2058-9565/ae2c16
+UR  - http://dx.doi.org/10.1088/2058-9565/ae2c16
+TI  - Achieving fast and robust perfect entangling gates via reinforcement learning
+T2  - Quantum Science and Technology
+AU  - Grech, Leander
+AU  - Krauss, Matthias G
+AU  - Consiglio, Mirko
+AU  - Apollaro, Tony J G
+AU  - Koch, Christiane P
+AU  - Hirlaender, Simon
+AU  - Valentino, Gianluca
+PY  - 2025
+DA  - 2025/12/23
+PB  - IOP Publishing
+SP  - 015030
+IS  - 1
+VL  - 11
+SN  - 2058-9565
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevapplied.6.064007
+UR  - http://dx.doi.org/10.1103/PhysRevApplied.6.064007
+TI  - Universal Gate for Fixed-Frequency Qubits via a Tunable Bus
+T2  - Physical Review Applied
+AU  - McKay, David C.
+AU  - Filipp, Stefan
+AU  - Mezzacapo, Antonio
+AU  - Magesan, Easwar
+AU  - Chow, Jerry M.
+AU  - Gambetta, Jay M.
+PY  - 2016
+DA  - 2016/12/12
+PB  - American Physical Society (APS)
+IS  - 6
+VL  - 6
+SN  - 2331-7019
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physreva.96.022330
+UR  - http://dx.doi.org/10.1103/PhysRevA.96.022330
+TI  - Efficient
+                    <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                      <mml:mi>Z</mml:mi>
+                    </mml:math>
+                    gates for quantum computing
+T2  - Physical Review A
+AU  - McKay, David C.
+AU  - Wood, Christopher J.
+AU  - Sheldon, Sarah
+AU  - Chow, Jerry M.
+AU  - Gambetta, Jay M.
+PY  - 2017
+DA  - 2017/08/31
+PB  - American Physical Society (APS)
+IS  - 2
+VL  - 96
+SN  - 2469-9926
+SN  - 2469-9934
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physreva.68.052311
+UR  - http://dx.doi.org/10.1103/PhysRevA.68.052311
+TI  - Lower bounds on the complexity of simulating quantum gates
+T2  - Physical Review A
+AU  - Childs, Andrew M.
+AU  - Haselgrove, Henry L.
+AU  - Nielsen, Michael A.
+PY  - 2003
+DA  - 2003/11/18
+PB  - American Physical Society (APS)
+IS  - 5
+VL  - 68
+SN  - 1050-2947
+SN  - 1094-1622
+ER  -
+
+TY  - JOUR
+DO  - 10.1016/j.physleta.2007.02.069
+UR  - http://dx.doi.org/10.1016/j.physleta.2007.02.069
+TI  - Fidelity of quantum operations
+T2  - Physics Letters A
+AU  - Pedersen, Line Hjortshøj
+AU  - Møller, Niels Martin
+AU  - Mølmer, Klaus
+PY  - 2007
+DA  - 2007/07
+PB  - Elsevier BV
+SP  - 47-51
+IS  - 1-2
+VL  - 367
+SN  - 0375-9601
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physreva.91.062306
+UR  - http://dx.doi.org/10.1103/PhysRevA.91.062306
+TI  - Optimizing for an arbitrary perfect entangler. I. Functionals
+T2  - Physical Review A
+AU  - Watts, Paul
+AU  - Vala, Jiří
+AU  - Müller, Matthias M.
+AU  - Calarco, Tommaso
+AU  - Whaley, K. Birgitta
+AU  - Reich, Daniel M.
+AU  - Goerz, Michael H.
+AU  - Koch, Christiane P.
+PY  - 2015
+DA  - 2015/06/08
+PB  - American Physical Society (APS)
+IS  - 6
+VL  - 91
+SN  - 1050-2947
+SN  - 1094-1622
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevapplied.10.054062
+UR  - http://dx.doi.org/10.1103/PhysRevApplied.10.054062
+TI  - Tunable Coupling Scheme for Implementing High-Fidelity Two-Qubit Gates
+T2  - Physical Review Applied
+AU  - Yan, Fei
+AU  - Krantz, Philip
+AU  - Sung, Youngkyu
+AU  - Kjaergaard, Morten
+AU  - Campbell, Daniel L.
+AU  - Orlando, Terry P.
+AU  - Gustavsson, Simon
+AU  - Oliver, William D.
+PY  - 2018
+DA  - 2018/11/28
+PB  - American Physical Society (APS)
+IS  - 5
+VL  - 10
+SN  - 2331-7019
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevx.11.021058
+UR  - http://dx.doi.org/10.1103/PhysRevX.11.021058
+TI  - Realization of High-Fidelity CZ and
+                    <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline">
+                      <mml:mi>Z</mml:mi>
+                      <mml:mi>Z</mml:mi>
+                    </mml:math>
+                    -Free iSWAP Gates with a Tunable Coupler
+T2  - Physical Review X
+AU  - Sung, Youngkyu
+AU  - Ding, Leon
+AU  - Braumüller, Jochen
+AU  - Vepsäläinen, Antti
+AU  - Kannan, Bharath
+AU  - Kjaergaard, Morten
+AU  - Greene, Ami
+AU  - Samach, Gabriel O.
+AU  - McNally, Chris
+AU  - Kim, David
+AU  - Melville, Alexander
+AU  - Niedzielski, Bethany M.
+AU  - Schwartz, Mollie E.
+AU  - Yoder, Jonilyn L.
+AU  - Orlando, Terry P.
+AU  - Gustavsson, Simon
+AU  - Oliver, William D.
+PY  - 2021
+DA  - 2021/06/16
+PB  - American Physical Society (APS)
+IS  - 2
+VL  - 11
+SN  - 2160-3308
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevx.13.031035
+UR  - http://dx.doi.org/10.1103/PhysRevX.13.031035
+TI  - High-Fidelity, Frequency-Flexible Two-Qubit Fluxonium Gates with a Transmon Coupler
+T2  - Physical Review X
+AU  - Ding, Leon
+AU  - Hays, Max
+AU  - Sung, Youngkyu
+AU  - Kannan, Bharath
+AU  - An, Junyoung
+AU  - Di Paolo, Agustin
+AU  - Karamlou, Amir H.
+AU  - Hazard, Thomas M.
+AU  - Azar, Kate
+AU  - Kim, David K.
+AU  - Niedzielski, Bethany M.
+AU  - Melville, Alexander
+AU  - Schwartz, Mollie E.
+AU  - Yoder, Jonilyn L.
+AU  - Orlando, Terry P.
+AU  - Gustavsson, Simon
+AU  - Grover, Jeffrey A.
+AU  - Serniak, Kyle
+AU  - Oliver, William D.
+PY  - 2023
+DA  - 2023/09/25
+PB  - American Physical Society (APS)
+IS  - 3
+VL  - 13
+SN  - 2160-3308
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevx.14.041050
+UR  - http://dx.doi.org/10.1103/PhysRevX.14.041050
+TI  - Realization of High-Fidelity CZ Gate Based on a Double-Transmon Coupler
+T2  - Physical Review X
+AU  - Li, Rui
+AU  - Kubo, Kentaro
+AU  - Ho, Yinghao
+AU  - Yan, Zhiguang
+AU  - Nakamura, Yasunobu
+AU  - Goto, Hayato
+PY  - 2024
+DA  - 2024/11/21
+PB  - American Physical Society (APS)
+IS  - 4
+VL  - 14
+SN  - 2160-3308
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevapplied.23.014015
+UR  - http://dx.doi.org/10.1103/PhysRevApplied.23.014015
+TI  - Designing fast quantum gates using optimal control with a reinforcement-learning ansatz
+T2  - Physical Review Applied
+AU  - Sarma, Bijita
+AU  - Hartmann, Michael J.
+PY  - 2025
+DA  - 2025/01/06
+PB  - American Physical Society (APS)
+IS  - 1
+VL  - 23
+SN  - 2331-7019
+ER  -
+
+TY  - JOUR
+DO  - 10.1038/s41534-019-0168-5
+UR  - http://dx.doi.org/10.1038/s41534-019-0168-5
+TI  - Decoherence benchmarking of superconducting qubits
+T2  - npj Quantum Information
+AU  - Burnett, Jonathan J.
+AU  - Bengtsson, Andreas
+AU  - Scigliuzzo, Marco
+AU  - Niepce, David
+AU  - Kudra, Marina
+AU  - Delsing, Per
+AU  - Bylander, Jonas
+PY  - 2019
+DA  - 2019/06/26
+PB  - Springer Science and Business Media LLC
+IS  - 1
+VL  - 5
+SN  - 2056-6387
+ER  -
+
+TY  - JOUR
+DO  - 10.1103/physrevlett.123.190502
+UR  - http://dx.doi.org/10.1103/PhysRevLett.123.190502
+TI  - Correlating Decoherence in Transmon Qubits: Low Frequency Noise by Single Fluctuators
+T2  - Physical Review Letters
+AU  - Schlör, Steffen
+AU  - Lisenfeld, Jürgen
+AU  - Müller, Clemens
+AU  - Bilmes, Alexander
+AU  - Schneider, Andre
+AU  - Pappas, David P.
+AU  - Ustinov, Alexey V.
+AU  - Weides, Martin
+PY  - 2019
+DA  - 2019/11/08
+PB  - American Physical Society (APS)
+IS  - 19
+VL  - 123
+SN  - 0031-9007
+SN  - 1079-7114
+ER  -
+
+TY  - JOUR
+DO  - 10.1126/sciadv.abi6690
+UR  - http://dx.doi.org/10.1126/sciadv.abi6690
+TI  - High-performance superconducting quantum processors via laser annealing of transmon qubits
+T2  - Science Advances
+AU  - Zhang, Eric J.
+AU  - Srinivasan, Srikanth
+AU  - Sundaresan, Neereja
+AU  - Bogorin, Daniela F.
+AU  - Martin, Yves
+AU  - Hertzberg, Jared B.
+AU  - Timmerwilke, John
+AU  - Pritchett, Emily J.
+AU  - Yau, Jeng-Bang
+AU  - Wang, Cindy
+AU  - Landers, William
+AU  - Lewandowski, Eric P.
+AU  - Narasgond, Adinath
+AU  - Rosenblatt, Sami
+AU  - Keefe, George A.
+AU  - Lauer, Isaac
+AU  - Rothwell, Mary Beth
+AU  - McClure, Douglas T.
+AU  - Dial, Oliver E.
+AU  - Orcutt, Jason S.
+AU  - Brink, Markus
+AU  - Chow, Jerry M.
+PY  - 2022
+DA  - 2022/05/13
+PB  - American Association for the Advancement of Science (AAAS)
+IS  - 19
+VL  - 8
+SN  - 2375-2548
+ER  -
+
+TY  - GEN
+T1  - Stability studies on subtractively-fabricated CMOS-compatible superconducting transmon qubits
+AU  - Dhieb, Chawki
+AU  - Weber, Johannes
+AU  - Taubenberger, Samuel
+AU  - Guizan, Carla Moran
+AU  - Lang, Simon J. K.
+AU  - Luo, Zhen
+AU  - Music, Emir
+AU  - Maiwald, Alwin
+AU  - Lerch, Wilfried
+AU  - Nebrich, Lars
+AU  - Tornow, Marc
+AU  - Mayer, Thomas
+AU  - Zahn, Daniela
+AU  - Pereira, Rui N.
+AU  - Kutter, Christoph
+DO  - 10.48550/ARXIV.2512.18037
+UR  - https://arxiv.org/abs/2512.18037
+AB  - Developing fault-tolerant quantum processors with error correction demands large arrays of physical qubits whose key performance metrics (coherence times, control fidelities) must remain within specifications over both short and long timescales. Here we investigated the temporal stability of subtractively fabricated CMOS-compatible superconducting transmon qubits. During a single cooldown and over a period of 95 hours, we monitored several parameters for 8 qubits, including coherence times $T_1$ and $T_2^*$, which exhibit fluctuations originating primarily from the interaction between two-level system (TLS) defects and the host qubit. We also demonstrate that subtractively-fabricated superconducting quantum devices align with the theoretical predictions that higher mean lifetimes $T_1$ correspond to larger fluctuations. To assess long-term stability, we tracked two representative qubits over 10 cooldown cycles spanning more than one year. We observed an average total downward shift in both qubit transition frequencies of approximately 61 MHz within the thermal cycles considered. In contrast, readout resonator frequencies decreased only marginally. Meanwhile, $T_1$ exhibits fluctuations from cycle to cycle, but maintains a stable baseline value.
+KW  - Quantum Physics (quant-ph)
+KW  - Superconductivity (cond-mat.supr-con)
+KW  - FOS: Physical sciences
+PY  - 2025
+PB  - arXiv
+ER  -
+
+TY  - JOUR
+DO  - 10.22331/q-2021-11-17-583
+UR  - http://dx.doi.org/10.22331/q-2021-11-17-583
+TI  - Scqubits: a Python package for superconducting qubits
+T2  - Quantum
+AU  - Groszkowski, Peter
+AU  - Koch, Jens
+PY  - 2021
+DA  - 2021/11/17
+PB  - Verein zur Forderung des Open Access Publizierens in den Quantenwissenschaften
+SP  - 583
+VL  - 5
+SN  - 2521-327X
+ER  -

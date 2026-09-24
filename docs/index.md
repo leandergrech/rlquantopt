@@ -1,60 +1,126 @@
-# RLQuantOpt v2 (JAX)
+# RLQuantOpt
+
+**Reinforcement learning that shapes the control pulses of superconducting quantum computers.**
+
+[Collaborate with us :material-handshake:](contact.md){ .md-button .md-button--primary }
+[Read the paper :material-file-document:](https://doi.org/10.1088/2058-9565/ae2c16){ .md-button }
+[Code on GitHub :material-github:](https://github.com/leandergrech/rlquantopt){ .md-button }
 
 !!! warning "Work in progress: open-source active research"
     This is ongoing research by Leander Grech, shared openly as it happens. Code, results and
-    conclusions may change; the settled results are those of the
-    [published paper](https://doi.org/10.1088/2058-9565/ae2c16). Interested in working together?
-    See [Collaborate](contact.md).
+    conclusions may change; the settled results are those of the published paper
+    [[grech2026]](bibliography.md#grech2026).
 
-This site documents the JAX re-implementation of RLQuantOpt (`rlquantopt/jx`), which started
-on 23 September 2026. It is written for the two of us: you (Leander) steering the research, and
-Claude writing most of the code. Every page says what the code does, shows the parts you need
-to understand, and flags the decisions that are yours to make.
+## The idea
 
-The v1 code (QuTiP + Stable-Baselines3) and the paper,
-[Grech et al., *Quantum Sci. Technol.* 11, 015030 (2026)](https://doi.org/10.1088/2058-9565/ae2c16),
-are the starting point and stay untouched in the repository as the reference.
+RLQuantOpt is a curiosity-driven research effort. The question: can an agent that learns from
+trial and error design the microwave-scale control pulses of a quantum processor as well as,
+or better than, gradient-based optimal control, while adapting when the hardware drifts?
 
-## Where we are
+In simulation, the answer so far is encouraging. An RL agent found a two-qubit perfect-entangling
+gate in about 10 ns, matching the speed limit found by optimal control
+[[grech2026]](bibliography.md#grech2026). Its pulses can be refined further by gradient methods,
+and a policy can re-generate pulses for a slightly different device without re-optimisation.
 
-| Version | What it added | Status |
-| --- | --- | --- |
-| 2.0.0 | Plan and package skeleton | done |
-| 2.1.0 | Exact sector propagation and closed-form gate metrics | done |
-| 2.2.0 | Functional, jit/vmap environment equivalent to v1 | done |
-| 2.3.0 | Robustness maps replicated (paper Figs. 10-12) | done |
-| 2.4.0 | PPO and TRPO in JAX, import of v1 SB3 checkpoints | done |
-| 2.5.0 | Policy-level generalisation replicated (Figs. 13-17) | done |
-| 2.6.0 | TRPO training replicated from scratch (Figs. 5-8), 1 seed | done |
-| 2.7.0 | GRAPE baseline and the quantum speed limit (Fig. 3) | done |
-| 2.8.0 | Replication report | done |
-| 2.9.0 | RL → GRAPE refinement and robust (ensemble) GRAPE | done |
-| 2.10.0 | This documentation site | done |
+**Our outstanding goal is hardware.** We are looking for collaborators who can provide time on a
+superconducting quantum processor, to test RL-generated pulses on a real device and to study how
+RL can make calibration faster and the use of scarce hardware time more efficient.
+[Get in touch](contact.md).
 
-The full list with commit messages is in the [changelog](changelog.md).
+## How it works (v1, the published design)
 
-## Headline results so far
+<figure markdown>
+  ![System](figures/paper_fig1_system.png){ width="560" }
+  <figcaption>Two fixed-frequency transmons, Q1 and Q2, coupled through a tunable bus Qc whose
+  frequency is modulated by the control u(t). Each is modelled with three levels; population above
+  |1⟩ is leakage. Figure 1 of [[grech2026]](bibliography.md#grech2026), CC BY 4.0.</figcaption>
+</figure>
 
-- **Same physics, ~100× faster.** The JAX environment agrees with v1 step by step and with an
-  exact 27-level propagation to 1e-13. It runs ~40k env steps/s on a laptop CPU in float64;
-  v1 ran ~410/s. See [Physics](code/physics.md).
-- **The paper's own agents behave identically in JAX.** The imported paper policy regenerates
-  the paper's RL pulse (best J_T 9.49e-5 at 17.25 ns), and both of the paper's policies match
-  the v1 generalisation sweeps at every point of a 101 × 101 grid. See
-  [Replication](replication.md).
-- **Training from scratch reproduces the dynamics but not the final quality, yet.** One seed
-  reaches J_T ≈ 1e-3 against the paper's 1e-4; more seeds are needed.
-- **GRAPE on top of RL is cheap and large.** Seeded with the RL pulse, GRAPE lowers J_T by about
-  an order of magnitude in seconds. Robust GRAPE is the fair baseline for the paper's robustness
-  claim. See [RL vs GRAPE vs robust GRAPE](experiments/rl-grape-robust.md).
-- **Eight places where the paper text and the code or data differ**, including Table 1 and how
-  domain randomisation was applied. See [Replication, section 7](replication.md#7-where-the-paper-and-the-code-differ).
+Modulating the bus at the qubit-qubit detuning (0.86 GHz) activates an iSWAP-type interaction,
+the parametric scheme demonstrated experimentally by [[mckay2016]](bibliography.md#mckay2016).
+The agent does not set the pulse amplitude directly. At each step it proposes three amplitude
+**changes**, each held for 50 ps, which are added to the previous amplitude:
 
-## How to read this site
+<figure markdown>
+  ![Actions](figures/paper_fig2_actions.png){ width="560" }
+  <figcaption>The agent's action is a vector of pulse deltas Δu, applied over 3 × 50 ps; it observes
+  the quantum state after each segment. Figure 2 of [[grech2026]](bibliography.md#grech2026), CC BY 4.0.</figcaption>
+</figure>
 
-1. [Working together](working-together.md): how we split the work, and what to check on each commit.
-2. [Getting started](getting-started.md): set up the environment, run the tests and one experiment.
-3. [Code walkthrough](architecture.md): the modules in the order data flows through them, with the
-   code you should know by heart.
-4. [Experiments](replication.md): what we ran, what came out, and what it means.
-5. [Roadmap](v2_jax_plan.md): what comes next and why.
+### Why fine, delta-parameterised pulses
+
+Earlier RL pulse design used piecewise-constant pulses sampled every 10 ns, about 50 MHz of
+bandwidth, which cannot represent the GHz-scale features a transmon gate needs
+([[grech2026]](bibliography.md#grech2026), section 1.1). v1 samples every 50 ps and lets the agent
+move the amplitude in bounded steps, which keeps the pulse continuous-looking and its slew rate
+limited. The difference is not cosmetic. Re-sampling the paper's RL pulse more coarsely, with the
+same simulator:
+
+![Sampling](figures/pulse_sampling.png)
+
+| Sampling of the same pulse | J_T at 17.25 ns |
+| --- | --- |
+| 50 ps (v1) | 9.5e-5 |
+| 250 ps | 3.3e-2 |
+| 1 ns | 2.9e-1 |
+| 10 ns | 2.5e-1 (no entangling gate) |
+
+(Coarsening a pulse optimised at 50 ps is harsher than optimising at a coarse sampling from the
+start; the point is that the gate relies on sub-nanosecond structure.)
+
+<figure markdown>
+  ![Spectrum](figures/paper_fig5_spectrum.png){ width="460" }
+  <figcaption>During training the agent discovers the 0.86 GHz qubit-qubit detuning as the pulse's
+  main frequency. Figure 5 of [[grech2026]](bibliography.md#grech2026), CC BY 4.0.</figcaption>
+</figure>
+
+### How it compares
+
+| | Gate | Time | Fidelity or error | Setting |
+| --- | --- | --- | --- | --- |
+| This project (v1 RL pulse) | perfect entangler | 17 ns | J_T = 9.5e-5 | simulation, closed system |
+| Parametric iSWAP on a tunable bus [[mckay2016]](bibliography.md#mckay2016) | iSWAP | 183 ns | 98.2 % | experiment |
+| Tunable coupler, CZ / iSWAP [[sung2021]](bibliography.md#sung2021) | CZ, iSWAP | — | 99.76 % / 99.87 % | experiment |
+| Double-transmon coupler, RL-optimised [[li2024]](bibliography.md#li2024) | CZ | — | 99.90 % | experiment |
+
+The simulated number is not comparable to the experimental ones: it has no decoherence, an
+idealised control line and a perfect-entangler target rather than a named gate. Closing that gap is
+exactly what hardware collaboration is for.
+
+## Current simplifications
+
+```mermaid
+flowchart LR
+    A[Paper model] --> B[RWA couplings<br/>excitation number conserved]
+    A --> C[Linear control u·b†b<br/>no flux non-linearity]
+    A --> D[Closed system<br/>T1/T2 only at evaluation]
+    A --> E[Unbounded coupler excursion<br/>no flux-line filter]
+    A --> F[Perfect-entangler target<br/>not a named gate]
+```
+
+Each of these is discussed, with what it would take to remove it, in
+[Named gates and a richer model](next/named-gates.md).
+
+## History and credits
+
+- **v1 (2024-2025)**, the published work [[grech2026]](bibliography.md#grech2026): the ZCQPEE
+  environment and TRPO agents. **Mirko Consiglio** carried out the mathematical and physical
+  validation of v1, and **Matthias G. Krauss** validated it independently with separate Julia
+  simulations.
+- **v2 (from September 2026)**, this site: a JAX re-implementation that runs ~100× faster, is
+  differentiable end to end, reproduces the paper, and adds gradient-based baselines and hardware
+  drift models. Start with [Working together](working-together.md) or the
+  [Model and simulator](system/model.md).
+- **Next:** named gates, a realistic tunable-coupler model, and **hardware**.
+  [Collaborate with us](contact.md).
+
+## What changed recently
+
+!!! abstract "Latest"
+    - PPO matches TRPO's best gate at half the wall time; three more seeds are training
+      ([Training RL agents](results/training.md)).
+    - Hardware drift ranges from the literature now define robustness
+      ([Hardware drift ranges](system/drift.md)).
+    - Design note on named gates and richer models ([Named gates](next/named-gates.md)).
+
+The full history is in the [changelog](changelog.md).

@@ -6,13 +6,15 @@ amplitude bound (|u| <= 20 rad/ns). Compared:
   rl               the paper's RL pulse, stopped at its best time
   rl+grape         RL pulse refined by GRAPE on the nominal Hamiltonian
   grape            GRAPE from random smooth guesses (nominal Hamiltonian)
-  robust           robust GRAPE from random guesses: mean J_T over a 5x5 grid of ±10 MHz detunings
+  robust           robust GRAPE from random guesses: mean J_T over a 5x5 grid covering the
+                   between-cooldown drift range, ±5.7 MHz (rlquantopt.jx.drift)
   rl+robust        robust GRAPE started from the RL pulse
   rl_jax+grape     (if present) the pulse of our own JAX-trained agent, refined by GRAPE at its own length
 
-For each pulse: nominal J_T, the robustness map on the paper's ±50 MHz grid (the ensemble
-only covers ±10 MHz, so most of the map is held out), the area with J_T <= 1e-3 and 1e-2,
-and smoothness (total variation, max |u|). Writes docs/figures/rl_grape_robust.{png,npz,json}.
+For each pulse: nominal J_T; mean and worst-case J_T over the three hardware drift ranges of
+rlquantopt.jx.drift (in-cooldown ±0.1 MHz, recool ±5.7 MHz, fabrication targeting ±18.5 MHz);
+the map on the paper's ±50 MHz grid with the area where J_T <= 1e-3; and smoothness
+(total variation, max |u|). Writes docs/figures/rl_grape_robust.{png,npz,json}.
 
     JAX_PLATFORMS=cpu python scripts/rl_grape_robust.py
 """
@@ -31,6 +33,7 @@ import matplotlib.pyplot as plt
 
 from rlquantopt.jx import grape, physics, robustness as rb
 from rlquantopt.jx import env as jenv
+from rlquantopt.jx.drift import DRIFT_RANGES, box_grid, range_stats
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DT = 0.05
@@ -68,9 +71,14 @@ def summarise(name, u, ham, cost_evals, d_map):
                total_variation=float(np.abs(np.diff(np.asarray(u))).sum()),
                max_abs_u=float(np.abs(np.asarray(u)).max()),
                simulator_pulse_evals=int(cost_evals))
+    for rng in DRIFT_RANGES.values():
+        d0, d1 = box_grid(rng.half_width_mhz)
+        row.update(range_stats(rb.detuning_map(u, cfg, d0, d1), rng.name))
     print(f"{name:13s} J_T={JT0:.2e}  area(J_T<=1e-3)={row['area_JT_le_1e3_MHz2']:6.0f} MHz²  "
           f"area(<=1e-2)={row['area_JT_le_1e2_MHz2']:6.0f} MHz²  <log10 J_T>_r10={row['mean_log10_JT_r10']:.2f}  "
-          f"TV={row['total_variation']:.0f}  evals={cost_evals:.1e}", flush=True)
+          f"TV={row['total_variation']:.0f}  evals={cost_evals:.1e}  "
+          + "  ".join(f"{r}: mean {row[r + '_mean_JT']:.1e} worst {row[r + '_worst_JT']:.1e}" for r in DRIFT_RANGES),
+          flush=True)
     return row, M
 
 
@@ -78,7 +86,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--iters", type=int, default=2000)
     p.add_argument("--restarts", type=int, default=4)
-    p.add_argument("--ens-half-width", type=float, default=10.0, help="MHz")
+    p.add_argument("--ens-half-width", type=float, default=DRIFT_RANGES["recool"].half_width_mhz, help="MHz")
     p.add_argument("--ens-n", type=int, default=5, help="ensemble grid points per axis")
     p.add_argument("--map-step", type=float, default=1.0, help="MHz")
     p.add_argument("--out", default=os.path.join(ROOT, "docs", "figures"))
@@ -156,8 +164,9 @@ def main():
         im = ax.imshow(-np.log10(maps[name].T), origin="lower", extent=[-50, 50, -50, 50], cmap="terrain",
                        vmin=0.5, vmax=5)
         ax.contour(d_map, d_map, maps[name].T, levels=[1e-3], colors="r", linewidths=0.8)
-        ax.add_patch(plt.Rectangle((-args.ens_half_width,) * 2, 2 * args.ens_half_width, 2 * args.ens_half_width,
-                                   fill=False, ec="w", ls="--", lw=0.8))
+        for rng, ls in ((DRIFT_RANGES["recool"], "--"), (DRIFT_RANGES["fab_targeting"], ":")):
+            w = rng.half_width_mhz
+            ax.add_patch(plt.Rectangle((-w, -w), 2 * w, 2 * w, fill=False, ec="w", ls=ls, lw=0.8))
         ax.set_xlabel("Δω qubit 0 [MHz]")
         if j == 0:
             ax.set_ylabel("Δω qubit 1 [MHz]")

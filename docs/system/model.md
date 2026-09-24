@@ -1,4 +1,4 @@
-# Physics: `rlquantopt/jx/physics.py`
+# Model and simulator: `rlquantopt/jx/physics.py`
 
 ## The model
 

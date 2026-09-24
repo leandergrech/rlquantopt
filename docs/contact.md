@@ -11,7 +11,7 @@ Collaboration is welcome, especially on:
 - **Hardware validation** of RL or GRAPE pulses on a superconducting device;
 - **device models** beyond the paper's Hamiltonian: realistic tunable couplers, the double-transmon
   coupler, fluxonium (see the
-  [roadmap](v2_jax_plan.md));
+  [roadmap](next/roadmap.md));
 - **RL methods**: model-based and meta-RL, robustness to drift;
 - **optimal-control baselines** and fair comparisons.
 

@@ -3,6 +3,17 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.11.0: docs by topic, landing page, bibliography, drift ranges (2026-09-24)
+
+Docs reorganised into Guide / The system / The code / Results / Next steps; a landing page with the
+idea, the v1 design and credits; a bibliography generated from DOIs with BibTeX, RIS, CSL-JSON and
+text downloads; hardware drift ranges from the literature (`rlquantopt/jx/drift.py`); a design note
+on named gates and richer models; one page of open decisions; PPO vs TRPO (seed 123).
+
+## 2.10.1: work-in-progress notice (2026-09-24)
+
+Site banner and a Collaborate page with a GitHub issue form.
+
 ## 2.10.0: documentation site (2026-09-24)
 
 This MkDocs site, deployed to GitHub Pages by `.github/workflows/docs.yml`. Code shown on the site
@@ -12,11 +23,11 @@ is included from the source through `--8<--` markers.
 
 `grape.optimise` accepts an ensemble of Hamiltonians (mean J_T over detunings). New
 `scripts/rl_grape_robust.py` compares RL, RL → GRAPE, GRAPE, robust GRAPE and RL → robust GRAPE
-at equal gate time and amplitude bound. See [the experiment](experiments/rl-grape-robust.md).
+at equal gate time and amplitude bound. See [the experiment](results/robustness.md).
 
 ## 2.8.0: replication report (2026-09-24)
 
-[docs/replication.md](replication.md), README section, updated roadmap.
+[docs/replication.md](results/replication.md), README section, updated roadmap.
 
 ## 2.7.0: GRAPE and the quantum speed limit (2026-09-24)
 
@@ -57,4 +68,4 @@ cross-checked against QuTiP and `weylchamber`.
 
 ## 2.0.0: plan (2026-09-23)
 
-[Roadmap](v2_jax_plan.md), package skeleton, `requirements-jax.txt`.
+[Roadmap](next/roadmap.md), package skeleton, `requirements-jax.txt`.

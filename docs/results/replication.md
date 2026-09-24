@@ -40,7 +40,7 @@ optimises (the paper's RL pulse reads J_T_min = 8e-6 instead of 9.5e-5).
 
 ## 2. Stored pulses and robustness (Figs. 10-12)
 
-![Robustness maps](figures/robustness_maps.png)
+![Robustness maps](../figures/robustness_maps.png)
 
 `scripts/replicate_robustness.py` evaluates the stored pulses on the paper's ±50 MHz grid and
 compares with the paper's Julia results.
@@ -68,7 +68,7 @@ v1's ODE error.
 
 ## 4. Policy-level generalisation (Figs. 13-17)
 
-![Generalisation](figures/generalisation.png)
+![Generalisation](../figures/generalisation.png)
 
 `scripts/replicate_generalisation.py` runs the paper's static policy and its domain-randomised
 (±0.1 %) policy on the paper's ±1 % grid (101 × 101) and compares with the v1 sweeps.
@@ -85,7 +85,7 @@ island around nominal spans Δω0 ∈ [−0.8, 1.6] MHz and Δω1 ∈ [−2.0, 0
 
 ## 5. Training from scratch (Figs. 5-8)
 
-![Training evolution](figures/training_evolution.png)
+![Training evolution](../figures/training_evolution.png)
 
 One TRPO run with the paper's hyper-parameters (seed 123, 20M steps; `results/jax_trpo_paper_s123/`).
 
@@ -104,7 +104,7 @@ propagation here vs v1's ODE error during training). Next step: 5 seeds each.
 
 ## 6. Quantum speed limit (Fig. 3)
 
-![QSL](figures/qsl.png)
+![QSL](../figures/qsl.png)
 
 `scripts/replicate_qsl.py` runs GRAPE on the same simulator (4 random smooth guesses, 1000 Adam
 steps, best J_T kept) for several amplitude limits.

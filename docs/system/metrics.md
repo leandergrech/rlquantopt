@@ -53,7 +53,5 @@ follows `weylchamber` line by line:
     compares concurrence at 3e-4 while amplitudes are compared at 1e-5. On exact gates the metric
     agrees with `weylchamber` to 1e-8.
 
-!!! question "Decision: keep a perfect-entangler target, or switch to a named gate?"
-    The concurrence rewards any perfect entangler. A named gate (√iSWAP, CZ) would use an average
-    gate fidelity instead (after local corrections), which is what the rest of the literature
-    reports. It is a change to this module and to the reward in `env.step`.
+The perfect-entangler target and its named-gate alternatives are discussed in
+[Named gates and a richer model](../next/named-gates.md).

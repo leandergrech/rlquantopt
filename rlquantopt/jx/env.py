@@ -3,7 +3,7 @@
 Semantics follow rlquantopt.rl_envs.zc_qpee.ZCQPEE as used for the paper run
 (05-12-24_201634): delta-mode actions, K samples per step, the concurrence and
 unitarity reward with a TV penalty, and the out-of-bounds truncation penalty.
-See docs/v2_jax_plan.md for the exact list.
+See docs/code/environment.md for the exact list.
 
     cfg = EnvConfig()
     obs, state = reset(key, cfg)

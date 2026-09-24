@@ -1,4 +1,9 @@
-# RL vs GRAPE vs robust GRAPE
+# Robustness to hardware drift
+
+!!! info "Being updated"
+    The results below use a ±10 MHz ensemble and the paper's ±50 MHz map (v2.9.0). A re-run with the
+    [hardware drift ranges](../system/drift.md) (robust GRAPE over the ±5.7 MHz recool range, scored
+    over all three ranges) is in progress and will replace them.
 
 Roadmap items 1 and 2: refine RL pulses with GRAPE, and give the paper's robustness claim its
 fair baseline, robust (ensemble) GRAPE.
@@ -35,7 +40,7 @@ Top: pulses (\(u/2\pi\)). Bottom: \(-\log_{10} J_T\) over static detunings; red 
 | RL → robust GRAPE | 8.5e-5 | 286 MHz² | 1834 MHz² | −3.31 | 1614 | 4.7 min |
 
 Our own JAX-trained agent's best pulse (46.8 ns, J_T = 9.8e-4, see
-[Replication](../replication.md#5-training-from-scratch-figs-5-8)) goes to **J_T = 6.8e-7** after
+[Replication](replication.md#5-training-from-scratch-figs-5-8)) goes to **J_T = 6.8e-7** after
 GRAPE refinement, in 93 s. The 10× gap to the paper's agent disappears once GRAPE finishes the job.
 
 ## What it means

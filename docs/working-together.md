@@ -10,11 +10,11 @@ the contract that prevents that: how work is split, how it is versioned, and wha
 | Research questions and what counts as a result | Implementation, tests, running experiments | Interpreting results |
 | Which physics goes in the model (levels, noise, targets) | Keeping v1 equivalence tests green | Choosing baselines and metrics |
 | What is published or pushed, and when | Writing the docs and the report | Deciding what a discrepancy means |
-| Priorities on the [roadmap](v2_jax_plan.md) | Flagging open decisions (below) | |
+| Priorities on the [roadmap](next/roadmap.md) | Flagging open decisions ([Open decisions](next/decisions.md)) | |
 
 When Claude hits a choice that changes the science (a reward definition, a baseline, how a
-number is reported), it asks instead of picking silently. These are listed on each page as
-**Decision** boxes.
+number is reported), it asks instead of picking silently, and adds it to
+[Open decisions](next/decisions.md).
 
 ## Versioning
 
@@ -38,7 +38,7 @@ A five-minute review of any commit:
    looser tolerances without a reason in the comment.
 
 !!! tip "Where to start reading the code"
-    Read [Physics](code/physics.md) and [Environment](code/environment.md) first. Everything else
+    Read [Model and simulator](system/model.md) and [Environment](code/environment.md) first. Everything else
     (agents, GRAPE, sweeps) is built from `physics.propagate` and `env.step`.
 
 ## Ground rules for the code
@@ -46,23 +46,20 @@ A five-minute review of any commit:
 - **v1 is the reference.** `rlquantopt/rl_envs` and `rlquantopt/rl_agents` are not edited. New
   behaviour goes in `rlquantopt/jx`, and differences from v1 are deliberate and documented.
 - **float64 by default.** Training in float32 is wrong at the 1e-4 level (see
-  [Physics](code/physics.md#precision)).
+  [Physics](system/model.md#precision)).
 - **Pure functions.** Environment and agent code are pure JAX functions of explicit state, so they
   can be `jit`-ted, `vmap`-ped and differentiated. No hidden state in objects.
 - **Every result has a script.** Nothing in `docs/` is produced by hand.
 
-## Open decisions for you
+## Decisions
 
-!!! question "Decision: how many seeds, and which algorithm, for the training comparison?"
-    One TRPO seed reached J_T ≈ 1e-3 against the paper's 1e-4. Five seeds per setting cost about
-    10 CPU-hours for TRPO with the paper's settings. PPO with many parallel environments is faster
-    per sample. Do we replicate TRPO faithfully first, or move on to PPO?
+Choices that change the science are collected on one page, [Open decisions](next/decisions.md),
+with options and a recommendation each. Pages link there instead of carrying their own
+decision boxes, so you have one place to check.
 
-!!! question "Decision: the robustness metric for comparing RL and GRAPE"
-    The [RL vs GRAPE experiment](experiments/rl-grape-robust.md) reports the area with
-    J_T ≤ 1e-3 on a ±50 MHz map and the mean log10 J_T within 10 and 25 MHz. Which one should the
-    paper use, and over what detuning range is drift realistic for the target hardware?
+## Keeping the docs readable
 
-!!! question "Decision: named gate or perfect entangler?"
-    The reward targets any perfect entangler. A named gate (√iSWAP or CZ) with average gate
-    fidelity makes results comparable with the literature, at the cost of changing the reward.
+- Pages are organised by topic, not by date. A new result updates the page that answers its
+  question ([Results](results/replication.md)); it does not get a page of its own.
+- The home page has a short **What changed** box, so you can see what is new without rereading.
+- Code on the site is included from the source, so it is always current.
