@@ -103,11 +103,14 @@ def main():
     guesses = grape.random_guesses(key, args.restarts, N_SAMPLES, U_MAX, DT)
     rl = load_rl_pulse()
 
-    pulses, t_opt = {}, {}
+    pulses, t_opt, hist = {}, {}, {}
 
-    def best(out):
-        u, JT, *_ = out
-        return u[int(jnp.argmin(JT))]
+    def best(out, name=None):
+        u, JT, C, U, h = out
+        i = int(jnp.argmin(JT))
+        if name:
+            hist[name] = np.asarray(h[i])        # per-iteration (mean) J_T of the kept restart
+        return u[i]
 
     t0 = time.perf_counter(); pulses["rl"] = rl; t_opt["rl"] = 0.0
     runs = [("rl+grape", rl[None], ham, refine, 1),
@@ -117,7 +120,7 @@ def main():
     evals = {"rl": 13_300_000}      # RL: env steps of the paper's training (each a 3-sample segment)
     for name, u0, h, cfg, n_traj in runs:
         t0 = time.perf_counter()
-        pulses[name] = best(grape.optimise(u0, h, U_MAX, cfg))
+        pulses[name] = best(grape.optimise(u0, h, U_MAX, cfg), name)
         t_opt[name] = time.perf_counter() - t0
         evals[name] = 2 * args.iters * n_traj           # forward + backward pulse simulations
         print(f"{name}: optimised in {t_opt[name]:.0f} s", flush=True)
@@ -146,7 +149,8 @@ def main():
         settings = {k: v for k, v in vars(args).items() if k != "out"} | dict(n_samples=N_SAMPLES, dt=DT, u_max=U_MAX)
         json.dump(dict(settings=settings, results=rows), f, indent=2)
     np.savez_compressed(os.path.join(args.out, "rl_grape_robust.npz"), d_mhz=d_map,
-                        **{f"map_{k}": v for k, v in maps.items()}, **{f"pulse_{k}": np.asarray(v) for k, v in pulses.items()})
+                        **{f"map_{k}": v for k, v in maps.items()}, **{f"pulse_{k}": np.asarray(v) for k, v in pulses.items()},
+                        **{f"hist_{k}": v for k, v in hist.items()})
 
     names = list(pulses)
     fig = plt.figure(figsize=(3.6 * len(names), 7.2), constrained_layout=True)

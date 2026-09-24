@@ -1,0 +1,72 @@
+{
+  "args": {
+    "algo": "ppo",
+    "seed": 3,
+    "total_steps": 20000000,
+    "n_envs": null,
+    "n_steps": null,
+    "lr": 0.0003,
+    "activation": "relu",
+    "max_drift": 0.0,
+    "fixed_drift": false,
+    "eval_every": 65536,
+    "out": "runs",
+    "tag": "ppo_s3"
+  },
+  "env": {
+    "pulse_length": 1000,
+    "T": 50.0,
+    "n_time_steps": 3,
+    "a_scale": 20.0,
+    "a_norm_max": 1.0,
+    "tv_penalty_scale": 0.001,
+    "concurrence_weight": 1.0,
+    "unitarity_weight": 3.0,
+    "terminal_penalty": -20.0,
+    "log_lim": 0.01,
+    "rew_scale": 1.0,
+    "obs_scale": 0.9,
+    "jt_floor": 1e-12,
+    "max_drift": 0.0,
+    "model": [
+      [
+        5.0311,
+        5.8899
+      ],
+      [
+        -0.324,
+        -0.235
+      ],
+      [
+        0.1,
+        0.0714
+      ],
+      -0.23,
+      6.0,
+      7.445
+    ]
+  },
+  "algo": {
+    "n_envs": 64,
+    "n_steps": 128,
+    "n_epochs": 10,
+    "n_minibatches": 32,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_eps": 0.2,
+    "ent_coef": 0.0,
+    "vf_coef": 0.5,
+    "max_grad_norm": 0.5,
+    "lr": 0.0003,
+    "lr_harmonic_k": 2.51188643150958,
+    "total_steps": 20000000,
+    "hidden": [
+      128,
+      128
+    ],
+    "activation": "relu",
+    "resample_drift": true
+  },
+  "backend": "cpu",
+  "x64": true
+}

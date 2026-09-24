@@ -43,3 +43,4 @@ survive without re-calibration), with the fabrication range as the transfer test
 | 2026-09-24 | Switch the training study to PPO if it is faster than TRPO without losing quality; 3 more seeds, not 5 | Leander |
 | 2026-09-24 | Use literature-based hardware drift ranges, with every number referenced | Leander |
 | 2026-09-24 | Keep the docs organised by topic, results updated in place | Leander |
+| 2026-09-24 | PPO replaces TRPO for training studies (same best gate, ~2× faster); 4 seeds run | Leander |

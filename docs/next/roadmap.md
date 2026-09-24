@@ -45,11 +45,12 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.9.0 | RL → GRAPE refinement and robust (ensemble) GRAPE ([results](../results/robustness.md)) | done |
 | 2.10.0 | Documentation site (MkDocs, GitHub Pages) | done |
 | 2.11.0 | Docs by topic, landing page, bibliography, hardware drift ranges, PPO vs TRPO | done |
+| 2.12.0 | PPO seeds, losses, drift-range robustness, RL vs GRAPE cost per device, site redesign | done |
 
 ## Beyond replication (next minor versions, not in this pass)
 
-0. More seeds (≥5) of the TRPO replication, to tell seed variance from a systematic gap (best J_T
-   1e-3 here vs 1e-4 in the paper).
+0. Tune PPO (KL per update ~0.1 is too high: fewer epochs or a target-KL stop) and compare on ≥4 seeds.
+   The seed study (v2.12.0) showed the earlier gap to the paper was seed variance.
 1. Named-gate targets (CZ, √iSWAP) with average gate fidelity and leakage reported separately.
 2. Fair baselines: ensemble GRAPE over the ±Δω distribution and RL → GRAPE refinement are done
    (v2.9.0); still open: RL from demonstrations, ≥5 seeds per method, a hardware-justified drift range.

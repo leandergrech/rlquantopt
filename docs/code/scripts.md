@@ -12,7 +12,13 @@ Every figure in these docs is produced by one of these. Run them from the reposi
 | `python scripts/replicate_robustness.py` | `docs/figures/robustness_maps.{png,npz}` (Figs. 10-12) | ~15 min |
 | `python scripts/replicate_generalisation.py` | `docs/figures/generalisation.{png,npz}` (Figs. 13-17); needs the v1 checkpoints | ~20 min |
 | `python scripts/replicate_qsl.py` | `docs/figures/qsl.{png,npz}` (Fig. 3) | ~1.5 h |
-| `python scripts/rl_grape_robust.py` | `docs/figures/rl_grape_robust.{png,npz,json}` | ~40 min |
+| `python scripts/rl_grape_robust.py` | `docs/figures/rl_grape_robust.{png,npz,json}`: RL vs GRAPE vs robust GRAPE under the drift ranges | ~50 min |
+| `python scripts/compare_training.py RUN ... --labels ...` | `docs/figures/training_comparison.{png,json}`: best J_T per run and seed statistics | seconds |
+| `python scripts/plot_training_losses.py RUN ... --labels ...` | `docs/figures/training_losses.png`: RL losses and diagnostics | seconds |
+| `python scripts/sample_efficiency.py --static-run RUN --dr-run RUN` | `docs/figures/sample_efficiency.{png,json,npz}`: cost per device, RL vs GRAPE (`--replot` redraws) | ~15 min |
+| `python scripts/plot_grape_losses.py` | `docs/figures/grape_losses.png`: GRAPE losses and final distributions | seconds |
+| `python scripts/pulse_sampling.py` | `docs/figures/pulse_sampling.png`: the RL pulse at coarser sampling | ~10 s |
+| `python scripts/make_bibliography.py` | `docs/bib/*`, `docs/bibliography.md` from DOIs | ~30 s |
 
 ## `rlquantopt.jx.train`
 

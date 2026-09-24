@@ -3,6 +3,14 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.12.0: PPO seeds, losses, drift-range robustness, RL vs GRAPE cost, redesign (2026-09-24)
+
+Four PPO seeds and TRPO compared (best seed J_T 1.1e-4, matching the paper); loss curves for RL
+and GRAPE; PPO's updates found too aggressive (KL ~0.1). Robustness re-run with the hardware drift
+ranges: robust GRAPE over the recool range beats every other pulse. New experiment comparing the
+cost per device of RL (with and without domain randomisation) and GRAPE. Serif redesign of the site,
+hero home page, fixed figure captions.
+
 ## 2.11.0: docs by topic, landing page, bibliography, drift ranges (2026-09-24)
 
 Docs reorganised into Guide / The system / The code / Results / Next steps; a landing page with the

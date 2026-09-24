@@ -1,15 +1,46 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
+<div class="hero" markdown>
+
 # RLQuantOpt
 
-**Reinforcement learning that shapes the control pulses of superconducting quantum computers.**
+Reinforcement learning that shapes the control pulses of superconducting quantum computers,
+fast enough to track a drifting device.
 
 [Collaborate with us :material-handshake:](contact.md){ .md-button .md-button--primary }
-[Read the paper :material-file-document:](https://doi.org/10.1088/2058-9565/ae2c16){ .md-button }
-[Code on GitHub :material-github:](https://github.com/leandergrech/rlquantopt){ .md-button }
+[Read the paper :material-file-document-outline:](https://doi.org/10.1088/2058-9565/ae2c16){ .md-button }
+[Code :material-github:](https://github.com/leandergrech/rlquantopt){ .md-button }
+
+</div>
 
 !!! warning "Work in progress: open-source active research"
     This is ongoing research by Leander Grech, shared openly as it happens. Code, results and
     conclusions may change; the settled results are those of the published paper
     [[grech2026]](bibliography.md#grech2026).
+
+<div class="grid cards" markdown>
+
+-   :material-lightning-bolt:{ .lg } **~10 ns entangling gates**
+
+    An RL agent finds a perfect-entangling pulse at the quantum speed limit of the model.
+
+-   :material-speedometer:{ .lg } **~100× faster simulation**
+
+    v2 in JAX: exact, differentiable, ~40k environment steps/s on a laptop CPU.
+
+-   :material-target:{ .lg } **Hardware drift built in**
+
+    Robustness scored against measured drift of real transmons, from hours to new devices.
+
+-   :material-handshake-outline:{ .lg } **Looking for hardware time**
+
+    We want to test RL-controlled pulses on a real device. [Get in touch](contact.md).
+
+</div>
 
 ## The idea
 
@@ -31,7 +62,7 @@ RL can make calibration faster and the use of scarce hardware time more efficien
 
 <figure markdown>
   ![System](figures/paper_fig1_system.png){ width="560" }
-  <figcaption>Two fixed-frequency transmons, Q1 and Q2, coupled through a tunable bus Qc whose
+  <figcaption markdown="span">Two fixed-frequency transmons, Q1 and Q2, coupled through a tunable bus Qc whose
   frequency is modulated by the control u(t). Each is modelled with three levels; population above
   |1⟩ is leakage. Figure 1 of [[grech2026]](bibliography.md#grech2026), CC BY 4.0.</figcaption>
 </figure>
@@ -43,7 +74,7 @@ The agent does not set the pulse amplitude directly. At each step it proposes th
 
 <figure markdown>
   ![Actions](figures/paper_fig2_actions.png){ width="560" }
-  <figcaption>The agent's action is a vector of pulse deltas Δu, applied over 3 × 50 ps; it observes
+  <figcaption markdown="span">The agent's action is a vector of pulse deltas Δu, applied over 3 × 50 ps; it observes
   the quantum state after each segment. Figure 2 of [[grech2026]](bibliography.md#grech2026), CC BY 4.0.</figcaption>
 </figure>
 
@@ -70,7 +101,7 @@ start; the point is that the gate relies on sub-nanosecond structure.)
 
 <figure markdown>
   ![Spectrum](figures/paper_fig5_spectrum.png){ width="460" }
-  <figcaption>During training the agent discovers the 0.86 GHz qubit-qubit detuning as the pulse's
+  <figcaption markdown="span">During training the agent discovers the 0.86 GHz qubit-qubit detuning as the pulse's
   main frequency. Figure 5 of [[grech2026]](bibliography.md#grech2026), CC BY 4.0.</figcaption>
 </figure>
 
@@ -117,10 +148,11 @@ Each of these is discussed, with what it would take to remove it, in
 ## What changed recently
 
 !!! abstract "Latest"
-    - PPO matches TRPO's best gate at half the wall time; three more seeds are training
+    - Four PPO seeds: the best matches the paper's agent (J_T 1.1e-4); PPO is ~2× faster than TRPO
       ([Training RL agents](results/training.md)).
-    - Hardware drift ranges from the literature now define robustness
-      ([Hardware drift ranges](system/drift.md)).
-    - Design note on named gates and richer models ([Named gates](next/named-gates.md)).
+    - Robustness against measured hardware drift: robust GRAPE keeps J_T ≤ 1.4e-4 over a full recool
+      range ([Robustness](results/robustness.md)).
+    - Where RL pays off: cost per device of RL and GRAPE under drift
+      ([Robustness](results/robustness.md#rl-vs-grape-cost-per-device)).
 
 The full history is in the [changelog](changelog.md).

@@ -1,0 +1,78 @@
+{
+  "TRPO": {
+    "runs": [
+      {
+        "seed": 123,
+        "best_JT": 0.0009763656598973,
+        "step_of_best": 19857408,
+        "one_minus_U_at_best": 0.001301820879863,
+        "steps_to_JT_below_1e2": 2359296.0,
+        "final_first_PE_ns": 6.0,
+        "wall_minutes": 115.36756320501667,
+        "steps_per_second": 2888.8351058816015
+      }
+    ],
+    "median": {
+      "best_JT": 0.0009763656598973,
+      "step_of_best": 19857408.0,
+      "one_minus_U_at_best": 0.001301820879863,
+      "steps_to_JT_below_1e2": 2359296.0,
+      "final_first_PE_ns": 6.0,
+      "wall_minutes": 115.36756320501667,
+      "steps_per_second": 2888.8351058816015
+    }
+  },
+  "PPO": {
+    "runs": [
+      {
+        "seed": 123,
+        "best_JT": 0.0009799195438782,
+        "step_of_best": 4653056,
+        "one_minus_U_at_best": 0.0013065593918375,
+        "steps_to_JT_below_1e2": 3080192.0,
+        "final_first_PE_ns": 14.55,
+        "wall_minutes": 60.88408954916668,
+        "steps_per_second": 5473.973071364228
+      },
+      {
+        "seed": 1,
+        "best_JT": 0.00049340464194,
+        "step_of_best": 19398656,
+        "one_minus_U_at_best": 0.0006369247598783,
+        "steps_to_JT_below_1e2": 1900544.0,
+        "final_first_PE_ns": 6.15,
+        "wall_minutes": 81.10774471136659,
+        "steps_per_second": 4109.075746745064
+      },
+      {
+        "seed": 2,
+        "best_JT": 0.000370226229945,
+        "step_of_best": 18677760,
+        "one_minus_U_at_best": 0.0004936349732601,
+        "steps_to_JT_below_1e2": 2818048.0,
+        "final_first_PE_ns": 27.3,
+        "wall_minutes": 81.46727689708338,
+        "steps_per_second": 4090.9415333434126
+      },
+      {
+        "seed": 3,
+        "best_JT": 0.0001050577796046,
+        "step_of_best": 16777216,
+        "one_minus_U_at_best": 0.0001400770394729,
+        "steps_to_JT_below_1e2": 1835008.0,
+        "final_first_PE_ns": 7.050000000000001,
+        "wall_minutes": 81.26854792001674,
+        "steps_per_second": 4100.945263531393
+      }
+    ],
+    "median": {
+      "best_JT": 0.0004318154359425,
+      "step_of_best": 17727488.0,
+      "one_minus_U_at_best": 0.0005652798665692,
+      "steps_to_JT_below_1e2": 2359296.0,
+      "final_first_PE_ns": 10.8,
+      "wall_minutes": 81.18814631569167,
+      "steps_per_second": 4105.010505138229
+    }
+  }
+}

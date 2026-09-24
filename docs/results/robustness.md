@@ -1,86 +1,105 @@
 # Robustness to hardware drift
 
-!!! info "Being updated"
-    The results below use a ±10 MHz ensemble and the paper's ±50 MHz map (v2.9.0). A re-run with the
-    [hardware drift ranges](../system/drift.md) (robust GRAPE over the ±5.7 MHz recool range, scored
-    over all three ranges) is in progress and will replace them.
+**Answer so far.** At the paper's gate time and amplitude bound, the RL pulse is no more robust than
+a plain GRAPE pulse. Robust GRAPE, which optimises the mean error over the recool drift range, keeps
+J_T below 1.4e-4 everywhere in that range, about 30× better than RL on average. What RL can offer
+instead is adaptation: see [RL vs GRAPE: cost per device](#rl-vs-grape-cost-per-device) below.
 
-Roadmap items 1 and 2: refine RL pulses with GRAPE, and give the paper's robustness claim its
-fair baseline, robust (ensemble) GRAPE.
+## Pulses under the three drift ranges
 
-**Result in one line.** At the same gate time and amplitude bound, GRAPE on top of RL lowers J_T
-by 90×, plain GRAPE is as robust as the RL pulse, and robust GRAPE covers a 49× larger low-error
-region than RL while keeping J_T = 6e-6 at nominal.
+All pulses last 17.25 ns (the paper RL pulse's best time) and respect the RL bound
+\(|u| \le 20\) rad/ns. Drift ranges are those of [Hardware drift ranges](../system/drift.md);
+each is scored on an 11 × 11 grid of qubit detunings.
 
-## Setup
+| Pulse | Nominal J_T | In-cooldown ±0.1 MHz: worst | Recool ±5.7 MHz: mean / worst | Fabrication ±18.5 MHz: mean / worst | Optimisation time |
+| --- | --- | --- | --- | --- | --- |
+| RL (paper agent) | 9.5e-5 | 1.0e-4 | 1.5e-3 / 4.0e-3 | 1.4e-2 / 3.9e-2 | ~9 h training |
+| RL → GRAPE | 1.1e-6 | 4.2e-6 | 1.9e-3 / 6.2e-3 | 2.0e-2 / 6.3e-2 | 82 s |
+| GRAPE, random start | 3.7e-6 | 5.9e-6 | 1.5e-3 / 4.7e-3 | 1.5e-2 / 5.0e-2 | 211 s |
+| **Robust GRAPE** (recool ensemble) | **9.4e-7** | **1.1e-6** | **3.1e-5 / 1.4e-4** | **8.6e-4 / 6.5e-3** | 44 min |
+| RL → robust GRAPE | 8.0e-6 | 9.5e-6 | 4.8e-4 / 1.4e-3 | 6.6e-3 / 2.5e-2 | 6 min |
 
-| | |
-| --- | --- |
-| Gate time | 17.25 ns (345 samples of 50 ps), the paper RL pulse's best time |
-| Amplitude bound | \(|u| \le 20\) rad/ns (3.18 GHz), the RL action bound |
-| Model | Paper model, nominal parameters, closed system |
-| GRAPE | 2000 Adam iterations, cosine-decayed step (0.05 from random guesses, 0.01 from an RL pulse), 4 random restarts |
-| Robust GRAPE ensemble | 5 × 5 grid of qubit detunings over ±10 MHz (white dashed square in the maps) |
-| Robustness map | Paper grid: ±50 MHz on both qubits, 1 MHz steps. Everything outside ±10 MHz is held out from the robust optimisation |
-| Script | `scripts/rl_grape_robust.py` → `docs/figures/rl_grape_robust.{png,json,npz}` |
+Times are on the shared laptop CPU; robust GRAPE runs 25 detuned systems × 4 restarts × 2000
+iterations.
 
-## Results
+![Pulses and maps](../figures/rl_grape_robust.png)
 
-![Pulses and robustness maps](../figures/rl_grape_robust.png)
+Top: pulses. Bottom: \(-\log_{10} J_T\) on the paper's ±50 MHz map; red contour at \(J_T = 10^{-3}\);
+white boxes: recool (dashed) and fabrication (dotted) ranges.
 
-Top: pulses (\(u/2\pi\)). Bottom: \(-\log_{10} J_T\) over static detunings; red contour at
-\(J_T = 10^{-3}\).
+What the table says:
 
-| Pulse | Nominal J_T | Area with J_T ≤ 1e-3 | Area with J_T ≤ 1e-2 | Mean log10 J_T within 10 MHz | Total variation (rad/ns) | Optimisation time |
-| --- | --- | --- | --- | --- | --- | --- |
-| RL (paper) | 9.5e-5 | 55 MHz² | 595 MHz² | −2.67 | 1425 | ~9 h training |
-| RL → GRAPE | **1.1e-6** | 48 MHz² | 457 MHz² | −2.58 | 1509 | 23 s |
-| GRAPE from random | 3.7e-6 | 71 MHz² | 713 MHz² | −2.72 | 1368 | 56 s |
-| Robust GRAPE | 6.2e-6 | **2698 MHz²** | **6891 MHz²** | **−4.92** | 999 | 16.5 min |
-| RL → robust GRAPE | 8.5e-5 | 286 MHz² | 1834 MHz² | −3.31 | 1614 | 4.7 min |
+1. **In-cooldown drift does not matter.** Every pulse keeps its nominal J_T to within a factor of
+   ~4 over ±0.1 MHz.
+2. **Recool drift is where pulses break.** A single recool degrades the RL and GRAPE pulses from
+   1e-4-1e-6 to ~2e-3 on average.
+3. **RL's robustness is not special.** RL, RL → GRAPE and plain GRAPE have the same recool mean,
+   ~1.5-1.9e-3. The paper's comparison with Krotov was at a different gate time (50 ns) and bound
+   (1.5 GHz).
+4. **Robust GRAPE wins on robustness,** and it also has the best nominal J_T. Its mean over the
+   fabrication range, which it never trained on, is 8.6e-4.
+5. **Starting robust GRAPE from the RL pulse is worse** than from random guesses: the RL solution
+   sits in a narrow basin.
 
-Our own JAX-trained agent's best pulse (46.8 ns, J_T = 9.8e-4, see
-[Replication](replication.md#5-training-from-scratch-figs-5-8)) goes to **J_T = 6.8e-7** after
-GRAPE refinement, in 93 s. The 10× gap to the paper's agent disappears once GRAPE finishes the job.
+## GRAPE losses
 
-## What it means
+![GRAPE losses](../figures/grape_losses.png)
 
-1. **RL → GRAPE is a free order of magnitude or two.** Starting from the RL pulse, GRAPE goes from
-   9.5e-5 to 1.1e-6 in 23 s without changing the pulse's character or its robustness. This matches
-   [Sarma & Hartmann (2025)](https://arxiv.org/abs/2312.16358), who used RL as the initial guess for
-   GRAPE.
-2. **The "emergent robustness" of RL is not special at equal gate time and bound.** Plain GRAPE
-   from random guesses, which never saw a detuned system, is as robust as the RL pulse (71 vs
-   55 MHz² at J_T ≤ 1e-3). The paper's comparison was against Krotov pulses at 50 ns with a
-   1.5 GHz bound, which is a different operating point.
-3. **Robust GRAPE is the real baseline to beat.** Optimising the mean J_T over ±10 MHz gives a low-
-   error region that extends well beyond the training square (area 2698 MHz², ~49× RL) at a nominal
-   J_T of 6e-6, and a smoother pulse (lowest total variation).
-4. **The RL pulse is a poor starting point for robustness.** Robust GRAPE started from the RL pulse
-   stays near it: 286 MHz², about 10× worse than robust GRAPE from random starts. The RL solution sits
-   in a narrow basin.
+(a) The single optimisations of the table above: J_T at each iteration (thin) and best so far
+(thick); for robust GRAPE, the mean over the 25 systems. RL → GRAPE touches 1e-6. (b) Across the
+24 drifted devices of the next section: median (solid), geometric mean (dashed) and quartile band
+of the best J_T so far. (c) Zoom on the last 20 % of the iterations, each device thin. (d) Final J_T
+on every drifted device for every method.
 
-## Caveats
+!!! note "Refinement needs small steps"
+    Started from the RL pulse with Adam at step 0.01 (as in the table), GRAPE first jumps out of the
+    RL pulse's basin (J_T up to 5e-2) and only improves once the step has decayed, after ~600
+    iterations. With a step of 3e-4 it reaches J_T = 5e-7 in 50 iterations and 7e-9 in 200 from
+    the paper's RL pulse. The per-device comparison below uses 3e-4.
 
-- **Not a like-for-like cost comparison.** GRAPE uses the model and its gradients; RL uses only
-  rewards. The table's times say what each costs here, not which method is more sample efficient.
-- **One run each.** Four random restarts per GRAPE setting and one ensemble choice; the numbers can
-  move by a factor of a few with other seeds or grids.
-- **No bandwidth limit.** All pulses, RL included, have large high-frequency content (total variation
-  1000-1600 rad/ns over 17 ns). A flux-line transfer function would penalise all of them; it may
-  change the ranking.
-- **Static detuning only.** Robustness here is against constant frequency offsets, the paper's
-  metric. Time-dependent noise and decoherence are not included.
+## RL vs GRAPE: cost per device
 
-## What this means for the RL story
+The question where RL can win: a device that is re-calibrated after every cooldown, or a fleet of
+devices, each with its own frequencies from the recool range. GRAPE pays its full cost for every
+device; a policy trained with domain randomisation pays once, then produces each device's pulse in
+a single rollout, and that pulse can seed a short GRAPE run.
 
-The case for RL has to move from "RL finds more robust pulses" to what gradient methods cannot do:
-**adapt without re-optimising**. A policy conditioned on the current detuning (roadmap item 5) that
-matches robust GRAPE's error at each detuning, from a single forward pass, would be a result
-gradient methods cannot produce.
+Test set: the nominal device plus 24 devices with qubit frequencies drawn uniformly from the recool
+range (±5.7 MHz on each qubit), none of them seen in training. Target: J_T ≤ 1e-3. Cost is counted
+in simulated 50 ps samples (an RL environment step is 3; a GRAPE iteration on a 345-sample pulse is
+3 × 345, forward plus backward). Both RL agents are PPO, seed 123, 20M steps; the drift-trained one
+redraws the qubit frequencies from the recool range every episode.
 
-!!! question "Decision: which robustness range matters?"
-    The areas above depend on the ±10 MHz training range and the ±50 MHz evaluation range. For the
-    paper we should fix a drift range justified by hardware (for example the typical day-to-day qubit
-    frequency drift of the target device) and report both nominal J_T and the worst case or mean
-    over that range.
+![Cost and quality](../figures/sample_efficiency.png)
+
+| Method | J_T nominal | J_T on drifted devices: median [quartiles] | Reaches 1e-3 | One-off cost | Cost per device |
+| --- | --- | --- | --- | --- | --- |
+| GRAPE per device (1000 iterations, random start) | 1.5e-3* | 2.4e-5 [1.5e-5, 3.2e-5] | 96 % | 0 | 7.0e5 samples, 12 s |
+| Robust GRAPE (one pulse for all) | 9.4e-7 | **1.7e-5** [4.9e-6, 2.8e-5] | 100 % | 2.1e8 samples, 44 min | 0 |
+| RL trained without drift | 9.8e-4 | 4.7e-3 [3.5e-3, 1.1e-2] | 0 % | 6.0e7 samples, 61 min | 1 rollout |
+| RL trained with drift | 1.2e-3 | 1.6e-3 [1.3e-3, 1.7e-3] | 0 % | 6.0e7 samples, 66 min | 1 rollout |
+| RL with drift → 200 GRAPE steps | 8.5e-5 | 2.0e-4 [8.6e-5, 3.3e-4] | 100 % | 6.0e7 samples, 66 min | **3.8e4 samples, 6 s** |
+
+\* A single random restart on the nominal device happened to stall; the drifted devices show the
+typical GRAPE result.
+
+What it shows:
+
+1. **Training with drift works as intended.** The drift-trained agent's gates hardly change across
+   devices (quartiles 1.3-1.7e-3), whereas the agent trained on one device degrades by 5× and
+   scatters over a decade. The policy adapts; it just does not reach 1e-3 on its own.
+2. **An RL pulse is a warm start that cuts GRAPE's cost per device 18×.** From the drift-trained
+   agent's pulse, 200 small GRAPE steps reach 1e-3 on every device, at 3.8e4 samples against 7.0e5
+   for GRAPE from a random guess.
+3. **Amortisation pays off after ~90 devices.** Training costs 6.0e7 samples once. Against GRAPE
+   from scratch, RL + short GRAPE is cheaper after 6.0e7 / (7.0e5 − 3.8e4) ≈ 90 devices or
+   recalibrations (in wall time, after several hundred, because the RL training ran on a shared CPU).
+4. **Within the recool range, one robust pulse is enough.** Robust GRAPE's single pulse beats every
+   per-device method on quality (median 1.7e-5) and needs nothing per device. Adaptation only matters
+   when the drift is larger than what one pulse can cover.
+
+**Where RL should win, and the next experiment.** Over the fabrication-targeting range
+(±18.5 MHz), robust GRAPE's worst case already degrades to 6.5e-3 (table above). That is where a
+policy that adapts per device, plus a short refinement, should beat both a single robust pulse and
+per-device GRAPE. We will repeat this comparison at that range, with the refinement budget and
+the RL training budget varied.
