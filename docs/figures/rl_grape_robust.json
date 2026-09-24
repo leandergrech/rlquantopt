@@ -1,0 +1,86 @@
+{
+  "settings": {
+    "iters": 2000,
+    "restarts": 4,
+    "ens_half_width": 10.0,
+    "ens_n": 5,
+    "map_step": 1.0,
+    "n_samples": 345,
+    "dt": 0.05,
+    "u_max": 20.0
+  },
+  "results": [
+    {
+      "name": "rl",
+      "JT_nominal": 9.48568232976843e-05,
+      "area_JT_le_1e3_MHz2": 55.0,
+      "area_JT_le_1e2_MHz2": 595.0,
+      "mean_log10_JT_r10": -2.669972546051439,
+      "mean_log10_JT_r25": -1.9143724685104542,
+      "total_variation": 1424.9719471931458,
+      "max_abs_u": 17.974519729614258,
+      "simulator_pulse_evals": 13300000,
+      "optimisation_seconds": 0.0
+    },
+    {
+      "name": "rl+grape",
+      "JT_nominal": 1.064201233358375e-06,
+      "area_JT_le_1e3_MHz2": 48.0,
+      "area_JT_le_1e2_MHz2": 457.0,
+      "mean_log10_JT_r10": -2.581276427173745,
+      "mean_log10_JT_r25": -1.7891188657029085,
+      "total_variation": 1509.368158340033,
+      "max_abs_u": 17.573227923381125,
+      "simulator_pulse_evals": 4000,
+      "optimisation_seconds": 23.126884598998004
+    },
+    {
+      "name": "grape",
+      "JT_nominal": 3.6655648192329693e-06,
+      "area_JT_le_1e3_MHz2": 71.0,
+      "area_JT_le_1e2_MHz2": 713.0,
+      "mean_log10_JT_r10": -2.7213044056399225,
+      "mean_log10_JT_r25": -1.940598087511256,
+      "total_variation": 1367.6026795052098,
+      "max_abs_u": 19.767346596928387,
+      "simulator_pulse_evals": 16000,
+      "optimisation_seconds": 55.571298801995
+    },
+    {
+      "name": "robust",
+      "JT_nominal": 6.2434345949879955e-06,
+      "area_JT_le_1e3_MHz2": 2698.0,
+      "area_JT_le_1e2_MHz2": 6891.0,
+      "mean_log10_JT_r10": -4.918679707428032,
+      "mean_log10_JT_r25": -3.926720481800218,
+      "total_variation": 998.6315259360548,
+      "max_abs_u": 18.941160803483474,
+      "simulator_pulse_evals": 400000,
+      "optimisation_seconds": 994.4460172640029
+    },
+    {
+      "name": "rl+robust",
+      "JT_nominal": 8.523293570894541e-05,
+      "area_JT_le_1e3_MHz2": 286.0,
+      "area_JT_le_1e2_MHz2": 1834.0,
+      "mean_log10_JT_r10": -3.3105945202287526,
+      "mean_log10_JT_r25": -2.4725319765451954,
+      "total_variation": 1613.9226199201928,
+      "max_abs_u": 18.71394538646961,
+      "simulator_pulse_evals": 100000,
+      "optimisation_seconds": 279.32232831400324
+    },
+    {
+      "name": "rl_jax",
+      "JT_nominal": 0.000976365659897338,
+      "gate_time_ns": 46.800000000000004
+    },
+    {
+      "name": "rl_jax+grape",
+      "JT_nominal": 6.773242311464145e-07,
+      "gate_time_ns": 46.800000000000004,
+      "optimisation_seconds": 92.75498466499994,
+      "simulator_pulse_evals": 4000
+    }
+  ]
+}

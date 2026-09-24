@@ -4,8 +4,11 @@ The amplitude bound is enforced by construction, u = u_max * tanh(theta), so eve
 iterate is a valid pulse. We minimise log10(J_T) with Adam (cosine-decayed step); restarts are vmapped.
 Weyl coordinates are used without rounding (see metrics.c1c2c3).
 
-Used for the quantum-speed-limit curve of paper Fig. 3: the smallest J_T reachable
-at each gate time T for several amplitude limits.
+Three uses:
+  - plain GRAPE and the quantum-speed-limit scan of paper Fig. 3 (``qsl_scan``);
+  - robust (ensemble) GRAPE: minimise the mean J_T over a set of detuned Hamiltonians
+    (``ensemble_hamiltonian`` + ``optimise``), the gradient-based counterpart of domain randomisation;
+  - refinement: start ``optimise`` from an RL pulse instead of a random guess.
 """
 from dataclasses import dataclass
 
@@ -25,6 +28,19 @@ class GrapeConfig:
     lr_final_frac: float = 0.02
     concurrence_weight: float = 1.0
     unitarity_weight: float = 3.0
+
+
+def ensemble_hamiltonian(model: physics.ModelParams, omegas):
+    """Stack of sector Hamiltonians, one per row of ``omegas`` (n, 2) in GHz."""
+    return jax.vmap(lambda om: physics.sector_hamiltonian(model._replace(omega_s=om)))(jnp.asarray(omegas))
+
+
+def detuning_grid(model: physics.ModelParams, half_width_mhz, n_per_axis):
+    """(n^2, 2) qubit frequencies on a square grid of ±half_width_mhz around nominal."""
+    d = np.linspace(-half_width_mhz, half_width_mhz, n_per_axis) * 1e-3
+    g0, g1 = np.meshgrid(d, d, indexing="ij")
+    w = np.asarray(model.omega_s)
+    return np.stack([w[0] + g0.ravel(), w[1] + g1.ravel()], axis=-1)
 
 
 def final_cost(u, ham, cfg: GrapeConfig):
@@ -50,13 +66,27 @@ def random_guesses(key, n, n_samples, u_max, dt, detuning_ghz=0.8588):
     return jnp.clip((low + drive) * envelope, -0.95, 0.95) * u_max
 
 
+# --8<-- [start:optimise]
 def optimise(u0, ham, u_max, cfg: GrapeConfig):
-    """Optimise a batch of initial pulses u0 (n, n_samples). Returns final pulses, J_T, C, U and the J_T history."""
-    theta0 = jnp.arctanh(jnp.clip(u0 / u_max, -0.99, 0.99))
+    """Optimise a batch of initial pulses u0 (n, n_samples) within |u| <= u_max.
+
+    ``ham`` is one SectorHamiltonian, or an ensemble with a leading axis (see
+    ``ensemble_hamiltonian``), in which case the loss is log10 of the mean J_T over
+    the ensemble (robust GRAPE). Returns the best pulses, their (mean) J_T, C, U
+    and the per-iteration history of the (mean) J_T.
+    """
+    ensemble = ham.drift1.ndim == 3
+    theta0 = jnp.arctanh(jnp.clip(u0 / u_max, -0.99, 0.99))     # u = u_max tanh(theta) keeps |u| <= u_max
     tx = optax.adam(optax.cosine_decay_schedule(cfg.lr, cfg.n_iter, cfg.lr_final_frac))
 
+    def cost(u):
+        if not ensemble:
+            return final_cost(u, ham, cfg)
+        JT, (C, U) = jax.vmap(lambda h: final_cost(u, h, cfg))(ham)
+        return JT.mean(), (C.mean(), U.mean())
+
     def loss(theta):
-        JT, aux = final_cost(u_max * jnp.tanh(theta), ham, cfg)
+        JT, aux = cost(u_max * jnp.tanh(theta))
         return jnp.log10(jnp.maximum(JT, 1e-12)), (JT, aux)
 
     grad_fn = jax.value_and_grad(loss, has_aux=True)
@@ -65,7 +95,7 @@ def optimise(u0, ham, u_max, cfg: GrapeConfig):
         def step(carry, _):
             theta, opt_state, best = carry
             (l, (JT, _)), g = grad_fn(theta)
-            g = jnp.nan_to_num(g)
+            g = jnp.nan_to_num(g)          # sqrt(abcd) in the Weyl eigenvalues has an infinite slope at 0
             updates, opt_state = tx.update(g, opt_state)
             best_theta, best_JT = best
             better = JT < best_JT
@@ -75,10 +105,11 @@ def optimise(u0, ham, u_max, cfg: GrapeConfig):
         init = (theta, tx.init(theta), (theta, jnp.inf))
         (_, _, (best_theta, _)), hist = jax.lax.scan(step, init, None, cfg.n_iter)
         u = u_max * jnp.tanh(best_theta)
-        JT, (C, U) = final_cost(u, ham, cfg)
+        JT, (C, U) = cost(u)
         return u, JT, C, U, hist
 
     return jax.jit(jax.vmap(run_one))(theta0)
+# --8<-- [end:optimise]
 
 
 def qsl_scan(Ts_ns, u_max_ghz, n_restarts=8, cfg: GrapeConfig = GrapeConfig(), model=physics.ModelParams(), seed=0):
