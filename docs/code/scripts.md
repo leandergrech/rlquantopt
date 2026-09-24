@@ -22,7 +22,8 @@ Every figure in these docs is produced by one of these. Run them from the reposi
 | `python scripts/gate_times.py --fab-dr RUN --t1 D2=RUN D3=RUN D5=RUN` | `docs/figures/gate_times.json`: gate times the policies choose | ~5 min |
 | `python scripts/matched_gate_time.py` | `docs/figures/matched_gate_time.json`: GRAPE from random at the policies' gate times | ~40 min |
 | `python scripts/coupler_drift_scan.py` | `docs/figures/coupler_drift_scan.{png,json}`: stored pulses vs coupler drift | ~1 min |
-| `python scripts/coupler_drift_experiment.py robust` / `evaluate --dr-run RUN --static-run RUN` | `docs/figures/coupler_robust.*`, `coupler_drift.{png,json}`: large coupler drift | ~40 min / ~1.5 h |
+| `python scripts/coupler_drift_experiment.py robust` / `evaluate --dr-run RUN --static-run RUN` / `replot` | `docs/figures/coupler_robust.*`, `coupler_drift.{png,json}`: large coupler drift | ~40 min / ~1.5 h / seconds |
+| `taskset -c 2 python scripts/bench_costs.py` (single-threaded XLA, see its docstring) | `docs/figures/compute_costs.json`: logical-core seconds per GRAPE iteration, robust-GRAPE member, PPO step and rollout; `scripts/compute_cost.py` converts the experiments' sample counts into core-hours with it | ~15 min |
 | `python scripts/pulse_sampling.py` | `docs/figures/pulse_sampling.png`: the RL pulse at coarser sampling | ~10 s |
 | `python scripts/make_bibliography.py` | `docs/bib/*`, `docs/bibliography.md` from DOIs | ~30 s |
 

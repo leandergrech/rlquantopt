@@ -220,7 +220,7 @@ def main():
          DRIFT_RANGES[args.range])
 
 
-def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
+def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"], n_rl=750):
     """(a) Cost to reach the threshold, split into one-off (RL pretraining, robust optimisation) and per-device
     GRAPE; (b) total cost against the number of devices; (c) gate quality per device."""
     names = ["grape", "robust grape", "rl", "rl-dr", "rl-dr+grape"]
@@ -230,10 +230,23 @@ def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
     what = {"recool": "recool", "fab_targeting": "fabrication"}.get(rng.name, rng.name)
     fig, axs = plt.subplots(1, 3, figsize=(18, 5.2), constrained_layout=True, gridspec_kw=dict(width_ratios=[1.2, 1, 1]))
 
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("compute_cost", os.path.join(ROOT, "scripts", "compute_cost.py"))
+    cc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cc)
+
     def parts(n):
+        """(one-off, per-device) logical-core hours on the benchmarked machine."""
         s = summary[n]
-        per = s["per_device_cost_samples"]
-        return s["one_off_cost_samples"], per
+        one, per = s["one_off_cost_samples"], s["per_device_cost_samples"]
+        if n == "grape":
+            return 0.0, cc.grape_hours_from_samples(per, N_GRAPE)
+        if n == "robust grape":
+            return cc.robust_hours_from_samples(one), (0.0 if np.isfinite(per) else np.inf)
+        one_h = cc.rl_training_hours(one / 3)
+        if n in ("rl", "rl-dr"):
+            return one_h, (cc.rollout_hours() if np.isfinite(per) else np.inf)
+        return one_h, (cc.rollout_hours() + cc.grape_hours_from_samples(per - 999, n_rl) if np.isfinite(per) else np.inf)
 
     ax = axs[0]
     scen = [1, fleet]
@@ -271,12 +284,13 @@ def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
     ax.set_yscale("log")
     ax.set_ylim(bottom, top * 3)
     ax.set_xticks(x, [f"1 new device\n({what} drift)", f"{fleet} devices\n({what} drift)"])
-    ax.set_ylabel("simulator cost, 50 ps samples")
-    ax.set_title("(a) Cost to reach $J_T \\leq 10^{-3}$, one-off vs per device (✗: never reaches it)", fontsize=10)
-    ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=2, frameon=False)
+    ax.set_ylabel(f"logical-core hours\n{cc.machine()}", fontsize=8)
+
+    ax.legend(handles=handles, fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=2, frameon=False)
     one, per = parts("rl-dr+grape")
-    ax.text(x[1] + 2 * wb, (one + fleet * per) * 1.3, f"pretrain {one:.1e}\n+ {fleet} × GRAPE {per:.1e}",
-            ha="center", fontsize=7, color=colours["rl-dr+grape"])
+    ax.set_title("(a) Core time to reach $J_T \\leq 10^{-3}$, one-off vs per device (✗: never reaches it)\n"
+                 f"RL with drift → GRAPE: pretraining {one:.2g} core-h, then {per * 3600:.2g} core-s per device",
+                 fontsize=10)
 
     ax = axs[1]
     N = np.logspace(0, 4, 200)
@@ -294,8 +308,8 @@ def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
         ax.text(nstar * 1.1, ax.get_ylim()[0] * 3 if ax.get_ylim()[0] > 0 else 1e6, f"break-even\n≈ {nstar:.0f} devices",
                 fontsize=8)
     ax.set_xlabel("number of devices or re-calibrations")
-    ax.set_ylabel("total simulator cost, 50 ps samples")
-    ax.set_title("(b) Total cost against number of devices", fontsize=10)
+    ax.set_ylabel("total logical-core hours")
+    ax.set_title("(b) Total core time against number of devices", fontsize=10)
     ax.legend(fontsize=7)
 
     ax = axs[2]
@@ -319,8 +333,12 @@ def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"]):
 def replot(tag=""):
     d = json.load(open(os.path.join(ROOT, "docs", "figures", f"sample_efficiency{tag}.json")))
     rng = DRIFT_RANGES[d["settings"].get("range", "recool")]
+    # length of the refined RL pulses (median gate time of the drift-trained policy on these devices)
+    gt = json.load(open(os.path.join(ROOT, "docs", "figures", "gate_times.json")))
+    key = "fab-range policy on fab devices" if rng.name == "fab_targeting" else "D2 policy on D=2 devices"
+    n_rl = int(round(gt[key]["median_ns"] / DT))
     plot(d["summary"], d["per_device"], d["settings"]["threshold"], d["settings"]["fleet"],
-         os.path.join(ROOT, "docs", "figures", f"sample_efficiency{tag}.png"), rng)
+         os.path.join(ROOT, "docs", "figures", f"sample_efficiency{tag}.png"), rng, n_rl)
 
 
 if __name__ == "__main__":

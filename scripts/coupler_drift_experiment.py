@@ -50,6 +50,7 @@ def robust(args):
     u0 = grape.random_guesses(jax.random.PRNGKey(7), args.restarts, N17, U_MAX, DT)
     t0 = time.perf_counter()
     u, JT, C, U, h = grape.optimise(u0, stack(members), U_MAX, cfg)
+    JT.block_until_ready()                  # JAX is asynchronous: wait before stopping the clock
     wall = time.perf_counter() - t0
     i = int(jnp.argmin(JT))
     np.savez_compressed(os.path.join(FIG, "coupler_robust.npz"), pulse=np.asarray(u[i]), hist=np.asarray(h[i]))
@@ -142,6 +143,32 @@ def evaluate(args):
                    summary=summary, by_iterations=at, costs=costs, per_device=rec),
               open(os.path.join(FIG, "coupler_drift.json"), "w"), indent=2)
 
+    np.savez(os.path.join(FIG, "coupler_drift_hist.npz"), **{k: np.stack(v) for k, v in H.items()})
+    plot(json.load(open(os.path.join(FIG, "coupler_drift.json"))), H)
+
+
+def core_hours(costs, gate_ns):
+    """Sample counts to logical-core hours (scripts/compute_cost.py): (one-off, per-device) per method."""
+    cc = _load("compute_cost")
+    n_gate = int(round(gate_ns / DT))
+    rollout = jenv.EnvConfig().n_steps * 3
+    out = {}
+    for k, c in costs.items():
+        one, per = c["one_off"], c["per_device"]
+        if k == "RL + GRAPE":
+            out[k] = (cc.rl_training_hours(one / 3),
+                      cc.rollout_hours() + cc.grape_hours_from_samples(per - rollout, n_gate) if np.isfinite(per) else np.inf)
+        elif k == "robust GRAPE, 3D":
+            out[k] = (cc.robust_hours_from_samples(one), per)
+        else:
+            n = n_gate if "matched" in k else N17
+            out[k] = (0.0, cc.grape_hours_from_samples(per, n))
+    return out, cc.machine()
+
+
+def plot(d, H):
+    rec, costs, thr = d["per_device"], d["costs"], d["settings"]["threshold"]
+    hours, machine = core_hours(costs, d["gate_time_ns"]["median"])
     cols = ["#8172b2", "#b8a9d9", "#c44e52", "#dd8452", "#55a868", "#4c72b0", "#9fb7d9"]
     fig, axs = plt.subplots(1, 3, figsize=(20, 5), constrained_layout=True, gridspec_kw=dict(width_ratios=[1.3, 1, 1]))
     ax = axs[0]
@@ -152,7 +179,7 @@ def evaluate(args):
     ax.axhline(thr, c="k", ls="--", lw=0.8)
     ax.set_xticks(range(len(rec)), [k.replace(", ", ",\n") for k in rec], fontsize=8)
     ax.set_ylabel("$J_T$ per device (bar: median)")
-    ax.set_title(f"{args.n_devices} devices: qubits ±{W_Q} MHz, coupler ±{W_C:.0f} MHz", fontsize=10)
+    ax.set_title(f"{len(rec['RL + GRAPE'])} devices: qubits ±{W_Q} MHz, coupler ±{W_C:.0f} MHz", fontsize=10)
     ax = axs[1]
     for k, c in (("RL + GRAPE", cols[4]), ("GRAPE, random, matched T", cols[5]), ("GRAPE, random, 17.25 ns", cols[6])):
         L = min(len(h) for h in H[k])
@@ -172,16 +199,16 @@ def evaluate(args):
     cc = {"RL + GRAPE": cols[4], "GRAPE, random, matched T": cols[5], "GRAPE, random, 17.25 ns": cols[6],
           "robust GRAPE, 3D": cols[0]}
     for k, c in cc.items():
-        one, per = costs[k]["one_off"], costs[k]["per_device"]
+        one, per = hours[k]
         if np.isfinite(per):
-            ax.loglog(N, one + N * per + 1, c=c, lw=2, label=k)
-    one, per = costs["RL + GRAPE"]["one_off"], costs["RL + GRAPE"]["per_device"]
+            ax.loglog(N, one + N * per, c=c, lw=2, label=k)
+    one, per = hours["RL + GRAPE"]
     ax.loglog(N, np.full_like(N, one), c=cc["RL + GRAPE"], ls=":", lw=1.2, label="…of which RL pretraining")
     if np.isfinite(per):
         ax.loglog(N, N * per, c=cc["RL + GRAPE"], ls="--", lw=1.2, label="…of which per-device GRAPE")
     ax.set_xlabel("number of devices or re-calibrations")
-    ax.set_ylabel("total simulator cost to reach $J_T \\leq 10^{-3}$, 50 ps samples")
-    ax.set_title("Cost against number of devices (∞ per device: not drawn)", fontsize=10)
+    ax.set_ylabel(f"logical-core hours to reach $J_T \\leq 10^{{-3}}$\n{machine}", fontsize=9)
+    ax.set_title("Core time against number of devices (never reaching: not drawn)", fontsize=10)
     ax.legend(fontsize=7)
     ax.grid(alpha=0.3, which="both")
     for a in axs[:2]:
@@ -190,9 +217,14 @@ def evaluate(args):
     print("wrote coupler_drift.png")
 
 
+def replot():
+    H = dict(np.load(os.path.join(FIG, "coupler_drift_hist.npz")))
+    plot(json.load(open(os.path.join(FIG, "coupler_drift.json"))), H)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["robust", "evaluate"])
+    ap.add_argument("mode", choices=["robust", "evaluate", "replot"])
     ap.add_argument("--iters", type=int, default=2000)
     ap.add_argument("--restarts", type=int, default=2)
     ap.add_argument("--dr-run")
@@ -202,7 +234,7 @@ def main():
     ap.add_argument("--control-iters", type=int, default=1000)
     ap.add_argument("--threshold", type=float, default=1e-3)
     args = ap.parse_args()
-    robust(args) if args.mode == "robust" else evaluate(args)
+    {"robust": robust, "evaluate": evaluate, "replot": lambda a: replot()}[args.mode](args)
 
 
 if __name__ == "__main__":

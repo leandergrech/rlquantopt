@@ -60,8 +60,8 @@ For convex problems, such methods "usually need at most n times more iterations 
 gradient methods, where n is the dimension of the space of variables"
 ([[nesterov2017]](../bibliography.md#nesterov2017), abstract). Gate optimisation is not convex, so the
 bound is a guide rather than a theorem here, but the direction is clear: here n = 345 pulse samples. So "RL is orders of magnitude more efficient than
-any gradient technique" is **false per instance**. Our own data agree: GRAPE needs 7.0e5 simulated
-samples per device, while training the RL agent took 6.0e7.
+any gradient technique" is **false per instance**. Our own data agree: GRAPE needs 14 core-seconds
+per device, while training the RL agent took 0.81 core-hours, about 200 times more.
 
 !!! warning "What can and cannot be claimed"
     The defensible claim is about **total cost over many drifting device states**, and about
@@ -114,13 +114,14 @@ What this shows:
 From [Robustness: cost per device](../results/robustness.md#rl-vs-grape-cost-per-device):
 
 - A PPO agent trained over the recool drift gives consistent gates on every held-out device, and as a
-  warm start it cuts GRAPE's per-device cost 18× (3.8e4 vs 7.0e5 simulated samples).
-- Its training (6.0e7 samples) pays back after ≈ 90 devices or recalibrations.
+  warm start it cuts GRAPE's per-device compute 15× (0.94 vs 14 core-seconds).
+- Its training (0.81 core-hours) pays back after ≈ 220 devices or recalibrations (≈ 350 over the
+  fabrication range, where the policy's longer pulses make each refinement step dearer).
 - Within the recool range, and even over the ±18.5 MHz fabrication range, a single robust GRAPE pulse
   covers two drifting frequencies ([fabrication-range experiment](../results/robustness.md#fabrication-range-experiment)).
 - At matched gate time, the policy's pulse is a far better GRAPE starting point than a random guess:
   1-3 orders of magnitude lower J_T at equal GRAPE budget. A policy trained for only 2M steps is
-  already a good warm start, which moves the break-even to about 13 devices.
+  already a good warm start, which moves the break-even to about 36 devices.
 
 ### T1: policies trained with more drifting parameters
 

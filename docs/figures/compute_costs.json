@@ -1,0 +1,50 @@
+{
+  "machine": {
+    "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+    "threads": 16,
+    "jax": "0.7.1",
+    "backend": "cpu",
+    "x64": true,
+    "load_average_1min": 44.30224609375,
+    "logical_cores_used": 1,
+    "reference_clock_ghz": 2.1,
+    "units": "core-seconds at the reference clock"
+  },
+  "grape": {
+    "core_s_per_iter_by_samples": {
+      "345": 0.020815814140044235,
+      "700": 0.04990227385604694,
+      "1000": 0.0810083149197959
+    },
+    "measured_core_s_per_iter_by_samples": {
+      "345": 0.09947974564999988,
+      "700": 0.2177533494500004,
+      "1000": 0.3705115173500005
+    },
+    "fit_a_s": -0.011862043028189023,
+    "fit_b_s_per_sample": 9.159537017137126e-05
+  },
+  "robust_grape_345": {
+    "core_s_per_iter_by_members": {
+      "5": 0.0664479841067076,
+      "15": 0.17749704511181202,
+      "35": 0.378954818419922
+    },
+    "measured_core_s_per_iter_by_members": {
+      "5": 0.30610857329999985,
+      "15": 0.802562800749999,
+      "35": 1.5686823524000004
+    },
+    "fit_a_s": 0.017557851401258564,
+    "fit_b_s_per_member": 0.010367750789721197
+  },
+  "ppo": {
+    "s_per_env_step": 0.00014518530029360396,
+    "measured_core_s_per_env_step": 0.0005346823876546206,
+    "core_hours_per_20M_steps": 0.806585001631133
+  },
+  "rollout": {
+    "s": 0.025049379961912078,
+    "measured_core_s": 0.09835833700003604
+  }
+}

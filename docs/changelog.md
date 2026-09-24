@@ -3,6 +3,17 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.14.2: compute in logical-core hours (2026-09-25)
+
+All cost comparisons are now in logical-core time on the laptop CPU instead of simulated samples.
+`scripts/bench_costs.py` prices each algorithmic step (a PPO environment step including its network
+updates, a GRAPE iteration by pulse length, a robust-GRAPE member, a rollout) on one pinned logical
+core, sampling the clock so that results are stated at the 2.1 GHz base clock whatever the load.
+`scripts/compute_cost.py` converts the recorded step counts. Pricing the network updates changes the
+conclusions: the warm start saves 15× per device on the recool range and 2.6× on the fabrication
+range (longer pulses), and pretraining pays back after ~220-350 devices (~36 with a 2M-step policy),
+not ~90-130.
+
 ## 2.14.1: cost split, RL-initialised control, platforms (2026-09-24)
 
 Cost figures split RL routes into one-off pretraining and per-device GRAPE, with total cost against the

@@ -23,8 +23,8 @@ flowchart LR
 | The warm start is informative, not an artefact of pulse length | At equal gate time and 200 GRAPE steps: median J_T 1.4e-5 from the RL pulse vs 1.3e-2 from a random start (100 % vs 0 % of devices below 1e-3), fabrication-range devices | [Robustness](../results/robustness.md#the-gate-time-confound-and-its-control) |
 | It holds as drift dimensions are added | Policies trained with 2, 3 or 5 drifting parameters all refine to the target on 75-100 % of devices within 200 steps; on the D = 5 devices a random start at the same gate time reaches 0 % | [T1](drift-and-dimension.md#t1-policies-trained-with-more-drifting-parameters) |
 | The policy alone is not enough | Median J_T 1.4e-3 to 2e-2 across experiments; the refinement is what reaches the target | [Robustness](../results/robustness.md) |
-| Pretraining pays back | Break-even against per-device GRAPE after ~128 devices with full training, ~13 with a 2M-step policy | [Robustness](../results/robustness.md#training-and-refinement-budgets) |
-| Cheap to train | A usable policy in 2M environment steps, minutes on a laptop CPU with the JAX environment | [Training](../results/training.md) |
+| Pretraining pays back | In logical-core time, break-even against per-device GRAPE after ~220-350 devices with full training (0.81 core-hours), ~36 with a 2M-step policy (5 core-minutes) | [Robustness](../results/robustness.md#training-and-refinement-budgets) |
+| Cheap to train | A usable policy in 2M environment steps: 5 core-minutes on a laptop CPU with the JAX environment | [Training](../results/training.md) |
 
 ## The literature around it
 
