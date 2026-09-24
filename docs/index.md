@@ -1,5 +1,11 @@
 # RLQuantOpt v2 (JAX)
 
+!!! warning "Work in progress: open-source active research"
+    This is ongoing research by Leander Grech, shared openly as it happens. Code, results and
+    conclusions may change; the settled results are those of the
+    [published paper](https://doi.org/10.1088/2058-9565/ae2c16). Interested in working together?
+    See [Collaborate](contact.md).
+
 This site documents the JAX re-implementation of RLQuantOpt (`rlquantopt/jx`), which started
 on 23 September 2026. It is written for the two of us: you (Leander) steering the research, and
 Claude writing most of the code. Every page says what the code does, shows the parts you need

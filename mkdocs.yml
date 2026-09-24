@@ -10,7 +10,9 @@ docs_dir: docs
 
 theme:
   name: material
+  custom_dir: overrides
   features:
+    - announce.dismiss
     - navigation.sections
     - navigation.expand
     - navigation.top
@@ -56,6 +58,7 @@ nav:
   - Reference:
       - Scripts and CLI: reference/scripts.md
       - Changelog: changelog.md
+  - Collaborate: contact.md
 
 markdown_extensions:
   - admonition

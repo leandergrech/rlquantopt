@@ -27,6 +27,9 @@ against Krotov-optimised pulses in terms of robustness and generalisation.
 
 ## v2: JAX re-implementation
 
+> **Work in progress.** v2 is open-source, active research by Leander Grech; code and results may change.
+> Interested in collaborating? [Open a collaboration request](https://github.com/leandergrech/rlquantopt/issues/new?template=collaboration.yml).
+
 `rlquantopt/jx` re-implements the environment and the agents in JAX. It propagates only the
 excitation-number sectors the gate lives in, exactly, and computes the reward in closed form, so
 it runs ~100× faster than v1 on a CPU and is differentiable end to end. It reproduces the

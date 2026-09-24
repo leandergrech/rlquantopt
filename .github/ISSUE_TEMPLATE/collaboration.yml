@@ -1,0 +1,44 @@
+name: Collaboration request
+description: Get in touch about working together on RLQuantOpt
+title: "[Collaboration] "
+labels: ["collaboration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in RLQuantOpt. This is open-source, active research by Leander Grech.
+        This form creates a **public** GitHub issue, so do not include anything confidential; if you
+        prefer a private conversation, say so and leave a way to reach you.
+  - type: input
+    id: name
+    attributes:
+      label: Name and affiliation
+      placeholder: e.g. Jane Doe, University of ...
+    validations:
+      required: true
+  - type: dropdown
+    id: interest
+    attributes:
+      label: What would you like to work on?
+      multiple: true
+      options:
+        - Hardware validation of RL or GRAPE pulses
+        - Device models (tunable couplers, double-transmon coupler, fluxonium)
+        - Reinforcement learning methods (model-based, meta-RL, robustness)
+        - Optimal control baselines
+        - Software / JAX tooling
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: message
+    attributes:
+      label: Message
+      description: What you have in mind, and what you could bring (hardware access, expertise, compute, students, ...).
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: How to reach you (optional)
+      description: Leave blank to continue the conversation in this issue.
