@@ -39,6 +39,12 @@ class EnvConfig:
     # Further drifting parameters (absolute, MHz): coupler frequency omega_c_0 and couplings g_0, g_1
     coupler_drift_mhz: float = 0.0
     g_drift_mhz: float = 0.0
+    # Idea i06: "pe" = the paper's perfect-entangler J_T; "sqrt_iswap" = 1 - average gate fidelity to
+    # sqrt(iSWAP) after free virtual-Z corrections. info["JT"] always holds the active objective's cost.
+    objective: str = "pe"
+    # "amplitudes" = v1's 12 complex state amplitudes; "measured" = readout populations and Pauli
+    # expectations a lab can measure (physics.measured_observables)
+    obs_mode: str = "amplitudes"
     model: physics.ModelParams = physics.ModelParams()
 
     @property
@@ -53,7 +59,7 @@ class EnvConfig:
 
     @property
     def obs_dim(self):
-        return 24 + self.n_time_steps + 1
+        return (physics.N_MEASURED if self.obs_mode == "measured" else 24) + self.n_time_steps + 1
 
     @property
     def act_dim(self):
@@ -114,11 +120,15 @@ def reset(key, cfg: EnvConfig):
 
 # --8<-- [start:observation]
 def observation(state: EnvState, idx_for_time, cfg: EnvConfig):
-    z = physics.sector_amplitudes(state.sector)
-    polar = jnp.stack([2 * jnp.abs(z) - 1, jnp.angle(z) / jnp.pi], axis=-1).reshape(-1)
+    if cfg.obs_mode == "measured":
+        pops, paulis = physics.measured_observables(state.sector)
+        quantum = jnp.concatenate([2 * pops - 1, paulis])          # all in [-1, 1]
+    else:
+        z = physics.sector_amplitudes(state.sector)
+        quantum = jnp.stack([2 * jnp.abs(z) - 1, jnp.angle(z) / jnp.pi], axis=-1).reshape(-1)
     amps = state.amps_cur / cfg.a_scale / cfg.a_norm_max
     t = idx_for_time * 2 / cfg.pulse_length - 1
-    obs = jnp.concatenate([polar, amps, jnp.atleast_1d(t)]) * cfg.obs_scale
+    obs = jnp.concatenate([quantum, amps, jnp.atleast_1d(t)]) * cfg.obs_scale
     return obs.astype(fdtype())
 # --8<-- [end:observation]
 
@@ -137,7 +147,7 @@ def step(state: EnvState, action, cfg: EnvConfig):
 
     sector = physics.propagate(state.ham, state.sector, amps, cfg.dt)
     G = physics.realised_gate(sector)
-    JT, C, U = metrics.cost_JT(G, cfg.concurrence_weight, cfg.unitarity_weight)
+    JT, C, U = metrics.cost(G, cfg.objective, cfg.concurrence_weight, cfg.unitarity_weight)
     reward = -jnp.log10(jnp.maximum(JT, cfg.jt_floor)) * cfg.rew_scale - cfg.rew_thresh
     tv = jnp.sum(jnp.abs(jnp.diff(amps))) * cfg.tv_penalty_scale
     reward = reward - tv
@@ -184,7 +194,8 @@ def rollout_pulse(amps, cfg: EnvConfig, omega_s=None):
 
     def body(sector, u):
         sector = physics.propagate(ham, sector, u[None], cfg.dt)
-        JT, C, U = metrics.cost_JT(physics.realised_gate(sector), cfg.concurrence_weight, cfg.unitarity_weight)
+        JT, C, U = metrics.cost(physics.realised_gate(sector), cfg.objective, cfg.concurrence_weight,
+                                cfg.unitarity_weight)
         return sector, (JT, C, U)
 
     _, (JT, C, U) = jax.lax.scan(body, physics.initial_state(), jnp.asarray(amps))

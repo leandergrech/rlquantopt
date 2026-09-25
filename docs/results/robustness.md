@@ -320,6 +320,10 @@ last 46 ns in the median (quartiles 37-49 ns).
     robust GRAPE at 46 ns with more members, and more restarts for the 4 devices where refinement
     stalls.
 
+The same experiment with a √iSWAP gate-fidelity target and measurable observations is on
+[Measurable observations and gate fidelity](measurable.md): the conclusions hold, and the policy on its
+own adapts better.
+
 The robust optimisation took about 66 minutes of wall time on the shared machine (from file
 timestamps; the script did not wait for the asynchronous JAX result, since fixed); the core-hours
 above come from its iteration count.

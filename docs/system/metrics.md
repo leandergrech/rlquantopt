@@ -55,3 +55,27 @@ follows `weylchamber` line by line:
 
 The perfect-entangler target and its named-gate alternatives are discussed in
 [Named gates and a richer model](../next/named-gates.md).
+
+## Named-gate fidelity with free Z corrections
+
+Option B of [Named gates](../next/named-gates.md#how-the-reward-changes), implemented for √iSWAP
+(idea i07). Virtual Z rotations cost nothing on hardware, so the fidelity is taken after the best
+Z corrections on each qubit before and after the gate. For the block-diagonal gates of this model
+only three combinations of the four phases change \(|\mathrm{Tr}\,M|\); they are found by a 10³ grid
+search and eight modified-Newton steps. The first term of the average gate fidelity is the
+unitarity, so leakage is penalised without a separate term.
+
+\[
+F = \max_{\text{Z phases}} \frac{\operatorname{Tr}(M M^\dagger) + |\operatorname{Tr} M|^2}{20},
+\qquad M = V^\dagger D_\text{after}\, P\, D_\text{before}
+\]
+
+```python
+--8<-- "rlquantopt/jx/metrics.py:fidelity"
+```
+
+`tests/test_jx_fidelity.py` checks \(F\) against a brute-force optimisation over the four phases
+(agreement to 1e-9), unit fidelity for √iSWAP and √iSWAP† under arbitrary Z phases, and the pulse
+gradient against finite differences. The pulses optimised for the perfect-entangler objective sit
+0.6-1.8 % away from √iSWAP: they land near Weyl point (0.25, 0.25, 0.06-0.09), √iSWAP plus a small
+conditional phase.

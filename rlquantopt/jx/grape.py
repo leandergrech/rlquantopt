@@ -28,6 +28,7 @@ class GrapeConfig:
     lr_final_frac: float = 0.02
     concurrence_weight: float = 1.0
     unitarity_weight: float = 3.0
+    objective: str = "pe"       # or "sqrt_iswap" (idea i06), see metrics.cost
 
 
 def ensemble_hamiltonian(model: physics.ModelParams, omegas):
@@ -45,8 +46,8 @@ def detuning_grid(model: physics.ModelParams, half_width_mhz, n_per_axis):
 
 def final_cost(u, ham, cfg: GrapeConfig):
     sector = physics.propagate(ham, physics.initial_state(), u, cfg.dt)
-    JT, C, U = metrics.cost_JT(physics.realised_gate(sector), cfg.concurrence_weight, cfg.unitarity_weight,
-                               digits=None)
+    JT, C, U = metrics.cost(physics.realised_gate(sector), cfg.objective, cfg.concurrence_weight,
+                            cfg.unitarity_weight, digits=None)
     return JT, (C, U)
 
 

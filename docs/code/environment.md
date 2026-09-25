@@ -52,8 +52,32 @@ image of \|110⟩ (6 amplitudes): exactly the 12 entries v1 extracted from the 2
 Each complex amplitude \(z\) becomes \((2|z| - 1,\ \arg z / \pi)\).
 
 !!! note "The observation is a simulator privilege"
-    State amplitudes are not measurable on hardware. That is fine for replicating the paper, but a
-    sim-to-real version needs measurement-based observations (roadmap item 5).
+    State amplitudes are not measurable on hardware. That is fine for replicating the paper; for a
+    sim-to-real version use `obs_mode="measured"` below.
+
+### Measured observations (`obs_mode="measured"`)
+
+With `EnvConfig(obs_mode="measured")` (CLI `--obs-mode measured`, idea i07) the agent sees only what a
+lab can read out after preparing an input state and playing the pulse so far:
+
+```python
+--8<-- "rlquantopt/jx/physics.py:measured"
+```
+
+63 numbers: for the inputs \|01⟩, \|10⟩, \|11⟩ the readout probabilities of 00, 01, 10, 11 and of
+"a transmon in \|2⟩" (15), and for the superposition inputs \|0+⟩, \|+0⟩, \|+1⟩ the 16 two-qubit Pauli
+expectation values (48), which carry the relative phases that populations cannot see. The coupler is
+traced out, since it is not read out; an excitation left in it reads as qubits in \|00⟩. Values are
+exact expectations for now; finite-shot estimates are the next step. On hardware each value needs its
+own experiment per step, which is the price of observing mid-pulse.
+
+### Objective (`objective`)
+
+`objective="pe"` (default) is the paper's perfect-entangler \(J_T\). `objective="sqrt_iswap"` (CLI
+`--objective sqrt_iswap`) uses \(1 - F\), the average gate fidelity to √iSWAP after free virtual-Z
+corrections ([Gate metrics](../system/metrics.md#named-gate-fidelity-with-free-z-corrections)); the
+reward is \(-\log_{10}(1 - F)\) with the same shaping. `info["JT"]` always holds the active objective's
+cost, so training, evaluation and GRAPE code work unchanged (`GrapeConfig(objective=...)`).
 
 ## Auto-reset for training
 

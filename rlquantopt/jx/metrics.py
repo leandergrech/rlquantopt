@@ -7,6 +7,7 @@ and (ad + bc) ± 2·sqrt(abcd). This lets us follow weylchamber.c1c2c3
 (Childs et al., PRA 68, 052311) exactly without a general 4x4 eig, which JAX
 does not provide on GPU.
 """
+import jax
 import jax.numpy as jnp
 
 WEYL_DIGITS = 8     # weylchamber.prec.DEFAULT_WEYL_PRECISSION
@@ -64,3 +65,66 @@ def cost_JT(G, concurrence_weight=1.0, unitarity_weight=3.0, digits=WEYL_DIGITS)
     K = concurrence_weight + unitarity_weight
     return 1 - (concurrence_weight * C + unitarity_weight * U) / K, C, U
 # --8<-- [end:cost]
+
+
+# --8<-- [start:fidelity]
+# Named-gate fidelity (idea i06). Target in the basis |00>, |01>, |10>, |11> (|q0 q1>).
+SQRT_ISWAP = jnp.array([[1, 0, 0, 0],
+                        [0, 1 / jnp.sqrt(2), 1j / jnp.sqrt(2), 0],
+                        [0, 1j / jnp.sqrt(2), 1 / jnp.sqrt(2), 0],
+                        [0, 0, 0, 1]], dtype=jnp.complex128)
+_GRID = jnp.stack(jnp.meshgrid(*[jnp.linspace(-jnp.pi, jnp.pi, 10, endpoint=False)] * 3, indexing="ij"), -1).reshape(-1, 3)
+
+
+def physical_gate(G):
+    """<b_i|U|b_j> from ``physics.realised_gate``, which follows v1 and returns its conjugate transpose."""
+    return G.conj().T
+
+
+def _z_trace(P, V, th):
+    """Tr(V† D_after P D_before) for block-diagonal P and V, as a function of the three phase combinations
+    (x, y, z) = (a1 + b1, a1 + b0, a0 + b1) that the Z corrections D = diag(1, e^{i a1}, e^{i a0}, e^{i(a0 + a1)})
+    before (b) and after (a) the gate can set; the global phase does not enter |Tr|."""
+    t = jnp.conj(V) * P
+    x, y, z = th[..., 0], th[..., 1], th[..., 2]
+    e = lambda p: jnp.exp(1j * p)
+    return (t[0, 0] + t[1, 1] * e(x) + t[1, 2] * e(y) + t[2, 1] * e(z) + t[2, 2] * e(y + z - x)
+            + t[3, 3] * e(y + z))
+
+
+def best_z_phases(P, V):
+    """Z-correction phases maximising |Tr|: best point of a 10^3 grid, then 8 modified-Newton steps."""
+    f = lambda th: jnp.abs(_z_trace(P, V, th)) ** 2
+    th = _GRID[jnp.argmax(jax.vmap(f)(_GRID))]
+
+    def newton(th, _):
+        g, H = jax.grad(f)(th), jax.hessian(f)(th)
+        w, Q = jnp.linalg.eigh(H)
+        w = jnp.minimum(w, -1e-6 * (1 + jnp.abs(w).max()))     # ascent direction even off the concave region
+        return th - Q @ ((Q.T @ g) / w), None
+
+    th, _ = jax.lax.scan(newton, th, None, 8)
+    return th
+
+
+def fidelity_free_z(G, V=SQRT_ISWAP):
+    """Average gate fidelity to V after the best virtual-Z corrections, leakage included
+    (Pedersen et al., Phys. Lett. A 367, 47 (2007)): F = (Tr(M M†) + |Tr M|^2) / 20, M = V† D_a P D_b.
+    The phases are optimised on a stopped-gradient copy: at the optimum dF/dphase = 0, so the gradient
+    with respect to the pulse is exact. Returns (F, U) with U the unitarity Tr(P†P)/4."""
+    P = physical_gate(G)
+    th = jax.lax.stop_gradient(best_z_phases(jax.lax.stop_gradient(P), V))
+    U = jnp.sum(jnp.abs(P) ** 2) / 4
+    F = (4 * U + jnp.abs(_z_trace(P, V, th)) ** 2) / 20
+    return F, U
+
+
+def cost(G, objective="pe", concurrence_weight=1.0, unitarity_weight=3.0, digits=WEYL_DIGITS):
+    """(cost, C, U) for the objective: ``pe`` = the paper's J_T; ``sqrt_iswap`` = 1 - F to sqrt(iSWAP), free Z."""
+    if objective == "pe":
+        return cost_JT(G, concurrence_weight, unitarity_weight, digits)
+    if objective == "sqrt_iswap":
+        F, U = fidelity_free_z(G, SQRT_ISWAP)
+        return 1 - F, concurrence(c1c2c3(G, digits)), U
+    raise ValueError(f"unknown objective {objective!r}")
+# --8<-- [end:fidelity]

@@ -3,6 +3,17 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.16.0: measurable observations and gate fidelity (2026-09-25)
+
+Idea i07: the environment can now reward the average gate fidelity to √iSWAP after free virtual-Z
+corrections (leakage included; `--objective sqrt_iswap`) and show the agent only lab-measurable
+values: readout populations of |01⟩, |10⟩, |11⟩ and two-qubit Pauli expectations of |0+⟩, |+0⟩, |+1⟩,
+coupler not read out (`--obs-mode measured`). The defaults keep the paper's setup. The large-coupler-
+drift experiment, repeated under both: no single √iSWAP pulse covers the drift (0 %); the drift-trained
+policy alone gives 6.2e-3 on every device; from its pulse GRAPE reaches 1e-3 on 92 % of devices within
+200-500 steps (median 3.6e-8 after 500), random starts at equal gate time 0 % within 500. The misses are
+2 devices where the policy hits the amplitude bound. New page: Measurable observations and gate fidelity.
+
 ## 2.15.1: readable figures (2026-09-25)
 
 Every figure opens full screen on click, with zoom and pan (mkdocs-glightbox). The page is wider

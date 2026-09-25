@@ -153,6 +153,9 @@ Each of these is discussed, with what it would take to remove it, in
       ([RL-initialised optimal control](hypothesis/rl-initialised-qoc.md)).
     - Where next: pulse-level hardware access today, Rydberg atoms vs transmons vs ions, and what to do
       before hardware ([Beyond two transmons](next/platforms.md)).
+    - **Measurable observations and a named gate**: the large-coupler-drift experiment repeated with
+      a √iSWAP gate-fidelity reward and only lab-measurable observations; the conclusions hold and the
+      policy adapts better on its own ([results](results/measurable.md)).
     - **Large coupler drift (±140 MHz)**: the first regime where one robust pulse fails (0 % of devices);
       100 GRAPE steps from the RL policy's pulse reach the target on 83 %, random starts need ~1000
       ([Large coupler drift](results/robustness.md#large-coupler-drift)).

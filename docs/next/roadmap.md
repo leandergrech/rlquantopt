@@ -50,7 +50,8 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.14.0 | Fabrication-range comparison; test T1; matched-gate-time control | done |
 | 2.14.2 | Compute in logical-core hours (benchmarked step prices) | done |
 | 2.15.0 | Large coupler drift (±140 MHz): first regime where one robust pulse fails; RL warm start reaches the target in 100 steps | done |
-| next | Robust GRAPE at the policy's 46 ns; gate-time penalty in training; three-qubit model with a spectator (T5) | open |
+| 2.16.0 | Measurable observations (readout populations, Pauli expectations) and √iSWAP gate fidelity with free Z (idea i07) | done |
+| next | Finite-shot observations; policy kept inside the amplitude bound; robust GRAPE at the policy's 46 ns; gate-time penalty in training; three-qubit model with a spectator (T5) | open |
 
 ## Beyond replication (next minor versions, not in this pass)
 

@@ -1,0 +1,8 @@
+{
+  "members": 35,
+  "restarts": 2,
+  "iters": 2000,
+  "mean_JT_ensemble": 0.030670961918221083,
+  "wall_s": 1047.4953188039945,
+  "simulator_samples": 144900000.0
+}

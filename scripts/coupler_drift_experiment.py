@@ -12,6 +12,10 @@ Methods on 24 held-out devices: the 3D robust pulse, the fabrication-range robus
 saw coupler drift), the nominal and the drift-trained PPO policies, the drift-trained policy's pulse
 refined by GRAPE, GRAPE from random at the policy's gate time (the matched control), and GRAPE from
 random at 17.25 ns. Writes docs/figures/coupler_drift.{png,json} (and coupler_robust.{npz,json}).
+
+With --objective sqrt_iswap --tag _gecko (idea i07) the costs are 1 - gate fidelity to sqrt(iSWAP) with free
+virtual-Z corrections, each policy is evaluated with the observations it was trained on (read from its
+config.json), and the files get the tag: coupler_robust_gecko.*, coupler_drift_gecko.*.
 """
 import argparse
 import importlib.util
@@ -32,6 +36,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIG = os.path.join(ROOT, "docs", "figures")
 U_MAX, DT, N17 = 20.0, 0.05, 345
 W_Q, W_C = 5.7, 140.0            # MHz half-widths: qubits (recool), coupler (worst-loop flux drift)
+OBJ, TAG = "pe", ""               # set from --objective / --tag in main()
 M0 = physics.ModelParams()
 
 
@@ -47,17 +52,17 @@ def stack(models):
 def robust(args):
     members = [model_at(a * W_Q, b * W_Q, c) for c in np.linspace(-W_C, W_C, 7)
                for a, b in ((0, 0), (-1, -1), (-1, 1), (1, -1), (1, 1))]
-    cfg = grape.GrapeConfig(n_iter=args.iters, lr=0.05)
+    cfg = grape.GrapeConfig(n_iter=args.iters, lr=0.05, objective=OBJ)
     u0 = grape.random_guesses(jax.random.PRNGKey(7), args.restarts, N17, U_MAX, DT)
     t0 = time.perf_counter()
     u, JT, C, U, h = grape.optimise(u0, stack(members), U_MAX, cfg)
     JT.block_until_ready()                  # JAX is asynchronous: wait before stopping the clock
     wall = time.perf_counter() - t0
     i = int(jnp.argmin(JT))
-    np.savez_compressed(os.path.join(FIG, "coupler_robust.npz"), pulse=np.asarray(u[i]), hist=np.asarray(h[i]))
+    np.savez_compressed(os.path.join(FIG, f"coupler_robust{TAG}.npz"), pulse=np.asarray(u[i]), hist=np.asarray(h[i]))
     json.dump(dict(members=len(members), restarts=args.restarts, iters=args.iters, mean_JT_ensemble=float(JT[i]),
                    wall_s=wall, simulator_samples=float(2 * args.iters * args.restarts * len(members) * N17 * 1.5)),
-              open(os.path.join(FIG, "coupler_robust.json"), "w"), indent=2)
+              open(os.path.join(FIG, f"coupler_robust{TAG}.json"), "w"), indent=2)
     print(f"robust 3D: mean J_T over {len(members)} members {float(JT[i]):.2e} in {wall:.0f} s")
 
 
@@ -69,31 +74,39 @@ def _load(name):
 
 
 def final_JT(u, m):
-    return float(grape.final_cost(jnp.asarray(u), physics.sector_hamiltonian(m), grape.GrapeConfig())[0])
+    return float(grape.final_cost(jnp.asarray(u), physics.sector_hamiltonian(m), grape.GrapeConfig(objective=OBJ))[0])
 
 
 def evaluate(args):
     se, t1 = _load("sample_efficiency"), _load("drift_dimension_policies")
-    cfg = jenv.EnvConfig()
+    def run_cfg(run):
+        """The observations and objective the policy was trained with (older runs: the v1 defaults)."""
+        env = json.load(open(os.path.join(run, "config.json")))["env"]
+        return jenv.EnvConfig(objective=env.get("objective", "pe"), obs_mode=env.get("obs_mode", "amplitudes"))
+    cfg, cfg_s = run_cfg(args.dr_run), run_cfg(args.static_run)
+    assert cfg.objective == cfg_s.objective == OBJ, "the runs must be trained on --objective"
     ev = jax.jit(t1.evaluate_params, static_argnums=(0, 2))
     ms, ps, *_ = se.best_params(args.static_run)
     md, pd_, *_ = se.best_params(args.dr_run)
-    u_rob = np.load(os.path.join(FIG, "coupler_robust.npz"))["pulse"]
+    u_rob = np.load(os.path.join(FIG, f"coupler_robust{TAG}.npz"))["pulse"]
     u_fab = np.load(os.path.join(FIG, "rl_grape_robust_fab.npz"))["pulse_robust"]
     rng = np.random.default_rng(11)
     devices = [model_at(*rng.uniform(-1, 1, 2) * W_Q, rng.uniform(-1, 1) * W_C) for _ in range(args.n_devices)]
-    ref_cfg = grape.GrapeConfig(n_iter=args.refine_iters, lr=3e-4)
-    ctl_cfg = grape.GrapeConfig(n_iter=args.control_iters, lr=0.05)
+    ref_cfg = grape.GrapeConfig(n_iter=args.refine_iters, lr=3e-4, objective=OBJ)
+    ctl_cfg = grape.GrapeConfig(n_iter=args.control_iters, lr=0.05, objective=OBJ)
+    # the fabrication-range robust pulse was optimised for the perfect-entangler objective only
     rec = {k: [] for k in ("robust GRAPE, 3D", "robust GRAPE, fab. (no coupler)", "RL, no drift", "RL, coupler drift",
-                           "RL + GRAPE", "GRAPE, random, matched T", "GRAPE, random, 17.25 ns")}
+                           "RL + GRAPE", "GRAPE, random, matched T", "GRAPE, random, 17.25 ns")
+           if not (OBJ != "pe" and k.startswith("robust GRAPE, fab"))}
     H = {"RL + GRAPE": [], "GRAPE, random, matched T": [], "GRAPE, random, 17.25 ns": []}
     gate = []
     for i, m in enumerate(devices):
         ham = physics.sector_hamiltonian(m)
         rec["robust GRAPE, 3D"].append(final_JT(u_rob, m))
-        rec["robust GRAPE, fab. (no coupler)"].append(final_JT(u_fab, m))
-        for key, (mod, par) in (("RL, no drift", (ms, ps)), ("RL, coupler drift", (md, pd_))):
-            JT, amps, alive = jax.device_get(ev(mod, par, cfg, m))
+        if "robust GRAPE, fab. (no coupler)" in rec:
+            rec["robust GRAPE, fab. (no coupler)"].append(final_JT(u_fab, m))
+        for key, (mod, par, c) in (("RL, no drift", (ms, ps, cfg_s)), ("RL, coupler drift", (md, pd_, cfg))):
+            JT, amps, alive = jax.device_get(ev(mod, par, c, m))
             JT = np.where(alive, JT, np.inf)
             k = int(np.argmin(JT))
             rec[key].append(float(JT[k]))
@@ -122,7 +135,7 @@ def evaluate(args):
         return int(idx[0]) if len(idx) else np.inf
     import pandas as pd
     train_steps = int(pd.read_csv(os.path.join(args.dr_run, "progress.csv"))["step"].iloc[-1])
-    rob = json.load(open(os.path.join(FIG, "coupler_robust.json")))
+    rob = json.load(open(os.path.join(FIG, f"coupler_robust{TAG}.json")))
     rl_per = [cfg.n_steps * 3 + iters_to(h) * len_ * 3 for h, len_ in zip(H["RL + GRAPE"], [int(round(t / DT)) for t in gate])]
     costs = {
         "RL + GRAPE": dict(one_off=float(train_steps * 3), per_device=float(np.median(rl_per))),
@@ -138,14 +151,15 @@ def evaluate(args):
     print("costs", costs)
     print("at iterations", at)
     json.dump(dict(settings=dict(qubit_half_width_mhz=W_Q, coupler_half_width_mhz=W_C, n_devices=args.n_devices,
-                                 refine_iters=args.refine_iters, control_iters=args.control_iters, threshold=thr),
+                                 refine_iters=args.refine_iters, control_iters=args.control_iters, threshold=thr,
+                                 objective=OBJ, obs_mode=cfg.obs_mode, dr_run=args.dr_run, static_run=args.static_run),
                    gate_time_ns=dict(median=float(np.median(gate)), q25=float(np.quantile(gate, 0.25)),
                                      q75=float(np.quantile(gate, 0.75))),
                    summary=summary, by_iterations=at, costs=costs, per_device=rec),
-              open(os.path.join(FIG, "coupler_drift.json"), "w"), indent=2)
+              open(os.path.join(FIG, f"coupler_drift{TAG}.json"), "w"), indent=2)
 
-    np.savez(os.path.join(FIG, "coupler_drift_hist.npz"), **{k: np.stack(v) for k, v in H.items()})
-    plot(json.load(open(os.path.join(FIG, "coupler_drift.json"))), H)
+    np.savez(os.path.join(FIG, f"coupler_drift_hist{TAG}.npz"), **{k: np.stack(v) for k, v in H.items()})
+    plot(json.load(open(os.path.join(FIG, f"coupler_drift{TAG}.json"))), H)
 
 
 def core_hours(costs, gate_ns):
@@ -171,15 +185,20 @@ def plot(d, H):
     rec, costs, thr = d["per_device"], d["costs"], d["settings"]["threshold"]
     hours, machine = core_hours(costs, d["gate_time_ns"]["median"])
     cols = ["#8172b2", "#b8a9d9", "#c44e52", "#dd8452", "#55a868", "#4c72b0", "#9fb7d9"]
+    names = ["robust GRAPE, 3D", "robust GRAPE, fab. (no coupler)", "RL, no drift", "RL, coupler drift",
+             "RL + GRAPE", "GRAPE, random, matched T", "GRAPE, random, 17.25 ns"]
+    colour = dict(zip(names, cols))
+    obj = d["settings"].get("objective", "pe")
+    lbl = "$J_T$" if obj == "pe" else "$1 - F$ ($\\sqrt{\\mathrm{iSWAP}}$, free Z)"
     fig, axs = plt.subplots(1, 3, figsize=(20, 5), constrained_layout=True, gridspec_kw=dict(width_ratios=[1.3, 1, 1]))
     ax = axs[0]
     for j, (k, v) in enumerate(rec.items()):
-        ax.scatter(j + np.random.default_rng(j).uniform(-0.15, 0.15, len(v)), v, s=12, color=cols[j], alpha=0.8)
+        ax.scatter(j + np.random.default_rng(j).uniform(-0.15, 0.15, len(v)), v, s=12, color=colour[k], alpha=0.8)
         ax.scatter([j], [np.median(v)], marker="_", s=500, color="k")
     ax.set_yscale("log")
     ax.axhline(thr, c="k", ls="--", lw=0.8)
     ax.set_xticks(range(len(rec)), [k.replace(", ", ",\n") for k in rec], fontsize=8)
-    ax.set_ylabel("$J_T$ per device (bar: median)")
+    ax.set_ylabel(f"{lbl} per device (bar: median)")
     ax.set_title(f"{len(rec['RL + GRAPE'])} devices: qubits ±{W_Q} MHz, coupler ±{W_C:.0f} MHz", fontsize=10)
     ax = axs[1]
     for k, c in (("RL + GRAPE", cols[4]), ("GRAPE, random, matched T", cols[5]), ("GRAPE, random, 17.25 ns", cols[6])):
@@ -200,7 +219,7 @@ def plot(d, H):
     ax.set_xscale("symlog", linthresh=1)
     ax.set_xlim(0, None)
     ax.set_xlabel("GRAPE iteration (0 = starting pulse)")
-    ax.set_ylabel("best $J_T$ so far (median" + (", quartiles)" if H is not None else " at each budget)"))
+    ax.set_ylabel(f"best {lbl} so far (median" + (", quartiles)" if H is not None else " at each budget)"))
     ax.set_title("Per-device GRAPE: warm start vs random start", fontsize=10)
     ax.legend(fontsize=8)
     ax = axs[2]
@@ -216,20 +235,21 @@ def plot(d, H):
     if np.isfinite(per):
         ax.loglog(N, N * per, c=cc["RL + GRAPE"], ls="--", lw=1.2, label="…of which per-device GRAPE")
     ax.set_xlabel("number of devices or re-calibrations")
-    ax.set_ylabel(f"logical-core hours to reach $J_T \\leq 10^{{-3}}$\n{machine}", fontsize=9)
+    ax.set_ylabel(f"logical-core hours to reach {lbl} $\\leq 10^{{-3}}$\n{machine}", fontsize=9)
     ax.set_title("Core time against number of devices (never reaching: not drawn)", fontsize=10)
     ax.legend(fontsize=7)
     ax.grid(alpha=0.3, which="both")
     for a in axs[:2]:
         a.grid(alpha=0.3, axis="y")
-    fig.savefig(os.path.join(FIG, "coupler_drift.png"), dpi=120)
-    print("wrote coupler_drift.png", _load("figtools").save_panels(fig, axs, os.path.join(FIG, "coupler_drift.png")))
+    png = os.path.join(FIG, f"coupler_drift{TAG}.png")
+    fig.savefig(png, dpi=120)
+    print("wrote", png, _load("figtools").save_panels(fig, axs, png))
 
 
 def replot():
-    hist = os.path.join(FIG, "coupler_drift_hist.npz")
+    hist = os.path.join(FIG, f"coupler_drift_hist{TAG}.npz")
     H = dict(np.load(hist)) if os.path.exists(hist) else None
-    plot(json.load(open(os.path.join(FIG, "coupler_drift.json"))), H)
+    plot(json.load(open(os.path.join(FIG, f"coupler_drift{TAG}.json"))), H)
 
 
 def main():
@@ -243,7 +263,11 @@ def main():
     ap.add_argument("--refine-iters", type=int, default=200)
     ap.add_argument("--control-iters", type=int, default=1000)
     ap.add_argument("--threshold", type=float, default=1e-3)
+    ap.add_argument("--objective", choices=["pe", "sqrt_iswap"], default="pe")
+    ap.add_argument("--tag", default="", help="suffix of the output files, e.g. _gecko")
     args = ap.parse_args()
+    global OBJ, TAG
+    OBJ, TAG = args.objective, args.tag
     {"robust": robust, "evaluate": evaluate, "replot": lambda a: replot()}[args.mode](args)
 
 

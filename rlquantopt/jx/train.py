@@ -39,6 +39,10 @@ def parse_args(argv=None):
     p.add_argument("--g-drift-mhz", type=float, default=0.0, help="domain randomisation of both couplings, ±MHz")
     p.add_argument("--fixed-drift", action="store_true",
                    help="draw the drift once per env (v1 ZCQPEEWRD) instead of every episode")
+    p.add_argument("--objective", choices=["pe", "sqrt_iswap"], default="pe",
+                   help="pe: the paper's perfect-entangler J_T; sqrt_iswap: 1 - gate fidelity to sqrt(iSWAP), free Z")
+    p.add_argument("--obs-mode", choices=["amplitudes", "measured"], default="amplitudes",
+                   help="amplitudes: v1 state amplitudes; measured: readout populations and Pauli expectations")
     p.add_argument("--eval-every", type=int, default=2_000_000, help="env steps between evals/checkpoints")
     p.add_argument("--out", default="runs")
     p.add_argument("--tag", default="")
@@ -47,7 +51,7 @@ def parse_args(argv=None):
 
 def build(args):
     env_cfg = jenv.EnvConfig(max_drift=args.max_drift, coupler_drift_mhz=args.coupler_drift_mhz,
-                             g_drift_mhz=args.g_drift_mhz)
+                             g_drift_mhz=args.g_drift_mhz, objective=args.objective, obs_mode=args.obs_mode)
     common = dict(total_steps=args.total_steps, lr=args.lr, resample_drift=not args.fixed_drift)
     if args.n_envs:
         common["n_envs"] = args.n_envs

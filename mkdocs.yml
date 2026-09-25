@@ -63,6 +63,7 @@ nav:
       - Replication of the paper: results/replication.md
       - Training RL agents: results/training.md
       - Robustness to hardware drift: results/robustness.md
+      - Measurable observations and gate fidelity: results/measurable.md
   - Research question:
       - Drift, dimension and learned policies: hypothesis/drift-and-dimension.md
       - RL-initialised optimal control: hypothesis/rl-initialised-qoc.md

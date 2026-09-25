@@ -141,3 +141,47 @@ def realised_gate(state: SectorState):
 def sector_amplitudes(state: SectorState):
     """The 12 amplitudes v1 puts in the observation: N=1 images of |010>, |100>, then the N=2 image of |110>."""
     return jnp.concatenate([state.U1[:, S1_POS_010], state.U1[:, S1_POS_100], state.psi2])
+
+
+# --8<-- [start:measured]
+# Experimentally measurable observables (idea i06): what a lab reads out after preparing an input state
+# and playing the pulse so far. The coupler is not read out (traced out); each transmon is read out in
+# three levels, so leakage to |2> is visible.
+_A = np.zeros((3, 3)); _A[0, 0] = _A[1, 1] = 1
+_PX = np.zeros((3, 3)); _PX[0, 1] = _PX[1, 0] = 1
+_PY = np.zeros((3, 3), complex); _PY[0, 1], _PY[1, 0] = -1j, 1j
+_PZ = np.zeros((3, 3)); _PZ[0, 0], _PZ[1, 1] = 1, -1
+PAULIS_2Q = np.stack([np.kron(a, b) for a in (_A, _PX, _PY, _PZ) for b in (_A, _PX, _PY, _PZ)])   # (16, 9, 9)
+COMP_IDX = np.array([0, 1, 3, 4])            # |00>, |01>, |10>, |11> among the 9 qubit states |q0 q1>
+N_MEASURED = 3 * 5 + 3 * 16
+
+
+def _full(idx, v):
+    return jnp.zeros(FULL_DIM, v.dtype).at[idx].set(v)
+
+
+def _qubit_rho(psi):
+    """Reduced density matrix of the two transmons (9x9), coupler traced out."""
+    p = psi.reshape(3, 3, 3)
+    return jnp.einsum("abc,dec->abde", p, p.conj()).reshape(9, 9)
+
+
+def measured_observables(state: SectorState):
+    """63 numbers: for inputs |01>, |10>, |11> the readout probabilities of 00, 01, 10, 11 and of any
+    transmon in |2>; for inputs |0+>, |+0>, |+1> the 16 two-qubit Pauli expectations (I on the
+    computational levels only), which carry the relative phases that populations cannot see."""
+    U1, psi2 = state
+    psi01 = _full(SECTOR1_IDX, U1[:, S1_POS_010])
+    psi10 = _full(SECTOR1_IDX, U1[:, S1_POS_100])
+    psi11 = _full(SECTOR2_IDX, psi2)
+    e000 = jnp.zeros(FULL_DIM, U1.dtype).at[0].set(1.0)
+    pops = []
+    for psi in (psi01, psi10, psi11):
+        p = jnp.real(jnp.diag(_qubit_rho(psi)))[COMP_IDX]
+        pops.append(jnp.concatenate([p, jnp.atleast_1d(1 - p.sum())]))
+    paulis = []
+    for psi in ((e000 + psi01) / np.sqrt(2), (e000 + psi10) / np.sqrt(2), (psi01 + psi11) / np.sqrt(2)):
+        rho = _qubit_rho(psi)
+        paulis.append(jnp.real(jnp.einsum("kij,ji->k", PAULIS_2Q, rho)))
+    return jnp.concatenate(pops), jnp.concatenate(paulis)
+# --8<-- [end:measured]
