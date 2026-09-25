@@ -67,15 +67,19 @@ on the run's length: with a 200-step schedule (the setting of the [original expe
 The same PPO setup and seed, trained over the same drift with the √iSWAP objective, once with the
 measured observations and once with v1's amplitudes:
 
-| Observation | Best nominal 1 − F in training | Policy alone on devices: median [quartiles] | + 200 GRAPE steps (200-step schedule): median (reach 1e-3) |
-| --- | --- | --- | --- |
-| **Measured** (63 values) | 5.4e-3 (still improving at 20M steps) | **6.2e-3** [5.6e-3, 7.0e-3] | **4.1e-4** (54 %) |
-| Amplitudes (24 values) | 4.3e-3 (best at 6.4M steps) | 1.0e-2 [8.5e-3, 1.4e-2] | 9.0e-4 (54 %) |
+| Observation | Best nominal 1 − F in training | Policy alone on devices: median [quartiles] | + 200 GRAPE steps: median (reach 1e-3) | + 500 GRAPE steps: median (reach 1e-3) | Per device, core-seconds |
+| --- | --- | --- | --- | --- | --- |
+| **Measured** (63 values) | 5.4e-3 (still improving at 20M steps) | **6.2e-3** [5.6e-3, 7.0e-3] | 3.7e-5 (92 %) | 3.6e-8 (92 %) | 7.3 |
+| Amplitudes (24 values) | 4.3e-3 (best at 6.4M steps) | 1.0e-2 [8.5e-3, 1.4e-2] | 3.7e-5 (88 %) | 4.2e-8 (88 %) | 8.0 |
 
-Measured observations are at least as good here: one seed each, so the difference is not established,
-but nothing is lost by observing only measurable quantities. A plausible reason is that the Pauli
-expectations present the phases the fidelity depends on directly, where the amplitude observation gives
-them as raw angles of individual amplitudes.
+Both refined with the same 500-step schedule. The policies differ on their own, where the one with
+measured observations is 1.6× better and tighter across devices, but after refinement they are
+equivalent. They miss different devices: the measured policy the 2 where it hits the amplitude bound,
+the amplitude policy 3 others. With one seed each, the difference in the policy alone is not
+established; what is established is that nothing is lost by observing only measurable quantities.
+A plausible reason for the measured policy's edge is that the Pauli expectations present the phases the
+fidelity depends on directly, where the amplitude observation gives them as raw angles of individual
+amplitudes.
 
 ## Findings
 

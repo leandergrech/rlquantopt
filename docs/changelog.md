@@ -14,6 +14,9 @@ policy alone gives 6.2e-3 on every device; from its pulse GRAPE reaches 1e-3 on 
 200-500 steps (median 3.6e-8 after 500), random starts at equal gate time 0 % within 500. The misses are
 2 devices where the policy hits the amplitude bound. New page: Measurable observations and gate fidelity.
 
+**2.16.1**: the amplitude-observation control re-evaluated with the same 500-step refinement: the
+policy alone is worse (1.0e-2 vs 6.2e-3), refined results are equivalent (88 % vs 92 %, median 4e-8).
+
 ## 2.15.1: readable figures (2026-09-25)
 
 Every figure opens full screen on click, with zoom and pan (mkdocs-glightbox). The page is wider
