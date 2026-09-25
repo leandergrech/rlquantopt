@@ -44,8 +44,18 @@
 .hero .md-button--primary { background: #b5651d; border-color: #b5651d; }
 .hero .md-button:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
 
-/* Figures */
+/* Layout: a wider page, so that figures get room */
+.md-grid { max-width: 1800px; }
+
+/* Figures: click to enlarge (glightbox); a hint on hover */
 .md-typeset figure { margin: 1.6em auto; }
+.md-typeset a.glightbox { cursor: zoom-in; display: block; }
+.md-typeset a.glightbox img { transition: box-shadow 0.15s; }
+.md-typeset a.glightbox:hover img { box-shadow: 0 2px 14px rgba(0,0,0,0.28); }
+/* Panels of a split figure: stacked, each at a readable size */
+.md-typeset .panels { display: flex; flex-direction: column; align-items: center; gap: 1.4em; margin: 1.4em 0; }
+.md-typeset .panels img { width: 100%; max-width: 900px; }
+.md-typeset .panels p { margin: 0; width: 100%; text-align: center; }
 .md-typeset figure img, .md-typeset p > img {
   border-radius: 6px;
   box-shadow: 0 1px 8px rgba(0,0,0,0.12);
@@ -74,5 +84,3 @@
 .md-typeset .grid.cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
 article:has(.hero) > .md-content__button { display: none; }
 
-/* A little wider than the default so tables breathe */
-.md-grid { max-width: 1320px; }

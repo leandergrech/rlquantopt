@@ -328,6 +328,10 @@ def plot(summary, rec, threshold, fleet, path, rng=DRIFT_RANGES["recool"], n_rl=
         a.grid(alpha=0.3, which="both" if a is axs[1] else "major", axis="y" if a is not axs[1] else "both")
     fig.savefig(path, dpi=120)
     print("wrote", path)
+    figtools = importlib.util.module_from_spec(importlib.util.spec_from_file_location(
+        "figtools", os.path.join(ROOT, "scripts", "figtools.py")))
+    figtools.__spec__.loader.exec_module(figtools)
+    print("wrote", figtools.save_panels(fig, axs, path))
 
 
 def replot(tag=""):

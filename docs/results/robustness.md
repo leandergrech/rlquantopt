@@ -109,7 +109,17 @@ clock, so the numbers do not depend on how busy the machine was. At full turbo e
 twice as fast. Wall-clock times from the runs themselves are not used: they were measured on a
 shared, throttling machine with varying thread counts.
 
-![Cost and quality](../figures/sample_efficiency.png)
+<div class="panels" markdown>
+
+![(a) Core time to reach the target, one-off and per device, recool range](../figures/sample_efficiency_a.png)
+
+![(b) Total core time against the number of devices, recool range](../figures/sample_efficiency_b.png)
+
+![(c) Gate quality on each device, recool range](../figures/sample_efficiency_c.png)
+
+</div>
+
+Click any figure to enlarge it; scroll or pinch to zoom.
 
 | Method | J_T nominal | J_T on drifted devices: median [quartiles] | Reaches 1e-3 | One-off, core-hours | Per device, core-seconds |
 | --- | --- | --- | --- | --- | --- |
@@ -166,7 +176,17 @@ Trading a little nominal quality buys a pulse with J_T ≤ 7.6e-4 everywhere in 
 With two drifting frequencies, even ±18.5 MHz is not wide enough to need per-device adaptation in
 this model.
 
-![Cost and quality, fabrication range](../figures/sample_efficiency_fab.png)
+<div class="panels" markdown>
+
+![(a) Core time to reach the target, one-off and per device, fabrication range](../figures/sample_efficiency_fab_a.png)
+
+![(b) Total core time against the number of devices, fabrication range](../figures/sample_efficiency_fab_b.png)
+
+![(c) Gate quality on each device, fabrication range](../figures/sample_efficiency_fab_c.png)
+
+</div>
+
+Click any figure to enlarge it; scroll or pinch to zoom.
 
 | Method | J_T on devices: median [quartiles] | Reaches 1e-3 | One-off, core-hours | Per device, core-seconds |
 | --- | --- | --- | --- | --- |
@@ -242,7 +262,15 @@ Three drifting parameters, one of them very wide. Script: `scripts/coupler_drift
   1000 iterations each; the fabrication-range robust pulse, which never saw coupler drift.
 - 24 held-out devices drawn uniformly from the 3D box. Target J_T ≤ 1e-3.
 
-![Large coupler drift](../figures/coupler_drift.png)
+<div class="panels" markdown>
+
+![J_T on each device, by method](../figures/coupler_drift_a.png)
+
+![Per-device GRAPE from the RL pulse and from random starts](../figures/coupler_drift_b.png)
+
+![Core time against the number of devices](../figures/coupler_drift_c.png)
+
+</div>
 
 | Method | J_T on devices: median [quartiles] | Reaches 1e-3 | One-off, core-hours | Per device, core-seconds |
 | --- | --- | --- | --- | --- |

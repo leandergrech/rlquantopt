@@ -223,7 +223,7 @@ def plot(d, H):
     for a in axs[:2]:
         a.grid(alpha=0.3, axis="y")
     fig.savefig(os.path.join(FIG, "coupler_drift.png"), dpi=120)
-    print("wrote coupler_drift.png")
+    print("wrote coupler_drift.png", _load("figtools").save_panels(fig, axs, os.path.join(FIG, "coupler_drift.png")))
 
 
 def replot():

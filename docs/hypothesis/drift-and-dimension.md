@@ -78,11 +78,11 @@ figure uses the recool spread for every parameter as a fraction of its value (±
 the qubit frequencies, assumed for the rest). The right figure is a stylised stress test in which
 every parameter drifts by the same ±5.7 MHz.
 
-<div class="grid" markdown>
+<div class="panels" markdown>
 
-![Relative drift](../figures/drift_dimension.png)
+![Relative drift: every parameter at the recool spread (±0.11 %)](../figures/drift_dimension.png)
 
-![Absolute drift](../figures/drift_dimension_absolute.png)
+![Absolute drift: every parameter by ±5.7 MHz](../figures/drift_dimension_absolute.png)
 
 </div>
 

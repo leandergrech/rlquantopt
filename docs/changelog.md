@@ -3,6 +3,13 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.15.1: readable figures (2026-09-25)
+
+Every figure opens full screen on click, with zoom and pan (mkdocs-glightbox). The page is wider
+(content column about 1000 px on a large screen). The three-panel figures (cost and quality on the
+recool and fabrication ranges, large coupler drift) are split into stacked panels
+(`scripts/figtools.py`), and the two drift-dimension figures are stacked instead of side by side.
+
 ## 2.15.0: large coupler drift (2026-09-25)
 
 Coupler drifting over ±140 MHz (worst-loop flux drift, Dai et al. 2021) with both qubits over the

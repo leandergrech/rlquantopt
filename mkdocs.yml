@@ -74,6 +74,17 @@ nav:
   - Bibliography: bibliography.md
   - Changelog: changelog.md
 
+plugins:
+  - search
+  # click any figure to open it full screen, with zoom (wheel, pinch) and pan
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      zoomable: true
+      draggable: true
+      skip_classes: [no-lightbox]
+
 markdown_extensions:
   - admonition
   - attr_list
