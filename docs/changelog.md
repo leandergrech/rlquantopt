@@ -3,6 +3,31 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.17.0: the idea farm, and ibis in progress (2026-09-25)
+
+**Idea iterations.** Every new training idea gets a number and an animal codename, a registry entry
+(`rlquantopt/jx/ideas.py`), its own run directory (`train.py --idea <animal>` writes to
+`runs/iNN_<animal>/`) and a page in the hidden "Working ideas" section. Toy environments and benchmarks
+(`toy_envs.py`, `toybench.py`, `foxbench.py`) test ingredients in isolation. Outcomes of i01-i06 and i08:
+no idea beats plain PPO on the gate environment (axolotl, badger, echidna); the gate environment is not
+exploration-limited and needs PPO's big steps; black-box fine-tuning after drift is not worth its samples
+(fox, 72 paired comparisons); a drift-conditioned PPO policy with a Bayesian belief over the drift
+recovers 614 of an oracle's 655 on toy devices in one episode against 327 for a robust policy, and
+information-gain probing adds +21 to +110 (hippogriff), but its EKF belief is 9-890× overconfident.
+Found on the way: treating an overshoot as truncation bootstraps γV onto the penalty, which collapses
+fine-tuning after drift.
+
+**i09 ibis (in progress): gecko made data-lean.** New environment options, defaults unchanged:
+amplitude clipping with a penalty instead of termination (`--oob-mode clip`), finite-shot observations
+(`--shots N`, 30 settings per step), a calibration context of measured qubit and coupler frequencies
+(`--obs-mode context`, `measured+context`), longer steps with a scaled action (`--delta-scale`), network
+size (`--hidden`) and GELU; a √iSWAP fidelity estimate from measured data only
+(`metrics.fidelity_from_observables`) and model-free refinement (SPSA, CMA-ES; `refine.py`). So far:
+policies trained on exact observations fail under shot noise (30× worse at 1e6 shots per pulse);
+64×64 GELU matches 128×128 ReLU with a third of the parameters; black-box refinement barely improves a
+policy pulse (5.8e-3 to about 4e-3 after 1500 noise-free estimates), so the policy must be good enough
+on its own. Noise-aware and calibration-conditioned runs are in progress.
+
 ## 2.16.0: measurable observations and gate fidelity (2026-09-25)
 
 Idea i07: the environment can now reward the average gate fidelity to √iSWAP after free virtual-Z

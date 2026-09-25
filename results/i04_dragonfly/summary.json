@@ -1,0 +1,14 @@
+{
+  "idea": "dragonfly",
+  "number": 4,
+  "summary": "Faster chameleon: history as parallel leaky-integrator traces (momenta of the latent); exploration as a per-dimension Ornstein-Uhlenbeck walk (constant entropy, persistence tau_d, spread sigma_d) set by a small learned guide that sees the measured latent entropy, a pessimistic ensemble value and its position p relative to a canonical golden cache of best reward/return; lower-bound Q vetoes risky candidates in the search; self-imitation of golden actions. Algo: dragonfly.",
+  "smoke": {
+    "updates": 40,
+    "steps": 327680,
+    "s_per_update": 10.666275644005452,
+    "eval_return_last": -20.0,
+    "mean_reward_first": -9.429149627685549,
+    "mean_reward_best": 0.4058903455734253,
+    "mean_reward_last": -1.7524994611740112
+  }
+}

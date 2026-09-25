@@ -1,0 +1,140 @@
+{
+  "idea": "fox",
+  "number": 6,
+  "summary": "Sample-cost-aware per-device adaptation (black-box): PPO fine-tuning plus an improvement-equivalent model, a Bayesian regression of return gained per unit step on the step direction in a basis of recent PPO steps (the likelihood of |g| cos(g, step)); confident steps along g, a cache of unexplained updates kept until explained, and a marginal-value stopping rule against the cost of samples. Benchmarked on drifted toy devices first (foxbench.py).",
+  "benchmarks": {
+    "first_24": {
+      "n": 24,
+      "mean": {
+        "start": 290.2103780110677,
+        "ppo_end": 296.3011665344238,
+        "fox_end": 304.742483774821,
+        "u_no_adapt": 290.2103780110677,
+        "u_fox_stop3": 244.74248377482095,
+        "fox_stop3": 60.0,
+        "ppo_auc": 293.1593455226043,
+        "fox_auc": 298.63507800805763,
+        "ppo_to_target": NaN,
+        "fox_to_target": NaN,
+        "u_ppo_full": 236.30116653442383,
+        "u_fox_full": 244.74248377482095,
+        "u_ppo_oracle": 300.43762588500977,
+        "u_fox_stop": 280.91539827982587,
+        "fox_stop": 20.791666666666668
+      },
+      "reached_target": {
+        "ppo": 0,
+        "fox": 0
+      },
+      "median_updates_to_target": {
+        "ppo": Infinity,
+        "fox": Infinity
+      },
+      "paired_fox_minus_ppo": {
+        "end": {
+          "mean": 8.441317240397135,
+          "sem": 6.0280810825877005,
+          "fox_better": 13
+        },
+        "auc": {
+          "mean": 5.475732485453279,
+          "sem": 4.281493622281338,
+          "fox_better": 15
+        },
+        "utility_stop_vs_oracle": {
+          "mean": -19.522227605183918,
+          "sem": 4.558257399618158,
+          "fox_better": 4
+        },
+        "utility_stop_vs_ppo_full": {
+          "mean": 44.614231745402016,
+          "sem": 4.672747961339878,
+          "fox_better": 23
+        },
+        "utility_stop_vs_no_adapt": {
+          "mean": -9.294979731241861,
+          "sem": 5.806190912717678,
+          "fox_better": 8
+        },
+        "utility_stop3_vs_no_adapt": {
+          "mean": -45.46789423624674,
+          "sem": 5.151782732712336,
+          "fox_better": 1
+        },
+        "utility_stop3_vs_stop10": {
+          "mean": -36.17291450500488,
+          "sem": 2.7864564414327435,
+          "fox_better": 1
+        }
+      }
+    },
+    "main_72": {
+      "n": 72,
+      "mean": {
+        "start": 324.39663738674585,
+        "ppo_end": 303.21898211373224,
+        "fox_end": 308.7055178218418,
+        "u_no_adapt": 324.39663738674585,
+        "u_fox_stop3": 278.97012164857654,
+        "fox_stop3": 20.40277777777778,
+        "ppo_auc": 301.73590124456825,
+        "fox_auc": 304.87057255222066,
+        "ppo_to_target": NaN,
+        "fox_to_target": NaN,
+        "u_ppo_full": 243.21898211373224,
+        "u_fox_full": 248.70551782184177,
+        "u_ppo_oracle": 334.33597649468317,
+        "u_fox_stop": 279.86917140748767,
+        "fox_stop": 22.291666666666668
+      },
+      "reached_target": {
+        "ppo": 0,
+        "fox": 0
+      },
+      "median_updates_to_target": {
+        "ppo": Infinity,
+        "fox": Infinity
+      },
+      "paired_fox_minus_ppo": {
+        "end": {
+          "mean": 5.486535708109538,
+          "sem": 3.7046630852773177,
+          "fox_better": 42
+        },
+        "auc": {
+          "mean": 3.1346713076523693,
+          "sem": 2.869194184100569,
+          "fox_better": 42
+        },
+        "utility_stop_vs_oracle": {
+          "mean": -54.4668050871955,
+          "sem": 7.437393952213342,
+          "fox_better": 6
+        },
+        "utility_stop_vs_ppo_full": {
+          "mean": 36.650189293755425,
+          "sem": 3.675598595394279,
+          "fox_better": 66
+        },
+        "utility_stop_vs_no_adapt": {
+          "mean": -44.52746597925822,
+          "sem": 8.218075682207532,
+          "fox_better": 18
+        },
+        "utility_stop3_vs_no_adapt": {
+          "mean": -45.42651573816935,
+          "sem": 8.563531142198292,
+          "fox_better": 18
+        },
+        "utility_stop3_vs_stop10": {
+          "mean": -0.8990497589111328,
+          "sem": 2.0416327567135673,
+          "fox_better": 11
+        }
+      }
+    }
+  },
+  "invalid": [
+    "runs/i06_fox/foxbench/tracker_20260925-111044/INVALID.txt"
+  ]
+}

@@ -1,0 +1,192 @@
+{
+  "idea": "badger",
+  "number": 2,
+  "summary": "axolotl with a judge that also sees the lambda-return, is trained only every few policy updates, and whose guide weight halves with its age since training; PPO early-stops an update's epochs once approx KL exceeds 1.5 * target_kl. Algo: ppo_judge.",
+  "gate_runs": {
+    "s123_ar_kl": {
+      "steps": 19996672,
+      "wall_h": 3.88,
+      "best_JT": 0.2390501348654224,
+      "median_JT_last30": 0.24456153888654486,
+      "reaches_PE_last30": 0.0,
+      "approx_kl_last300": 0.012129295920021781,
+      "clip_frac_last300": 0.1305911218871673,
+      "steps_to_JT<0.1": null,
+      "steps_to_JT<0.01": null,
+      "steps_to_JT<0.001": null,
+      "frac_steps_taken": {
+        "first_quarter": 0.2915420115513147,
+        "last_quarter": 0.05584528783458418
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "badger",
+        "judge_z": 1.0,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "judge_every": 1,
+        "judge_half_life": Infinity,
+        "target_kl": 0.02,
+        "tag": "ar_kl"
+      }
+    },
+    "s123_badger": {
+      "steps": 19996672,
+      "wall_h": 3.91,
+      "best_JT": 0.1673116579246172,
+      "median_JT_last30": 0.173615408411505,
+      "reaches_PE_last30": 0.0,
+      "approx_kl_last300": 0.01285465960623691,
+      "clip_frac_last300": 0.13953356837232908,
+      "steps_to_JT<0.1": null,
+      "steps_to_JT<0.01": null,
+      "steps_to_JT<0.001": null,
+      "judge_corr": {
+        "first_quarter": 0.005313995621690991,
+        "last_quarter": 0.004512109631027441
+      },
+      "frac_steps_taken": {
+        "first_quarter": 0.1933452886994928,
+        "last_quarter": 0.0240215168601726
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "badger",
+        "judge_coef": 0.5,
+        "judge_z": 0.25,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "judge_return": true,
+        "judge_every": 5,
+        "judge_half_life": 3.0,
+        "target_kl": 0.02,
+        "tag": "badger"
+      }
+    },
+    "s123_badger_kl001": {
+      "steps": 19996672,
+      "wall_h": 3.87,
+      "best_JT": 0.2268848952430475,
+      "median_JT_last30": 0.2481875817771782,
+      "reaches_PE_last30": 0.0,
+      "approx_kl_last300": 0.005864611095748793,
+      "clip_frac_last300": 0.07254137939773497,
+      "steps_to_JT<0.1": null,
+      "steps_to_JT<0.01": null,
+      "steps_to_JT<0.001": null,
+      "judge_corr": {
+        "first_quarter": -0.00014468182029095795,
+        "last_quarter": -0.0002872022004205428
+      },
+      "frac_steps_taken": {
+        "first_quarter": 0.13071209221169897,
+        "last_quarter": 0.055604509260413784
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "badger",
+        "judge_coef": 0.5,
+        "judge_z": 0.25,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "judge_return": true,
+        "judge_every": 5,
+        "judge_half_life": 3.0,
+        "target_kl": 0.01,
+        "tag": "badger_kl001"
+      }
+    },
+    "s123_badger_noar": {
+      "steps": 19996672,
+      "wall_h": 3.35,
+      "best_JT": 0.0048990209527952,
+      "median_JT_last30": 0.0075748720535315,
+      "reaches_PE_last30": 1.0,
+      "approx_kl_last300": 0.012852006881495565,
+      "clip_frac_last300": 0.1551261578996976,
+      "steps_to_JT<0.1": 5636096,
+      "steps_to_JT<0.01": 11534336,
+      "steps_to_JT<0.001": null,
+      "judge_corr": {
+        "first_quarter": 0.0028461050384722807,
+        "last_quarter": -0.0026451111589863813
+      },
+      "frac_steps_taken": {
+        "first_quarter": 0.17959528949691866,
+        "last_quarter": 0.034385246460585515
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "badger",
+        "no_ar": true,
+        "judge_coef": 0.5,
+        "judge_z": 0.25,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "judge_return": true,
+        "judge_every": 5,
+        "judge_half_life": 3.0,
+        "target_kl": 0.02,
+        "tag": "badger_noar"
+      }
+    },
+    "s123_ctrl_ppo_kl": {
+      "steps": 19996672,
+      "wall_h": 3.32,
+      "best_JT": 0.1964438722380385,
+      "median_JT_last30": 0.2063873245843154,
+      "reaches_PE_last30": 0.0,
+      "approx_kl_last300": 0.013691910221082999,
+      "clip_frac_last300": 0.15388469169537225,
+      "steps_to_JT<0.1": null,
+      "steps_to_JT<0.01": null,
+      "steps_to_JT<0.001": null,
+      "frac_steps_taken": {
+        "first_quarter": 0.23716701134489696,
+        "last_quarter": 0.07284323887624697
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "badger",
+        "no_ar": true,
+        "judge_z": 1.0,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "judge_every": 1,
+        "judge_half_life": Infinity,
+        "target_kl": 0.02,
+        "tag": "ctrl_ppo_kl"
+      }
+    }
+  }
+}

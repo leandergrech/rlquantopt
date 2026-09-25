@@ -79,6 +79,25 @@ corrections ([Gate metrics](../system/metrics.md#named-gate-fidelity-with-free-z
 reward is \(-\log_{10}(1 - F)\) with the same shaping. `info["JT"]` always holds the active objective's
 cost, so training, evaluation and GRAPE code work unchanged (`GrapeConfig(objective=...)`).
 
+### Finite shots, calibration context, clipping (idea i09)
+
+- `shots=N` (`--shots N`): the measured observables become estimates from N shots per measurement
+  setting, drawn with the key carried in the environment state; one step costs 30 settings.
+
+```python
+--8<-- "rlquantopt/jx/env.py:shots"
+```
+
+- `obs_mode="context"` / `"measured+context"`: the policy also sees the qubit and coupler frequency
+  offsets, measured once per episode with Gaussian error `context_noise_mhz` (spectroscopy, before the
+  pulse); `"context"` alone is an open-loop policy that needs no measurement during the pulse.
+- `oob_mode="clip"` (`--oob-mode clip --oob-penalty λ`): an amplitude beyond the bound is clipped and
+  costs λ per unit of normalised excess instead of ending the episode.
+- `delta_scale` (`--delta-scale`): rad/ns per sample for a unit action; scale it down for longer steps
+  (`n_time_steps`), or one step sweeps the whole amplitude range.
+
+See [ibis](../ideas/ibis.md) for what these do in practice.
+
 ## Auto-reset for training
 
 Training runs thousands of environments in lock-step, so an environment that finishes must

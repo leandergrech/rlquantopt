@@ -39,12 +39,27 @@ class EnvConfig:
     # Further drifting parameters (absolute, MHz): coupler frequency omega_c_0 and couplings g_0, g_1
     coupler_drift_mhz: float = 0.0
     g_drift_mhz: float = 0.0
-    # Idea i06: "pe" = the paper's perfect-entangler J_T; "sqrt_iswap" = 1 - average gate fidelity to
+    # Idea i07: "pe" = the paper's perfect-entangler J_T; "sqrt_iswap" = 1 - average gate fidelity to
     # sqrt(iSWAP) after free virtual-Z corrections. info["JT"] always holds the active objective's cost.
     objective: str = "pe"
     # "amplitudes" = v1's 12 complex state amplitudes; "measured" = readout populations and Pauli
     # expectations a lab can measure (physics.measured_observables)
     obs_mode: str = "amplitudes"
+    # Idea i09. "terminate" (v1): an amplitude beyond the bound ends the episode with terminal_penalty;
+    # "clip": the amplitude is clipped, the episode goes on, and the reward loses oob_penalty per unit of
+    # normalised excess, so the policy learns to stay inside the bound without losing the pulse.
+    oob_mode: str = "terminate"
+    oob_penalty: float = 1.0
+    # Largest amplitude change per sample for a unit action, rad/ns; 0 = a_scale (v1). Scale it down with
+    # longer steps (e.g. a_scale * 3 / K) or one step can sweep the whole range several times.
+    delta_scale: float = 0.0
+    # Measured observations as finite-shot estimates: N shots per measurement setting (0 = exact)
+    shots: int = 0
+    # obs_mode "context" / "measured+context": the policy also sees a calibration of the device, measured
+    # once before the pulse (spectroscopy of both qubits and the coupler), as MHz offsets from nominal with
+    # Gaussian measurement error context_noise_mhz, divided by context_scale_mhz
+    context_noise_mhz: tuple = (0.1, 0.1, 1.0)
+    context_scale_mhz: tuple = (5.7, 5.7, 140.0)
     model: physics.ModelParams = physics.ModelParams()
 
     @property
@@ -59,7 +74,9 @@ class EnvConfig:
 
     @property
     def obs_dim(self):
-        return (physics.N_MEASURED if self.obs_mode == "measured" else 24) + self.n_time_steps + 1
+        quantum = {"amplitudes": 24, "measured": physics.N_MEASURED, "context": 0,
+                   "measured+context": physics.N_MEASURED}[self.obs_mode]
+        return quantum + (3 if "context" in self.obs_mode else 0) + self.n_time_steps + 1
 
     @property
     def act_dim(self):
@@ -79,6 +96,8 @@ class EnvState(NamedTuple):
     amps_cur: jnp.ndarray       # (K,) last segment amplitudes, rad/ns
     cur_idx: jnp.ndarray        # sample index at the start of the next step
     omega_s: jnp.ndarray        # (2,) qubit frequencies of this episode, GHz
+    key: jnp.ndarray            # PRNG key for measurement noise (used only with shots > 0)
+    context: jnp.ndarray        # (3,) measured calibration: qubit and coupler frequency offsets, MHz
 
 
 def sample_omega_s(key, cfg: EnvConfig):
@@ -100,13 +119,17 @@ def sample_model(key, cfg: EnvConfig):
     return model
 
 
-def reset_params(model: physics.ModelParams, cfg: EnvConfig):
-    """Reset with fully specified physical parameters."""
+def reset_params(model: physics.ModelParams, cfg: EnvConfig, key=None):
+    """Reset with fully specified physical parameters; ``key`` seeds the measurement noise."""
     omega_s = jnp.asarray(model.omega_s, fdtype())
+    k_obs, k_state, k_ctx = jax.random.split(jax.random.PRNGKey(0) if key is None else key, 3)
+    offsets = jnp.concatenate([omega_s - jnp.asarray(cfg.model.omega_s, fdtype()),
+                               jnp.atleast_1d(jnp.asarray(model.omega_c_0, fdtype()) - cfg.model.omega_c_0)]) * 1e3
+    context = offsets + jax.random.normal(k_ctx, (3,), fdtype()) * jnp.asarray(cfg.context_noise_mhz, fdtype())
     state = EnvState(sector=physics.initial_state(), ham=physics.sector_hamiltonian(model),
                      amps_cur=jnp.zeros(cfg.n_time_steps, fdtype()),
-                     cur_idx=jnp.zeros((), jnp.int32), omega_s=omega_s)
-    return observation(state, state.cur_idx, cfg), state
+                     cur_idx=jnp.zeros((), jnp.int32), omega_s=omega_s, key=k_state, context=context)
+    return observation(state, state.cur_idx, cfg, k_obs), state
 
 
 def reset_to(omega_s, cfg: EnvConfig):
@@ -115,20 +138,44 @@ def reset_to(omega_s, cfg: EnvConfig):
 
 
 def reset(key, cfg: EnvConfig):
-    return reset_params(sample_model(key, cfg), cfg)
+    return reset_params(sample_model(key, cfg), cfg, jax.random.fold_in(key, 3))
+
+
+# --8<-- [start:shots]
+def shot_estimates(key, pops, paulis, shots):
+    """Finite-shot estimates of the measured observables, ``shots`` per measurement setting.
+
+    Populations: a multinomial over the 5 readout outcomes of each input. Pauli expectations: each
+    value from a multinomial over +1, -1 and "a transmon left the computational levels" (probability
+    1 - <II>), so the estimate is (n+ - n-)/N. Values sharing a setting are sampled independently (their
+    correlations are ignored). One step costs 3 + 3 x 9 = 30 settings, i.e. 30 N shots.
+    """
+    k1, k2 = jax.random.split(key)
+    p = jnp.clip(pops.reshape(3, 5), 0, 1)
+    n_pop = jax.random.multinomial(k1, shots, p / p.sum(-1, keepdims=True))
+    ii = jnp.repeat(paulis.reshape(3, 16)[:, :1], 16, axis=1).reshape(-1)
+    q = jnp.clip(jnp.stack([(ii + paulis) / 2, (ii - paulis) / 2, 1 - ii], -1), 0, 1)
+    n_pauli = jax.random.multinomial(k2, shots, q / q.sum(-1, keepdims=True))
+    return (n_pop / shots).reshape(-1), (n_pauli[:, 0] - n_pauli[:, 1]) / shots
+# --8<-- [end:shots]
 
 
 # --8<-- [start:observation]
-def observation(state: EnvState, idx_for_time, cfg: EnvConfig):
-    if cfg.obs_mode == "measured":
+def observation(state: EnvState, idx_for_time, cfg: EnvConfig, key=None):
+    parts = []
+    if cfg.obs_mode.startswith("measured"):
         pops, paulis = physics.measured_observables(state.sector)
-        quantum = jnp.concatenate([2 * pops - 1, paulis])          # all in [-1, 1]
-    else:
+        if cfg.shots:
+            pops, paulis = shot_estimates(key, pops, paulis, cfg.shots)
+        parts.append(jnp.concatenate([2 * pops - 1, paulis]))          # all in [-1, 1]
+    elif cfg.obs_mode == "amplitudes":
         z = physics.sector_amplitudes(state.sector)
-        quantum = jnp.stack([2 * jnp.abs(z) - 1, jnp.angle(z) / jnp.pi], axis=-1).reshape(-1)
+        parts.append(jnp.stack([2 * jnp.abs(z) - 1, jnp.angle(z) / jnp.pi], axis=-1).reshape(-1))
+    if "context" in cfg.obs_mode:
+        parts.append(state.context / jnp.asarray(cfg.context_scale_mhz, fdtype()))
     amps = state.amps_cur / cfg.a_scale / cfg.a_norm_max
     t = idx_for_time * 2 / cfg.pulse_length - 1
-    obs = jnp.concatenate([quantum, amps, jnp.atleast_1d(t)]) * cfg.obs_scale
+    obs = jnp.concatenate(parts + [amps, jnp.atleast_1d(t)]) * cfg.obs_scale
     return obs.astype(fdtype())
 # --8<-- [end:observation]
 
@@ -138,11 +185,12 @@ def step(state: EnvState, action, cfg: EnvConfig):
     """One env step. ``action`` in [-1, 1]^K (clipped, as SB3 does) are amplitude deltas."""
     K = cfg.n_time_steps
     action = jnp.clip(jnp.reshape(action, (K,)), -1, 1).astype(fdtype())
-    deltas = action * cfg.a_scale
+    deltas = action * (cfg.delta_scale or cfg.a_scale)
     prev = jnp.where(state.cur_idx == 0, 0.0, state.amps_cur[-1])
     amps = prev + jnp.cumsum(deltas)
     amps_norm = amps / cfg.a_scale
     oob = jnp.max(jnp.abs(amps_norm)) > cfg.a_norm_max
+    excess = jnp.sum(jnp.maximum(jnp.abs(amps_norm) - cfg.a_norm_max, 0.0))
     amps = jnp.clip(amps_norm, -cfg.a_norm_max, cfg.a_norm_max) * cfg.a_scale
 
     sector = physics.propagate(state.ham, state.sector, amps, cfg.dt)
@@ -151,15 +199,19 @@ def step(state: EnvState, action, cfg: EnvConfig):
     reward = -jnp.log10(jnp.maximum(JT, cfg.jt_floor)) * cfg.rew_scale - cfg.rew_thresh
     tv = jnp.sum(jnp.abs(jnp.diff(amps))) * cfg.tv_penalty_scale
     reward = reward - tv
-    oob_reward = cfg.terminal_penalty * (1 - state.cur_idx / cfg.pulse_length)
-    reward = jnp.where(oob, oob_reward, reward).astype(fdtype())
+    if cfg.oob_mode == "clip":          # keep the pulse, penalise pushing against the bound
+        reward = (reward - cfg.oob_penalty * excess).astype(fdtype())
+    else:                               # v1: leaving the bound ends the episode
+        oob_reward = cfg.terminal_penalty * (1 - state.cur_idx / cfg.pulse_length)
+        reward = jnp.where(oob, oob_reward, reward).astype(fdtype())
 
-    new_state = state._replace(sector=sector, amps_cur=amps)
-    obs = observation(new_state, state.cur_idx, cfg)
+    k_obs, k_next = jax.random.split(state.key)
+    new_state = state._replace(sector=sector, amps_cur=amps, key=k_next)
+    obs = observation(new_state, state.cur_idx, cfg, k_obs)
     cur_idx = state.cur_idx + K
     new_state = new_state._replace(cur_idx=cur_idx)
     terminated = cur_idx + K - 1 >= cfg.pulse_length
-    truncated = oob
+    truncated = oob if cfg.oob_mode == "terminate" else jnp.array(False)
     info = dict(JT=JT, concurrence=C, unitarity=U, tv_penalty=tv, oob=oob,
                 t=cur_idx * cfg.dt)
     return obs, new_state, reward, terminated, truncated, info

@@ -16,7 +16,8 @@ import flax.linen as nn
 from rlquantopt.jx import env as jenv
 
 
-ACTIVATIONS = {"tanh": nn.tanh, "relu": nn.relu}
+ACTIVATIONS = {"tanh": nn.tanh, "relu": nn.relu, "leaky_relu": nn.leaky_relu,   # leaky slope 0.01
+               "gelu": nn.gelu}
 
 
 class MLP(nn.Module):
@@ -54,6 +55,22 @@ class ActorCritic(NamedTuple):
     def value(self, critic_params, obs):
         return self.critic.apply(critic_params, obs.astype(jnp.float32))[..., 0]
 
+    # The interface the rollout, PPO and evaluation use, so other policies (e.g. autoregressive.py) can plug in.
+    def sample(self, actor_params, obs, key):
+        mean, log_std = self.dist(actor_params, obs)
+        action = mean + jnp.exp(log_std) * jax.random.normal(key, mean.shape)
+        return action, gaussian_logp(mean, log_std, action)
+
+    def mode(self, actor_params, obs):
+        return self.dist(actor_params, obs)[0]
+
+    def logp(self, actor_params, obs, action):
+        return gaussian_logp(*self.dist(actor_params, obs), action)
+
+    def entropy(self, actor_params):
+        log_std = actor_params["log_std"]
+        return jnp.sum(log_std + 0.5 * jnp.log(2 * jnp.pi * jnp.e))
+
 
 def gaussian_logp(mean, log_std, a):
     return jnp.sum(-0.5 * ((a - mean) / jnp.exp(log_std)) ** 2 - log_std - 0.5 * jnp.log(2 * jnp.pi), axis=-1)
@@ -86,7 +103,7 @@ class RunnerState(NamedTuple):
 
 
 # --8<-- [start:collect]
-def collect(model: ActorCritic, runner: RunnerState, cfg: jenv.EnvConfig, n_steps: int, gamma: float,
+def collect(model, runner: RunnerState, cfg: jenv.EnvConfig, n_steps: int, gamma: float,
             resample_drift: bool = True):
     """Roll out ``n_steps`` in every env. Arrays in the returned Transition are (n_steps, n_envs, ...)."""
     v_step = jax.vmap(jenv.step_autoreset, in_axes=(0, 0, 0, None, None))
@@ -94,9 +111,7 @@ def collect(model: ActorCritic, runner: RunnerState, cfg: jenv.EnvConfig, n_step
     def body(runner, _):
         params, env_state, obs, key = runner
         key, k_act, k_env = jax.random.split(key, 3)
-        mean, log_std = model.dist(params["actor"], obs)
-        action = mean + jnp.exp(log_std) * jax.random.normal(k_act, mean.shape)
-        logp = gaussian_logp(mean, log_std, action)
+        action, logp = model.sample(params["actor"], obs, k_act)
         value = model.value(params["critic"], obs)
         n = obs.shape[0]
         next_obs, env_state, reward, term, trunc, info = v_step(
@@ -125,7 +140,7 @@ def gae(traj: Transition, last_value, gamma, lam):
 # --8<-- [end:gae]
 
 
-def evaluate(model: ActorCritic, params, cfg: jenv.EnvConfig, omega_s=None, stop_on_truncation=True):
+def evaluate(model, params, cfg: jenv.EnvConfig, omega_s=None, stop_on_truncation=True):
     """Deterministic episode (mean actions). Returns per-step reward, J_T, C, U, t and the pulse.
 
     With ``stop_on_truncation=False`` the episode keeps going after an out-of-bounds step (amplitudes
@@ -136,8 +151,7 @@ def evaluate(model: ActorCritic, params, cfg: jenv.EnvConfig, omega_s=None, stop
 
     def body(carry, _):
         obs, state, alive = carry
-        mean, _ = model.dist(params["actor"], obs)
-        obs, state, r, term, trunc, info = jenv.step(state, mean, cfg)
+        obs, state, r, term, trunc, info = jenv.step(state, model.mode(params["actor"], obs), cfg)
         out = dict(reward=r, JT=info["JT"], concurrence=info["concurrence"], unitarity=info["unitarity"],
                    t=info["t"], amps=state.amps_cur, alive=alive)
         ended = term | trunc if stop_on_truncation else term

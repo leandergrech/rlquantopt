@@ -72,6 +72,17 @@ nav:
       - Named gates and a richer model: next/named-gates.md
       - Beyond two transmons: next/platforms.md
       - Roadmap: next/roadmap.md
+  - Working ideas:
+      - 🐾: ideas/index.md
+      - 🐸: ideas/axolotl.md
+      - 🦡: ideas/badger.md
+      - 🐲: ideas/chameleon.md
+      - 🦋: ideas/dragonfly.md
+      - 🦔: ideas/echidna.md
+      - 🦊: ideas/fox.md
+      - 🦎: ideas/gecko.md
+      - 🦄: ideas/hippogriff.md
+      - 🦩: ideas/ibis.md
   - Bibliography: bibliography.md
   - Changelog: changelog.md
 

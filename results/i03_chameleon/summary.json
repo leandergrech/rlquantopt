@@ -1,0 +1,14 @@
+{
+  "idea": "chameleon",
+  "number": 3,
+  "summary": "Fresh start: a jumpy, gamma-conditioned latent world model with a GRU history sets latent tasks g = sqrt(1-eps) u + sqrt(eps) xi (u = value-gradient direction, xi = random orthogonal direction, eps from a learned Beta gate); the policy proposes candidate actions, the model re-ranks them by predicted progress along g, and the policy is rewarded for following g. The model trains on every PPO minibatch after a model-only warm-up. Leaky ReLU throughout. Algo: chameleon.",
+  "smoke": {
+    "updates": 40,
+    "steps": 327680,
+    "s_per_update": 47.0464568620082,
+    "eval_return_last": -18.752640783102397,
+    "mean_reward_first": -14.663294792175291,
+    "mean_reward_best": -4.724819660186768,
+    "mean_reward_last": -6.077047348022461
+  }
+}

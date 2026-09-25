@@ -10,6 +10,7 @@ pandas
 pyyaml
 tqdm
 pytest
+cma>=3.3            # CMA-ES for model-free refinement (idea i09)
 # Only needed to run the cross-check tests against the v1 reference implementation
 qutip>=5.2  # v1 pins 5.0.2, which does not work with numpy 2
 weylchamber

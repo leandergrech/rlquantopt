@@ -128,3 +128,32 @@ def cost(G, objective="pe", concurrence_weight=1.0, unitarity_weight=3.0, digits
         return 1 - F, concurrence(c1c2c3(G, digits)), U
     raise ValueError(f"unknown objective {objective!r}")
 # --8<-- [end:fidelity]
+
+
+# --8<-- [start:fidelity_estimate]
+def gate_from_observables(pops, paulis):
+    """Reconstruct the physical gate <b_i|U|b_j> from the 63 measured observables (physics.measured_observables
+    or their finite-shot estimates), assuming only that excitation number is conserved (block-diagonal gate,
+    |00> untouched). Magnitudes from the readout populations, phases from the Pauli expectations:
+    input |0+> gives <IX> + i<IY> = a = <01|U|01> and <XI> + i<YI> = c = <10|U|01>; |+0> gives b and d the same
+    way; |+1> gives a* e and c* e (e = <11|U|11>) from the q1 = 1 and q0 = 1 projected coherences.
+    Coherences with the coupler excited are neglected, a bias of the order of the coupler population."""
+    p = pops.reshape(3, 5)
+    s = paulis.reshape(3, 16)
+    ph = lambda z: z / jnp.maximum(jnp.abs(z), 1e-12)
+    mag = lambda x: jnp.sqrt(jnp.clip(x, 0, 1))
+    a = mag(p[0, 1]) * ph(s[0, 1] + 1j * s[0, 2])
+    c = mag(p[0, 2]) * ph(s[0, 4] + 1j * s[0, 8])
+    b = mag(p[1, 1]) * ph(s[1, 1] + 1j * s[1, 2])
+    d = mag(p[1, 2]) * ph(s[1, 4] + 1j * s[1, 8])
+    w1 = ((s[2, 4] - s[2, 7]) + 1j * (s[2, 8] - s[2, 11])) / 2      # a* e, from X/Y on q0 with q1 in |1>
+    w2 = ((s[2, 1] - s[2, 13]) + 1j * (s[2, 2] - s[2, 14])) / 2     # c* e, from X/Y on q1 with q0 in |1>
+    e = mag(p[2, 3]) * ph(a * w1 + c * w2)
+    return jnp.array([[1, 0, 0, 0], [0, a, b, 0], [0, c, d, 0], [0, 0, 0, e]], dtype=jnp.complex128)
+
+
+def fidelity_from_observables(pops, paulis, V=SQRT_ISWAP):
+    """Average gate fidelity to V (free Z) estimated from measured data only: no Hamiltonian involved."""
+    P = gate_from_observables(pops, paulis)
+    return fidelity_free_z(P.conj().T, V)[0]         # fidelity_free_z takes the realised_gate convention
+# --8<-- [end:fidelity_estimate]

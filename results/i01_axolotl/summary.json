@@ -1,0 +1,217 @@
+{
+  "idea": "axolotl",
+  "number": 1,
+  "summary": "Autoregressive delta policy (one head, fed its own output K times per step) and a sample judge: an MLP of (obs, action, reward) predicting mean and std of how well each sample's PPO gradient agrees with the rest of the batch; confident verdicts reweight the PPO loss through a separate guide term. Algo: ppo_judge.",
+  "gate_runs": {
+    "s123_ar_only": {
+      "steps": 19996672,
+      "wall_h": 4.06,
+      "best_JT": 0.0029689417266536,
+      "median_JT_last30": 0.01309709662648435,
+      "reaches_PE_last30": 0.03333333333333333,
+      "approx_kl_last300": 0.6008820713559786,
+      "clip_frac_last300": 0.6681097944577535,
+      "steps_to_JT<0.1": 3211264,
+      "steps_to_JT<0.01": 9830400,
+      "steps_to_JT<0.001": null,
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "axolotl",
+        "judge_z": 1.0,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "tag": "ar_only"
+      }
+    },
+    "s123_judge_z025": {
+      "steps": 19996672,
+      "wall_h": 4.15,
+      "best_JT": 0.0042718876486633,
+      "median_JT_last30": 0.011910563719465049,
+      "reaches_PE_last30": 0.4666666666666667,
+      "approx_kl_last300": 0.6259305264552434,
+      "clip_frac_last300": 0.6599264842271805,
+      "steps_to_JT<0.1": 2228224,
+      "steps_to_JT<0.01": 16121856,
+      "steps_to_JT<0.001": null,
+      "judge_corr": {
+        "first_quarter": 0.013523115676041204,
+        "last_quarter": -0.001738971898443878
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "axolotl",
+        "judge_coef": 0.5,
+        "judge_z": 0.25,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "tag": "judge_z025"
+      }
+    },
+    "s123_judge_z025_noar": {
+      "steps": 19996672,
+      "wall_h": 3.58,
+      "best_JT": 0.0028621142843598,
+      "median_JT_last30": 0.0034905924560303,
+      "reaches_PE_last30": 1.0,
+      "approx_kl_last300": 0.10354330255912686,
+      "clip_frac_last300": 0.4997924091418584,
+      "steps_to_JT<0.1": 1245184,
+      "steps_to_JT<0.01": 2949120,
+      "steps_to_JT<0.001": null,
+      "judge_corr": {
+        "first_quarter": 0.021884309988844167,
+        "last_quarter": 0.0026129995650870886
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "axolotl",
+        "no_ar": true,
+        "judge_coef": 0.5,
+        "judge_z": 0.25,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "tag": "judge_z025_noar"
+      }
+    },
+    "s123_judge_z1": {
+      "steps": 19996672,
+      "wall_h": 4.16,
+      "best_JT": 0.1408109456844161,
+      "median_JT_last30": 0.1523522210462957,
+      "reaches_PE_last30": 0.0,
+      "approx_kl_last300": 0.4447995771964391,
+      "clip_frac_last300": 0.6298435165484746,
+      "steps_to_JT<0.1": null,
+      "steps_to_JT<0.01": null,
+      "steps_to_JT<0.001": null,
+      "judge_corr": {
+        "first_quarter": 0.01121306291112932,
+        "last_quarter": 0.00011382082522060269
+      },
+      "args": {
+        "algo": "ppo_judge",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "idea": "axolotl",
+        "judge_coef": 0.5,
+        "judge_z": 1.0,
+        "judge_probe": 512,
+        "judge_warmup": 20,
+        "tag": "judge_z1"
+      }
+    }
+  },
+  "baselines": {
+    "ppo_s123": {
+      "steps": 19996672,
+      "wall_h": 1.01,
+      "best_JT": 0.0009799195438782,
+      "median_JT_last30": 0.00354812319681865,
+      "reaches_PE_last30": 1.0,
+      "approx_kl_last300": 0.13109613624042377,
+      "clip_frac_last300": 0.5318809908628463,
+      "steps_to_JT<0.1": 1114112,
+      "steps_to_JT<0.01": 3080192,
+      "steps_to_JT<0.001": 4653056,
+      "args": {
+        "algo": "ppo",
+        "seed": 123,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "tag": "ppo_s123"
+      }
+    },
+    "ppo_s1": {
+      "steps": 19996672,
+      "wall_h": 1.35,
+      "best_JT": 0.00049340464194,
+      "median_JT_last30": 0.0006907429712209,
+      "reaches_PE_last30": 0.9666666666666667,
+      "approx_kl_last300": 0.07059342819283353,
+      "clip_frac_last300": 0.4419159004588922,
+      "steps_to_JT<0.1": 1114112,
+      "steps_to_JT<0.01": 1900544,
+      "steps_to_JT<0.001": 9109504,
+      "args": {
+        "algo": "ppo",
+        "seed": 1,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "tag": "ppo_s1"
+      }
+    },
+    "ppo_s2": {
+      "steps": 19996672,
+      "wall_h": 1.36,
+      "best_JT": 0.000370226229945,
+      "median_JT_last30": 0.0009702405392156999,
+      "reaches_PE_last30": 1.0,
+      "approx_kl_last300": 0.11820096658407321,
+      "clip_frac_last300": 0.5216552832722664,
+      "steps_to_JT<0.1": 1376256,
+      "steps_to_JT<0.01": 2818048,
+      "steps_to_JT<0.001": 11075584,
+      "args": {
+        "algo": "ppo",
+        "seed": 2,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "tag": "ppo_s2"
+      }
+    },
+    "ppo_s3": {
+      "steps": 19996672,
+      "wall_h": 1.35,
+      "best_JT": 0.0001050577796046,
+      "median_JT_last30": 0.00025455301171695,
+      "reaches_PE_last30": 1.0,
+      "approx_kl_last300": 0.07623744271940715,
+      "clip_frac_last300": 0.4087494357426961,
+      "steps_to_JT<0.1": 1114112,
+      "steps_to_JT<0.01": 1835008,
+      "steps_to_JT<0.001": 6160384,
+      "args": {
+        "algo": "ppo",
+        "seed": 3,
+        "total_steps": 20000000,
+        "lr": 0.0003,
+        "activation": "relu",
+        "eval_every": 65536,
+        "out": "runs",
+        "tag": "ppo_s3"
+      }
+    }
+  }
+}
