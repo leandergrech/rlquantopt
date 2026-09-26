@@ -33,6 +33,7 @@ from rlquantopt.jx.agents.common import ActorCritic
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIG = os.path.join(ROOT, "docs", "figures")
 SETTINGS_PER_STEP = 30
+CALIBRATION_SHOTS = 10_000     # one spectroscopy calibration of the three frequencies (context modes)
 
 
 def _load(name):
@@ -91,8 +92,12 @@ def main():
         ev = jax.jit(lambda mp, key, cfg: rollout(model, params, cfg, mp, key), static_argnums=2)
         rec = dict(run=run, best_step=int(step), n_steps=cfg.n_steps, K=cfg.n_time_steps,
                    train_shots_per_setting=cfg.shots, actor_params=n_params, by_shots={})
-        for N in args.eval_shots:
+        per_step = SETTINGS_PER_STEP if cfg.obs_mode.startswith("measured") else 0
+        calib = CALIBRATION_SHOTS if "context" in cfg.obs_mode else 0
+        rec["settings_per_step"], rec["calibration_shots"] = per_step, calib
+        for N in (args.eval_shots if per_step else [0]):
             ecfg = dataclasses.replace(cfg, shots=N)
+            shots_per_pulse = cfg.n_steps * per_step * N + calib
             final, best, oob = [], [], []
             for i, mp in enumerate(devices):
                 for sd in range(args.noise_seeds if N else 1):
@@ -102,9 +107,9 @@ def main():
                     oob.append(float(ob.mean()))
             q = lambda v: dict(median=float(np.median(v)), q25=float(np.quantile(v, 0.25)),
                                q75=float(np.quantile(v, 0.75)), below_1e2=float(np.mean(np.asarray(v) <= 1e-2)))
-            rec["by_shots"][str(N)] = dict(shots_per_pulse=cfg.n_steps * SETTINGS_PER_STEP * N, final=q(final),
+            rec["by_shots"][str(N)] = dict(shots_per_pulse=shots_per_pulse, final=q(final),
                                            best_step=q(best), oob_step_fraction=float(np.mean(oob)))
-            print(f"{label:22s} N={N:5d}  shots/pulse {cfg.n_steps * SETTINGS_PER_STEP * N:9.2e}  "
+            print(f"{label:22s} N={N:5d}  shots/pulse {shots_per_pulse:9.2e}  "
                   f"final 1-F {np.median(final):.2e}  best-step {np.median(best):.2e}  "
                   f"oob steps {np.mean(oob):.1%}", flush=True)
         # training: env steps (and measurement settings) to first reach 1 - F <= 1e-2 on the nominal device
@@ -122,10 +127,10 @@ def plot(out, path):
     ax = axs[0]
     for label, r in out.items():
         pts = sorted((v["shots_per_pulse"], v["final"]["median"], v["final"]["q25"], v["final"]["q75"])
-                     for N, v in r["by_shots"].items() if int(N) > 0)
-        exact = r["by_shots"].get("0")
+                     for N, v in r["by_shots"].items() if int(N) > 0 or r.get("settings_per_step") == 0)
+        exact = r["by_shots"].get("0") if r.get("settings_per_step", 30) else None
         x, y, lo, hi = map(np.asarray, zip(*pts))
-        l, = ax.loglog(x, y, "o-", label=f"{label} ({r['actor_params']} actor params)")
+        l, = ax.loglog(x, y, "o-" if len(x) > 1 else "*", ms=12, label=f"{label} ({r['actor_params']} actor params)")
         ax.fill_between(x, lo, hi, color=l.get_color(), alpha=0.12, lw=0)
         if exact:
             ax.axhline(exact["final"]["median"], color=l.get_color(), ls=":", lw=1)

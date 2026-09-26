@@ -54,6 +54,8 @@ def parse_args(argv=None):
     p.add_argument("--delta-scale", type=float, default=0.0,
                    help="rad/ns per sample for a unit action (default: a_scale = 20, as v1; use 20 * 3 / K for long steps)")
     p.add_argument("--hidden", type=int, nargs="+", default=None, help="hidden layer widths (default 128 128)")
+    p.add_argument("--action-mode", choices=["delta", "carrier"], default="delta",
+                   help="delta (v1): per-sample amplitude increments; carrier: steer A, phi, offset of a carrier at the qubit detuning")
     p.add_argument("--eval-every", type=int, default=2_000_000, help="env steps between evals/checkpoints")
     p.add_argument("--out", default="runs")
     p.add_argument("--idea", default=None, help="idea codename (rlquantopt/jx/ideas.py): runs go to <out>/iNN_<idea>/")
@@ -99,7 +101,8 @@ def build(args):
     env_cfg = jenv.EnvConfig(max_drift=args.max_drift, coupler_drift_mhz=args.coupler_drift_mhz,
                              g_drift_mhz=args.g_drift_mhz, objective=args.objective, obs_mode=args.obs_mode,
                              oob_mode=args.oob_mode, oob_penalty=args.oob_penalty, shots=args.shots,
-                             n_time_steps=args.n_time_steps, delta_scale=args.delta_scale)
+                             n_time_steps=args.n_time_steps, delta_scale=args.delta_scale,
+                             action_mode=args.action_mode)
     common = dict(total_steps=args.total_steps, lr=args.lr, resample_drift=not args.fixed_drift)
     if args.n_envs:
         common["n_envs"] = args.n_envs

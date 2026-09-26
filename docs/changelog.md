@@ -3,6 +3,20 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.18.0: ibis, the carrier policy (2026-09-26)
+
+New action mode `--action-mode carrier`: the pulse is u(t) = offset + A cos(2π f_d t + φ), the policy
+nudges (A, φ, offset), and f_d is the nominal qubit detuning corrected by the measured calibration. With
+it, a policy that sees only a frequency calibration measured once before the pulse (open loop, about
+1e4 shots per device) reaches 1 − F = 3.9e-3 on the 24 large-coupler-drift devices (all below 1e-2),
+reaching 1e-2 in 0.72M training steps: better than the best closed-loop policy with exact observations
+(8.5e-3, 8.1M steps) and about 1000× cheaper in shots than a closed-loop policy at 1000 shots per
+setting. A closed-loop carrier policy trained with 100 shots reaches 1.1e-2 at 2e5 shots per pulse.
+With per-sample actions the open-loop policy could not learn (identity gate) and noise-trained
+closed-loop policies plateaued at 0.13. Few long steps (K = 15) matter in carrier mode. Also: calibration
+runs with oob penalty 5 and 1; records in results/i09_ibis; corrected actor-parameter counts on the ibis
+page.
+
 ## 2.17.0: the idea farm, and ibis in progress (2026-09-25)
 
 **Idea iterations.** Every new training idea gets a number and an animal codename, a registry entry

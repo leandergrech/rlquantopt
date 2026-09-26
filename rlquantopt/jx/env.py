@@ -60,6 +60,12 @@ class EnvConfig:
     # Gaussian measurement error context_noise_mhz, divided by context_scale_mhz
     context_noise_mhz: tuple = (0.1, 0.1, 1.0)
     context_scale_mhz: tuple = (5.7, 5.7, 140.0)
+    # "delta" (v1): each action is K per-sample amplitude increments. "carrier": the pulse is
+    # u(t) = offset + A cos(2 pi f_d t + phi) and each action nudges the three slow knobs (A, phi, offset) by
+    # up to carrier_steps = (rad/ns, rad, rad/ns); f_d is the nominal qubit-qubit detuning, corrected by the
+    # measured calibration when the policy has one (context modes). act_dim is then 3 for any K.
+    action_mode: str = "delta"
+    carrier_steps: tuple = (1.0, 0.2, 1.0)
     model: physics.ModelParams = physics.ModelParams()
 
     @property
@@ -76,11 +82,16 @@ class EnvConfig:
     def obs_dim(self):
         quantum = {"amplitudes": 24, "measured": physics.N_MEASURED, "context": 0,
                    "measured+context": physics.N_MEASURED}[self.obs_mode]
-        return quantum + (3 if "context" in self.obs_mode else 0) + self.n_time_steps + 1
+        control = 4 if self.action_mode == "carrier" else self.n_time_steps
+        return quantum + (3 if "context" in self.obs_mode else 0) + control + 1
 
     @property
     def act_dim(self):
-        return self.n_time_steps
+        return 3 if self.action_mode == "carrier" else self.n_time_steps
+
+    @property
+    def carrier_ghz(self):
+        return abs(self.model.omega_s[1] - self.model.omega_s[0])
 
     @property
     def rew_thresh(self):
@@ -98,6 +109,7 @@ class EnvState(NamedTuple):
     omega_s: jnp.ndarray        # (2,) qubit frequencies of this episode, GHz
     key: jnp.ndarray            # PRNG key for measurement noise (used only with shots > 0)
     context: jnp.ndarray        # (3,) measured calibration: qubit and coupler frequency offsets, MHz
+    knobs: jnp.ndarray          # (3,) carrier mode: amplitude A (rad/ns), phase phi (rad), offset (rad/ns)
 
 
 def sample_omega_s(key, cfg: EnvConfig):
@@ -128,7 +140,8 @@ def reset_params(model: physics.ModelParams, cfg: EnvConfig, key=None):
     context = offsets + jax.random.normal(k_ctx, (3,), fdtype()) * jnp.asarray(cfg.context_noise_mhz, fdtype())
     state = EnvState(sector=physics.initial_state(), ham=physics.sector_hamiltonian(model),
                      amps_cur=jnp.zeros(cfg.n_time_steps, fdtype()),
-                     cur_idx=jnp.zeros((), jnp.int32), omega_s=omega_s, key=k_state, context=context)
+                     cur_idx=jnp.zeros((), jnp.int32), omega_s=omega_s, key=k_state, context=context,
+                     knobs=jnp.zeros(3, fdtype()))
     return observation(state, state.cur_idx, cfg, k_obs), state
 
 
@@ -173,7 +186,11 @@ def observation(state: EnvState, idx_for_time, cfg: EnvConfig, key=None):
         parts.append(jnp.stack([2 * jnp.abs(z) - 1, jnp.angle(z) / jnp.pi], axis=-1).reshape(-1))
     if "context" in cfg.obs_mode:
         parts.append(state.context / jnp.asarray(cfg.context_scale_mhz, fdtype()))
-    amps = state.amps_cur / cfg.a_scale / cfg.a_norm_max
+    if cfg.action_mode == "carrier":
+        A, phi, off = state.knobs
+        amps = jnp.stack([A / cfg.a_scale, off / cfg.a_scale, jnp.cos(phi), jnp.sin(phi)])
+    else:
+        amps = state.amps_cur / cfg.a_scale / cfg.a_norm_max
     t = idx_for_time * 2 / cfg.pulse_length - 1
     obs = jnp.concatenate(parts + [amps, jnp.atleast_1d(t)]) * cfg.obs_scale
     return obs.astype(fdtype())
@@ -184,10 +201,21 @@ def observation(state: EnvState, idx_for_time, cfg: EnvConfig, key=None):
 def step(state: EnvState, action, cfg: EnvConfig):
     """One env step. ``action`` in [-1, 1]^K (clipped, as SB3 does) are amplitude deltas."""
     K = cfg.n_time_steps
-    action = jnp.clip(jnp.reshape(action, (K,)), -1, 1).astype(fdtype())
-    deltas = action * (cfg.delta_scale or cfg.a_scale)
-    prev = jnp.where(state.cur_idx == 0, 0.0, state.amps_cur[-1])
-    amps = prev + jnp.cumsum(deltas)
+    knobs = state.knobs
+    if cfg.action_mode == "carrier":
+        action = jnp.clip(jnp.reshape(action, (3,)), -1, 1).astype(fdtype())
+        knobs = knobs + action * jnp.asarray(cfg.carrier_steps, fdtype())
+        knobs = knobs.at[0].set(jnp.clip(knobs[0], 0.0, cfg.a_scale)).at[2].set(jnp.clip(knobs[2], -cfg.a_scale, cfg.a_scale))
+        f = cfg.carrier_ghz
+        if "context" in cfg.obs_mode:       # the measured detuning, not the true one
+            f = f + jnp.sign(cfg.model.omega_s[1] - cfg.model.omega_s[0]) * (state.context[1] - state.context[0]) * 1e-3
+        t = (state.cur_idx + jnp.arange(K) + 0.5) * cfg.dt
+        amps = knobs[2] + knobs[0] * jnp.cos(2 * jnp.pi * f * t + knobs[1])
+    else:
+        action = jnp.clip(jnp.reshape(action, (K,)), -1, 1).astype(fdtype())
+        deltas = action * (cfg.delta_scale or cfg.a_scale)
+        prev = jnp.where(state.cur_idx == 0, 0.0, state.amps_cur[-1])
+        amps = prev + jnp.cumsum(deltas)
     amps_norm = amps / cfg.a_scale
     oob = jnp.max(jnp.abs(amps_norm)) > cfg.a_norm_max
     excess = jnp.sum(jnp.maximum(jnp.abs(amps_norm) - cfg.a_norm_max, 0.0))
@@ -206,7 +234,7 @@ def step(state: EnvState, action, cfg: EnvConfig):
         reward = jnp.where(oob, oob_reward, reward).astype(fdtype())
 
     k_obs, k_next = jax.random.split(state.key)
-    new_state = state._replace(sector=sector, amps_cur=amps, key=k_next)
+    new_state = state._replace(sector=sector, amps_cur=amps, key=k_next, knobs=knobs)
     obs = observation(new_state, state.cur_idx, cfg, k_obs)
     cur_idx = state.cur_idx + K
     new_state = new_state._replace(cur_idx=cur_idx)

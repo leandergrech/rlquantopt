@@ -85,3 +85,20 @@ def test_context_observation():
         assert abs(float(s.context[2])) <= 140.0
         _, s2, *_ = jenv.step(s, jnp.zeros(3), cfg)
         np.testing.assert_array_equal(np.asarray(s2.context), np.asarray(s.context))
+
+
+def test_carrier_mode():
+    """Carrier actions steer (A, phi, offset); the samples oscillate at the qubit detuning."""
+    cfg = jenv.EnvConfig(action_mode="carrier", obs_mode="measured", oob_mode="clip", n_time_steps=15)
+    assert cfg.act_dim == 3 and cfg.obs_dim == 63 + 4 + 1
+    obs, s = jenv.reset(jax.random.PRNGKey(0), cfg)
+    amps = []
+    for _ in range(20):
+        obs, s, *_ = jenv.step(s, jnp.array([1.0, 0.0, 0.0]), cfg)
+        amps.append(np.asarray(s.amps_cur))
+    assert float(s.knobs[0]) == 20.0                       # A ramps by 1 rad/ns per step, capped at the bound
+    u = np.concatenate(amps)[-200:]
+    f = np.fft.rfftfreq(len(u), cfg.dt)[np.argmax(np.abs(np.fft.rfft(u))[1:]) + 1]
+    assert abs(f - cfg.carrier_ghz) < 0.11                 # FFT resolution 1 / (200 * 50 ps) = 0.1 GHz
+    ctx = jenv.EnvConfig(action_mode="carrier", obs_mode="context")
+    assert ctx.obs_dim == 3 + 4 + 1
