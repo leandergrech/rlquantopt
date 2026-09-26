@@ -3,6 +3,18 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.18.1: hippogriff's belief fixed (2026-09-26)
+
+Idea i08: the linearised Kalman belief over the device's drift was 9-890× overconfident (it shrank around
+a wrong value). Two remedies, compared on the same pretrained policies, 3 seeds × 12 toy devices, with
+noise-free and noisy measurements: an exact grid belief (Bayes on 41 × 41 points, probing by the spread
+of predictions) gives 575-627 of an oracle's 655 in the first episode with the exact model and 511-549
+with a learned model (Kalman: 372-614 and 337-486), and noise barely hurts it; a consistency check
+(covariance inflation on surprising innovations) lets the Kalman belief reach the oracle by episode 5
+with the exact model but breaks with the learned one. Probing pays only where the belief is weak. The
+hippogriff page has a guide to its runs; failed and duplicate raw runs are archived in `runs/_attic/`
+(TensorBoard skips them, `idea_records.py` still reads them).
+
 ## 2.18.0: ibis, the carrier policy (2026-09-26)
 
 New action mode `--action-mode carrier`: the pulse is u(t) = offset + A cos(2π f_d t + φ), the policy

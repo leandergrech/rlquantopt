@@ -134,7 +134,5 @@
       }
     }
   },
-  "invalid": [
-    "runs/i06_fox/foxbench/tracker_20260925-111044/INVALID.txt"
-  ]
+  "invalid": []
 }

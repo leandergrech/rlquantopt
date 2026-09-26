@@ -46,7 +46,8 @@ def gate_run(d):
 
 def gate_idea(codename):
     n = IDEAS[codename].number
-    runs = sorted(glob.glob(f"runs/i{n:02d}_{codename}/*_s*/progress.csv"))
+    runs = sorted(glob.glob(f"runs/i{n:02d}_{codename}/*_s*/progress.csv")
+                  + glob.glob(f"runs/_attic/i{n:02d}_{codename}/*_s*/progress.csv"))
     return {os.path.basename(os.path.dirname(f)).split("_", 3)[-1]: gate_run(os.path.dirname(f)) for f in runs}
 
 
@@ -102,16 +103,18 @@ def main():
     write("fox", dict(benchmarks=fox, invalid=[d for d in glob.glob("runs/i06_fox/foxbench/*/INVALID.txt")]))
 
     hip = {}
-    for f in sorted(glob.glob("runs/i08_hippogriff/seed*/results.json")):
+    for f in sorted(glob.glob("runs/i08_hippogriff/seed*_*_*/results.json")):
         r = json.load(open(f))
-        tag = "noisy" if f.split("/")[-2].endswith("noisy") else "quiet"
-        run = dict(seed=r["args"]["seed"], method=r.get("method"), calib=r["calib"], calib_blind=r["calib_blind"],
+        tag = f.split("/")[-2].split("_", 2)[2]         # the variant: ekf, ekf_noisy, nis, nis_noisy, grid, grid_noisy
+        run = dict(seed=r["args"]["seed"], filter=r["method"]["filter"], method=r.get("method"), calib=r["calib"],
+                   calib_blind=r["calib_blind"],
                    model_b_fit=r["model_b_fit"], modes={})
         for mode, m in r["modes"].items():
             ret = np.array(m["returns"])
             run["modes"][mode] = dict(return_per_episode=ret.mean(1).tolist(),
                                       zerr_end_ep1=float(np.array(m["zerr"])[0, :, -1].mean()),
                                       rho_end_ep1=float(np.array(m["rho"])[0, :, -1].mean()),
+                                      zerr_end_ep5=float(np.array(m["zerr"])[-1, :, -1].mean()),
                                       probing_steps_ep1=float(np.mean(m["probing_steps"][0])))
         hip.setdefault(tag, []).append(run)
     if hip:

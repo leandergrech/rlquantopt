@@ -24,11 +24,11 @@ COLOUR = dict(blind=GREY, robust=GREY, oracle=DARK, filter_A=BLUE, hippogriff_A=
 PRIOR_STD = 1 / np.sqrt(3)
 
 
-def load(tag):
+def load(tag, filt="ekf"):
     out = []
-    for f in sorted(glob.glob("runs/i08_hippogriff/seed*/results.json")):
-        if f.split("/")[-2].endswith("noisy") == (tag == "noisy"):
-            out.append(json.load(open(f))["modes"])
+    variant = {"quiet": "ekf", "noisy": "ekf_noisy"}[tag] if filt == "ekf" else f"{filt}{'_noisy' if tag == 'noisy' else ''}"
+    for f in sorted(glob.glob(f"runs/i08_hippogriff/seed*_{variant}/results.json")):
+        out.append(json.load(open(f))["modes"])
     return out
 
 

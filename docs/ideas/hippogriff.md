@@ -5,12 +5,12 @@ On a new device, can an agent first identify the drift, with an uncertainty that
 action and shrinks with every interaction, and then act on what it has learned, instead of re-training?
 (A hippogriff is the offspring of a griffin and a horse: a hybrid of a hybrid.)
 
-**Answer so far.** Largely yes, on the toy devices, with one important flaw. Identifying the drift
-lifts the first-episode return from 327 (a robust policy) to 614 of the oracle's 655, where black-box
-fine-tuning ([fox](fox.md)) barely recovered after 60 updates. Probing for information pays: the full
-method beats passive identification in 11 of 12 seed × setting pairs, by +21 to +110. But the belief
-becomes badly overconfident: its uncertainty shrinks as designed, around a wrong value, claiming an error
-9× to 890× smaller than its actual error, so later episodes barely improve on the first.
+**Answer so far.** Yes, on the toy devices. Identifying the drift lifts the first-episode return from
+327 (a robust policy) to 614-627 of the oracle's 655, where black-box fine-tuning ([fox](fox.md)) barely
+recovered after 60 updates. The first belief, a linearised Kalman filter, became badly overconfident (its
+uncertainty shrank around a wrong value); an exact grid belief fixes that and is robust to noise and to a
+learned measurement model, and a consistency check lets the Kalman belief recover to the oracle with the
+exact model. Probing for information pays where the belief is weak.
 
 ## The key idea: a belief that can only sharpen
 
@@ -117,18 +117,68 @@ its uncertainty already tiny, no later measurement can move it. The cause is the
 tracking score, \(-\log_{10}(	ext{error})\), is far from linear in the drift, so a first-order update is
 confidently wrong. That is why the learned model, with its larger *R*, does better under noise.
 
+## Fixing the belief: three filters on the same policies
+
+Same pretrained policies and devices, three beliefs (`--set filter=...`):
+
+- **`ekf`**: the linearised Kalman filter above.
+- **`ekf_nis`**: the same, with a consistency check. When a measurement is more surprising than the belief
+  allows (normalised innovation squared above the 99 % χ² bound), the uncertainty is scaled up before the
+  update (at most back to the prior). This is the "artificial confidence bound" used as a floor.
+- **`grid`**: exact Bayes on a 41 × 41 grid over the drift; no linearisation. Probing uses the spread of
+  the model's predictions over the whole belief, which reduces to the Jacobian formula for a linear model.
+
+Return per episode (mean over 12 devices and 3 seeds; oracle 655, robust 327, blind 319), and the error in
+the drift after 5 episodes:
+
+| Belief | Model | Noise-free: filter / hippogriff, episode 1 → 5 | error | Noisy: filter / hippogriff, episode 1 → 5 | error |
+| --- | --- | --- | --- | --- | --- |
+| `ekf` | A (exact) | 593 → 596 / 614 → 617 | 0.17 / 0.12 | 372 → 373 / 417 → 442 | 0.70 / 0.54 |
+| `ekf_nis` | A | 600 → **655** / 610 → **655** | 0.00 / 0.00 | 400 → 634 / 395 → 570 | 0.05 / 0.19 |
+| `grid` | A | **627** → 627 / 622 → 626 | 0.05 / 0.06 | **575** → 629 / **591** → 622 | 0.06 / 0.06 |
+| `ekf` | B (learned) | 411 → 423 / 443 → 455 | 0.49 / 0.36 | 337 → 364 / 447 → 486 | 0.62 / 0.34 |
+| `ekf_nis` | B | 214 → 228 / 271 → 320 | 1.46 / 0.75 | 270 → 272 / 398 → 453 | 1.20 / 0.13 |
+| `grid` | B | **541** → 540 / **549** → 548 | 0.27 / 0.29 | **530** → 539 / **511** → 546 | 0.23 / 0.21 |
+
+1. **The exact grid belief is the robust choice**: best or close to best in the first episode in every
+   setting, and noise barely hurts it (575-591 against 622-627 noise-free). With the learned model it
+   lifts the first episode from 337-486 (EKF) to 511-549.
+2. **The consistency check lets a belief recover from a wrong early commitment**: with the exact model the
+   `ekf_nis` belief reaches the true drift and the oracle's 655 by episode 5, which the plain EKF never
+   does. But it is slow in the first episode, and **it breaks with the learned model**: the model's own
+   errors look like surprises, the belief keeps inflating and ends further from the truth than the prior
+   (error 1.2-1.5 against 0.85).
+3. **Probing matters where the belief is weak.** It added +21 to +110 for the EKF; with the grid belief,
+   ordinary operation is already informative and probing changes the first episode by −19 to +16.
+4. **What is left**: the grid's resolution (spacing 0.05 in *z*, an error floor about 0.05) for model A,
+   and the learned model's bias (error 0.2-0.3) for model B.
+
+## Which run is which
+
+Everything is in `runs/i08_hippogriff/` (gitignored); the summaries are in `results/i08_hippogriff/`.
+
+| Directory | What it is |
+| --- | --- |
+| `pretrained/seed{0,1,2}_2000000.pkl` | the cached stage-1 artefacts per seed: z-conditioned and blind PPO policies, learned model B; every variant below deploys these |
+| `seed{s}_20260925-2136xx_ekf` / `_ekf_noisy` | the linearised Kalman belief, noise-free / noisy (the "Full results" above) |
+| `seed{s}_20260925-2136xx_nis` / `_nis_noisy` | the Kalman belief with the consistency check |
+| `seed{s}_20260925-2136xx_grid` / `_grid_noisy` | the exact grid belief |
+| `logs/` | the console logs (`full_*`, `noisy_*`: the first runs; `filters_*`: the comparison) |
+
+Each variant directory holds `results.json` with all 7 modes (blind, robust, oracle, filter A/B,
+hippogriff A/B): returns per episode and device, and the belief's error and ρ at every step. The first
+full runs (`seed*_20260925-2030xx`, `…-2039xx_noisy`) were exact duplicates of the `ekf` variants and are
+archived in `runs/_attic/`.
+
 ## Next
 
-The fix follows from the design's own "artificial clipping confidence bound", applied as a *floor*:
-
-1. **A consistency check**: compare each innovation \(y - \hat y\) with what the belief predicts (the
-   normalised innovation squared). When measurements keep surprising the filter, inflate *P* instead of
-   shrinking it.
-2. **A filter that does not linearise.** The drift here has 2 dimensions (3-5 on the gate environment), so
-   a particle or grid posterior is exact and cheap. That removes the linearisation error that made it
-   overconfident.
-3. Then the gate environment (grey box, model A): the belief over the physical drift parameters
-   (qubit and coupler frequencies, couplings), with the Jacobian from the differentiable simulator.
+1. **The gate environment** with a particle belief over the physical drift (qubit and coupler frequencies,
+   couplings): each particle simulates its own device through the same actions, since the quantum state
+   depends on the drift. [Ibis](ibis.md) has since found that a policy fed a routine frequency calibration
+   plays a good pulse open loop; hippogriff's question there becomes whether identification during
+   operation can replace, or refine, that calibration, and catch the drift the calibration does not see
+   (couplings, anharmonicities), which the jackal line of work (i10, in progress) also tests.
+2. A finer or adaptive grid (or particles) to remove the resolution floor.
 
 Fox's improvement model, riding along during the 2M-step pretraining, predicted each update's return
 change only weakly (correlation 0.07-0.15 with the realised change for the drift-conditioned policy,

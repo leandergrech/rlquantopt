@@ -60,7 +60,7 @@ def scalars(row):
 def sync(root, out, writers, seen):
     for path in sorted(glob.glob(os.path.join(root, "**", "progress.csv"), recursive=True)):
         run = os.path.relpath(os.path.dirname(path), root)
-        if run.startswith("_tensorboard"):
+        if run.startswith(("_tensorboard", "_attic")):
             continue
         try:
             with open(path) as f:
@@ -158,13 +158,13 @@ def _hippogriff(path, root):
 
 
 BENCH_SOURCES = [("**/toybench/*/curves.npz", _toybench), ("**/foxbench/*/results.json", _foxbench),
-                 ("i08_hippogriff/*/results.json", _hippogriff)]
+                 ("i08_hippogriff/seed*/results.json", _hippogriff)]
 
 
 def sync_benchmarks(root, out, mtimes):
     for pattern, render in BENCH_SOURCES:
         for path in sorted(glob.glob(os.path.join(root, pattern), recursive=True)):
-            if os.path.exists(os.path.join(os.path.dirname(path), "INVALID.txt")):
+            if "/_attic/" in path or os.path.exists(os.path.join(os.path.dirname(path), "INVALID.txt")):
                 continue
             mt = os.path.getmtime(path)
             if mtimes.get(path) == mt:

@@ -27,7 +27,7 @@ actor and critic, 20M steps (about 1.3 h). Over four seeds its best \(J_T\) is 1
 | 🦔 | [i05 echidna](echidna.md) | PPO plus one dragonfly ingredient at a time, on toy environments first | toys, gate env | every ingredient is task-specific; none helps on the gate env |
 | 🦊 | [i06 fox](fox.md) | adapting to a new device under a cost per sample, with an improvement-equivalent model | toy devices | no significant gain; not adapting is best there |
 | 🦎 | [i07 gecko](gecko.md) | measurable observations and a hardware-reportable fidelity (parallel line of work) | gate env | the large-coupler-drift result holds: the policy's pulse + GRAPE reaches 1 − F ≤ 1e-3 on 92 % of devices, random starts 0 % at equal budget ([results](../results/measurable.md)) |
-| 🦄 | [i08 hippogriff](hippogriff.md) | identify the device's drift with a belief whose uncertainty shrinks, then act on it | toy devices | 614 of the oracle's 655 in one episode (robust policy: 327); the belief is overconfident |
+| 🦄 | [i08 hippogriff](hippogriff.md) | identify the device's drift with a belief whose uncertainty shrinks, then act on it | toy devices | 614-627 of the oracle's 655 in one episode (robust policy: 327); a linearised belief was overconfident, an exact grid belief fixes it |
 | 🦩 | [i09 ibis](ibis.md) | gecko made data-lean: clipped amplitudes, finite shots, small networks, calibration context, refinement from measured data (parallel line of work) | gate env | in progress: a carrier policy fed only a frequency calibration reaches 3.9e-3 on all drifted devices with ~1e4 shots, open loop; per-sample closed-loop policies fail under shot noise; black-box refinement barely helps |
 
 The emoji stand in where there is no emoji for the animal itself (🐸 axolotl, 🐲 chameleon, 🦋 dragonfly,
@@ -64,7 +64,7 @@ flowchart LR
    caught this way before they could mislead a long run.
 6. **A shrinking uncertainty is not a correct one.** A linearised Kalman belief shrinks by construction,
    even around a wrong estimate; on a strongly nonlinear measurement it became 9-890× overconfident
-   (hippogriff). Uncertainty needs a consistency check, or a filter that does not linearise.
+   (hippogriff). An exact (grid) belief fixed it; a consistency check helps only when the model is exact.
 
 ## Reproducing
 
@@ -75,3 +75,7 @@ python -m rlquantopt.jx.foxbench --seeds 3 --devices 8 --budget 60    # fox
 python -m rlquantopt.jx.hippogriff --seed 0 --devices 12              # hippogriff
 python scripts/idea_records.py                                        # rebuild results/iNN_<animal>/
 ```
+
+Raw runs of closed experiments (failed ideas whose lessons are recorded here, an invalid benchmark, exact
+duplicates) are archived in `runs/_attic/`, keeping only each run's best and final checkpoint; the records
+in `results/` still build from them, and TensorBoard no longer shows them.
