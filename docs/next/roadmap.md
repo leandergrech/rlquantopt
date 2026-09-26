@@ -55,7 +55,8 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.18.0 | Carrier actions: an open-loop policy fed only a frequency calibration reaches 3.9e-3 on all drifted devices with ~1e4 shots (ibis) | done |
 | 2.18.1 | Hippogriff's belief fixed (exact grid belief; consistency check) | done |
 | 2.19.0 | Ibis concluded (4 seeds, calibration stress, unseen drift, K = 30 / 60, 32 × 32); the calibration MDP page; jackal started; docs consolidated (status stamps, lessons, code walkthroughs) | done |
-| 2.20.0 | Jackal (i10): the realistic tunable-coupler device and the sim-to-sim transfer test | in progress |
+| 2.20.0 | Jackal (i10), first results: a 35× sim-to-sim gap; trained on the realistic device 7.2e-3 on drifted devices; an evaluation bug fixed | done |
+| 2.21.0 | Jackal: close the 5× margin to gradient-optimised knob schedules; then hippogriff's identification on the device | open |
 | next | Hippogriff on jackal's device (identification of the drift the calibration does not see); an improvement-equivalent tracker in knob space ([the farm](../ideas/index.md#where-next-tracking-with-improvement-equivalence)); decoherence in the device model; the hardware contract of a target platform; three-qubit model with a spectator (T5) | open |
 
 ## Beyond replication

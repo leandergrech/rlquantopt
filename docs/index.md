@@ -182,9 +182,11 @@ Each is discussed, with what it would take to remove it, in
       on all 24 drifted devices), with a 1.4k-parameter network, with calibration errors 10× larger than in
       training (92-99 % of devices below 1e-2) and with drift the calibration cannot see; 33 decisions per
       pulse learn faster (0.46M steps) at 5.2e-3 ([ibis](ideas/ibis.md)).
-    - **A realistic device** (jackal, in progress): no RWA, direct coupling, a SQUID-tuned coupler, 1 ns
-      AWG and a flux-line filter, physical drift; does the calibration policy transfer from the simplified
-      model? ([jackal](ideas/jackal.md))
+    - **A realistic device** (jackal, v2.20, in progress): on a tunable-coupler model without RWA, with
+      direct coupling, a SQUID-tuned coupler, 1 ns AWG, a flux-line filter and physical drift, a calibration
+      policy trained on the simplified model loses 35× (1.1e-3 → 3.7e-2); trained on the realistic model it
+      gives 7.2e-3 on drifted devices (75 % below 1e-2), about 5× from what its knobs can reach
+      ([jackal](ideas/jackal.md)).
     - **The calibration policy** (v2.18.0): a policy that sees only a frequency calibration, measured once,
       and steers the knobs of a carrier reaches 1 − F = 3.9e-3 on all 24 large-coupler-drift devices with
       about 1e4 shots per device, open loop, in 0.72M training steps ([the new MDP](system/carrier-mdp.md),

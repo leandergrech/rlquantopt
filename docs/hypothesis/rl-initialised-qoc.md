@@ -71,4 +71,7 @@ somewhere; the combination, and the cost analysis under realistic drift, does no
 - **Longer gates.** Our policies choose 36-45 ns gates, against 17 ns for GRAPE. On hardware, gate time
   costs coherence; the policy should be trained with a gate-time penalty or a fixed duration.
 - **The simulator gap.** A policy trained on an idealised model may give a poor warm start on hardware.
-  Training on hardware-shaped models and randomising the model itself are the mitigations.
+  Between two simulators it is already large: a calibration policy that reached 1.1e-3 on a simplified
+  tunable-coupler model gave 3.7e-2 on the realistic one, and 7.2e-3 when trained on the realistic one
+  ([jackal](../ideas/jackal.md)). Training on hardware-shaped models and randomising the model itself are the
+  mitigations.

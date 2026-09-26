@@ -3,6 +3,23 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.20.0: jackal, first results on a realistic device (2026-09-26)
+
+Idea i10: the ibis calibration policy on a realistic tunable-coupler device.
+- **The sim-to-sim gap is 35×.** A policy trained on the simplified model reaches 1.1e-3 there, but 3.7e-2 on
+  the full one (0 % of 24 drifted devices below 1e-2).
+- **Trained on the full model:** 7.2e-3 on drifted devices (75 % below 1e-2), or 7.9e-3 (69 %) with unseen
+  coupling and anharmonicity drift. That is about 5× from gradient-optimised 20-step knob schedules
+  (~1.3e-3 with the same calibration).
+- **Training with the unseen drift** did not help at 3M steps (8.1e-3). Calibration errors 3× larger
+  change the results by < 10 %.
+- **Evaluation bug fixed:** device evaluation through `reset_to` used the paper model's qubit frequencies,
+  so training-time evaluations and best-checkpoint choices were on the wrong device. `reset_to` now uses the
+  device's nominal point (with a test), and `scripts/jackal_eval.py` re-scores checkpoints.
+- **Knob scale** for the device: ±0.15 Φ0, steps 0.03 Φ0 / 0.3 rad / 0.02 Φ0.
+- **Docs:** jackal's results on its page, the farm table and lessons, the home page, the roadmap, and the
+  simulator-gap risk on RL-initialised control.
+
 ## 2.19.0: ibis concluded, the calibration MDP, jackal started, the docs consolidated (2026-09-26)
 
 **i09 ibis concluded.** The open-loop carrier policy fed only a frequency calibration (~1e4 shots per

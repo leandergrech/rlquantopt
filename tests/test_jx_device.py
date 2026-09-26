@@ -131,3 +131,11 @@ def test_simplified_model_is_rwa_and_linear():
     f_full = dv.coupler_frequency(PHI0 + 0.01, P)
     slope, phi0 = dv.linearisation(P)
     assert abs(float(f_full) - (5.45 + slope * 0.01)) < 0.05      # curvature over 10 mPhi0 stays below 50 MHz
+
+
+def test_reset_to_uses_the_device_nominal_point():
+    """Agents' evaluate() passes the paper model's qubit frequencies; the device must ignore them."""
+    from rlquantopt.jx import env as jenv
+    cfg = _dev_cfg()
+    _, s = jenv.reset_to(jnp.asarray(cfg.model.omega_s), cfg)
+    np.testing.assert_allclose(np.asarray(s.omega_s), [P.omega_1, P.omega_2])

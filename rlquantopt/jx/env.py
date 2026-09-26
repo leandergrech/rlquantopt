@@ -170,8 +170,10 @@ def reset_params(model: physics.ModelParams, cfg: EnvConfig, key=None):
 def reset_to(omega_s, cfg: EnvConfig):
     """Reset with given qubit frequencies, other parameters nominal (sweeps, fixed-per-env randomisation)."""
     if cfg.physics_model == "device":
+        # the device's own nominal point: omega_s here are the paper model's qubits (agents' evaluate() passes
+        # cfg.model.omega_s), which mean nothing for the device. Device runs redraw the drift every episode.
         from rlquantopt.jx import env_device
-        return env_device.reset(env_device.nominal_model(cfg, omega_s), cfg)
+        return env_device.reset(env_device.nominal_model(cfg), cfg)
     return reset_params(cfg.model._replace(omega_s=omega_s), cfg)
 
 

@@ -46,7 +46,7 @@ full pulse on 24 held-out drifted devices.
 | 🦎 | <span class="stamp stamp--concluded">🏁</span> | [i07 gecko](gecko.md) | measurable observations and a hardware-reportable fidelity (parallel line of work) | gate env | the large-coupler-drift result holds: the policy's pulse + GRAPE reaches 1 − F ≤ 1e-3 on 92 % of devices, random starts 0 % at equal budget ([results](../results/measurable.md)) |
 | 🦄 | <span class="stamp stamp--active">🟢</span> | [i08 hippogriff](hippogriff.md) | identify the device's drift with a belief whose uncertainty shrinks, then act on it | toy devices | 614-627 of the oracle's 655 in one episode (robust policy: 327); a linearised belief was overconfident, an exact grid belief fixes it. Next: the gate step on jackal's device |
 | 🦩 | <span class="stamp stamp--concluded">🏁</span> | [i09 ibis](ibis.md) | gecko made data-lean: clipped amplitudes, finite shots, small networks, calibration context, refinement from measured data, **carrier actions** (parallel line of work) | gate env | an open-loop carrier policy fed only a frequency calibration (~1e4 shots per device) gives 1 − F = 3.7-4.6e-3 on every drifted device over 4 seeds, learned in 0.7-0.85M steps, robust to calibration errors 10× larger than in training and to unseen coupling and anharmonicity drift ([the new MDP](../system/carrier-mdp.md)); per-sample closed-loop policies fail under shot noise; black-box refinement barely helps |
-| 🐺 | <span class="stamp stamp--active">🟢</span> | [i10 jackal](jackal.md) | the ibis calibration policy on a realistic device: no RWA, direct coupling, SQUID flux curve, AWG and filter, physical drift; train on the simplified model vs the full one | device model | in progress: three runs (simplified model, full model, full model with drift the calibration cannot see) |
+| 🐺 | <span class="stamp stamp--active">🟢</span> | [i10 jackal](jackal.md) | the ibis calibration policy on a realistic device: no RWA, direct coupling, SQUID flux curve, AWG and filter, physical drift; train on the simplified model vs the full one | device model | first results (v2.20): trained on the simplified model, 1.1e-3 there but 3.7e-2 on the realistic device (a 35× sim-to-sim gap); trained on the realistic device, 7.2e-3 on drifted devices (75 % below 1e-2), about 5× from gradient-optimised knob schedules; unseen drift costs little. Next: close the 5× margin |
 
 The emoji stand in where there is no emoji for the animal itself (🐸 axolotl, 🐲 chameleon, 🦋 dragonfly,
 🦔 echidna, 🦄 hippogriff, 🦩 ibis, 🐺 jackal).
@@ -151,7 +151,9 @@ policy's pulse 92 % of devices reach 1 − F ≤ 1e-3 within 200-500 steps, from
 time and budget none do; the training pays back after tens to hundreds of devices
 ([gecko](../results/measurable.md), [RL-initialised control](../hypothesis/rl-initialised-qoc.md)).
 *For a real system:* treat the policy as the first guess of an optimiser, and count the total cost,
-training included, against re-optimising every time.
+training included, against re-optimising every time; and train on the most faithful model available: a
+policy that reached 1.1e-3 on a simplified device model was 35× worse on the realistic one, where training
+on the realistic model gave 7.2e-3 ([jackal](jackal.md)).
 
 **8. Without a model, the last mile is expensive.** Refining a policy pulse from noisy fidelity estimates
 alone (SPSA, CMA-ES) moved it from 5.8e-3 to about 4e-3 after 1500 noise-free estimates, where exact
@@ -173,7 +175,10 @@ machinery for any of them.
 **10. Test one ingredient at a time, on cheap proxies, with a control on the same code path.** The toy
 environments caught two benchmark bugs (the truncation bootstrap, and a reward that made ending early
 optimal) before they could mislead a long run ([fox](fox.md)); seeds of plain PPO differ by 9× in best
-\(J_T\), so single-seed differences between variants mean little ([training](../results/training.md)).
+\(J_T\), so single-seed differences between variants mean little ([training](../results/training.md)). And
+check that the evaluation runs on the system you think it does: jackal's periodic evaluation silently used
+the old model's qubit frequencies, which made working policies look broken and picked the wrong checkpoints
+until an independent check of what the action space could reach exposed it ([jackal](jackal.md)).
 
 **11. Representation before capacity.** With the right observation and action space, a 32 × 32 GELU actor
 of 1.4k parameters does as well as 64 × 64 (4.3e-3 against 3.9e-3 on the devices); with the wrong ones, no
@@ -243,8 +248,9 @@ negative late). What the farm suggests for the next version:
 4. **Measure the right thing**: shots spent per device-hour kept above the target fidelity, under drift
    that evolves in time ([platforms](../next/platforms.md#what-to-do-until-there-is-hardware)).
 
-The immediate step is hippogriff's identification on jackal's realistic device model, with ibis's open-loop
-carrier policy as the amortised part.
+The immediate steps: bring jackal's policy on the realistic device from 7.2e-3 to the ~1e-3 its knobs can
+reach, then hippogriff's identification of the drift the calibration cannot see (worth about 2× at that
+level on this device), with the calibration policy as the amortised part.
 
 ## Reproducing
 

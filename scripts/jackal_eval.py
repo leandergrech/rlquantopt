@@ -11,6 +11,7 @@ error at deployment x1 and x3 the training error. Reported: 1 - F of the full pu
 Writes docs/figures/jackal_eval{tag}.json.
 """
 import argparse
+import glob
 import dataclasses
 import importlib.util
 import json
@@ -57,6 +58,19 @@ def _policy(run, env_cfg):
     raise FileNotFoundError(run)
 
 
+def rescore(run, env_cfg, model, every=4):
+    """Best checkpoint by the full-pulse 1 - F on the nominal device (re-evaluated: before the reset_to fix the
+    training-time evaluations of device runs ran on the wrong qubit frequencies)."""
+    import pickle
+    ie = _load("ibis_eval")
+    files = sorted(glob.glob(os.path.join(run, "params_*.pkl")), key=lambda f: int(f.split("_")[-1][:-4]))[::every]
+    mp = env_device.nominal_model(env_cfg)
+    ev = jax.jit(lambda p: ie.rollout(model, p, env_cfg, mp, jax.random.PRNGKey(0))[0][-1])
+    scores = [(float(ev(pickle.load(open(f, "rb")))), int(f.split("_")[-1][:-4]), f) for f in files]
+    best = min(scores)
+    return pickle.load(open(best[2], "rb")), best[1], scores
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--runs", nargs="+", required=True, help="LABEL=RUN_DIR")
@@ -68,6 +82,8 @@ def main():
     out = {}
     for label, run in (r.split("=", 1) for r in args.runs):
         cfg, model, params, step, prog = load_run(run)
+        params, step, scores = rescore(run, cfg, model)
+        print(f"{label}: best checkpoint {step} (nominal full-pulse 1-F {min(scores)[0]:.2e})", flush=True)
         full = dataclasses.replace(cfg, device_simplified=False, awg_dt=1.0, filter_tau=0.5)
         ev = jax.jit(lambda mp, key, c: ie.rollout(model, params, c, mp, key), static_argnums=2)
         rec = dict(run=run, trained_on="simplified" if cfg.device_simplified else "full", best_step=int(step), by_case={})
@@ -87,9 +103,10 @@ def main():
                                            below_1e3=float(np.mean(np.asarray(final) <= 1e-3)))
                 print(f"{label:22s} {key:42s} median {np.median(final):.2e}  <=1e-2 {np.mean(np.asarray(final) <= 1e-2):.0%}"
                       f"  <=1e-3 {np.mean(np.asarray(final) <= 1e-3):.0%}", flush=True)
-        p = prog.dropna(subset=["eval_JT_min"])
-        hit = p[p["eval_JT_min"] <= 1e-2]
-        rec["steps_to_1e2"] = int(hit["step"].iloc[0]) if len(hit) else None
+        sc = sorted((st, jt) for jt, st, _ in scores)
+        rec["nominal_curve"] = dict(step=[st for st, _ in sc], jt=[jt for _, jt in sc])
+        hit = [st for st, jt in sc if jt <= 1e-2]
+        rec["steps_to_1e2"] = hit[0] if hit else None
         out[label] = rec
     json.dump(out, open(os.path.join(FIG, f"jackal_eval{args.tag}.json"), "w"), indent=2)
 
