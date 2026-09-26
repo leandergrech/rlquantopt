@@ -72,6 +72,44 @@ def rollout(model, params, cfg, mp, key):
     return JT, oob
 
 
+def devices_for(kind, n, c):
+    """The 24 held-out devices; "full" also drifts both couplings (±5.7 MHz) and all anharmonicities (±5 MHz),
+    which the calibration does not measure."""
+    rng = np.random.default_rng(11)
+    devs = [c.model_at(*rng.uniform(-1, 1, 2) * c.W_Q, rng.uniform(-1, 1) * c.W_C) for _ in range(n)]
+    if kind == "full":
+        r2 = np.random.default_rng(12)
+        devs = [m._replace(g=tuple(np.asarray(m.g) + r2.uniform(-1, 1, 2) * 5.7e-3),
+                           alpha_s=tuple(np.asarray(m.alpha_s) + r2.uniform(-1, 1, 2) * 5e-3),
+                           alpha_c=float(m.alpha_c + r2.uniform(-1, 1) * 5e-3)) for m in devs]
+    return devs
+
+
+def stress(args):
+    """Calibration stress for context policies: measurement error x1/x3/x10, a stale (biased) calibration,
+    and devices with drift the calibration cannot see."""
+    c = _load("coupler_drift_experiment")
+    out = {}
+    for label, run in (r.split("=", 1) for r in args.runs):
+        cfg, model, params, step, prog = load_run(run)
+        ev = jax.jit(lambda mp, key, cfg: rollout(model, params, cfg, mp, key), static_argnums=2)
+        rec = {}
+        for kind in ("coupler", "full"):
+            devs = devices_for(kind, args.n_devices, c)
+            for scale in (1, 3, 10):
+                for bias in ((0.0, 0.0, 0.0), (0.3, -0.3, 5.0)):
+                    ecfg = dataclasses.replace(cfg, context_noise_mhz=tuple(scale * np.asarray(cfg.context_noise_mhz)),
+                                               context_bias_mhz=bias)
+                    final = [float(jax.device_get(ev(mp, jax.random.PRNGKey(1000 * i + sd), ecfg)[0])[-1])
+                             for i, mp in enumerate(devs) for sd in range(args.noise_seeds)]
+                    key = f"{kind}|noise x{scale}|bias {'stale' if any(bias) else 'none'}"
+                    rec[key] = dict(median=float(np.median(final)), q25=float(np.quantile(final, 0.25)),
+                                    q75=float(np.quantile(final, 0.75)), below_1e2=float(np.mean(np.asarray(final) <= 1e-2)))
+                    print(f"{label:22s} {key:34s} median {np.median(final):.2e}  below 1e-2 {np.mean(np.asarray(final) <= 1e-2):.0%}", flush=True)
+        out[label] = rec
+    json.dump(out, open(os.path.join(FIG, f"ibis_stress{args.tag}.json"), "w"), indent=2)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--runs", nargs="+", required=True, help="LABEL=RUN_DIR")
@@ -79,7 +117,10 @@ def main():
     ap.add_argument("--noise-seeds", type=int, default=3)
     ap.add_argument("--n-devices", type=int, default=24)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--stress", action="store_true", help="calibration stress for context policies instead")
     args = ap.parse_args()
+    if args.stress:
+        return stress(args)
 
     c = _load("coupler_drift_experiment")
     rng = np.random.default_rng(11)             # the devices of coupler_drift_experiment.py

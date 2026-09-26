@@ -1,5 +1,7 @@
 # 🦋 i04 dragonfly: chameleon, faster, more careful, remembering its best
 
+<span class="stamp stamp--archived">📦 archived</span> *2026-09-25, v2.17.0 · smoke test only · its ingredients were tested one at a time in [echidna](echidna.md), its belief and caution returned in [hippogriff](hippogriff.md)*
+
 **Question.** Chameleon, but fast enough to run, exploring by a guided random walk with momentum,
 cautious where it is unsure ("worst case until proven otherwise"), and remembering the best it has seen.
 

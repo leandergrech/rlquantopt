@@ -1,5 +1,7 @@
 # 🦎 i07 gecko: only what an experiment can measure
 
+<span class="stamp stamp--concluded">🏁 concluded</span> *2026-09-25, v2.16.1 · positive: the large-coupler-drift result holds with measurable observations · continued by [ibis](ibis.md)*
+
 A parallel line of work, documented in full in
 [Measurable observations and gate fidelity](../results/measurable.md).
 

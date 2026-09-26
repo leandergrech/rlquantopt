@@ -50,9 +50,11 @@ Smoothed over 20 updates. TRPO in blue, the four PPO seeds in orange.
   PPO's evaluation J_T wanders late in training (seed 123 was at 3e-3 at 20M after 9.8e-4 at 4.7M),
   so the best checkpoint, not the last, should be kept.
 
-!!! tip "Next tuning step"
-    Fewer PPO epochs per update (10 now), a target-KL early stop, or larger minibatches should bring
-    the KL down. Given the seed spread, compare settings on at least four seeds.
+!!! tip "Tried since: a KL brake stalls learning"
+    A target-KL early stop brought the clip fraction down but let through only 2-7 % of the planned
+    minibatch steps late in training, and plain PPO with the brake stalled at J_T ≈ 0.2
+    ([badger](../ideas/badger.md)). This task needs PPO's large steps; keep the best checkpoint rather
+    than braking the updates. Given the seed spread, compare settings on at least four seeds.
 
 ## What this means
 

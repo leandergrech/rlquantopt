@@ -2,7 +2,9 @@
 
 `env.py` is a functional re-implementation of v1 `ZCQPEE` with the semantics of the paper run
 (`05-12-24_201634`). There is no environment object: state is an explicit pytree and every
-function is pure.
+function is pure. Its defaults are the paper's MDP, checked step by step against v1; everything added
+since (named-gate objective, measured observations, finite shots, calibration context, clipping, carrier
+actions, the realistic device) is a switch in `EnvConfig` that is off by default.
 
 ```python
 cfg = EnvConfig()                                   # static: sets shapes and episode length
@@ -20,6 +22,11 @@ obs, state, reward, terminated, truncated, info = step(state, action, cfg)
 | Amplitude bound | \(|u| \le 20\) rad/ns (10/π ≈ 3.18 GHz); leaving it clips \(u\) and truncates the episode |
 | Observation | 28 numbers: 12 complex amplitudes in polar form, the 3 segment amplitudes / 20, time, all × 0.9 |
 | Reward | \(-\log_{10} J_T - 0.0044 - 10^{-3}\sum|\Delta u|\) per step; \(-20(1 - t/T)\) on truncation |
+
+!!! tip "The newer MDP"
+    Ideas i07-i10 replace this MDP with a calibration policy: it observes a measured device calibration
+    instead of the state and steers the knobs of a carrier instead of individual samples. See
+    [The calibration policy (new MDP)](../system/carrier-mdp.md).
 
 ## One step
 
@@ -97,6 +104,43 @@ cost, so training, evaluation and GRAPE code work unchanged (`GrapeConfig(object
   (`n_time_steps`), or one step sweeps the whole amplitude range.
 
 See [ibis](../ideas/ibis.md) for what these do in practice.
+
+### Carrier actions (`action_mode="carrier"`, idea i09)
+
+The `step` above has a second branch. With `action_mode="carrier"` (`--action-mode carrier`) an action is
+three numbers in [−1, 1], scaled by `carrier_steps` = (1 rad/ns, 0.2 rad, 1 rad/ns) and added to three
+slow knobs held in `state.knobs`: the amplitude *A* (kept in [0, 20] rad/ns), the phase φ and the offset
+*b* (kept within ±20 rad/ns). The next *K* samples are then
+
+\[
+u(t_k) = b + A\cos(2\pi f_d t_k + \phi), \qquad t_k \text{ the sample midpoints, in absolute time,}
+\]
+
+so the carrier runs on continuously across steps. \(f_d\) is the nominal qubit-qubit detuning
+(`cfg.carrier_ghz`, 0.86 GHz); in the context modes it is corrected by the **measured** frequency offsets,
+so the policy uses what spectroscopy says, not the true detuning. Everything after the amplitudes
+(clipping, physics, reward) is shared with the delta branch. `act_dim` is 3 for any *K*, and with
+`obs_mode="context"` the observation is 8 numbers: the calibration (3), the knobs (*A*, *b*, cos φ, sin φ)
+and the time. `context_bias_mhz` adds a fixed error to the calibration, a stale calibration for stress tests.
+Why this is a new MDP, with a diagram of how a pulse is built: [The calibration policy](../system/carrier-mdp.md).
+
+### The realistic device (`physics_model="device"`, idea i10)
+
+With `physics_model="device"` (`--physics device`), `reset` and `step` hand over to `env_device.py`, with the
+same interface and reward. What changes:
+
+| | Paper model (`"rwa"`) | Device (`"device"`) |
+| --- | --- | --- |
+| Physics | `physics.py`: RWA, excitation-number sectors | `device.py`: no RWA, parity blocks (7 + 10 states), direct coupling g₁₂, dressed computational states ([jackal](../ideas/jackal.md)) |
+| Control | Coupler frequency shift *u*, rad/ns | Coupler flux offset from idle, in flux quanta (bound ±0.15 Φ₀ as `train.py` sets it), through an asymmetric-SQUID curve |
+| Samples | 50 ps | 0.1 ns, held for one AWG sample (`awg_dt`, 1 ns), then a first-order flux-line filter (`filter_tau`, 0.5 ns) whose state carries across steps (`state.filt`) |
+| Carrier | At the qubit detuning, 0.86 GHz | At the measured dressed detuning, about 0.16 GHz |
+| Drift | Frequencies, couplings (fractions or MHz) | Physical: qubit MHz, coupler flux offset in mΦ₀, couplings and anharmonicities (not in the calibration) |
+| At the bound | `oob_mode` | Always clipped with a penalty |
+
+`device_simplified=True` swaps in the model one would write down first (RWA, no g₁₂, a linear flux curve,
+ideal AWG and flux line), with the same calibration and actions, so a policy trained on it can be deployed on
+the full model: the sim-to-sim transfer test.
 
 ## Auto-reset for training
 

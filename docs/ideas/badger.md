@@ -1,5 +1,7 @@
 # 🦡 i02 badger: a better-informed judge, and a brake
 
+<span class="stamp stamp--concluded">🏁 concluded</span> *2026-09-25, v2.17.0 · negative: the KL brake starved learning · raw runs archived in `runs/_attic/i02_badger/`*
+
 **Question.** Does axolotl's judge work once it can tell good samples from bad (it sees the return), is
 consulted only when fresh, and does PPO become calmer, lower KL and clip fraction, with a KL brake?
 

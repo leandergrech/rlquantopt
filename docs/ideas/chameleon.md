@@ -1,5 +1,7 @@
 # 🐲 i03 chameleon: a manager with a map, a worker that follows
 
+<span class="stamp stamp--archived">📦 archived</span> *2026-09-25, v2.17.0 · smoke test only, too slow to run at scale · superseded by [dragonfly](dragonfly.md)*
+
 **Question.** Can a policy learn faster if it only follows latent tasks set by a jumpy world model, which
 chooses between exploiting what it predicts and exploring in directions that never undo it?
 

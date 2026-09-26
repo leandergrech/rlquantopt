@@ -81,3 +81,21 @@ Keys in brackets are the BibTeX keys.
 <span id="evered2023"></span>**[evered2023]** Evered, S. J., Bluvstein, D., Kalinowski, M., Ebadi, S., Manovitz, T., Zhou, H., Li, S. H., Geim, A. A., Wang, T. T., Maskara, N., Levine, H., Semeghini, G., Greiner, M., Vuletić, V., & Lukin, M. D. (2023). High-fidelity parallel entangling gates on a neutral-atom quantum computer. Nature, 622(7982), 268–272. https://doi.org/10.1038/s41586-023-06481-y
 
 <span id="leung2018"></span>**[leung2018]** Leung, P. H., Landsman, K. A., Figgatt, C., Linke, N. M., Monroe, C., & Brown, K. R. (2018). Robust 2-Qubit Gates in a Linear Ion Crystal Using a Frequency-Modulated Driving Force. Physical Review Letters, 120(2). https://doi.org/10.1103/physrevlett.120.020501
+
+<span id="schulman2015"></span>**[schulman2015]** Schulman, J., Levine, S., Moritz, P., Jordan, M. I., &amp; Abbeel, P. (2015). <i>Trust Region Policy Optimization</i> (Version 5). arXiv. https://doi.org/10.48550/ARXIV.1502.05477
+
+<span id="schulman2017"></span>**[schulman2017]** Schulman, J., Wolski, F., Dhariwal, P., Radford, A., &amp; Klimov, O. (2017). <i>Proximal Policy Optimization Algorithms</i> (Version 2). arXiv. https://doi.org/10.48550/ARXIV.1707.06347
+
+<span id="schulman2015gae"></span>**[schulman2015gae]** Schulman, J., Moritz, P., Levine, S., Jordan, M., &amp; Abbeel, P. (2015). <i>High-Dimensional Continuous Control Using Generalized Advantage Estimation</i> (Version 6). arXiv. https://doi.org/10.48550/ARXIV.1506.02438
+
+<span id="oh2018"></span>**[oh2018]** Oh, J., Guo, Y., Singh, S., &amp; Lee, H. (2018). <i>Self-Imitation Learning</i> (Version 1). arXiv. https://doi.org/10.48550/ARXIV.1806.05635
+
+<span id="mackay1992"></span>**[mackay1992]** MacKay, D. J. C. (1992). Bayesian Interpolation. Neural Computation, 4(3), 415–447. https://doi.org/10.1162/neco.1992.4.3.415
+
+<span id="spall1992"></span>**[spall1992]** Spall, J. C. (1992). Multivariate stochastic approximation using a simultaneous perturbation gradient approximation. IEEE Transactions on Automatic Control, 37(3), 332–341. https://doi.org/10.1109/9.119632
+
+<span id="hansen2016"></span>**[hansen2016]** Hansen, N. (2016). <i>The CMA Evolution Strategy: A Tutorial</i> (Version 2). arXiv. https://doi.org/10.48550/ARXIV.1604.00772
+
+<span id="grimm2020"></span>**[grimm2020]** Grimm, C., Barreto, A., Singh, S., &amp; Silver, D. (2020). <i>The Value Equivalence Principle for Model-Based Reinforcement Learning</i> (Version 1). arXiv. https://doi.org/10.48550/ARXIV.2011.03506
+
+<span id="sutton1990"></span>**[sutton1990]** Sutton, R. S. (1990). Integrated Architectures for Learning, Planning, and Reacting Based on Approximating Dynamic Programming. Machine Learning Proceedings 1990, 216–224. https://doi.org/10.1016/b978-1-55860-141-3.50030-4

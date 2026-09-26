@@ -36,6 +36,16 @@ fast enough to track a drifting device.
 
     Robustness scored against measured drift of real transmons, from hours to new devices.
 
+-   :material-tune-variant:{ .lg } **A gate from one calibration**
+
+    A policy that reads only a routine frequency calibration (~1e4 shots) plays a √iSWAP pulse open
+    loop on every drifted device. [The new MDP](system/carrier-mdp.md)
+
+-   :material-sprout:{ .lg } **An idea farm for sample-efficient RL**
+
+    Ten ideas, each with a codename, a status stamp and the lessons it taught.
+    [The farm](ideas/index.md)
+
 -   :material-handshake-outline:{ .lg } **Looking for hardware time**
 
     We want to test RL-controlled pulses on a real device. [Get in touch](contact.md).
@@ -53,12 +63,23 @@ gate in about 10 ns, matching the speed limit found by optimal control
 [[grech2026]](bibliography.md#grech2026). Its pulses can be refined further by gradient methods,
 and a policy can re-generate pulses for a slightly different device without re-optimisation.
 
+Since then the work has turned to what a real device demands: only measurable observations, a gate
+fidelity a lab reports, finite measurement shots, and as few experiments as possible. The current policies
+read a routine calibration of the device and play a whole pulse without measuring anything during it
+([The calibration policy](system/carrier-mdp.md)), and a series of research ideas asks, more generally,
+what makes reinforcement learning sample-efficient on real, drifting systems ([the idea farm](ideas/index.md)).
+
 **Our outstanding goal is hardware.** We are looking for collaborators who can provide time on a
 superconducting quantum processor, to test RL-generated pulses on a real device and to study how
 RL can make calibration faster and the use of scarce hardware time more efficient.
 [Get in touch](contact.md).
 
 ## How it works (v1, the published design)
+
+!!! info "Since v2.18: a calibration policy"
+    The current policies no longer watch the quantum state. They read a routine frequency calibration
+    of the device and steer a carrier pulse open loop: see
+    [The calibration policy (new MDP)](system/carrier-mdp.md).
 
 <figure markdown>
   ![System](figures/paper_fig1_system.png){ width="560" }
@@ -120,16 +141,19 @@ exactly what hardware collaboration is for.
 
 ## Current simplifications
 
-```mermaid
-flowchart LR
-    A[Paper model] --> B[RWA couplings<br/>excitation number conserved]
-    A --> C[Linear control u·b†b<br/>no flux non-linearity]
-    A --> D[Closed system<br/>T1/T2 only at evaluation]
-    A --> E[Unbounded coupler excursion<br/>no flux-line filter]
-    A --> F[Perfect-entangler target<br/>not a named gate]
-```
+The paper's model is idealised. Where each simplification stands:
 
-Each of these is discussed, with what it would take to remove it, in
+| Simplification in the paper's model | Status |
+| --- | --- |
+| Perfect-entangler target, not a named gate | **Removed** (v2.16): √iSWAP average gate fidelity with free virtual-Z corrections, leakage included ([Gate metrics](system/metrics.md#named-gate-fidelity-with-free-z-corrections)) |
+| State amplitudes as observations (not measurable) | **Removed** (v2.16-v2.18): readout populations and Pauli expectations, finite shots, or only a frequency calibration ([the new MDP](system/carrier-mdp.md)) |
+| RWA couplings, excitation number conserved | **Being removed** in the realistic device model: counter-rotating terms kept ([jackal](ideas/jackal.md), in progress) |
+| Linear control u·b†b, no flux non-linearity | **Being removed**: the coupler is tuned through an asymmetric-SQUID flux curve, couplings scale with it (jackal) |
+| Unbounded coupler excursion, no flux-line filter | **Being removed**: bounded flux, 1 ns AWG samples, a first-order flux-line filter (jackal) |
+| Closed system, T1/T2 only at evaluation | Open |
+| Two qubits, no spectators | Open |
+
+Each is discussed, with what it would take to remove it, in
 [Named gates and a richer model](next/named-gates.md).
 
 ## History and credits
@@ -142,24 +166,31 @@ Each of these is discussed, with what it would take to remove it, in
   differentiable end to end, reproduces the paper, and adds gradient-based baselines and hardware
   drift models. Start with [Working together](working-together.md) or the
   [Model and simulator](system/model.md).
-- **Next:** named gates, a realistic tunable-coupler model, and **hardware**.
-  [Collaborate with us](contact.md).
+- **Since v2.16**: a named gate and measurable observations (gecko), data-lean calibration policies
+  (ibis), a realistic tunable-coupler device (jackal), and the [idea farm](ideas/index.md) of research agents.
+- **Next:** identifying the drift a calibration cannot see (hippogriff on jackal's device), tracking a
+  drifting device with few samples, and **hardware**. [Collaborate with us](contact.md).
 
 ## What changed recently
 
 !!! abstract "Latest"
-    - The case for **RL-initialised optimal control**: a policy trained once as the warm start for
-      per-device gradient refinement, and where the literature leaves a gap
-      ([RL-initialised optimal control](hypothesis/rl-initialised-qoc.md)).
-    - Where next: pulse-level hardware access today, Rydberg atoms vs transmons vs ions, and what to do
-      before hardware ([Beyond two transmons](next/platforms.md)).
-    - **Measurable observations and a named gate**: the large-coupler-drift experiment repeated with
-      a √iSWAP gate-fidelity reward and only lab-measurable observations; the conclusions hold and the
-      policy adapts better on its own ([results](results/measurable.md)).
-    - **Large coupler drift (±140 MHz)**: the first regime where one robust pulse fails (0 % of devices);
-      100 GRAPE steps from the RL policy's pulse reach the target on 83 %, random starts need ~1000
-      ([Large coupler drift](results/robustness.md#large-coupler-drift)).
-    - All compute comparisons in logical-core hours
-      ([how it is counted](results/robustness.md#how-compute-is-counted)).
+    - **Docs consolidated** (v2.19): every idea carries a status stamp (🟢 active, 🏁 concluded,
+      📦 archived); the idea farm states its lessons for sample-efficient RL on real systems and the next
+      step, tracking with improvement equivalence ([the farm](ideas/index.md)); the code pages walk through
+      PPO and every research agent ([Agents](code/agents.md), [Research agents](code/idea-agents.md)).
+    - **Ibis concluded** (v2.19): the open-loop calibration policy holds over four seeds (1 − F = 3.7-4.6e-3
+      on all 24 drifted devices), with a 1.4k-parameter network, with calibration errors 10× larger than in
+      training (92-99 % of devices below 1e-2) and with drift the calibration cannot see; 33 decisions per
+      pulse learn faster (0.46M steps) at 5.2e-3 ([ibis](ideas/ibis.md)).
+    - **A realistic device** (jackal, in progress): no RWA, direct coupling, a SQUID-tuned coupler, 1 ns
+      AWG and a flux-line filter, physical drift; does the calibration policy transfer from the simplified
+      model? ([jackal](ideas/jackal.md))
+    - **The calibration policy** (v2.18.0): a policy that sees only a frequency calibration, measured once,
+      and steers the knobs of a carrier reaches 1 − F = 3.9e-3 on all 24 large-coupler-drift devices with
+      about 1e4 shots per device, open loop, in 0.72M training steps ([the new MDP](system/carrier-mdp.md),
+      [ibis](ideas/ibis.md)).
+    - **Identifying the drift** (v2.18.1): a drift-conditioned policy with an exact Bayesian belief recovers
+      575-627 of an oracle's 655 in the first episode on toy devices; a linearised belief was overconfident
+      ([hippogriff](ideas/hippogriff.md)).
 
 The full history is in the [changelog](changelog.md).

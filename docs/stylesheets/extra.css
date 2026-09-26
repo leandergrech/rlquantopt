@@ -84,3 +84,19 @@
 .md-typeset .grid.cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
 article:has(.hero) > .md-content__button { display: none; }
 
+
+/* Idea status stamps (Working ideas): active, concluded, archived */
+.md-typeset .stamp {
+  display: inline-block; margin: 0 0.4em 0.2em 0; padding: 0.05em 0.55em;
+  border: 2px solid currentColor; border-radius: 4px;
+  font-family: "JetBrains Mono", monospace; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.6;
+  transform: rotate(-2deg); opacity: 0.9; white-space: nowrap;
+}
+.md-typeset td .stamp { font-size: 0.6rem; margin: 0; transform: none; }
+.md-typeset .stamp--active { color: #1a7f37; }
+.md-typeset .stamp--concluded { color: #2b4c7e; }
+.md-typeset .stamp--archived { color: #6e7781; border-style: dashed; }
+[data-md-color-scheme="slate"] .md-typeset .stamp--active { color: #4ac26b; }
+[data-md-color-scheme="slate"] .md-typeset .stamp--concluded { color: #8fb3e8; }
+[data-md-color-scheme="slate"] .md-typeset .stamp--archived { color: #9ea7b3; }

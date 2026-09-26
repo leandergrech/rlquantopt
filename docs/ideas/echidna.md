@@ -1,5 +1,7 @@
 # 🦔 i05 echidna: back to PPO, one ingredient at a time
 
+<span class="stamp stamp--concluded">🏁 concluded</span> *2026-09-25, v2.17.0 · negative on the gate environment · its toy test bed (`toy_envs.py`) is still in use*
+
 **Question.** Which of dragonfly's ingredients helps on its own? Each is tested on small, cheap
 environments first, and only a winner goes onto the gate environment.
 

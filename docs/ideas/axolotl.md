@@ -1,5 +1,7 @@
 # 🐸 i01 axolotl: rate each sample, emit actions one at a time
 
+<span class="stamp stamp--concluded">🏁 concluded</span> *2026-09-25, v2.17.0 · negative: worse than plain PPO · raw runs archived in `runs/_attic/i01_axolotl/`*
+
 **Question.** Not every sample in a PPO batch helps the update. Can a small model learn which samples
 help, and can PPO use that to learn faster? And does an autoregressive policy, one amplitude delta at a
 time, suit a pulse built from deltas?

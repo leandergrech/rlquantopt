@@ -31,7 +31,7 @@ number is reported), it asks instead of picking silently, and adds it to
 A five-minute review of any commit:
 
 1. Read the commit message: does the claim match what you expected?
-2. Run the tests: `pytest tests/` (about 30 s on the CPU; see [Getting started](getting-started.md)).
+2. Run the tests: `pytest tests/` (about 3-4 min on the CPU; the v1 equivalence core alone takes 30 s; see [Getting started](getting-started.md#run-the-tests)).
 3. For a new experiment, open its figure under `docs/figures/` and the numbers in the JSON/NPZ next
    to it. Every figure has a script in `scripts/` that regenerates it.
 4. If the physics changed, check the equivalence tests still compare against v1 and did not get
@@ -60,6 +60,8 @@ decision boxes, so you have one place to check.
 ## Keeping the docs readable
 
 - Pages are organised by topic, not by date. A new result updates the page that answers its
-  question ([Results](results/replication.md)); it does not get a page of its own.
+  question ([Results](results/replication.md)); it does not get a page of its own. The exception is the
+  [idea farm](ideas/index.md): each research idea gets one page, named after its animal, with a status
+  stamp (🟢 active, 🏁 concluded, 📦 archived) on the page and in the navigation.
 - The home page has a short **What changed** box, so you can see what is new without rereading.
 - Code on the site is included from the source, so it is always current.

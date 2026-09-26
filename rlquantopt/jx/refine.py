@@ -72,6 +72,7 @@ def make_device(model: physics.ModelParams, u0, n_basis, shots, dt=0.05, u_max=2
     return measure, exact, pulse
 
 
+# --8<-- [start:spsa]
 def spsa(measure, exact, n_basis, shots, max_shots, seed=0, c=0.05, first_step=0.05, A=20, calib=10):
     rng = np.random.default_rng(seed)
     key = jax.random.PRNGKey(seed)
@@ -96,6 +97,7 @@ def spsa(measure, exact, n_basis, shots, max_shots, seed=0, c=0.05, first_step=0
         tr_j.append(float(exact(jnp.asarray(x))))
         k += 1
     return x, Trace(np.asarray(tr_s), np.asarray(tr_j))
+# --8<-- [end:spsa]
 
 
 def cmaes(measure, exact, n_basis, shots, max_shots, seed=0, sigma0=0.1):

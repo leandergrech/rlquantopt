@@ -89,6 +89,7 @@ class ImprovementModel:
         u = step / (np.linalg.norm(step) + 1e-12)
         return self.D @ u
 
+    # --8<-- [start:improvement_model]
     def fit(self):
         obs, w = self._data()
         if self.D is None or len(obs) < 2:
@@ -126,6 +127,7 @@ class ImprovementModel:
         g = self.D.T @ mu
         n = np.linalg.norm(g)
         return (g / n if n > 0 else g), float(n)
+    # --8<-- [end:improvement_model]
 
     def residual_z(self, o: Obs):
         mu, A_inv, s2 = self.post

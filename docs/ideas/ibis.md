@@ -1,6 +1,8 @@
 # 🦩 i09 ibis: gecko made data-lean
 
-In progress. Runs in `runs/i09_ibis/`, records in `results/i09_ibis/`.
+<span class="stamp stamp--concluded">🏁 concluded</span> *2026-09-26, v2.19.0 · positive: an open-loop policy fed only a frequency calibration gives 1 − F ≈ 4e-3 on every drifted device, 4 seeds, robust to 10× calibration errors · continued by [jackal](jackal.md)*
+
+Runs in `runs/i09_ibis/`, records in `results/i09_ibis/`. Continued on a realistic device model in [jackal](jackal.md).
 
 **Answer so far.** Yes, with the right action space. A policy that steers a carrier at the qubit
 detuning (amplitude, phase, offset) and sees only a routine frequency calibration, measured once before
@@ -119,19 +121,63 @@ All 64×64 GELU, clip λ = 1; 24 drifted devices, full pulse:
 3. **Few, long steps matter in carrier mode**: *K* = 3 (333 small knob decisions) learns badly or not at
    all; *K* = 15 (66 decisions) learns within 1M steps.
 
-### Running
+### Closing tests: seeds, calibration stress, unseen drift, size, step length
 
-| Run | Question | Status |
+All carrier, calibration only, 64×64 GELU (unless noted), clip λ = 1, 5M steps; the same 24 drifted
+devices, full pulse. Script: `scripts/ibis_eval.py` (and `--stress`).
+
+<div class="panels" markdown>
+
+![Closing tests: quality against measurement shots](../figures/ibis_eval_close_a.png)
+
+![Closing tests: training curves](../figures/ibis_eval_close_b.png)
+
+</div>
+
+| Policy | Actor params | 1 − F, median | Below 1e-2 | Env steps to 1e-2 (nominal) |
+| --- | --- | --- | --- | --- |
+| K = 15, seed 123 | 4.9k | 3.9e-3 | 100 % | 0.72M |
+| K = 15, seed 1 | 4.9k | 4.4e-3 | 100 % | 0.69M |
+| K = 15, seed 2 | 4.9k | 3.7e-3 | 100 % | 0.72M |
+| K = 15, seed 3 | 4.9k | 4.6e-3 | 100 % | 0.85M |
+| K = 15, couplings also drift in training (±5.7 MHz) | 4.9k | 4.5e-3 | 100 % | 0.95M |
+| **K = 15, 32×32** | **1.4k** | 4.3e-3 | 100 % | 0.79M |
+| K = 30 (33 decisions) | 4.9k | 5.2e-3 | 100 % | 0.46M |
+| K = 60 (16 decisions) | 4.9k | 9.5e-3 | 67 % | 0.29M |
+
+**Calibration stress** (median 1 − F over the four K = 15 seeds, and the share of device × noise draws below 1e-2):
+
+| Calibration at deployment | Devices as in training | Couplings (±5.7 MHz) and anharmonicities (±5 MHz) also drift, unseen |
 | --- | --- | --- |
-Nothing is running. Per-sample runs that finished since the first table: trained with *N* = 100,
-*K* = 3 and *K* = 15: robust to noise but plateau at 0.13-0.14; calibration only (λ = 5 and λ = 1): stuck
-at the identity (0.22), which the carrier fixes; calibration + measured (λ = 1): 0.13, and fragile under
-noise.
+| Errors as in training (0.1 / 0.1 / 1 MHz) | 3.7-4.7e-3, 100 % | 3.8-4.8e-3, 99-100 % |
+| 3× larger | 3.7-4.6e-3, 100 % | 3.9-4.8e-3, 97-100 % |
+| 10× larger (1 / 1 / 10 MHz) | 4.2-5.1e-3, 92-99 % | 4.4-5.0e-3, 86-96 % |
+| Stale (fixed bias +0.3 / −0.3 / +5 MHz) + 10× errors | 4.4-5.8e-3, 81-99 % | 4.3-6.0e-3, 78-93 % |
 
-## Next
+1. **The result is reproducible.** Four seeds give 3.7-4.6e-3 on the drifted devices, all below 1e-2,
+   and reach 1e-2 in 0.69-0.85M training steps.
+2. **It is robust to the calibration.** Ten times larger frequency errors than in training raise the
+   median infidelity by 0-15 %; a stale calibration on top costs a little more. Drift the calibration does not see
+   (couplings, anharmonicities) barely matters here, and training with coupling drift makes the policy the
+   most robust of all (94-100 % below 1e-2 in every case).
+3. **Small is enough.** A 32×32 policy with 1.4k actor parameters matches the 64×64 one.
+4. **Fewer decisions are cheaper to learn but cost quality.** 33 decisions (K = 30) reach 1e-2 fastest
+   among the good policies (0.46M steps) at 5.2e-3; 16 decisions (K = 60) reach it in 0.29M steps but end at
+   9.5e-3.
 
-1. Stress the calibration: larger frequency errors at deployment than in training, and drift that
-   the calibration does not capture (couplings, anharmonicities).
-2. More seeds for the carrier runs; *K* = 30 and 60 (even fewer decisions).
-3. Smaller carrier policies (32×32); the calibration-only policy has 4.9k actor parameters.
-4. A reward on the final pulse only, so that training on hardware needs one fidelity estimate per episode.
+## Conclusion
+
+In the paper's model, under large coupler drift, a pulse needs neither the Hamiltonian nor measurements
+during the pulse: an open-loop policy of 1.4-4.9k parameters, fed only a routine frequency calibration and
+steering the knobs of a carrier, gives 1 − F ≈ 4e-3 on every drifted device with about 1e4 shots of
+calibration, robust to calibration errors ten times larger than in training. It learns in under 1M
+simulated steps. The closed-loop, measurement-driven policies of the first half of ibis could not
+approach this with 1e7 shots per pulse. The MDP is described on
+[The calibration policy (new MDP)](../system/carrier-mdp.md); whether it survives a realistic device is
+the question of [jackal](jackal.md).
+
+## Next (in jackal)
+
+1. The realistic device: no RWA, direct coupling, flux-tunable coupler, AWG and flux-line filter,
+   physical drift ([jackal](jackal.md)).
+2. Decoherence, a final-pulse reward for training on hardware, and a Bayesian tune-up after deployment.

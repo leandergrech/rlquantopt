@@ -1,0 +1,137 @@
+{
+  "args": {
+    "algo": "ppo",
+    "seed": 123,
+    "total_steps": 5000000,
+    "n_envs": null,
+    "n_steps": null,
+    "lr": 0.0003,
+    "activation": "gelu",
+    "max_drift": 0.0011,
+    "coupler_drift_mhz": 140.0,
+    "g_drift_mhz": 0.0,
+    "fixed_drift": false,
+    "objective": "sqrt_iswap",
+    "obs_mode": "context",
+    "oob_mode": "clip",
+    "oob_penalty": 1.0,
+    "shots": 0,
+    "n_time_steps": 30,
+    "delta_scale": 0.0,
+    "hidden": [
+      64,
+      64
+    ],
+    "action_mode": "carrier",
+    "eval_every": 32768,
+    "out": "runs",
+    "idea": "ibis",
+    "no_ar": false,
+    "judge_coef": 0.5,
+    "judge_z": 1.0,
+    "judge_probe": 512,
+    "judge_warmup": 20,
+    "judge_return": false,
+    "judge_every": 1,
+    "judge_half_life": Infinity,
+    "target_kl": Infinity,
+    "n_epochs": null,
+    "clip_eps": null,
+    "n_candidates": 8,
+    "task_reward_coef": 1.0,
+    "env_reward_coef": 1.0,
+    "no_gate": false,
+    "fixed_eps": 0.0,
+    "goal_every": 8,
+    "latent_dim": 16,
+    "model_warmup": 5,
+    "sil_coef": null,
+    "search_value_coef": 1.0,
+    "lcb_kappa": 1.0,
+    "cache_size": 64,
+    "tau_max": 64.0,
+    "ou_rho": 0.0,
+    "veto": false,
+    "tag": "car_ctx_k30"
+  },
+  "env": {
+    "pulse_length": 1000,
+    "T": 50.0,
+    "n_time_steps": 30,
+    "a_scale": 20.0,
+    "a_norm_max": 1.0,
+    "tv_penalty_scale": 0.001,
+    "concurrence_weight": 1.0,
+    "unitarity_weight": 3.0,
+    "terminal_penalty": -20.0,
+    "log_lim": 0.01,
+    "rew_scale": 1.0,
+    "obs_scale": 0.9,
+    "jt_floor": 1e-12,
+    "max_drift": 0.0011,
+    "coupler_drift_mhz": 140.0,
+    "g_drift_mhz": 0.0,
+    "objective": "sqrt_iswap",
+    "obs_mode": "context",
+    "oob_mode": "clip",
+    "oob_penalty": 1.0,
+    "delta_scale": 0.0,
+    "shots": 0,
+    "context_noise_mhz": [
+      0.1,
+      0.1,
+      1.0
+    ],
+    "context_scale_mhz": [
+      5.7,
+      5.7,
+      140.0
+    ],
+    "action_mode": "carrier",
+    "carrier_steps": [
+      1.0,
+      0.2,
+      1.0
+    ],
+    "model": [
+      [
+        5.0311,
+        5.8899
+      ],
+      [
+        -0.324,
+        -0.235
+      ],
+      [
+        0.1,
+        0.0714
+      ],
+      -0.23,
+      6.0,
+      7.445
+    ]
+  },
+  "algo": {
+    "n_envs": 64,
+    "n_steps": 128,
+    "n_epochs": 10,
+    "n_minibatches": 32,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_eps": 0.2,
+    "ent_coef": 0.0,
+    "vf_coef": 0.5,
+    "max_grad_norm": 0.5,
+    "lr": 0.0003,
+    "lr_harmonic_k": 2.51188643150958,
+    "total_steps": 5000000,
+    "hidden": [
+      64,
+      64
+    ],
+    "activation": "gelu",
+    "resample_drift": true
+  },
+  "backend": "cpu",
+  "x64": true
+}

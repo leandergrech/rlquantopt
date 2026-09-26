@@ -1,8 +1,14 @@
 # Named gates and a richer model
 
 A design note for the next phase: moving from "any perfect entangler" to a named gate, and from
-the paper's idealised Hamiltonian to a model closer to current hardware. Nothing here is
-implemented yet; the choices marked **Decision** are yours.
+the paper's idealised Hamiltonian to a model closer to current hardware.
+
+!!! success "Status"
+    **The named gate is done** (v2.16.0, [gecko](../ideas/gecko.md)): option B below, the average gate
+    fidelity to √iSWAP with free virtual-Z corrections (`--objective sqrt_iswap`). **The richer model is
+    being built** as [jackal](../ideas/jackal.md) (i10): the tunable-coupler device of Sung et al. without
+    the RWA, with direct coupling, a SQUID flux curve, bounded flux, 1 ns AWG samples and a flux-line
+    filter. Decoherence and the architecture after it are still [open decisions](decisions.md).
 
 ## Should we target a named gate?
 
@@ -46,10 +52,11 @@ reward becomes \(-\log_{10}(1 - F)\), the same shape as now. The maximisation ov
 small inner problem over two (or, with corrections before and after the gate, four) phases; a few
 Newton or Adam steps in JAX, differentiable end to end.
 
-!!! question "Decision: Option A or B?"
+!!! question "Decided (2026-09-25): option B"
     A keeps the paper's spirit (the agent finds the entangling power; single-qubit gates are
     compiled away). B is what an experiment measures with interleaved randomised benchmarking.
-    I recommend B, with A as a diagnostic.
+    B was implemented in v2.16.0 (`metrics.fidelity_free_z`); A remains available through the Weyl
+    coordinates as a diagnostic.
 
 ## Do we need more states?
 
@@ -61,7 +68,9 @@ compute; only `metrics.py` and `env.step` change.
 **Yes, as soon as the model stops conserving excitations** (next section). Then the propagator
 mixes sectors, and we propagate the full space: 27 states with 3 levels each, 64 with 4. That is
 still cheap in JAX: one 27×27 `eigh` per sample instead of a 3×3 and a 6×6, roughly 10-20× slower
-than now, but still far faster than v1.
+than now, but still far faster than v1. Jackal's device model does better: without the RWA, parity is
+still conserved, so the space splits into an even block of 7 and an odd block of 10 states (up to 3
+excitations), checked against the full 27-level space to 1e-5 in fidelity.
 
 ## Limits of the current Hamiltonian
 

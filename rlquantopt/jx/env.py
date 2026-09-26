@@ -16,6 +16,7 @@ import jax
 import jax.numpy as jnp
 
 from rlquantopt.jx import physics, metrics
+from rlquantopt.jx import device as device_mod
 from rlquantopt.jx.config import fdtype
 
 
@@ -60,12 +61,25 @@ class EnvConfig:
     # Gaussian measurement error context_noise_mhz, divided by context_scale_mhz
     context_noise_mhz: tuple = (0.1, 0.1, 1.0)
     context_scale_mhz: tuple = (5.7, 5.7, 140.0)
+    context_bias_mhz: tuple = (0.0, 0.0, 0.0)     # a stale calibration: fixed error added to the context
     # "delta" (v1): each action is K per-sample amplitude increments. "carrier": the pulse is
     # u(t) = offset + A cos(2 pi f_d t + phi) and each action nudges the three slow knobs (A, phi, offset) by
     # up to carrier_steps = (rad/ns, rad, rad/ns); f_d is the nominal qubit-qubit detuning, corrected by the
     # measured calibration when the policy has one (context modes). act_dim is then 3 for any K.
     action_mode: str = "delta"
     carrier_steps: tuple = (1.0, 0.2, 1.0)
+    # Idea i10: "rwa" = the paper's model (physics.py); "device" = the realistic tunable-coupler device
+    # (device.py, env_device.py), where the control is the coupler flux (a_scale, carrier knobs in flux
+    # quanta), drift is physical (qubit MHz, coupler flux offset in mPhi0, unmeasured couplings and
+    # anharmonicities), and the waveform goes through an AWG hold (awg_dt ns) and a flux-line filter (filter_tau ns)
+    physics_model: str = "rwa"
+    device: device_mod.DeviceParams = device_mod.DeviceParams()
+    qubit_drift_mhz: float = 0.0
+    flux_drift_mphi0: float = 0.0
+    eta_drift_mhz: float = 0.0
+    awg_dt: float = 0.0
+    filter_tau: float = 0.0
+    device_simplified: bool = False
     model: physics.ModelParams = physics.ModelParams()
 
     @property
@@ -91,6 +105,9 @@ class EnvConfig:
 
     @property
     def carrier_ghz(self):
+        if self.physics_model == "device":
+            from rlquantopt.jx import env_device
+            return env_device.carrier_ghz(self)
         return abs(self.model.omega_s[1] - self.model.omega_s[0])
 
     @property
@@ -110,6 +127,7 @@ class EnvState(NamedTuple):
     key: jnp.ndarray            # PRNG key for measurement noise (used only with shots > 0)
     context: jnp.ndarray        # (3,) measured calibration: qubit and coupler frequency offsets, MHz
     knobs: jnp.ndarray          # (3,) carrier mode: amplitude A (rad/ns), phase phi (rad), offset (rad/ns)
+    filt: jnp.ndarray           # device physics: flux-line filter state (last filtered sample)
 
 
 def sample_omega_s(key, cfg: EnvConfig):
@@ -133,24 +151,34 @@ def sample_model(key, cfg: EnvConfig):
 
 def reset_params(model: physics.ModelParams, cfg: EnvConfig, key=None):
     """Reset with fully specified physical parameters; ``key`` seeds the measurement noise."""
+    if cfg.physics_model == "device":
+        from rlquantopt.jx import env_device
+        return env_device.reset(model, cfg, key)
     omega_s = jnp.asarray(model.omega_s, fdtype())
     k_obs, k_state, k_ctx = jax.random.split(jax.random.PRNGKey(0) if key is None else key, 3)
     offsets = jnp.concatenate([omega_s - jnp.asarray(cfg.model.omega_s, fdtype()),
                                jnp.atleast_1d(jnp.asarray(model.omega_c_0, fdtype()) - cfg.model.omega_c_0)]) * 1e3
-    context = offsets + jax.random.normal(k_ctx, (3,), fdtype()) * jnp.asarray(cfg.context_noise_mhz, fdtype())
+    context = (offsets + jax.random.normal(k_ctx, (3,), fdtype()) * jnp.asarray(cfg.context_noise_mhz, fdtype())
+               + jnp.asarray(cfg.context_bias_mhz, fdtype()))
     state = EnvState(sector=physics.initial_state(), ham=physics.sector_hamiltonian(model),
                      amps_cur=jnp.zeros(cfg.n_time_steps, fdtype()),
                      cur_idx=jnp.zeros((), jnp.int32), omega_s=omega_s, key=k_state, context=context,
-                     knobs=jnp.zeros(3, fdtype()))
+                     knobs=jnp.zeros(3, fdtype()), filt=jnp.zeros((), fdtype()))
     return observation(state, state.cur_idx, cfg, k_obs), state
 
 
 def reset_to(omega_s, cfg: EnvConfig):
     """Reset with given qubit frequencies, other parameters nominal (sweeps, fixed-per-env randomisation)."""
+    if cfg.physics_model == "device":
+        from rlquantopt.jx import env_device
+        return env_device.reset(env_device.nominal_model(cfg, omega_s), cfg)
     return reset_params(cfg.model._replace(omega_s=omega_s), cfg)
 
 
 def reset(key, cfg: EnvConfig):
+    if cfg.physics_model == "device":
+        from rlquantopt.jx import env_device
+        return env_device.reset(env_device.sample(key, cfg), cfg, jax.random.fold_in(key, 3))
     return reset_params(sample_model(key, cfg), cfg, jax.random.fold_in(key, 3))
 
 
@@ -200,6 +228,9 @@ def observation(state: EnvState, idx_for_time, cfg: EnvConfig, key=None):
 # --8<-- [start:step]
 def step(state: EnvState, action, cfg: EnvConfig):
     """One env step. ``action`` in [-1, 1]^K (clipped, as SB3 does) are amplitude deltas."""
+    if cfg.physics_model == "device":
+        from rlquantopt.jx import env_device
+        return env_device.step(state, action, cfg)
     K = cfg.n_time_steps
     knobs = state.knobs
     if cfg.action_mode == "carrier":

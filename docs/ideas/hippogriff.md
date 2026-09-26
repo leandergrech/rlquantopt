@@ -1,5 +1,7 @@
 # 🦄 i08 hippogriff: know the device first, then act
 
+<span class="stamp stamp--active">🟢 active</span> *toy stage concluded in v2.18.1 · next: the gate step on [jackal](jackal.md)'s realistic device model*
+
 **Question.** Merge dragonfly's structure (a latent, caution, directed exploration) with fox's empiricism.
 On a new device, can an agent first identify the drift, with an uncertainty that is largest at the first
 action and shrinks with every interaction, and then act on what it has learned, instead of re-training?
@@ -177,7 +179,7 @@ archived in `runs/_attic/`.
    depends on the drift. [Ibis](ibis.md) has since found that a policy fed a routine frequency calibration
    plays a good pulse open loop; hippogriff's question there becomes whether identification during
    operation can replace, or refine, that calibration, and catch the drift the calibration does not see
-   (couplings, anharmonicities), which the jackal line of work (i10, in progress) also tests.
+   (couplings, anharmonicities), which [jackal](jackal.md) (i10, in progress) also tests.
 2. A finer or adaptive grid (or particles) to remove the resolution floor.
 
 Fox's improvement model, riding along during the 2M-step pretraining, predicted each update's return

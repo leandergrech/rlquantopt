@@ -55,6 +55,7 @@ def init(key, env_cfg: jenv.EnvConfig, cfg: PPOConfig):
 def make_update(model: ActorCritic, env_cfg: jenv.EnvConfig, cfg: PPOConfig):
     tx = make_optimizer(cfg)
 
+    # --8<-- [start:ppo_loss]
     def loss_fn(params, batch):
         obs, action, logp_old, adv, ret = batch
         mean, log_std = model.dist(params["actor"], obs)
@@ -68,7 +69,9 @@ def make_update(model: ActorCritic, env_cfg: jenv.EnvConfig, cfg: PPOConfig):
         loss = pg + cfg.vf_coef * v_loss - cfg.ent_coef * entropy
         return loss, dict(pg_loss=pg, v_loss=v_loss, approx_kl=((ratio - 1) - jnp.log(ratio)).mean(),
                           clip_frac=(jnp.abs(ratio - 1) > cfg.clip_eps).mean())
+    # --8<-- [end:ppo_loss]
 
+    # --8<-- [start:ppo_update]
     @jax.jit
     def update(runner: RunnerState, opt_state):
         runner, traj = collect(model, runner, env_cfg, cfg.n_steps, cfg.gamma, cfg.resample_drift)
@@ -98,6 +101,7 @@ def make_update(model: ActorCritic, env_cfg: jenv.EnvConfig, cfg: PPOConfig):
         stats = jax.tree_util.tree_map(jnp.mean, stats)
         stats.update(rollout_stats(traj))
         return runner, opt_state, stats
+    # --8<-- [end:ppo_update]
 
     return update
 

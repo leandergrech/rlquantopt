@@ -38,7 +38,8 @@ box is therefore a typical bad case, not an extreme one.
 | In-cooldown ±0.1 MHz | Scoring pulses | No re-calibration needed within a cooldown ([Robustness](../results/robustness.md#how-the-experiments-are-calibrated)) |
 | Recool ±5.7 MHz | Robust-GRAPE ensemble; domain randomisation of the RL agent (`--max-drift 1.1e-3`); the 24 test devices of the cost-per-device experiment | Robust GRAPE survives a recool; single pulses do not ([Robustness](../results/robustness.md)) |
 | Fabrication ±18.5 MHz | Scoring transfer to a new device; the fabrication-range experiment | A robust pulse trained on this range covers it ([Robustness](../results/robustness.md#fabrication-range-experiment)) |
-| Coupler ±140 MHz (worst-loop flux drift) | Large coupler drift experiment | [Robustness](../results/robustness.md#large-coupler-drift) |
+| Coupler ±140 MHz (worst-loop flux drift) | Large coupler drift experiment; gecko and ibis | [Robustness](../results/robustness.md#large-coupler-drift), [Measurable](../results/measurable.md), [ibis](../ideas/ibis.md) |
+| Coupler flux ±20 mΦ₀ with qubits ±5.7 MHz (physical units) | The realistic device model | [jackal](../ideas/jackal.md) |
 
 ## What is not covered yet
 
@@ -63,6 +64,12 @@ have. Assuming a symmetric-SQUID coupler with a maximum frequency of 8 GHz, park
 | 20 mΦ0, worst loop after 17 days | −144 / +127 MHz, used as **±140 MHz** |
 
 A higher f_max, or parking further from the sweet spot, makes the slope and the drift larger.
+
+!!! tip "In flux units: the realistic device model"
+    The [jackal](../ideas/jackal.md) device model (i10) has the coupler's flux map (an asymmetric SQUID,
+    Sung et al. 2021 parameters), so its drift is drawn directly in flux, up to ±20 mΦ₀ (about −178 MHz of
+    coupler frequency at its idle point), together with the qubit frequencies (±5.7 MHz) and, optionally,
+    the couplings and anharmonicities, which a spectroscopy calibration does not measure.
 
 In the paper's model the coupler term is \(2\pi(\omega_c - \omega_r) b^\dagger b + u(t)\, b^\dagger b\), so a
 coupler drift \(\delta\) is exactly a static offset \(2\pi\delta\) on the control line. How far each

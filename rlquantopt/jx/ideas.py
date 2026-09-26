@@ -57,6 +57,12 @@ IDEAS = {
                     "N shots per measurement setting, 30 settings per step (--shots N); smaller policy networks "
                     "(--hidden). Question: how few shots per pulse and how small a network still give a good "
                     "warm start under the large coupler drift. Algo: ppo."),
+    "jackal": Idea(10, "A calibration policy for a realistic device: the tunable-coupler transmons of Sung et al. 2021 "
+                       "without the RWA (parity blocks), with direct coupling, an asymmetric-SQUID coupler flux curve, "
+                       "a 1 ns AWG and a flux-line filter; physical drift (qubit MHz, coupler flux offset in mPhi0 after "
+                       "Dai et al. 2021, unmeasured couplings and anharmonicities). The ibis carrier policy, fed only the "
+                       "spectroscopic calibration, first transferred from the paper's model (sim-to-sim gap), then retrained "
+                       "on the device (--physics device). Algo: ppo."),
 }
 
 

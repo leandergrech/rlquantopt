@@ -45,6 +45,16 @@ REFS = [  # (key, DOI), in the order they appear on the bibliography page
     ("jandura2022", "10.22331/q-2022-05-13-712"),
     ("evered2023", "10.1038/s41586-023-06481-y"),
     ("leung2018", "10.1103/PhysRevLett.120.020501"),
+    # RL algorithms and the idea farm
+    ("schulman2015", "10.48550/arXiv.1502.05477"),
+    ("schulman2017", "10.48550/arXiv.1707.06347"),
+    ("schulman2015gae", "10.48550/arXiv.1506.02438"),
+    ("oh2018", "10.48550/arXiv.1806.05635"),
+    ("mackay1992", "10.1162/neco.1992.4.3.415"),
+    ("spall1992", "10.1109/9.119632"),
+    ("hansen2016", "10.48550/arXiv.1604.00772"),
+    ("grimm2020", "10.48550/arXiv.2011.03506"),
+    ("sutton1990", "10.1016/B978-1-55860-141-3.50030-4"),
 ]
 
 

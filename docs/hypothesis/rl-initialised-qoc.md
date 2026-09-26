@@ -25,6 +25,7 @@ flowchart LR
 | It matters where one pulse fails | Coupler over ±140 MHz: a robust 17.25 ns pulse reaches J_T ≤ 1e-3 on 0 % of devices; 100 GRAPE steps from the policy's pulse reach 83 %, random starts at the same gate time 0 % (they need ~1000) | [Large coupler drift](../results/robustness.md#large-coupler-drift) |
 | It holds with measurable observations and a named gate | √iSWAP fidelity, agent sees only readout populations and Pauli expectations: 92 % of devices reach 1 − F ≤ 1e-3 within 200-500 GRAPE steps from the policy's pulse, 0 % from random starts at equal gate time and budget | [Measurable observations](../results/measurable.md) |
 | The policy alone is not enough | Median J_T 1.4e-3 to 2e-2 across experiments; the refinement is what reaches the target | [Robustness](../results/robustness.md) |
+| Without a model, the policy must carry the job | Black-box refinement from measured fidelities (SPSA, CMA-ES) barely improves a policy pulse; a calibration-conditioned carrier policy alone reaches 1 − F = 3.9e-3 on all 24 drifted devices with ~1e4 shots per device, open loop | [ibis](../ideas/ibis.md), [the new MDP](../system/carrier-mdp.md) |
 | Pretraining pays back | In logical-core time, break-even against per-device GRAPE after ~220-350 devices with full training (0.81 core-hours), ~36 with a 2M-step policy (5 core-minutes) | [Robustness](../results/robustness.md#training-and-refinement-budgets) |
 | Cheap to train | A usable policy in 2M environment steps: 5 core-minutes on a laptop CPU with the JAX environment | [Training](../results/training.md) |
 
@@ -47,10 +48,14 @@ somewhere; the combination, and the cost analysis under realistic drift, does no
 
 ## What would make it a contribution
 
-1. **A named gate and a realistic model** (v3), so that the numbers compare with the literature.
+1. **A named gate and a realistic model**, so that the numbers compare with the literature: √iSWAP with free
+   Z since v2.16, the realistic tunable-coupler model in progress ([jackal](../ideas/jackal.md)).
 2. **Hardware-shaped constraints**: the vendor's sampling rate, amplitude and bandwidth limits, and
    the refinement done from measured data (finite shots), not exact gradients. This is test T4 of the
-   [hypothesis](drift-and-dimension.md#tests-that-would-settle-it).
+   [hypothesis](drift-and-dimension.md#tests-that-would-settle-it). Finite shots and measured-data refinement
+   are in place ([ibis](../ideas/ibis.md)); a 1 ns AWG, a flux-line filter and a bounded flux range are in the
+   realistic device model ([jackal](../ideas/jackal.md)); the vendor contract itself is an
+   [open decision](../next/decisions.md).
 3. **A scaling study** where a single robust pulse fails, since that is where the framework should win.
    Large coupler drift is the first such case here ([results](../results/robustness.md#large-coupler-drift));
    more qubits, or a platform whose drift dimension grows with system size, are next.

@@ -21,7 +21,8 @@ downgrade the JAX environment.
 ## Run the tests
 
 ```bash
-pytest tests/            # 27 tests, ~30 s on the CPU
+pytest tests/            # 122 tests, ~3-4 min on the CPU (a few are skipped without the v1 checkpoints)
+pytest tests/test_jx_env.py tests/test_jx_physics.py    # the v1 equivalence core, ~30 s
 ```
 
 | Test file | What it guarantees |
@@ -29,8 +30,13 @@ pytest tests/            # 27 tests, ~30 s on the CPU
 | `test_jx_physics.py` | Hamiltonian, sector propagation and Weyl metrics match QuTiP, full `expm` and `weylchamber` |
 | `test_jx_env.py` | The JAX env matches v1 `ZCQPEE` step by step, and full-space `expm` to 1e-12 |
 | `test_jx_agents.py` | Gaussian log-prob/KL, conjugate gradient, GAE, one PPO and one TRPO update |
+| `test_jx_grape.py` | Robust GRAPE: ensembles, detuning grids and the optimiser |
 | `test_jx_robustness.py` | The paper's stored pulses give the paper's J_T |
 | `test_jx_sb3_import.py` | The paper's SB3 policy loads and regenerates the paper's pulse (skipped without the v1 checkpoints) |
+| `test_jx_fidelity.py` | √iSWAP fidelity with free virtual-Z corrections, and the measurable observations (gecko) |
+| `test_jx_ibis.py` | Clipping with a penalty, finite-shot observations, the fidelity from measured data, shot-counted refinement, the calibration context (with a stale bias) and the carrier action (ibis) |
+| `test_jx_device.py` | The realistic device: flux curve, parity-block truncation against the 27-level space, idle gate, parametric exchange, drift and calibration, filter, simplified model (jackal) |
+| `test_jx_axolotl.py`, `test_jx_chameleon.py`, `test_jx_dragonfly.py`, `test_jx_echidna.py`, `test_jx_fox.py`, `test_jx_hippogriff.py` | The building blocks of each research agent: the autoregressive policy and judge, planner geometry and model targets, traces and the golden cache, the toy envs and PPO ingredients, the improvement model, the beliefs and deployment modes |
 
 ## CPU or GPU, float64 or float32
 

@@ -1,5 +1,7 @@
 # 🦊 i06 fox: is another update worth its samples?
 
+<span class="stamp stamp--concluded">🏁 concluded</span> *2026-09-25, v2.17.0 · no significant gain on this benchmark · the improvement-equivalence line continues ([the farm](index.md#where-next-tracking-with-improvement-equivalence))*
+
 **Question.** A trained policy meets a new, drifted device, where every sample costs lab time and no
 simulator gradient is available. Can a model of *how updates improve the return* make adaptation cheaper,
 and tell when to stop spending samples? (Named after optimal foraging: stay in a patch only while its

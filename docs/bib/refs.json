@@ -828,11 +828,11 @@
     [
      2026,
      9,
-     24
+     25
     ]
    ],
-   "date-time": "2026-09-24T15:42:50Z",
-   "timestamp": 1790264570773,
+   "date-time": "2026-09-25T05:52:07Z",
+   "timestamp": 1790315527578,
    "version": "4.1.0"
   },
   "reference-count": 42,
@@ -914,7 +914,7 @@
    "timestamp": 1481564504000
   },
   "source": "Crossref",
-  "is-referenced-by-count": 280,
+  "is-referenced-by-count": 281,
   "title": "Universal Gate for Fixed-Frequency Qubits via a Tunable Bus",
   "prefix": "10.1103",
   "volume": "6",
@@ -2068,12 +2068,12 @@
     [
      2026,
      9,
-     11
+     25
     ]
    ],
-   "date-time": "2026-09-11T04:46:46Z",
-   "timestamp": 1789102006189,
-   "version": "build-2803163510"
+   "date-time": "2026-09-25T05:52:06Z",
+   "timestamp": 1790315526718,
+   "version": "4.1.0"
   },
   "reference-count": 22,
   "publisher": "Elsevier BV",
@@ -2123,7 +2123,7 @@
   },
   "page": "47-51",
   "source": "Crossref",
-  "is-referenced-by-count": 313,
+  "is-referenced-by-count": 315,
   "title": "Fidelity of quantum operations",
   "prefix": "10.1016",
   "volume": "367",
@@ -3441,11 +3441,11 @@
     [
      2026,
      9,
-     24
+     25
     ]
    ],
-   "date-time": "2026-09-24T00:09:25Z",
-   "timestamp": 1790208565472,
+   "date-time": "2026-09-25T05:52:07Z",
+   "timestamp": 1790315527212,
    "version": "4.1.0"
   },
   "reference-count": 79,
@@ -3563,7 +3563,7 @@
   },
   "update-policy": "https://doi.org/10.1103/crossmark-policy",
   "source": "Crossref",
-  "is-referenced-by-count": 264,
+  "is-referenced-by-count": 265,
   "title": "Realization of High-Fidelity CZ and\n                    <mml:math xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\">\n                      <mml:mi>Z</mml:mi>\n                      <mml:mi>Z</mml:mi>\n                    </mml:math>\n                    -Free iSWAP Gates with a Tunable Coupler",
   "prefix": "10.1103",
   "volume": "11",
@@ -4280,12 +4280,12 @@
     [
      2026,
      9,
-     12
+     25
     ]
    ],
-   "date-time": "2026-09-12T02:11:12Z",
-   "timestamp": 1789179072985,
-   "version": "build-2803163510"
+   "date-time": "2026-09-25T05:52:05Z",
+   "timestamp": 1790315525691,
+   "version": "4.1.0"
   },
   "reference-count": 55,
   "publisher": "American Physical Society (APS)",
@@ -4402,7 +4402,7 @@
   },
   "update-policy": "https://doi.org/10.1103/crossmark-policy",
   "source": "Crossref",
-  "is-referenced-by-count": 137,
+  "is-referenced-by-count": 138,
   "title": "High-Fidelity, Frequency-Flexible Two-Qubit Fluxonium Gates with a Transmon Coupler",
   "prefix": "10.1103",
   "volume": "13",
@@ -7385,12 +7385,12 @@
     [
      2026,
      9,
-     11
+     25
     ]
    ],
-   "date-time": "2026-09-11T15:17:45Z",
-   "timestamp": 1789139865493,
-   "version": "build-2803163510"
+   "date-time": "2026-09-25T17:18:42Z",
+   "timestamp": 1790356722745,
+   "version": "4.1.0"
   },
   "reference-count": 52,
   "publisher": "American Physical Society (APS)",
@@ -7624,7 +7624,7 @@
   },
   "update-policy": "https://doi.org/10.1103/crossmark-policy",
   "source": "Crossref",
-  "is-referenced-by-count": 166,
+  "is-referenced-by-count": 167,
   "title": "Correlating Decoherence in Transmon Qubits: Low Frequency Noise by Single Fluctuators",
   "prefix": "10.1103",
   "volume": "123",
@@ -10094,11 +10094,11 @@
     [
      2026,
      9,
-     24
+     25
     ]
    ],
-   "date-time": "2026-09-24T08:02:43Z",
-   "timestamp": 1790236963919,
+   "date-time": "2026-09-25T18:18:28Z",
+   "timestamp": 1790360308329,
    "version": "4.1.0"
   },
   "reference-count": 12,
@@ -10143,7 +10143,7 @@
   },
   "update-policy": "https://doi.org/10.1103/crossmark-policy",
   "source": "Crossref",
-  "is-referenced-by-count": 988,
+  "is-referenced-by-count": 990,
   "title": "Evaluating analytic gradients on quantum hardware",
   "prefix": "10.1103",
   "volume": "99",
@@ -10416,11 +10416,11 @@
     [
      2026,
      9,
-     24
+     25
     ]
    ],
-   "date-time": "2026-09-24T16:18:41Z",
-   "timestamp": 1790266721829,
+   "date-time": "2026-09-25T15:30:12Z",
+   "timestamp": 1790350212169,
    "version": "4.1.0"
   },
   "reference-count": 56,
@@ -10520,7 +10520,7 @@
   },
   "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
   "source": "Crossref",
-  "is-referenced-by-count": 83,
+  "is-referenced-by-count": 84,
   "title": "Detecting and tracking drift in quantum information processors",
   "prefix": "10.1038",
   "volume": "11",
@@ -11318,12 +11318,12 @@
     [
      2026,
      9,
-     19
+     25
     ]
    ],
-   "date-time": "2026-09-19T17:11:23Z",
-   "timestamp": 1789837883609,
-   "version": "4.0.1"
+   "date-time": "2026-09-25T16:10:33Z",
+   "timestamp": 1790352633399,
+   "version": "4.1.0"
   },
   "reference-count": 70,
   "publisher": "Springer Science and Business Media LLC",
@@ -11384,7 +11384,7 @@
   },
   "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
   "source": "Crossref",
-  "is-referenced-by-count": 61,
+  "is-referenced-by-count": 62,
   "title": "Optimizing quantum gates towards the scale of logical qubits",
   "prefix": "10.1038",
   "volume": "15",
@@ -12486,12 +12486,12 @@
     [
      2026,
      9,
-     23
+     25
     ]
    ],
-   "date-time": "2026-09-23T03:35:00Z",
-   "timestamp": 1790134500615,
-   "version": "4.0.1"
+   "date-time": "2026-09-25T11:09:26Z",
+   "timestamp": 1790334566075,
+   "version": "4.1.0"
   },
   "reference-count": 22,
   "publisher": "Springer Science and Business Media LLC",
@@ -12544,7 +12544,7 @@
   "page": "527-566",
   "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
   "source": "Crossref",
-  "is-referenced-by-count": 607,
+  "is-referenced-by-count": 609,
   "title": "Random Gradient-Free Minimization of Convex Functions",
   "prefix": "10.1007",
   "volume": "17",
@@ -17663,11 +17663,11 @@
     [
      2026,
      9,
-     23
+     25
     ]
    ],
-   "date-time": "2026-09-23T22:37:55Z",
-   "timestamp": 1790203075401,
+   "date-time": "2026-09-25T22:47:49Z",
+   "timestamp": 1790376469670,
    "version": "4.1.0"
   },
   "reference-count": 100,
@@ -17739,7 +17739,7 @@
   "page": "268-272",
   "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
   "source": "Crossref",
-  "is-referenced-by-count": 538,
+  "is-referenced-by-count": 540,
   "title": "High-fidelity parallel entangling gates on a neutral-atom quantum computer",
   "prefix": "10.1038",
   "volume": "622",
@@ -19481,5 +19481,1140 @@
   },
   "article-number": "020501",
   "id": "leung2018"
+ },
+ {
+  "type": "article",
+  "id": "schulman2015",
+  "categories": [
+   "Machine Learning (cs.LG)",
+   "FOS: Computer and information sciences",
+   "FOS: Computer and information sciences"
+  ],
+  "author": [
+   {
+    "family": "Schulman",
+    "given": "John"
+   },
+   {
+    "family": "Levine",
+    "given": "Sergey"
+   },
+   {
+    "family": "Moritz",
+    "given": "Philipp"
+   },
+   {
+    "family": "Jordan",
+    "given": "Michael I."
+   },
+   {
+    "family": "Abbeel",
+    "given": "Pieter"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2015
+    ]
+   ]
+  },
+  "abstract": "We describe an iterative procedure for optimizing policies, with guaranteed monotonic improvement. By making several approximations to the theoretically-justified procedure, we develop a practical algorithm, called Trust Region Policy Optimization (TRPO). This algorithm is similar to natural policy gradient methods and is effective for optimizing large nonlinear policies such as neural networks. Our experiments demonstrate its robust performance on a wide variety of tasks: learning simulated robotic swimming, hopping, and walking gaits; and playing Atari games using images of the screen as input. Despite its approximations that deviate from the theory, TRPO tends to give monotonic improvement, with little tuning of hyperparameters.",
+  "DOI": "10.48550/ARXIV.1502.05477",
+  "publisher": "arXiv",
+  "title": "Trust Region Policy Optimization",
+  "URL": "https://arxiv.org/abs/1502.05477",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "5"
+ },
+ {
+  "type": "article",
+  "id": "schulman2017",
+  "categories": [
+   "Machine Learning (cs.LG)",
+   "FOS: Computer and information sciences",
+   "FOS: Computer and information sciences"
+  ],
+  "author": [
+   {
+    "family": "Schulman",
+    "given": "John"
+   },
+   {
+    "family": "Wolski",
+    "given": "Filip"
+   },
+   {
+    "family": "Dhariwal",
+    "given": "Prafulla"
+   },
+   {
+    "family": "Radford",
+    "given": "Alec"
+   },
+   {
+    "family": "Klimov",
+    "given": "Oleg"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2017
+    ]
+   ]
+  },
+  "abstract": "We propose a new family of policy gradient methods for reinforcement learning, which alternate between sampling data through interaction with the environment, and optimizing a \"surrogate\" objective function using stochastic gradient ascent. Whereas standard policy gradient methods perform one gradient update per data sample, we propose a novel objective function that enables multiple epochs of minibatch updates. The new methods, which we call proximal policy optimization (PPO), have some of the benefits of trust region policy optimization (TRPO), but they are much simpler to implement, more general, and have better sample complexity (empirically). Our experiments test PPO on a collection of benchmark tasks, including simulated robotic locomotion and Atari game playing, and we show that PPO outperforms other online policy gradient methods, and overall strikes a favorable balance between sample complexity, simplicity, and wall-time.",
+  "DOI": "10.48550/ARXIV.1707.06347",
+  "publisher": "arXiv",
+  "title": "Proximal Policy Optimization Algorithms",
+  "URL": "https://arxiv.org/abs/1707.06347",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "2"
+ },
+ {
+  "type": "article",
+  "id": "schulman2015gae",
+  "categories": [
+   "Machine Learning (cs.LG)",
+   "Robotics (cs.RO)",
+   "Systems and Control (eess.SY)",
+   "FOS: Computer and information sciences",
+   "FOS: Computer and information sciences",
+   "FOS: Electrical engineering, electronic engineering, information engineering",
+   "FOS: Electrical engineering, electronic engineering, information engineering"
+  ],
+  "author": [
+   {
+    "family": "Schulman",
+    "given": "John"
+   },
+   {
+    "family": "Moritz",
+    "given": "Philipp"
+   },
+   {
+    "family": "Levine",
+    "given": "Sergey"
+   },
+   {
+    "family": "Jordan",
+    "given": "Michael"
+   },
+   {
+    "family": "Abbeel",
+    "given": "Pieter"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2015
+    ]
+   ]
+  },
+  "abstract": "Policy gradient methods are an appealing approach in reinforcement learning because they directly optimize the cumulative reward and can straightforwardly be used with nonlinear function approximators such as neural networks. The two main challenges are the large number of samples typically required, and the difficulty of obtaining stable and steady improvement despite the nonstationarity of the incoming data. We address the first challenge by using value functions to substantially reduce the variance of policy gradient estimates at the cost of some bias, with an exponentially-weighted estimator of the advantage function that is analogous to TD(lambda). We address the second challenge by using trust region optimization procedure for both the policy and the value function, which are represented by neural networks.\n Our approach yields strong empirical results on highly challenging 3D locomotion tasks, learning running gaits for bipedal and quadrupedal simulated robots, and learning a policy for getting the biped to stand up from starting out lying on the ground. In contrast to a body of prior work that uses hand-crafted policy representations, our neural network policies map directly from raw kinematics to joint torques. Our algorithm is fully model-free, and the amount of simulated experience required for the learning tasks on 3D bipeds corresponds to 1-2 weeks of real time.",
+  "DOI": "10.48550/ARXIV.1506.02438",
+  "publisher": "arXiv",
+  "title": "High-Dimensional Continuous Control Using Generalized Advantage Estimation",
+  "URL": "https://arxiv.org/abs/1506.02438",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "6"
+ },
+ {
+  "type": "article",
+  "id": "oh2018",
+  "categories": [
+   "Machine Learning (cs.LG)",
+   "Artificial Intelligence (cs.AI)",
+   "Machine Learning (stat.ML)",
+   "FOS: Computer and information sciences",
+   "FOS: Computer and information sciences"
+  ],
+  "author": [
+   {
+    "family": "Oh",
+    "given": "Junhyuk"
+   },
+   {
+    "family": "Guo",
+    "given": "Yijie"
+   },
+   {
+    "family": "Singh",
+    "given": "Satinder"
+   },
+   {
+    "family": "Lee",
+    "given": "Honglak"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2018
+    ]
+   ]
+  },
+  "abstract": "This paper proposes Self-Imitation Learning (SIL), a simple off-policy actor-critic algorithm that learns to reproduce the agent's past good decisions. This algorithm is designed to verify our hypothesis that exploiting past good experiences can indirectly drive deep exploration. Our empirical results show that SIL significantly improves advantage actor-critic (A2C) on several hard exploration Atari games and is competitive to the state-of-the-art count-based exploration methods. We also show that SIL improves proximal policy optimization (PPO) on MuJoCo tasks.",
+  "DOI": "10.48550/ARXIV.1806.05635",
+  "publisher": "arXiv",
+  "title": "Self-Imitation Learning",
+  "URL": "https://arxiv.org/abs/1806.05635",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "1"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     25
+    ]
+   ],
+   "date-time": "2026-09-25T01:00:52Z",
+   "timestamp": 1790298052753,
+   "version": "4.1.0"
+  },
+  "reference-count": 14,
+  "publisher": "MIT Press",
+  "issue": "3",
+  "content-domain": {
+   "domain": [],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     1992,
+     5
+    ]
+   ]
+  },
+  "abstract": "<jats:p>Although Bayesian analysis has been in use since Laplace, the Bayesian method of model-comparison has only recently been developed in depth. In this paper, the Bayesian approach to regularization and model-comparison is demonstrated by studying the inference problem of interpolating noisy data. The concepts and methods described are quite general and can be applied to many other data modeling problems. Regularizing constants are set by examining their posterior probability distribution. Alternative regularizers (priors) and alternative basis sets are objectively compared by evaluating the evidence for them. “Occam's razor” is automatically embodied by this process. The way in which Bayes infers the values of regularizing constants and noise levels has an elegant interpretation in terms of the effective number of parameters determined by the data set. This framework is due to Gull and Skilling.</jats:p>",
+  "DOI": "10.1162/neco.1992.4.3.415",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2008,
+     3,
+     13
+    ]
+   ],
+   "date-time": "2008-03-13T12:45:25Z",
+   "timestamp": 1205412325000
+  },
+  "page": "415-447",
+  "source": "Crossref",
+  "is-referenced-by-count": 3574,
+  "title": "Bayesian Interpolation",
+  "prefix": "10.1162",
+  "volume": "4",
+  "author": [
+   {
+    "given": "David J. C.",
+    "family": "MacKay",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Computation and Neural Systems, California Institute of Technology 139-74, Pasadena, CA 91125 USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "281",
+  "reference": [
+   {
+    "key": "p_1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1007/BF02506337"
+   },
+   {
+    "issue": "3",
+    "key": "p_4",
+    "first-page": "533",
+    "volume": "88",
+    "author": "Bretthorst G. L.",
+    "year": "1990",
+    "journal-title": "J. Mag. Reson."
+   },
+   {
+    "key": "p_5",
+    "first-page": "245",
+    "author": "Charter M. K.",
+    "year": "1991",
+    "journal-title": "Laramie, 2990, W. T. Grandy and L. H. Schick, eds."
+   },
+   {
+    "key": "p_6",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1119/1.1990764"
+   },
+   {
+    "key": "p_7",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1017/S0334270000005221"
+   },
+   {
+    "key": "p_11",
+    "first-page": "511",
+    "author": "Gull S. F.",
+    "year": "1989",
+    "journal-title": "Cambridge, 2988, J. Skilling, ed."
+   },
+   {
+    "key": "p_19",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1162/neco.1992.4.3.448"
+   },
+   {
+    "key": "p_25",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/0005-1098(78)90005-5"
+   },
+   {
+    "key": "p_26",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aos/1176344136"
+   },
+   {
+    "key": "p_31",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/ss/1177013620"
+   },
+   {
+    "key": "p_33",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.2307/1402932"
+   },
+   {
+    "key": "p_34",
+    "doi-asserted-by": "crossref",
+    "first-page": "80",
+    "DOI": "10.1111/j.2517-6161.1969.tb00767.x",
+    "volume": "31",
+    "author": "Walker A. M.",
+    "year": "1967",
+    "journal-title": "J. R. Stat. SOC. B"
+   },
+   {
+    "key": "p_35",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1093/comjnl/11.2.185"
+   },
+   {
+    "issue": "3",
+    "key": "p_36",
+    "doi-asserted-by": "crossref",
+    "first-page": "240",
+    "DOI": "10.1111/j.2517-6161.1987.tb01695.x",
+    "volume": "49",
+    "author": "Wallace C. S.",
+    "year": "1987",
+    "journal-title": "J. R. Statist. SOC. B"
+   }
+  ],
+  "container-title": "Neural Computation",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://www.mitpressjournals.org/doi/pdf/10.1162/neco.1992.4.3.415",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2025,
+     1,
+     28
+    ]
+   ],
+   "date-time": "2025-01-28T21:59:40Z",
+   "timestamp": 1738101580000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://direct.mit.edu/neco/article/4/3/415-447/5639"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     1992,
+     5
+    ]
+   ]
+  },
+  "references-count": 14,
+  "journal-issue": {
+   "issue": "3",
+   "published-print": {
+    "date-parts": [
+     [
+      1992,
+      5
+     ]
+    ]
+   }
+  },
+  "alternative-id": [
+   "10.1162/neco.1992.4.3.415"
+  ],
+  "URL": "http://dx.doi.org/10.1162/neco.1992.4.3.415",
+  "relation": {},
+  "ISSN": [
+   "0899-7667",
+   "1530-888X"
+  ],
+  "subject": [],
+  "container-title-short": "Neural Computation",
+  "published": {
+   "date-parts": [
+    [
+     1992,
+     5
+    ]
+   ]
+  },
+  "id": "mackay1992"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     25
+    ]
+   ],
+   "date-time": "2026-09-25T06:04:40Z",
+   "timestamp": 1790316280669,
+   "version": "4.1.0"
+  },
+  "reference-count": 34,
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "issue": "3",
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       1992,
+       3,
+       1
+      ]
+     ],
+     "date-time": "1992-03-01T00:00:00Z",
+     "timestamp": 699408000000
+    },
+    "content-version": "vor",
+    "delay-in-days": 0,
+    "URL": "https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html"
+   }
+  ],
+  "content-domain": {
+   "domain": [],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     1992,
+     3
+    ]
+   ]
+  },
+  "DOI": "10.1109/9.119632",
+  "type": "journal-article",
+  "created": {
+   "date-parts": [
+    [
+     2002,
+     8,
+     24
+    ]
+   ],
+   "date-time": "2002-08-24T16:40:30Z",
+   "timestamp": 1030207230000
+  },
+  "page": "332-341",
+  "source": "Crossref",
+  "is-referenced-by-count": 1832,
+  "title": "Multivariate stochastic approximation using a simultaneous perturbation gradient approximation",
+  "prefix": "10.1109",
+  "volume": "37",
+  "author": [
+   {
+    "given": "J.C.",
+    "family": "Spall",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "263",
+  "reference": [
+   {
+    "key": "ref33",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/0893-6080(90)90029-K"
+   },
+   {
+    "key": "ref32",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/IJCNN.1992.227080"
+   },
+   {
+    "key": "ref31",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/CDC.1988.194588"
+   },
+   {
+    "key": "ref30",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/9.192188"
+   },
+   {
+    "key": "ref34",
+    "doi-asserted-by": "crossref",
+    "first-page": "307",
+    "DOI": "10.1007/BF00938315",
+    "article-title": "A stochastic steepest-descent algorithm",
+    "volume": "59",
+    "author": "wardi",
+    "year": "1988",
+    "journal-title": "J Optimiz Theory Appl"
+   },
+   {
+    "key": "ref10",
+    "first-page": "439",
+    "author": "fabian",
+    "year": "1971",
+    "journal-title": "Optimizing Methods in Statistics"
+   },
+   {
+    "key": "ref11",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aos/1176342414"
+   },
+   {
+    "key": "ref12",
+    "volume": "2",
+    "author": "feller",
+    "year": "1971",
+    "journal-title": "An Introduction to Probability Theory and Its Applications"
+   },
+   {
+    "key": "ref13",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1016/0167-7152(88)90003-X"
+   },
+   {
+    "key": "ref14",
+    "first-page": "761",
+    "article-title": "Perturbation analysis explained",
+    "volume": "34",
+    "author": "ho",
+    "year": "1989",
+    "journal-title": "IEEE Trans Automat Contr"
+   },
+   {
+    "key": "ref15",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/CDC.1989.70519"
+   },
+   {
+    "key": "ref16",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1080/01621459.1983.10477015"
+   },
+   {
+    "key": "ref17",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aoms/1177706705"
+   },
+   {
+    "key": "ref18",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aoms/1177729392"
+   },
+   {
+    "key": "ref19",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aos/1176342506"
+   },
+   {
+    "key": "ref28",
+    "author": "saridis",
+    "year": "0",
+    "journal-title": "Self-Organizing Control of Stochastic Systems"
+   },
+   {
+    "key": "ref4",
+    "first-page": "223",
+    "article-title": "Comparative study of several multivariate stochastic approximation algorithms",
+    "author": "chin",
+    "year": "1990",
+    "journal-title": "Proc Statist Comput Sect Amer Stat Assoc"
+   },
+   {
+    "key": "ref27",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/TAC.1983.1103184"
+   },
+   {
+    "key": "ref3",
+    "first-page": "845",
+    "article-title": "Convergence of parameter sensitivity estimates in a stochastic experiment",
+    "volume": "ac 30",
+    "author": "cao",
+    "year": "0",
+    "journal-title": "IEEE Trans Automat Contr"
+   },
+   {
+    "key": "ref6",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1007/BF01071091"
+   },
+   {
+    "key": "ref29",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1080/03610928108828137"
+   },
+   {
+    "key": "ref5",
+    "author": "doob",
+    "year": "1953",
+    "journal-title": "Stochastic Processes"
+   },
+   {
+    "key": "ref8",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aoms/1177699070"
+   },
+   {
+    "key": "ref7",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1080/17442508308833246"
+   },
+   {
+    "key": "ref2",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aoms/1177728659"
+   },
+   {
+    "key": "ref9",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aoms/1177698258"
+   },
+   {
+    "key": "ref1",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1080/00207728708964032"
+   },
+   {
+    "key": "ref20",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1007/978-1-4684-9352-8",
+    "author": "kushner",
+    "year": "1978",
+    "journal-title": "Stochastic Approximation Methods for Constrained and Unconstrained Systems"
+   },
+   {
+    "key": "ref22",
+    "first-page": "557",
+    "article-title": "Stochastic approximation and sequential search for optimum",
+    "volume": "ii",
+    "author": "lai",
+    "year": "1985",
+    "journal-title": "Proc Berkeley Conf in Honor of Jerzy Newman and Jack Kiefer"
+   },
+   {
+    "key": "ref21",
+    "author": "laha",
+    "year": "1979",
+    "journal-title": "Probability Theory"
+   },
+   {
+    "key": "ref24",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1109/TIT.1984.1056894"
+   },
+   {
+    "key": "ref23",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aos/1176344212"
+   },
+   {
+    "key": "ref26",
+    "doi-asserted-by": "publisher",
+    "DOI": "10.1214/aos/1176346589"
+   },
+   {
+    "key": "ref25",
+    "first-page": "379",
+    "volume": "4",
+    "author": "ruppert",
+    "year": "1983",
+    "journal-title": "Encyclopedia of Statistical Sciences"
+   }
+  ],
+  "container-title": "IEEE Transactions on Automatic Control",
+  "original-title": [],
+  "link": [
+   {
+    "URL": "http://xplorestaging.ieee.org/ielx4/9/3423/00119632.pdf?arnumber=119632",
+    "content-type": "unspecified",
+    "content-version": "vor",
+    "intended-application": "similarity-checking"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2021,
+     11,
+     29
+    ]
+   ],
+   "date-time": "2021-11-29T15:20:59Z",
+   "timestamp": 1638199259000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "http://ieeexplore.ieee.org/document/119632/"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     1992,
+     3
+    ]
+   ]
+  },
+  "references-count": 34,
+  "journal-issue": {
+   "issue": "3"
+  },
+  "URL": "http://dx.doi.org/10.1109/9.119632",
+  "relation": {},
+  "ISSN": [
+   "0018-9286"
+  ],
+  "subject": [],
+  "container-title-short": "IEEE Trans. Automat. Contr.",
+  "published": {
+   "date-parts": [
+    [
+     1992,
+     3
+    ]
+   ]
+  },
+  "id": "spall1992"
+ },
+ {
+  "type": "article",
+  "id": "hansen2016",
+  "categories": [
+   "Machine Learning (cs.LG)",
+   "Machine Learning (stat.ML)",
+   "FOS: Computer and information sciences",
+   "FOS: Computer and information sciences"
+  ],
+  "author": [
+   {
+    "family": "Hansen",
+    "given": "Nikolaus"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2016
+    ]
+   ]
+  },
+  "abstract": "This tutorial introduces the CMA Evolution Strategy (ES), where CMA stands for Covariance Matrix Adaptation. The CMA-ES is a stochastic, or randomized, method for real-parameter (continuous domain) optimization of non-linear, non-convex functions. We try to motivate and derive the algorithm from intuitive concepts and from requirements of non-linear, non-convex search in continuous domain.",
+  "DOI": "10.48550/ARXIV.1604.00772",
+  "publisher": "arXiv",
+  "title": "The CMA Evolution Strategy: A Tutorial",
+  "URL": "https://arxiv.org/abs/1604.00772",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "2"
+ },
+ {
+  "type": "article",
+  "id": "grimm2020",
+  "categories": [
+   "Machine Learning (cs.LG)",
+   "Artificial Intelligence (cs.AI)",
+   "FOS: Computer and information sciences",
+   "FOS: Computer and information sciences"
+  ],
+  "author": [
+   {
+    "family": "Grimm",
+    "given": "Christopher"
+   },
+   {
+    "family": "Barreto",
+    "given": "André"
+   },
+   {
+    "family": "Singh",
+    "given": "Satinder"
+   },
+   {
+    "family": "Silver",
+    "given": "David"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2020
+    ]
+   ]
+  },
+  "abstract": "Learning models of the environment from data is often viewed as an essential component to building intelligent reinforcement learning (RL) agents. The common practice is to separate the learning of the model from its use, by constructing a model of the environment's dynamics that correctly predicts the observed state transitions. In this paper we argue that the limited representational resources of model-based RL agents are better used to build models that are directly useful for value-based planning. As our main contribution, we introduce the principle of value equivalence: two models are value equivalent with respect to a set of functions and policies if they yield the same Bellman updates. We propose a formulation of the model learning problem based on the value equivalence principle and analyze how the set of feasible solutions is impacted by the choice of policies and functions. Specifically, we show that, as we augment the set of policies and functions considered, the class of value equivalent models shrinks, until eventually collapsing to a single point corresponding to a model that perfectly describes the environment. In many problems, directly modelling state-to-state transitions may be both difficult and unnecessary. By leveraging the value-equivalence principle one may find simpler models without compromising performance, saving computation and memory. We illustrate the benefits of value-equivalent model learning with experiments comparing it against more traditional counterparts like maximum likelihood estimation. More generally, we argue that the principle of value equivalence underlies a number of recent empirical successes in RL, such as Value Iteration Networks, the Predictron, Value Prediction Networks, TreeQN, and MuZero, and provides a first theoretical underpinning of those results.",
+  "DOI": "10.48550/ARXIV.2011.03506",
+  "publisher": "arXiv",
+  "title": "The Value Equivalence Principle for Model-Based Reinforcement Learning",
+  "URL": "https://arxiv.org/abs/2011.03506",
+  "copyright": "arXiv.org perpetual, non-exclusive license",
+  "version": "1"
+ },
+ {
+  "indexed": {
+   "date-parts": [
+    [
+     2026,
+     9,
+     25
+    ]
+   ],
+   "date-time": "2026-09-25T09:27:19Z",
+   "timestamp": 1790328439057,
+   "version": "4.1.0"
+  },
+  "reference-count": 23,
+  "publisher": "Elsevier",
+  "isbn-type": [
+   {
+    "value": "9781558601413",
+    "type": "print"
+   }
+  ],
+  "license": [
+   {
+    "start": {
+     "date-parts": [
+      [
+       1990,
+       1,
+       1
+      ]
+     ],
+     "date-time": "1990-01-01T00:00:00Z",
+     "timestamp": 631152000000
+    },
+    "content-version": "tdm",
+    "delay-in-days": 0,
+    "URL": "https://www.elsevier.com/tdm/userlicense/1.0/"
+   },
+   {
+    "start": {
+     "date-parts": [
+      [
+       1990,
+       1,
+       1
+      ]
+     ],
+     "date-time": "1990-01-01T00:00:00Z",
+     "timestamp": 631152000000
+    },
+    "content-version": "tdm",
+    "delay-in-days": 0,
+    "URL": "https://www.elsevier.com/legal/tdmrep-license"
+   }
+  ],
+  "content-domain": {
+   "domain": [],
+   "crossmark-restriction": false
+  },
+  "published-print": {
+   "date-parts": [
+    [
+     1990
+    ]
+   ]
+  },
+  "DOI": "10.1016/b978-1-55860-141-3.50030-4",
+  "type": "book-chapter",
+  "created": {
+   "date-parts": [
+    [
+     2014,
+     7,
+     1
+    ]
+   ],
+   "date-time": "2014-07-01T02:55:35Z",
+   "timestamp": 1404183335000
+  },
+  "page": "216-224",
+  "source": "Crossref",
+  "is-referenced-by-count": 585,
+  "title": "Integrated Architectures for Learning, Planning, and Reacting Based on Approximating Dynamic Programming",
+  "prefix": "10.1016",
+  "author": [
+   {
+    "given": "Richard S.",
+    "family": "Sutton",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "member": "78",
+  "reference": [
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib1",
+    "unstructured": "Agre, P. E., & Chapman, D. (1987) Pengi: An implementation of a theory of activity. Proceedings of AAAI-87, 268–272"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib2",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Anderson, C. W. (1987) Strategy learning with multilayer connectionist representations. Proceedings of the Fourth International Workshop on Machine Learning, 103–114. Morgan Kaufmann, Irvine, CA.",
+    "DOI": "10.1016/B978-0-934613-41-5.50014-3"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib3",
+    "doi-asserted-by": "crossref",
+    "first-page": "834",
+    "DOI": "10.1109/TSMC.1983.6313077",
+    "article-title": "Neuronlike elements that can solve difficult learning control problems",
+    "volume": "13",
+    "author": "Barto",
+    "year": "1983",
+    "journal-title": "IEEE Transactions on Systems, Man, and Cybernetics"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib4",
+    "unstructured": "Barto, A. G., Sutton, R. S., & Watkins, C. J. C. H. (1989) Learning and sequential decision making. COINS Technical Report 89–95, Dept, of Computer and Information Science, University of Massachusetts, Amherst, MA 01003. Also to appear in Learning and Computational Neuroscience, M. Gabriel and J.W. Moore (Eds.), MIT Press, 1990"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib5",
+    "article-title": "Sequential decision problems and neural networks",
+    "volume": "2",
+    "author": "Barto",
+    "year": "1990"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib6",
+    "series-title": "Dynamic Programming",
+    "author": "Bellman",
+    "year": "1957"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib7",
+    "series-title": "The Nature of Explanation",
+    "author": "Craik",
+    "year": "1943"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib8",
+    "series-title": "Brainstorms",
+    "first-page": "71",
+    "article-title": "Why the law of effect will not go away",
+    "author": "Dennett",
+    "year": "1978"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib9",
+    "series-title": "Dynamic Programming and Markov Processes",
+    "author": "Howard",
+    "year": "1960"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib10",
+    "unstructured": "Kaelbling, L. (in preparation) Learning in Embedded Systems. Stanford Computer Science Ph.D. Dissertation."
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib11",
+    "doi-asserted-by": "crossref",
+    "first-page": "189",
+    "DOI": "10.1016/0004-3702(90)90054-4",
+    "article-title": "Real-Time Heuristic Search",
+    "volume": "42",
+    "author": "Korf",
+    "year": "1990",
+    "journal-title": "Artificial Intelligence"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib12",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Mozer, M. C., & Bachrach, J. (1990) Discovering the structure of a reactive environment by exploration. In Advances in Neural Information Processing Systems 2, D. S. Touretzky, Ed. Morgan Kaufmann, San Mateo, CA. See also Technical Report CU-CS-451–89, Dept, of Computer Science, University of Colorado at Boulder 80309",
+    "DOI": "10.1162/neco.1990.2.4.447"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib13",
+    "doi-asserted-by": "crossref",
+    "unstructured": "Rivest, R. L., & Schapire, R. E. (1987) A new approach to unsupervised learning in deterministic environments. Proceedings of the Fourth International Workshop on Machine Learning, 364–375. Morgan Kaufmann, Irvine, CA.",
+    "DOI": "10.1016/B978-0-934613-41-5.50039-8"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib14",
+    "series-title": "Introduction to Stochastic Dynamic Programming",
+    "author": "Ross",
+    "year": "1983"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib15",
+    "first-page": "7",
+    "article-title": "Schemata and sequential thought processes in PDP models",
+    "volume": "Volume II",
+    "author": "Rumelhart",
+    "year": "1986"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib16",
+    "unstructured": "Russell, S. J. (1989) Execution architectures and compilation. Proceedings of IJCAI-89, 15–20"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib17",
+    "unstructured": "Sutton, R. S. (1984) Temporal credit assignment in reinforcement learning. Doctoral dissertation, Department of Computer and Information Science, University of Massachusetts, Amherst, MA 01003"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib18",
+    "doi-asserted-by": "crossref",
+    "first-page": "944",
+    "DOI": "10.1023/A:1022633531479",
+    "article-title": "Learning to predict by the methods of temporal differences",
+    "volume": "3",
+    "author": "Sutton",
+    "year": "1988",
+    "journal-title": "Machine Learning"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib19",
+    "first-page": "217",
+    "article-title": "An adaptive network that constructs and uses an internal model of its environment",
+    "volume": "4",
+    "author": "Sutton",
+    "year": "1981",
+    "journal-title": "Cognition and Brain Theory Quarterly"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib20",
+    "unstructured": "Sutton, R.S., Pinette, B. (1985) The learning of world models by connectionist networks. Proceedings of the Seventh Annual Conf. of the Cognitive Science Society, 54–64. Lawrence Erlbaum, Hillsdale, NJ."
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib21",
+    "unstructured": "Watkins, C. J. C. H. (1989) Learning with Delayed Rewards. PhD thesis, Cambridge University Psychology Department."
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib22",
+    "doi-asserted-by": "crossref",
+    "DOI": "10.1109/TSMC.1987.289329",
+    "article-title": "Building and understanding adaptive systems: A statistical/numerical approach to factory automation and brain research",
+    "author": "Werbos",
+    "year": "1987",
+    "journal-title": "IEEE Transactions on Systems, Man, and Cybernetics"
+   },
+   {
+    "key": "10.1016/B978-1-55860-141-3.50030-4_bib23",
+    "unstructured": "Whitehead, S. D. (1989) Scaling reinforcement learning systems. Technical Report 304, Dept, of Computer Science, University of Rochester, Rochester, NY 14627"
+   }
+  ],
+  "container-title": "Machine Learning Proceedings 1990",
+  "original-title": [],
+  "language": "en",
+  "link": [
+   {
+    "URL": "https://api.elsevier.com/content/article/PII:B9781558601413500304?httpAccept=text/xml",
+    "content-type": "text/xml",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   },
+   {
+    "URL": "https://api.elsevier.com/content/article/PII:B9781558601413500304?httpAccept=text/plain",
+    "content-type": "text/plain",
+    "content-version": "vor",
+    "intended-application": "text-mining"
+   }
+  ],
+  "deposited": {
+   "date-parts": [
+    [
+     2025,
+     11,
+     13
+    ]
+   ],
+   "date-time": "2025-11-13T09:58:45Z",
+   "timestamp": 1763027925000
+  },
+  "score": 1,
+  "resource": {
+   "primary": {
+    "URL": "https://linkinghub.elsevier.com/retrieve/pii/B9781558601413500304"
+   }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+   "date-parts": [
+    [
+     1990
+    ]
+   ]
+  },
+  "ISBN": [
+   "9781558601413"
+  ],
+  "references-count": 23,
+  "URL": "http://dx.doi.org/10.1016/B978-1-55860-141-3.50030-4",
+  "relation": {},
+  "subject": [],
+  "published": {
+   "date-parts": [
+    [
+     1990
+    ]
+   ]
+  },
+  "id": "sutton1990"
  }
 ]

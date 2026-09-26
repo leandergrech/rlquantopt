@@ -3,6 +3,57 @@
 All v2 versions are commits on `main` with an annotated tag `v2.x.y`. The commit messages hold
 the details; this page is the summary.
 
+## 2.19.0: ibis concluded, the calibration MDP, jackal started, the docs consolidated (2026-09-26)
+
+**i09 ibis concluded.** The open-loop carrier policy fed only a frequency calibration (~1e4 shots per
+device; K = 15, 64×64 GELU) is reproducible and robust. Figures: `ibis_eval_close*`, `ibis_stress_close.json`.
+
+- **Seeds.** Over four seeds, the full-pulse 1 − F median on the 24 held-out coupler-drift devices is
+  3.9e-3 / 4.4e-3 / 3.7e-3 / 4.6e-3, with every device below 1e-2. Each seed reached 1e-2 in 0.69-0.85M
+  steps.
+- **Network size.** A 32×32 network (1.4k actor parameters) gives 4.3e-3.
+- **Decisions per pulse.** 33 decisions (K = 30) learn fastest to good quality (0.46M steps, 5.2e-3);
+  16 decisions (K = 60) are too coarse (9.5e-3, 67 % below 1e-2).
+- **Calibration stress** (errors ×1 / ×3 / ×10 the training errors, and a stale bias): 3.7-5.8e-3,
+  81-100 % below 1e-2.
+- **Drift the calibration cannot see** (couplings ±5.7 MHz, anharmonicities ±5 MHz): 3.8-6.0e-3,
+  78-100 %.
+- **Unseen drift in training.** Training with coupling drift gives the most robust policy: 94-100 % in
+  every stress case.
+- **New option:** `context_bias_mhz` (a stale calibration); `scripts/ibis_eval.py --stress`.
+
+
+**Docs consolidated across both lines of work** (the idea farm, and gecko → ibis → jackal):
+
+- **Status stamps.** Every idea carries a stamp on its page, in the farm table and next to its emoji
+  in the navigation: 🟢 active (hippogriff, jackal), 🏁 concluded (axolotl, badger, echidna, fox,
+  gecko, ibis), 📦 archived (chameleon, dragonfly).
+- **The farm's lessons, stated generally.** Twelve lessons for sample-efficient RL on real, drifting
+  systems. The problem formulation (action space, decision interval, what is observed) gave the largest
+  gains. Identification beats re-training, amortise-then-refine works, and black-box refinement is weak.
+  Plus why quantum control is a good test bed (an exact differentiable model, nonlinear dynamics,
+  structured uncertainty), and the next direction: tracking with model-based and model-free parts, with
+  improvement equivalence for search control.
+- **Code pages.**
+    - PPO's loss and update walked through like TRPO's (new snippet markers in `agents/ppo.py`).
+    - A new page, Research agents, with the code of every animal. New markers in `agents/fox.py` and
+      `refine.py`; comment lines only, no code change.
+    - Architecture, Environment (carrier actions, the realistic device), Scripts and CLI (every flag and
+      idea script) and Getting started (122 tests) are brought up to date.
+- **Other pages.** Home page (cards, simplifications with their status, latest), roadmap, open decisions
+  (decided items moved, the platform and decoherence questions added), named gates, and the hypothesis
+  pages (first evidence on H3/T4 from ibis). Nine references added (PPO, TRPO, GAE, self-imitation,
+  evidence maximisation, SPSA, CMA-ES, value equivalence, Dyna).
+
+**The calibration policy as a new MDP.** New page, The system → The calibration policy (new MDP): the paper's
+MDP against the carrier calibration MDP, a schematic of how a pulse is built, what a trained policy plays,
+and the training and deployment loops.
+
+**i10 jackal started**: a realistic tunable-coupler device (Sung et al. 2021 parameters, no RWA with parity
+blocks, direct coupling, asymmetric-SQUID coupler, 1 ns AWG, flux-line filter, physical drift, spectroscopy
+calibration; `device.py`, `env_device.py`, `--physics device`), a simplified variant for the sim-to-sim
+transfer test, and `scripts/jackal_eval.py`. Runs in progress.
+
 ## 2.18.1: hippogriff's belief fixed (2026-09-26)
 
 Idea i08: the linearised Kalman belief over the device's drift was 9-890× overconfident (it shrank around

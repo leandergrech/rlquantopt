@@ -54,6 +54,16 @@ def parse_args(argv=None):
     p.add_argument("--delta-scale", type=float, default=0.0,
                    help="rad/ns per sample for a unit action (default: a_scale = 20, as v1; use 20 * 3 / K for long steps)")
     p.add_argument("--hidden", type=int, nargs="+", default=None, help="hidden layer widths (default 128 128)")
+    g = p.add_argument_group("realistic device (idea i10); --physics device implies carrier actions and context obs")
+    g.add_argument("--physics", choices=["rwa", "device"], default="rwa")
+    g.add_argument("--qubit-drift-mhz", type=float, default=0.0)
+    g.add_argument("--flux-drift-mphi0", type=float, default=0.0, help="coupler flux-offset drift (Dai et al. 2021: up to 20)")
+    g.add_argument("--eta-drift-mhz", type=float, default=0.0, help="anharmonicity drift, not in the calibration")
+    g.add_argument("--awg-dt", type=float, default=1.0, help="AWG sample time, ns (device only)")
+    g.add_argument("--filter-tau", type=float, default=0.5, help="flux-line filter time constant, ns (device only)")
+    g.add_argument("--gate-time", type=float, default=150.0, help="episode length, ns (device only; 0.1 ns samples)")
+    g.add_argument("--device-simplified", action="store_true",
+                   help="train on the simplified device model (RWA, no g_12, linear flux curve, ideal AWG/filter)")
     p.add_argument("--action-mode", choices=["delta", "carrier"], default="delta",
                    help="delta (v1): per-sample amplitude increments; carrier: steer A, phi, offset of a carrier at the qubit detuning")
     p.add_argument("--eval-every", type=int, default=2_000_000, help="env steps between evals/checkpoints")
@@ -108,6 +118,14 @@ def build(args):
         common["n_envs"] = args.n_envs
     if args.n_steps:
         common["n_steps"] = args.n_steps
+    if args.physics == "device":
+        env_cfg = dataclasses.replace(
+            env_cfg, physics_model="device", obs_mode="context", action_mode="carrier", T=args.gate_time,
+            pulse_length=int(round(args.gate_time / 0.1)), a_scale=0.15, carrier_steps=(0.03, 0.3, 0.02),
+            awg_dt=args.awg_dt, filter_tau=args.filter_tau, qubit_drift_mhz=args.qubit_drift_mhz,
+            flux_drift_mphi0=args.flux_drift_mphi0, eta_drift_mhz=args.eta_drift_mhz,
+            device_simplified=args.device_simplified,
+            context_scale_mhz=(5.7, 5.7, 180.0), n_time_steps=args.n_time_steps if args.n_time_steps != 3 else 50)
     if args.activation:
         common["activation"] = args.activation
     if args.hidden:

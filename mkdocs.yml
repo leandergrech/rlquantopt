@@ -53,10 +53,12 @@ nav:
       - Model and simulator: system/model.md
       - Gate metrics: system/metrics.md
       - Hardware drift ranges: system/drift.md
+      - The calibration policy (new MDP): system/carrier-mdp.md
   - The code:
       - Architecture: code/architecture.md
       - Environment: code/environment.md
       - Agents and training: code/agents.md
+      - Research agents (the idea farm): code/idea-agents.md
       - GRAPE: code/grape.md
       - Scripts and CLI: code/scripts.md
   - Results:
@@ -73,16 +75,18 @@ nav:
       - Beyond two transmons: next/platforms.md
       - Roadmap: next/roadmap.md
   - Working ideas:
+      # status stamps next to each animal: 🟢 active, 🏁 concluded, 📦 archived (legend on ideas/index.md)
       - 🐾: ideas/index.md
-      - 🐸: ideas/axolotl.md
-      - 🦡: ideas/badger.md
-      - 🐲: ideas/chameleon.md
-      - 🦋: ideas/dragonfly.md
-      - 🦔: ideas/echidna.md
-      - 🦊: ideas/fox.md
-      - 🦎: ideas/gecko.md
-      - 🦄: ideas/hippogriff.md
-      - 🦩: ideas/ibis.md
+      - 🐸 🏁: ideas/axolotl.md
+      - 🦡 🏁: ideas/badger.md
+      - 🐲 📦: ideas/chameleon.md
+      - 🦋 📦: ideas/dragonfly.md
+      - 🦔 🏁: ideas/echidna.md
+      - 🦊 🏁: ideas/fox.md
+      - 🦎 🏁: ideas/gecko.md
+      - 🦄 🟢: ideas/hippogriff.md
+      - 🦩 🏁: ideas/ibis.md
+      - 🐺 🟢: ideas/jackal.md
   - Bibliography: bibliography.md
   - Changelog: changelog.md
 

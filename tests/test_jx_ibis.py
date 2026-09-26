@@ -102,3 +102,9 @@ def test_carrier_mode():
     assert abs(f - cfg.carrier_ghz) < 0.11                 # FFT resolution 1 / (200 * 50 ps) = 0.1 GHz
     ctx = jenv.EnvConfig(action_mode="carrier", obs_mode="context")
     assert ctx.obs_dim == 3 + 4 + 1
+
+
+def test_context_bias_and_noise_scale():
+    cfg = jenv.EnvConfig(obs_mode="context", context_noise_mhz=(0.0, 0.0, 0.0), context_bias_mhz=(0.3, -0.3, 5.0))
+    _, s = jenv.reset_params(physics.ModelParams(), cfg, jax.random.PRNGKey(0))
+    np.testing.assert_allclose(np.asarray(s.context), [0.3, -0.3, 5.0], atol=1e-9)

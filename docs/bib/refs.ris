@@ -695,3 +695,151 @@ VL  - 120
 SN  - 0031-9007
 SN  - 1079-7114
 ER  -
+
+TY  - GEN
+T1  - Trust Region Policy Optimization
+AU  - Schulman, John
+AU  - Levine, Sergey
+AU  - Moritz, Philipp
+AU  - Jordan, Michael I.
+AU  - Abbeel, Pieter
+DO  - 10.48550/ARXIV.1502.05477
+UR  - https://arxiv.org/abs/1502.05477
+AB  - We describe an iterative procedure for optimizing policies, with guaranteed monotonic improvement. By making several approximations to the theoretically-justified procedure, we develop a practical algorithm, called Trust Region Policy Optimization (TRPO). This algorithm is similar to natural policy gradient methods and is effective for optimizing large nonlinear policies such as neural networks. Our experiments demonstrate its robust performance on a wide variety of tasks: learning simulated robotic swimming, hopping, and walking gaits; and playing Atari games using images of the screen as input. Despite its approximations that deviate from the theory, TRPO tends to give monotonic improvement, with little tuning of hyperparameters.
+KW  - Machine Learning (cs.LG)
+KW  - FOS: Computer and information sciences
+KW  - FOS: Computer and information sciences
+PY  - 2015
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - Proximal Policy Optimization Algorithms
+AU  - Schulman, John
+AU  - Wolski, Filip
+AU  - Dhariwal, Prafulla
+AU  - Radford, Alec
+AU  - Klimov, Oleg
+DO  - 10.48550/ARXIV.1707.06347
+UR  - https://arxiv.org/abs/1707.06347
+AB  - We propose a new family of policy gradient methods for reinforcement learning, which alternate between sampling data through interaction with the environment, and optimizing a "surrogate" objective function using stochastic gradient ascent. Whereas standard policy gradient methods perform one gradient update per data sample, we propose a novel objective function that enables multiple epochs of minibatch updates. The new methods, which we call proximal policy optimization (PPO), have some of the benefits of trust region policy optimization (TRPO), but they are much simpler to implement, more general, and have better sample complexity (empirically). Our experiments test PPO on a collection of benchmark tasks, including simulated robotic locomotion and Atari game playing, and we show that PPO outperforms other online policy gradient methods, and overall strikes a favorable balance between sample complexity, simplicity, and wall-time.
+KW  - Machine Learning (cs.LG)
+KW  - FOS: Computer and information sciences
+KW  - FOS: Computer and information sciences
+PY  - 2017
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - High-Dimensional Continuous Control Using Generalized Advantage Estimation
+AU  - Schulman, John
+AU  - Moritz, Philipp
+AU  - Levine, Sergey
+AU  - Jordan, Michael
+AU  - Abbeel, Pieter
+DO  - 10.48550/ARXIV.1506.02438
+UR  - https://arxiv.org/abs/1506.02438
+AB  - Policy gradient methods are an appealing approach in reinforcement learning because they directly optimize the cumulative reward and can straightforwardly be used with nonlinear function approximators such as neural networks. The two main challenges are the large number of samples typically required, and the difficulty of obtaining stable and steady improvement despite the nonstationarity of the incoming data. We address the first challenge by using value functions to substantially reduce the variance of policy gradient estimates at the cost of some bias, with an exponentially-weighted estimator of the advantage function that is analogous to TD(lambda). We address the second challenge by using trust region optimization procedure for both the policy and the value function, which are represented by neural networks.
+ Our approach yields strong empirical results on highly challenging 3D locomotion tasks, learning running gaits for bipedal and quadrupedal simulated robots, and learning a policy for getting the biped to stand up from starting out lying on the ground. In contrast to a body of prior work that uses hand-crafted policy representations, our neural network policies map directly from raw kinematics to joint torques. Our algorithm is fully model-free, and the amount of simulated experience required for the learning tasks on 3D bipeds corresponds to 1-2 weeks of real time.
+KW  - Machine Learning (cs.LG)
+KW  - Robotics (cs.RO)
+KW  - Systems and Control (eess.SY)
+KW  - FOS: Computer and information sciences
+KW  - FOS: Computer and information sciences
+KW  - FOS: Electrical engineering, electronic engineering, information engineering
+KW  - FOS: Electrical engineering, electronic engineering, information engineering
+PY  - 2015
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - Self-Imitation Learning
+AU  - Oh, Junhyuk
+AU  - Guo, Yijie
+AU  - Singh, Satinder
+AU  - Lee, Honglak
+DO  - 10.48550/ARXIV.1806.05635
+UR  - https://arxiv.org/abs/1806.05635
+AB  - This paper proposes Self-Imitation Learning (SIL), a simple off-policy actor-critic algorithm that learns to reproduce the agent's past good decisions. This algorithm is designed to verify our hypothesis that exploiting past good experiences can indirectly drive deep exploration. Our empirical results show that SIL significantly improves advantage actor-critic (A2C) on several hard exploration Atari games and is competitive to the state-of-the-art count-based exploration methods. We also show that SIL improves proximal policy optimization (PPO) on MuJoCo tasks.
+KW  - Machine Learning (cs.LG)
+KW  - Artificial Intelligence (cs.AI)
+KW  - Machine Learning (stat.ML)
+KW  - FOS: Computer and information sciences
+KW  - FOS: Computer and information sciences
+PY  - 2018
+PB  - arXiv
+ER  -
+
+TY  - JOUR
+DO  - 10.1162/neco.1992.4.3.415
+UR  - http://dx.doi.org/10.1162/neco.1992.4.3.415
+TI  - Bayesian Interpolation
+T2  - Neural Computation
+AU  - MacKay, David J. C.
+PY  - 1992
+DA  - 1992/05
+PB  - MIT Press
+SP  - 415-447
+IS  - 3
+VL  - 4
+SN  - 0899-7667
+SN  - 1530-888X
+ER  -
+
+TY  - JOUR
+DO  - 10.1109/9.119632
+UR  - http://dx.doi.org/10.1109/9.119632
+TI  - Multivariate stochastic approximation using a simultaneous perturbation gradient approximation
+T2  - IEEE Transactions on Automatic Control
+AU  - Spall, J.C.
+PY  - 1992
+DA  - 1992/03
+PB  - Institute of Electrical and Electronics Engineers (IEEE)
+SP  - 332-341
+IS  - 3
+VL  - 37
+SN  - 0018-9286
+ER  -
+
+TY  - GEN
+T1  - The CMA Evolution Strategy: A Tutorial
+AU  - Hansen, Nikolaus
+DO  - 10.48550/ARXIV.1604.00772
+UR  - https://arxiv.org/abs/1604.00772
+AB  - This tutorial introduces the CMA Evolution Strategy (ES), where CMA stands for Covariance Matrix Adaptation. The CMA-ES is a stochastic, or randomized, method for real-parameter (continuous domain) optimization of non-linear, non-convex functions. We try to motivate and derive the algorithm from intuitive concepts and from requirements of non-linear, non-convex search in continuous domain.
+KW  - Machine Learning (cs.LG)
+KW  - Machine Learning (stat.ML)
+KW  - FOS: Computer and information sciences
+KW  - FOS: Computer and information sciences
+PY  - 2016
+PB  - arXiv
+ER  -
+
+TY  - GEN
+T1  - The Value Equivalence Principle for Model-Based Reinforcement Learning
+AU  - Grimm, Christopher
+AU  - Barreto, André
+AU  - Singh, Satinder
+AU  - Silver, David
+DO  - 10.48550/ARXIV.2011.03506
+UR  - https://arxiv.org/abs/2011.03506
+AB  - Learning models of the environment from data is often viewed as an essential component to building intelligent reinforcement learning (RL) agents. The common practice is to separate the learning of the model from its use, by constructing a model of the environment's dynamics that correctly predicts the observed state transitions. In this paper we argue that the limited representational resources of model-based RL agents are better used to build models that are directly useful for value-based planning. As our main contribution, we introduce the principle of value equivalence: two models are value equivalent with respect to a set of functions and policies if they yield the same Bellman updates. We propose a formulation of the model learning problem based on the value equivalence principle and analyze how the set of feasible solutions is impacted by the choice of policies and functions. Specifically, we show that, as we augment the set of policies and functions considered, the class of value equivalent models shrinks, until eventually collapsing to a single point corresponding to a model that perfectly describes the environment. In many problems, directly modelling state-to-state transitions may be both difficult and unnecessary. By leveraging the value-equivalence principle one may find simpler models without compromising performance, saving computation and memory. We illustrate the benefits of value-equivalent model learning with experiments comparing it against more traditional counterparts like maximum likelihood estimation. More generally, we argue that the principle of value equivalence underlies a number of recent empirical successes in RL, such as Value Iteration Networks, the Predictron, Value Prediction Networks, TreeQN, and MuZero, and provides a first theoretical underpinning of those results.
+KW  - Machine Learning (cs.LG)
+KW  - Artificial Intelligence (cs.AI)
+KW  - FOS: Computer and information sciences
+KW  - FOS: Computer and information sciences
+PY  - 2020
+PB  - arXiv
+ER  -
+
+TY  - GENERIC
+DO  - 10.1016/b978-1-55860-141-3.50030-4
+UR  - http://dx.doi.org/10.1016/B978-1-55860-141-3.50030-4
+TI  - Integrated Architectures for Learning, Planning, and Reacting Based on Approximating Dynamic Programming
+T2  - Machine Learning Proceedings 1990
+AU  - Sutton, Richard S.
+PY  - 1990
+PB  - Elsevier
+SP  - 216-224
+SN  - 9781558601413
+ER  -

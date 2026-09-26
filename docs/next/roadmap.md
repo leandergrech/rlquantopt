@@ -51,19 +51,31 @@ Each milestone is one or more commits on `main`, tagged `v2.<minor>.<patch>`.
 | 2.14.2 | Compute in logical-core hours (benchmarked step prices) | done |
 | 2.15.0 | Large coupler drift (±140 MHz): first regime where one robust pulse fails; RL warm start reaches the target in 100 steps | done |
 | 2.16.0 | Measurable observations (readout populations, Pauli expectations) and √iSWAP gate fidelity with free Z (idea i07) | done |
-| next | Finite-shot observations; policy kept inside the amplitude bound; robust GRAPE at the policy's 46 ns; gate-time penalty in training; three-qubit model with a spectator (T5) | open |
+| 2.17.0 | The idea farm (i01-i06, i08): research agents, toy benchmarks, run registry; ibis (i09) started: clipping, finite shots, calibration context, refinement from measured data | done |
+| 2.18.0 | Carrier actions: an open-loop policy fed only a frequency calibration reaches 3.9e-3 on all drifted devices with ~1e4 shots (ibis) | done |
+| 2.18.1 | Hippogriff's belief fixed (exact grid belief; consistency check) | done |
+| 2.19.0 | Ibis concluded (4 seeds, calibration stress, unseen drift, K = 30 / 60, 32 × 32); the calibration MDP page; jackal started; docs consolidated (status stamps, lessons, code walkthroughs) | done |
+| 2.20.0 | Jackal (i10): the realistic tunable-coupler device and the sim-to-sim transfer test | in progress |
+| next | Hippogriff on jackal's device (identification of the drift the calibration does not see); an improvement-equivalent tracker in knob space ([the farm](../ideas/index.md#where-next-tracking-with-improvement-equivalence)); decoherence in the device model; the hardware contract of a target platform; three-qubit model with a spectator (T5) | open |
 
-## Beyond replication (next minor versions, not in this pass)
+## Beyond replication
 
-0. Tune PPO (KL per update ~0.1 is too high: fewer epochs or a target-KL stop) and compare on ≥4 seeds.
-   The seed study (v2.12.0) showed the earlier gap to the paper was seed variance.
-1. Named-gate targets (CZ, √iSWAP) with average gate fidelity and leakage reported separately.
-2. Fair baselines: ensemble GRAPE over the ±Δω distribution and RL → GRAPE refinement are done
-   (v2.9.0); still open: RL from demonstrations, ≥5 seeds per method, a hardware-justified drift range.
-3. Context-conditioned policies (Δω estimates or measurement history in the observation) to remove the domain-randomisation error floor.
-4. Open-system training (Lindblad T1/T2, coupler 1/f flux noise) and a flux-line transfer function.
-5. Measurement-based observations (finite-shot populations) and model-based RL.
-6. Meta-RL over transmon parameter distributions.
+The list drawn up after the replication, and where each item went:
+
+0. ~~Tune PPO (KL per update ~0.1 is too high).~~ A KL brake stalls learning on this task: PPO needs its
+   large steps ([badger](../ideas/badger.md), v2.17.0).
+1. ~~Named-gate targets with average gate fidelity.~~ √iSWAP with free Z, leakage included (v2.16.0).
+   CZ is open.
+2. Fair baselines: ensemble GRAPE and RL → GRAPE refinement (v2.9.0), matched gate time (v2.14.0),
+   core-hour accounting (v2.14.2) are done; still open: ≥5 seeds per method, RL from demonstrations.
+3. ~~Context-conditioned policies.~~ A policy conditioned on a measured calibration is the best policy we
+   have (ibis, v2.18.0); a belief over the drift it cannot see is next (hippogriff on jackal).
+4. Open-system training and a flux-line transfer function: the filter and the AWG are in the jackal device
+   model; decoherence is open.
+5. ~~Measurement-based observations (finite shots).~~ Done (gecko, ibis); model-based RL was tried in
+   several forms on the [idea farm](../ideas/index.md), with identification (hippogriff) the one that paid.
+6. Meta-RL over transmon parameter distributions: the drift-conditioned and calibration-conditioned
+   policies are the amortised form of it; tracking with improvement equivalence is the next step.
 
 ## Replication targets (from the paper)
 

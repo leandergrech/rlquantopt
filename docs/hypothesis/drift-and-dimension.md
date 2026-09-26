@@ -181,11 +181,21 @@ The support is partial. The robust pulse was limited to 17.25 ns while the polic
 policy's advantage comes through refinement, not from the policy alone. Robust GRAPE at 46 ns is the
 test that would close the gap.
 
-### H3: not tested yet
+### H3: first evidence from measured data (ibis)
 
-All results here use exact simulator gradients, which is the setting most favourable to GRAPE. On
-hardware, each GRAPE step would need gradient estimates for 345 parameters from shots; RL would learn
-from the rewards alone.
+The results above use exact simulator gradients, which is the setting most favourable to GRAPE. On
+hardware, each GRAPE step would need gradient estimates for hundreds of parameters from shots. Ibis
+([idea i09](../ideas/ibis.md)) gives the first numbers without a model at deployment:
+
+- **Black-box refinement from shots is weak.** SPSA and CMA-ES on a fidelity estimated from the 30
+  measurement settings moved a policy pulse from 5.8e-3 to 3.7-5.3e-3 after 1500 noise-free estimates, and
+  less with 1000 shots per setting; GRAPE with exact gradients reaches 1e-8 from the same pulses.
+- **An amortised policy can carry the whole job.** A policy that sees only a routine frequency calibration
+  and steers a carrier reaches 1 − F = 3.9e-3 on all 24 large-coupler-drift devices with about 1e4 shots
+  per device, open loop; closed-loop policies that observe the state need about 1e7 shots per pulse.
+
+Test T4 below (shot-based GRAPE against RL at equal measurements) is still open, but the direction is
+clear: without exact gradients, the quality has to come from the amortised policy.
 
 ## A scaling argument, with its assumptions
 
@@ -218,7 +228,7 @@ once the range exceeds what any single pulse can cover.
 | **T2** Robust GRAPE with grid and random ensembles versus D | Cost to reach a coverage target | Cost grows quickly with D |
 | **T3** Fabrication-range comparison | Whether one robust pulse still suffices over ±18.5 MHz | Per-device or policy methods overtake the single robust pulse. **Done (v2.14.0): one robust pulse still suffices** (J_T ≤ 7.6e-4); the RL warm start beats per-device GRAPE at matched gate time |
 | **T3b** Large coupler drift (±140 MHz) with qubits over the recool range | Whether one robust pulse suffices when a wide, sensitive parameter drifts | **Done (v2.15.0): no single 17.25 ns pulse suffices** (0 % of devices); the RL warm start reaches 1e-3 on 83 % in 100 steps, random starts need ~1000. Open: robust GRAPE at the policy's 46 ns |
-| **T4** GRAPE with gradients estimated from finite shots (parameter-shift or finite differences) versus RL learning from shot-noisy rewards | Measurements per device to reach J_T ≤ 1e-3 | RL needs fewer measurements per device, including amortised training |
+| **T4** GRAPE with gradients estimated from finite shots (parameter-shift or finite differences) versus RL learning from shot-noisy rewards | Measurements per device to reach J_T ≤ 1e-3 | RL needs fewer measurements per device, including amortised training. **Partly done (v2.17-v2.18):** black-box refinement from shots barely improves a policy pulse, and an open-loop calibration policy needs ~1e4 shots per device ([H3](#h3-first-evidence-from-measured-data-ibis)); shot-based GRAPE itself is untested |
 | **T5** Three-qubit model with a spectator | Effective dimension versus system size | D_eff, and the calibrations needed, grow faster than linearly |
 
 Figures on this page: `scripts/drift_dimension.py` (relative drift) and
